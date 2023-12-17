@@ -12,3 +12,4 @@ database.sqlite
 _ide_helper.php
 /vendor
 composer.lock
+/storage/

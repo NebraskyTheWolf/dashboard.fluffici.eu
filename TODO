@@ -3,9 +3,7 @@
 + Setup of JQuery and Semantic UI
 + Adding some customs CSS files
 
-
 + routes
  - /
  - /gallery
  - /language/{code}
- 
