@@ -19,24 +19,8 @@ return new class extends Migration
             $table->boolean('vouchers')->default(0);
             $table->boolean('sales')->default(0);
 
-            // Payment method modules
-
-            $table->boolean('paypal')->default(0);
-            $table->boolean('paysafecard')->default(0);
-            $table->boolean('stripe')->default(0);
-            $table->boolean('gopay')->default(0);
-
-            // Payment method information
-            // PAYPAL
-            $table->string('paypal_payout_email')->nullable();
-
-            // Stripe
-            $table->string('stripe_api_secret')->nullable();
-            $table->string('stripe_api_key')->nullable();
-            $table->boolean('stripe_test_mode')->default(0);
-            
-            // GoPay 
-            
+            $table->string('gateway_secret')->nullable();
+            $table->string('gateway_key')->nullable();
 
             $table->timestamps();
         });
