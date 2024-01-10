@@ -1,9 +1,20 @@
-+ UI Concept
-+ Base implementation of Laravel ( lastest version )
-+ Setup of JQuery and Semantic UI
-+ Adding some customs CSS files
+The Official Fluffíci Web Concept
+Sitemap
+Homepage (Domov)
+Events (Akce)
+Merchendise (Merch)
+About Us (O nás)
 
-+ routes
- - /
- - /gallery
- - /language/{code}
+Basic functionalities
+Admin dashboard
+Account system for admins and merchendise buying
+Simple blog posting system for the news widget
+Merchendise e-shop (we might look after an alternative if that's not in your powers)
+Editable text content in pages (if possible)
+...more ideas might probably come up later. 
+
+About the pages
+Homepage (UI Design progress 60%)
+Main and default page of the website. There's a banner with a background image with a headline text and a button 'Co jsme zač?' (redirecting to About Us page). Underneath is situated a widget with News from the community. It takes posts from Events page and posts manually added from the dashboard. Under this widget are located our social media links. Footer follows.
+
+-Will continue-

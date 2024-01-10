@@ -2,33 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Orchid\Filters\Types\Like;
 use Orchid\Filters\Types\Where;
 use Orchid\Filters\Types\WhereDateStartEnd;
-use Orchid\Platform\Models\User as Authenticatable;
+use Orchid\Screen\AsSource;
 
-class User extends Authenticatable
+class Seo extends Model
 {
+
+    use AsSource;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password'
-    ];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-        'permissions',
+        'tags',
     ];
 
     /**
@@ -37,8 +28,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'permissions'          => 'array',
-        'email_verified_at'    => 'datetime',
+        'tags'  => 'array',
     ];
 
     /**
@@ -47,11 +37,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $allowedFilters = [
-           'id'         => Where::class,
-           'name'       => Like::class,
-           'email'      => Like::class,
-           'updated_at' => WhereDateStartEnd::class,
-           'created_at' => WhereDateStartEnd::class,
+        'id'         => Where::class,
+        'updated_at' => WhereDateStartEnd::class,
+        'created_at' => WhereDateStartEnd::class,
     ];
 
     /**
@@ -61,8 +49,7 @@ class User extends Authenticatable
      */
     protected $allowedSorts = [
         'id',
-        'name',
-        'email',
+        'tags',
         'updated_at',
         'created_at',
     ];
