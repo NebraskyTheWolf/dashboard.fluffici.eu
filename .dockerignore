@@ -26,3 +26,5 @@
 **.gitattributes
 **.gitignore
 **.md
+
+/src-backend/node_modules

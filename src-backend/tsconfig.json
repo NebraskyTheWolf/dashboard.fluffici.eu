@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "experimentalDecorators": true,
+      "suppressImplicitAnyIndexErrors": true,
+      "lib": ["dom", "dom.iterable", "esnext"],
+      "ignoreDeprecations": "5.0",
+      "allowJs": true,
+      "target": "ES6",
+      "module": "CommonJS",
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "outDir": "build",
+      "rootDir": "src",
+      "baseUrl": "src/",
+      "skipLibCheck": true,
+      "paths": { "@riniya.ts/*": ["./*"] }
+    },
+    "include": ["next-env.d.ts", "./src/**/*", "**/*.ts", "**/*.tsx"],
+    "exclude": [
+      "node_modules",
+      "data",
+      "tests",
+      "tsconfig.json"
+    ]
+  }
