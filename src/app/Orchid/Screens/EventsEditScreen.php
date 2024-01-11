@@ -18,8 +18,10 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\Map;
 use Ramsey\Uuid\Uuid;
 use Orchid\Screen\TD;
-
+use Orchid\Support\Color;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Facades\Auth;
+use App\Models\AuditLogs;
 
 class EventsEditScreen extends Screen
 {
@@ -76,17 +78,20 @@ class EventsEditScreen extends Screen
             Button::make('Cancel event')
                 ->icon('bs.trash')
                 ->method('cancel')
-                ->canSee($this->events->exists && $this->events->status == "INCOMING"),
+                ->canSee($this->events->exists && $this->events->status == "INCOMING")
+                ->type(Color::DANGER),
             
             Button::make('Undo')
                 ->icon('bs.arrow-clockwise')
                 ->method('undo')
-                ->canSee($this->events->exists && $this->events->status == "ENDED"),
+                ->canSee($this->events->exists && $this->events->status == "ENDED")
+                ->type(Color::INFO),
 
             Button::make('Set as finished.')
                 ->icon('bs.check-lg')
                 ->method('finish')
-                ->canSee($this->events->exists && $this->events->status == "INCOMING"),
+                ->canSee($this->events->exists && $this->events->status == "INCOMING")
+                ->type(Color::SUCCESS),
         ];
     }
 
@@ -179,6 +184,8 @@ class EventsEditScreen extends Screen
 
         Toast::info('You have successfully cancelled ' . $this->events->name);
 
+        $this->saveAudit('DELETE');
+
         return redirect()->route('platform.events.list');
     }
 
@@ -193,6 +200,8 @@ class EventsEditScreen extends Screen
 
         Toast::info('You have successfully finished ' . $this->events->name);
 
+        $this->saveAudit('FINISHED');
+
         return redirect()->route('platform.events.list');
     }
 
@@ -206,10 +215,22 @@ class EventsEditScreen extends Screen
 
         Toast::info('You have successfully undone the last changes on ' . $this->events->name);
 
+        $this->saveAudit('UNDONE_CHANGE');
+
         return redirect()->route('platform.events.list');
     }
 
     public function bannerUpload(Request $request) {
         Toast::info(' ' . $request->file('events.banner'));
+    }
+
+    // Saving the logs inside the database
+
+    private function saveAudit($type) {
+        $audit = new AuditLogs();
+        $audit->name = Auth::user()->name;
+        $audit->slug = 'event';
+        $audit->type = $type;
+        $audit->save();
     }
 }
