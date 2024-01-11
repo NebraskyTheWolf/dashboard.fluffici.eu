@@ -54,7 +54,11 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make("Roles & Permissions")
                         ->icon('bs.shield')
                         ->route('platform.systems.roles')
-                        ->permission('platform.systems.roles')
+                        ->permission('platform.systems.roles'),
+                    Menu::make("Audit Logs")
+                        ->icon('bs.clipboard2')
+                        ->route('platform.audit')
+                        ->permission('platform.audit.read')
                 ])
                 ->divider()
                 ->permission('platform.systems.settings'),
@@ -66,10 +70,6 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.book')
                         ->route('platform.post.list')
                         ->permission('platform.systems.posts'),
-                    Menu::make('Photo gallery')
-                        ->icon('bs.window-sidebar')
-                        ->route('platform.example.layouts')
-                        ->permission('platform.systems.gallery'),
                     Menu::make('Events')
                         ->icon('bs.calendar-event')
                         ->route('platform.events.list')
@@ -86,26 +86,32 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('E-Shop')
                 ->icon('bs.cart2')
                 ->list([
+                    Menu::make('Statistics')
+                        ->icon('bs.graph-up')
+                        ->route('platform.example.layouts')
+                        ->title("GROWTH"),
                     Menu::make('Products')
                         ->icon('bs.window-sidebar')
                         ->route('platform.example.layouts')
-                        ->permission('platform.systems.eshop.products'),
-                    Menu::make('Statistics')
-                        ->icon('bs.graph-up')
-                        ->route('platform.example.layouts'),
+                        ->permission('platform.systems.eshop.products')
+                        ->title("PRODUCTS AND SALES"),
                     Menu::make('Sales')
                         ->icon('bs.credit-card-2-front')
                         ->route('platform.example.layouts')
-                        ->permission('platform.systems.eshop.sales'),
+                        ->permission('platform.systems.eshop.sales')
+                        ->canSee(false),
                     Menu::make('Vouchers')
                         ->icon('bs.card-list')
                         ->route('platform.example.layouts')
-                        ->permission('platform.systems.eshop.vouchers'),
+                        ->permission('platform.systems.eshop.vouchers')
+                        ->title("VOUCHERS")
+                        ->canSee(false),
                     Menu::make('Orders')
                         ->icon('bs.box-seam')
                         ->route('platform.example.layouts')
                         ->badge(fn () => ShopOrders::where('status', 'PENDING')->count() ?: 0)
-                        ->permission('platform.systems.eshop.orders'),
+                        ->permission('platform.systems.eshop.orders')
+                        ->title("ORDERS AND SUPPORT"),
                     Menu::make('Support Tickets')
                         ->icon('bs.chat-right-text')
                         ->route('platform.example.layouts')
@@ -115,6 +121,7 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.gear')
                         ->route('platform.example.layouts')
                         ->permission('platform.systems.eshop.settings')
+                        ->title("SHOP MANAGEMENT")
                 ])
                 ->divider()
                 ->permission('platform.systems.eshop')
@@ -133,6 +140,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.roles', __('Roles'))
                 ->addPermission('platform.systems.users', __('Users'))
                 ->addPermission('platform.systems.settings', "Settings (Navbar)")
+                ->addPermission('platform.audit.read', "Audit Logs (read)")
                 ->addPermission('platform.systems.social', "Social Media Management (read/write)"),
 
             ItemPermission::group("Shop Management")

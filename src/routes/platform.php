@@ -30,6 +30,8 @@ use App\Orchid\Screens\EventsListScreen;
 use App\Orchid\Screens\PagesEditScreen;
 use App\Orchid\Screens\PagesListScreen;
 
+use App\Orchid\Screens\AuditLogsListScreen;
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -130,3 +132,6 @@ Route::screen('page/{events?}', PagesEditScreen::class)
 
 Route::screen('pages', PagesListScreen::class)
     ->name('platform.pages.list');
+
+Route::screen('audit', AuditLogsListScreen::class)
+    ->name('platform.audit');

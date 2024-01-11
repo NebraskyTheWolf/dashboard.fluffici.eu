@@ -21,7 +21,7 @@ return new class extends Migration
 
             $table->string('gateway_secret')->nullable();
             $table->string('gateway_key')->nullable();
-
+            
             $table->timestamps();
         });
     }

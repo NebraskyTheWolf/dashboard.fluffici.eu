@@ -10,9 +10,13 @@ use App\Models\Pages;
 class HomeController extends Controller {
     
     public function index(Request $request) {
+
+        $result = $this->get('/api/test');
+
         return [
             'status' => true,
-            'message' => 'test'
+            'message' => 'test',
+            'backend' => $result
         ];
     }
 }
