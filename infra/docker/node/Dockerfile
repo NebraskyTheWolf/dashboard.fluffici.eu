@@ -15,6 +15,11 @@ RUN npm install
 # Bundle app source
 COPY ./src-backend /backend
 
+# Versioning
+
+COPY ./git/FETCH_HEAD /backend/REVISION
+COPY ./VERSION /backend/VERSION
+
 ARG GIT_COMMIT
 ENV GIT_COMMIT=$GIT_COMMIT
 
