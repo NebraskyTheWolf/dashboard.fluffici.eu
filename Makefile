@@ -25,6 +25,10 @@ destroy:
 remake:
 	@make destroy
 	@make install
+reload:
+	@make down
+	@make install
+	@make up
 ps:
 	docker compose ps
 web:
