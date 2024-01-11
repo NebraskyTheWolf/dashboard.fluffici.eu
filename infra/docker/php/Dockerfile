@@ -44,6 +44,7 @@ RUN <<EOF
 EOF
 
 COPY ./infra/docker/php/php.development.ini /usr/local/etc/php/php.ini
+COPY ./zz-nolog.conf /usr/local/etc/php-fpm.d/zz-nolog.conf
 
 FROM development AS development-xdebug
 
@@ -60,7 +61,6 @@ COPY ./infra/docker/php/php.deploy.ini /usr/local/etc/php/php.ini
 COPY ./src /workspace
 
 RUN <<EOF
-  composer install -q -n --no-ansi --no-dev --no-scripts --no-progress --prefer-dist
   chmod -R 777 storage bootstrap/cache
   php artisan optimize:clear
   php artisan optimize
