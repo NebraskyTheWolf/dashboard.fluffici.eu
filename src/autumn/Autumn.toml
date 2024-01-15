@@ -9,25 +9,21 @@ jpeg_quality = 80
     [tags.attachments]
         max_size = 20000000
         serve_if_field_present = ["object_id", "user_id"]
-        use_ulid = true
 
     # User Avatars
     [tags.avatars]
         max_size = 4000000
         restrict_content_type = "Image"
         serve_if_field_present = ["object_id", "user_id"]
-        use_ulid = true
     
     # User Profile Backgrounds
     [tags.photos]
         max_size = 6000000
         restrict_content_type = "Image"
         serve_if_field_present = ["object_id"]
-        use_ulid = true
     
     # Banners
     [tags.banners]
         max_size = 6000000
         restrict_content_type = "Image"
         serve_if_field_present = ["object_id", "event_id"]
-        use_ulid = true

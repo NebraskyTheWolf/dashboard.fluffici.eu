@@ -112,6 +112,10 @@ ping-minio-linux:
 	./bin/mc alias set mycloud http://localhost:9000
 	./bin/mc ping mycloud --error-count 20 --count 10 --interval 300
 
+buckets:
+	./bin/mc.exe alias set mycloud http://localhost:9000
+	./bin/mc.exe ls
+
 clean:
 	cd ./src/dashboard
 	php artisan config:clear

@@ -5,6 +5,7 @@ use crate::util::variables::{get_s3_bucket, LOCAL_STORAGE_PATH, USE_S3};
 
 use actix_web::{web::Query, HttpRequest, HttpResponse};
 use image::{io::Reader as ImageReader, ImageError};
+use log::info;
 use mongodb::bson::doc;
 use serde::Deserialize;
 use std::cmp;
@@ -145,7 +146,11 @@ pub async fn get(req: HttpRequest, resize: Query<Resize>) -> Result<HttpResponse
     let tag = get_tag(&req)?;
 
     let id = req.match_info().query("filename");
+    
+    info!("File id '{}'", id);
+
     let file = find_file(id, tag.clone()).await?;
+
 
     if let Some(true) = file.deleted {
         return Err(Error::NotFound);

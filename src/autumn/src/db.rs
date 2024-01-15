@@ -5,7 +5,9 @@ use crate::util::variables::{
 };
 
 use actix_web::web;
+use log::info;
 use mongodb::bson::doc;
+use mongodb::bson::oid::ObjectId;
 use mongodb::{Client, Collection};
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
@@ -94,18 +96,21 @@ impl File {
 pub async fn find_file(id: &str, tag: (String, &Tag)) -> Result<File, Error> {
     let mut query = doc! { "_id": id, "tag": tag.0 };
 
-    if !&tag.1.serve_if_field_present.is_empty() {
-        let mut or = vec![];
-        for field in &tag.1.serve_if_field_present {
-            or.push(doc! {
-                field: {
-                    "$exists": true
-                }
-            });
-        }
 
-        query.insert("$or", or);
-    }
+    /** Trying to find a better way. 
+    * if !&tag.1.serve_if_field_present.is_empty() {
+            let mut or = vec![];
+            for field in &tag.1.serve_if_field_present {
+                or.push(doc! {
+                    field: {
+                        "$exists": true
+                    }
+                });
+            }
+
+            query.insert("$or", or);
+        }
+     */
 
     get_collection("attachments")
         .find_one(query, None)
