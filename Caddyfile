@@ -1,6 +1,12 @@
-:80 {
+{$DASHBOARD_HOSTNAME} {
+
+	route /autumn* {
+		uri strip_prefix /autumn
+		reverse_proxy http://autumn:3000
+	}
+
 	root * /workspace/public
 	encode gzip
-	php_fastcgi app:9000
+	php_fastcgi dashboard:9000
 	file_server
 }

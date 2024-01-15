@@ -7,3 +7,4 @@ RUN <<EOF
   chown mysql:mysql $_
   chmod 777 $_
 EOF
+
