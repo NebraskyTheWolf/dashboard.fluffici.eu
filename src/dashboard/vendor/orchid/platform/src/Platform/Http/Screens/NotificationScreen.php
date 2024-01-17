@@ -90,7 +90,7 @@ class NotificationScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::wrapper('platform::partials.notification-wrap', [
+            Layout::wrapper('partials.notification-wrap', [
                 'table' => NotificationTable::class,
             ]),
         ];

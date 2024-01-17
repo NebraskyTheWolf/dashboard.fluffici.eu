@@ -43,7 +43,7 @@ class Upload extends Field
     /**
      * @var string
      */
-    protected $view = 'platform::fields.upload';
+    protected $view = 'fields.upload';
 
     /**
      * All attributes that are available to the field.

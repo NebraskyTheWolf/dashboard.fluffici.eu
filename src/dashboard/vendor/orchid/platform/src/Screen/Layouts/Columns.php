@@ -15,7 +15,7 @@ abstract class Columns extends Layout
     /**
      * @var string
      */
-    protected $template = 'platform::layouts.columns';
+    protected $template = 'layouts.columns';
 
     /**
      * Layout constructor.

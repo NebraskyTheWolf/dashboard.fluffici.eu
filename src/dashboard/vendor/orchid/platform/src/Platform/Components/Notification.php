@@ -37,7 +37,7 @@ class Notification extends Component
             ->limit(15)
             ->get();
 
-        return view('platform::components.notification', [
+        return view('components.notification', [
             'notifications' => $notifications,
         ]);
     }

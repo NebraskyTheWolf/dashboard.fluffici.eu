@@ -107,8 +107,14 @@ export default class extends ApplicationController {
         }
 
         axios
-            .put(this.prefix(`/systems/files/post/${attach.id}`), attach)
-            .then();
+            .post("http://127.0.0.1:3000/autumn/attachments", attach)
+            .then(result => {
+                if (result.id != null || result.id != undefined) {
+                    this.this.attachments[name].remote_id = result.id
+
+                    
+                }
+            });
     }
 
     /**
@@ -219,10 +225,10 @@ export default class extends ApplicationController {
 
         const controller = this;
 
-        const urlDelete = this.prefix(`/systems/files/`);
+        const urlDelete = "http://localhost:3000/attachments/delete/";
 
         this.dropZone = new Dropzone(this.element.querySelector('#' + this.data.get('id')), {
-            url: this.prefix('/systems/files'),
+            url: "http://localhost:3000/attachments",
             method: 'post',
             uploadMultiple: true,
             maxFilesize: this.data.get('max-file-size'),
@@ -289,9 +295,7 @@ export default class extends ApplicationController {
                             removeItem.parentNode.removeChild(removeItem);
                         }
                         !isMediaLibrary && axios
-                            .delete(urlDelete + file.data.id, {
-                                storage: storage,
-                            })
+                            .delete(urlDelete + file.data.id, {})
                             .then();
                     }
                 });
@@ -489,7 +493,7 @@ export default class extends ApplicationController {
             size: attachment.size,
             type: attachment.mime,
             status: Dropzone.ADDED,
-            url: `${attachment.url}`,
+            url: `http://localhost:3000/attachments/${attachment.remote_id}`,
             data: attachment,
         };
 

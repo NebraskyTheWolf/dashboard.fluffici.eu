@@ -20,7 +20,7 @@ abstract class Table extends Layout
     /**
      * @var string
      */
-    protected $template = 'platform::layouts.table';
+    protected $template = 'layouts.table';
 
     /**
      * @var Repository

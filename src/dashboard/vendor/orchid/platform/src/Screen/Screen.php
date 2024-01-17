@@ -49,7 +49,7 @@ abstract class Screen extends Controller
      */
     public function screenBaseView(): string
     {
-        return 'platform::layouts.base';
+        return 'layouts.base';
     }
 
     /**
@@ -168,7 +168,7 @@ abstract class Screen extends Controller
 
         $repository = $layout->handle($state, $request);
 
-        $view = $layout->build($repository).view('platform::partials.state', [
+        $view = $layout->build($repository).view('partials.state', [
             'state' => $this->serializeStateWithPublicProperties($state),
         ]);
 

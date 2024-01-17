@@ -15,7 +15,7 @@ abstract class Tabs extends Layout
     /**
      * @var string
      */
-    public $template = 'platform::layouts.tabs';
+    public $template = 'layouts.tabs';
 
     /**
      * @var array

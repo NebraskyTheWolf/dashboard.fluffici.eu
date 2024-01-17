@@ -32,13 +32,16 @@ export default class extends ApplicationController {
      *
      */
     connect() {
-        let image = this.data.get('url') ? this.data.get('url') : this.data.get(`value`);
+        let objectId = document.getElementById('object_id').value;
+        let tag = document.getElementById('bucket').value;
 
-        if (image) {
-            this.element.querySelector('.cropper-preview').src = image;
+        if (objectId != undefined || objectId != null && toString(objectId).length > 8) {
+            this.element.querySelector('.cropper-preview').src = `http://localhost:8080/autumn/${tag}/${objectId}`;
         } else {
             this.element.querySelector('.cropper-preview').classList.add('none');
             this.element.querySelector('.cropper-remove').classList.add('none');
+
+            this.clear()
         }
 
         let cropPanel = this.element.querySelector('.upload-panel');
@@ -72,17 +75,8 @@ export default class extends ApplicationController {
      * @param event
      */
     upload(event) {
-
-        let maxFileSize = this.data.get('max-file-size');
-
         if (this.keepOriginalTypeValue) {
             this.typeValue = event.target.files[0].type
-        }
-
-        if (event.target.files[0].size / 1024 / 1024 > maxFileSize) {
-            this.toast(this.maxSizeMessageValue.replace(/{value}/, maxFileSize))
-            event.target.value = null;
-            return;
         }
 
         if (!event.target.files[0]) {
@@ -129,35 +123,85 @@ export default class extends ApplicationController {
             const formData = new FormData();
 
             formData.append('file', blob);
-            formData.append('storage', this.data.get('storage'));
-            formData.append('group', this.data.get('groups'));
-            formData.append('path', this.data.get('path'));
-            formData.append('acceptedFiles', this.data.get('accepted-files'));
 
-            let element = this.element;
-             window.axios.post(this.prefix('/systems/files'), formData)
-                .then((response) => {
-                    let image = response.data.url;
-                    let targetValue = this.data.get('target');
+            var tag = document.getElementById("bucket").value;
 
-                    element.querySelector('.cropper-preview').src = image;
-                    element.querySelector('.cropper-preview').classList.remove('none');
-                    element.querySelector('.cropper-remove').classList.remove('none');
-                    element.querySelector('.cropper-path').value = response.data[targetValue];
-
-                    // add event for listener
-                    element.querySelector('.cropper-path').dispatchEvent(new Event("change"));
-
-                    console.log(this.getModal(), this.getModal().hide());
-
-                    this.getModal().hide();
-                })
-                .catch((error) => {
+            fetch(`http://localhost:8080/autumn/${tag}`, {
+                method: 'post',
+                body: formData
+            }).then((res) => {
+                if (res.ok) {
+                    this.process(this.element, res.json(), tag)
+                } else {
                     this.alert('Validation error', 'File upload error');
-                    console.warn(error);
-                });
+                }
+            })
+
         }, this.typeValue);
 
+    }
+
+    process(element, data, tag) {
+        data.then(async result => {
+            var objectId = result.id;
+
+            let image = `http://localhost:8080/autumn/${tag}/${objectId}`;
+
+            element.querySelector('.cropper-preview').src = image;
+            element.querySelector('.cropper-preview').classList.remove('none');
+            element.querySelector('.cropper-remove').classList.remove('none');
+            element.querySelector('.cropper-path').value = objectId;
+            element.querySelector('.cropper-path').dispatchEvent(new Event("change"));
+
+            this.getModal().hide();
+
+            var body = new FormData();
+            body.append('id', objectId)
+            body.append('tag', tag)
+            body.append('user_id', parseInt(document.getElementById("user_id").value))
+            body.append('action_id', document.getElementById("action_id").value)
+
+            await fetch(this.prefix("/systems/uploaded"), {
+                method: 'post',
+                body: body,
+                headers: {
+                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf_token"]').content
+                }
+            })
+            .then(res => {
+                if (res.ok) {
+                    res.json().then(data => {
+                        this.toast("File uploaded. (" + data.objectId.substring(0, 8) + " )")
+                    })
+                } else {
+                    this.toast("File validation error", "danger")
+                }
+            })
+        })
+    }
+
+    displayError(error) {
+        error.then(result => {
+            if (result.type == "Malware") {
+                this.toast("A malware was detected, we cannot send the file.", "danger")
+            } else if (result.type == "S3Error") {
+                this.toast("The ObjectStorage backend is offline", "danger")
+            } else if (result.type == "DatabaseError") {
+                this.toast("The database has struggles to answer.", "danger")
+            } else if (result.type == "FileTypeNotAllowed") {
+                this.toast("Incorrect file type for this tag.", "danger")
+            } else if (result.type == "UnknownTag") {
+                this.toast("This tag does not exists.", "danger")
+            } else if (result.type == "MissingData") {
+                this.toast("Missing data in the request.", "danger")
+            } else if (result.type == "FailedToReceive") {
+                this.toast("The upload was aborted.", "danger")
+            } else if (result.type == "FileTooLarge") {
+                this.toast("This file is too large ( Maximum size allowed : " + (error.max_size / 1000 / 1000) + " Mb )", "danger")
+            } else { 
+                this.toast("Autumn have not responded, is the fox gone OwO? *screech*")
+            }
+        })
     }
 
     /**

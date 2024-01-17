@@ -8,7 +8,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 
 use App\Listeners\UploadListener;
-use Orchid\Platform\Events\UploadFileEvent;
+use Orchid\Platform\Events\UploadedFileEvent;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -21,7 +21,7 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        UploadFileEvent::class => [
+        UploadedFileEvent::class => [
             UploadListener::class,
         ],
     ];

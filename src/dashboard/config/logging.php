@@ -36,6 +36,8 @@ return [
         'trace' => false,
     ],
 
+    
+
     /*
     |--------------------------------------------------------------------------
     | Log Channels
@@ -52,6 +54,10 @@ return [
     */
 
     'channels' => [
+        'flare' => [
+            'driver' => 'flare',
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
@@ -80,6 +86,12 @@ return [
             'emoji' => ':boom:',
             'level' => env('LOG_LEVEL', 'critical'),
             'replace_placeholders' => true,
+        ],
+
+        'stack' => [
+            'driver' => 'stack',
+            'channels' => ['daily', 'flare'],
+            'ignore_exceptions' => false,
         ],
 
         'papertrail' => [

@@ -49,6 +49,7 @@ mix
         'dropzone', 'cropperjs', 'tom-select', 'frappe-charts', 'inputmask',
         'simplemde', 'axios', 'leaflet', 'codeflask',
         'flatpickr', 'quill', 'codemirror', 'typo-js', 'sortablejs',
+        'node:zlib', 'node-fetch'
     ])
     .setPublicPath('public')
     .version();

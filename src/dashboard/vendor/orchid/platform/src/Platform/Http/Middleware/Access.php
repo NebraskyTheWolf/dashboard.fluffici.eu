@@ -50,10 +50,6 @@ class Access
             return $next($request);
         }
 
-        if (Impersonation::isSwitch()) {
-            return response()->view('platform::auth.impersonation');
-        }
-
         // The current user is already signed in.
         // It means that he does not have the privileges to view.
         abort(Screen::unaccessed());

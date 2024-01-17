@@ -10,7 +10,9 @@ use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\TextArea;
-use Orchid\Screen\Fields\Upload;
+use Orchid\Screen\Fields\Cropper;
+use Orchid\Screen\Fields\Picture;
+use Orchid\Screen\Layouts\View;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Group;
@@ -22,6 +24,8 @@ use Orchid\Support\Color;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AuditLogs;
+
+use App\Models\PlatformAttachments;
 
 class EventsEditScreen extends Screen
 {
@@ -102,6 +106,10 @@ class EventsEditScreen extends Screen
      */
     public function layout(): iterable
     {
+        if ($this->events->event_id == NULL) {
+            $this->events->event_id = Uuid::uuid4();
+        }
+
         return [
             Layout::rows([
                 Group::make([
@@ -152,18 +160,31 @@ class EventsEditScreen extends Screen
                         ->disabled($this->events->status == "CANCELLED"),
                 ]),
 
-                Upload::make('events.banner')
+                Cropper::make('events.banner')
                     ->title('Upload a banner or let it blank :3')
-                    ->group('avatars')
-                    ->closeOnAdd()
-                    ->title('Event Banner')
-                    //->canSee(!$this->events->exists),
+                    ->actionId($this->events->event_id)
+                    ->remoteTag('banners')
+                    ->minWidth(750)
+                    ->maxWidth(1500)
+                    ->minHeight(250)
+                    ->maxHeight(500)
+                    ->maxFileSize(200)
+                    ->canSee(!$this->events->exists),
+                Picture::make('events.banner')
+                    ->autumnUrl('http://localhost:8080/autumn')
+                    ->bucket('banners')
+                    ->width(750)
+                    ->height(250)
+                    ->readOnly(true)
+                    ->objectId($this->getBanner($this->events->event_id))
+                    ->title("Event banner")
+                    ->canSee($this->events->exists),
+                
             ])->title('Event informations'),
         ];
     }
 
     public function createOrUpdate(Request $request) {
-        $this->events->event_id = Uuid::uuid4();
         
         $this->events->fill($request->get('events'))->save();
 
@@ -231,5 +252,13 @@ class EventsEditScreen extends Screen
         $audit->slug = 'event';
         $audit->type = $type;
         $audit->save();
+    }
+
+    private function getBanner($id) {
+        if ($this->events->exists) {
+            return PlatformAttachments::where('action_id', $id)->firstOrFail()->attachment_id ?: NULL;
+        } else {
+            return NULL;
+        }
     }
 }

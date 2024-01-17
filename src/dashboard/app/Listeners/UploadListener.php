@@ -4,12 +4,14 @@ namespace App\Listeners;
 
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Orchid\Platform\Events\UploadFileEvent;
+use Orchid\Platform\Events\UploadedFileEvent;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Support\Facades\Toast;
 use Orchid\Attachment\Models\Attachment as OrchidAttachment;
-
+use Illuminate\Support\Facades\Http;
 use App\Models\PlatformAttachments;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7;
 
 class UploadListener 
 {
@@ -20,17 +22,16 @@ class UploadListener
     /**
      * Handle the event.
      *
-     * @param  UploadFileEvent  $event
+     * @param  UploadedFileEvent  $event
      * @return void
      */
-    public function handle(UploadFileEvent $event) {
-        $client = new \GuzzleHttp\Client();
-
+    public function handle(UploadedFileEvent $event) {
         try {
-            $this->res = $client->request('POST', env('DASHBOARD_HOSTNAME') . '/autumn/' . $event->attachment->group, [
+
+            $client = new Client();
+            $this->res = $client->request('POST', env('DASHBOARD_HOSTNAME', "") . '/autumn/attachments', [
                 'headers' => [
                     'Accept' => 'application/json',
-                    'Content-Type' => 'multipart/form-data',
                     'X-Client-Token' => ''. env('AUTUMN_SECRET', "0"),
                 ],
                 'multipart' => [
@@ -59,7 +60,7 @@ class UploadListener
             Toast::success('File ' . $event->attachment->name . ' uploaded with the ID ' . $response->id)->delay(2000);
 
         } catch (\Exception $e) {
-            $response = $e->getResponse();
+            $response = $this->res->getResponse();
             $body = @json_encode($response->getBody()->getContents(), true);
 
             if ($body->type == 'Malware') {

@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class AuditLogs extends Model
 {
     use AsSource;
+
+    protected $fillable = [
+        'name',
+        'slug',
+        'type'
+    ];
+
 }

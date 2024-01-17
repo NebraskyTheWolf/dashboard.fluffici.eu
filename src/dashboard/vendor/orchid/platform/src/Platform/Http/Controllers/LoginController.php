@@ -14,7 +14,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-use Orchid\Access\Impersonation;
 
 class LoginController extends Controller
 {
@@ -90,7 +89,7 @@ class LoginController extends Controller
 
         return $request->wantsJson()
             ? new JsonResponse([], 204)
-            : redirect()->intended(route(config('platform.index')));
+            : redirect()->intended("main");
     }
 
     /**
@@ -107,7 +106,7 @@ class LoginController extends Controller
 
         $model = $provider->createModel()->find($user);
 
-        return view('platform::auth.login', [
+        return view('auth.login', [
             'isLockUser' => optional($model)->exists ?? false,
             'lockUser'   => $model,
         ]);
@@ -120,7 +119,7 @@ class LoginController extends Controller
     {
         $lockUser = $cookieJar->forget('lockUser');
 
-        return redirect()->route('platform.login')->withCookie($lockUser);
+        return redirect()->route('login')->withCookie($lockUser);
     }
 
     /**
@@ -130,7 +129,7 @@ class LoginController extends Controller
     {
         Impersonation::logout();
 
-        return redirect()->route(config('platform.index'));
+        return redirect()->route("index");
     }
 
     /**

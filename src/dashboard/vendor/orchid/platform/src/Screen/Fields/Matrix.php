@@ -19,7 +19,7 @@ class Matrix extends Field
     /**
      * @var string
      */
-    protected $view = 'platform::fields.matrix';
+    protected $view = 'fields.matrix';
 
     /**
      * Default attributes value.

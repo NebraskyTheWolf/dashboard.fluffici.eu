@@ -14,6 +14,14 @@ use Orchid\Attachment\Models\Attachment;
 use Orchid\Platform\Dashboard;
 use Orchid\Platform\Events\UploadedFileEvent;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\PlatformAttachments;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7;
+
+use App\Models\User;
+use App\Models\AuditLogs;
+
+use Intervention\Image\Image;
 
 /**
  * Class AttachmentController.
@@ -25,6 +33,7 @@ class AttachmentController extends Controller
      */
     protected $attachment;
 
+
     /**
      * AttachmentController constructor.
      */
@@ -34,80 +43,50 @@ class AttachmentController extends Controller
         $this->attachment = Dashboard::modelClass(Attachment::class);
     }
 
-    public function upload(Request $request): JsonResponse
-    {
-        $attachment = collect($request->allFiles())
-            ->flatten()
-            ->map(fn (UploadedFile $file) => $this->createModel($file, $request));
+    public function uploaded(Request $request): JsonResponse {
+        
+        if ($request->has('user_id') 
+            && $request->has('action_id')
+            && $request->has('tag')
+            && $request->has('id')) {
 
-        $response = $attachment->count() > 1 ? $attachment : $attachment->first();
+            if ($request->input('tag') == "avatars") {
+                $user = User::where('id', $request->input('user_id'))->firstOrFail();
 
-        return response()->json($response);
-    }
+                if ($user->avatar == 1) {
+                    AuditLogs::create([
+                        'name' => User::where('id', $request->input('user_id'))->firstOrFail()->name,
+                        'slug' => 'file_changed',
+                        'type' => substr($request->input('id'), 0, 16) . ' -> ' . substr($user->avatar_id, 0, 16)
+                    ]);
+                } else {
+                    $user->avatar = 1;
+                }
 
-    public function sort(Request $request): void
-    {
-        collect($request->get('files', []))
-            ->each(function ($sort, $id) {
-                $attachment = $this->attachment->find($id);
-                $attachment->sort = $sort;
-                $attachment->save();
-            });
-    }
+                $user->avatar_id = $request->input('id');
+                $user->save();
+            }
+            
+            PlatformAttachments::create([
+                'user_id' => $request->input('user_id'),
+                'action_id' => $request->input('action_id') ?: "none",
+                'bucket' => $request->input('tag'),
+                'attachment_id' => $request->input('id')
+            ]);
 
-    /**
-     * Delete files.
-     */
-    public function destroy(string $id, Request $request): void
-    {
-        $storage = $request->get('storage', 'public');
-        $this->attachment->findOrFail($id)->delete($storage);
-    }
+            AuditLogs::create([
+                'name' => User::where('id', $request->input('user_id'))->firstOrFail()->name,
+                'slug' => 'file_upload',
+                'type' => substr($request->input('id'), 0, 16) . ' : ' . $request->input('tag')
+            ]);
 
-    /**
-     * @return ResponseFactory|Response
-     */
-    public function update(string $id, Request $request)
-    {
-        $attachment = $this->attachment
-            ->findOrFail($id)
-            ->fill($request->all());
-
-        $attachment->save();
-
-        return response()->json($attachment);
-    }
-
-    /**
-     * @throws BindingResolutionException
-     *
-     * @return mixed
-     */
-    private function createModel(UploadedFile $file, Request $request)
-    {
-        $file = resolve(File::class, [
-            'file'  => $file,
-            'disk'  => $request->get('storage'),
-            'group' => $request->get('group'),
-        ]);
-
-        if ($request->has('path')) {
-            $file->path($request->get('path'));
+            return response()->json([
+                'objectId' => $request->input('id')
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'failed'
+            ]);
         }
-
-        $model = $file->load();
-
-        $model->url = $model->url();
-
-        event(new UploadedFileEvent($model));
-
-        return $model;
-    }
-
-    public function media(): JsonResponse
-    {
-        $attachments = $this->attachment->filters()->paginate(12);
-
-        return response()->json($attachments);
     }
 }

@@ -13,7 +13,7 @@ export default class extends ApplicationController {
         },
         count: {
             type: Number,
-            default: 3,
+            default: 1,
         },
         size: {
             type: Number,
@@ -36,19 +36,16 @@ export default class extends ApplicationController {
     static targets = ['files', 'preview', 'container'];
 
     connect() {
-        this.attachmentValue.forEach((id) => this.renderPreview(id));
         this.togglePlaceholderShow();
+        var avatarId = document.getElementById("avatar_id").value;
+        if (avatarId != null 
+            || avatarId != undefined) {
+            this.renderPreview(avatarId, 'avatars');
+        }
     }
 
     change(event) {
         [...event.target.files].forEach((file) => {
-            let sizeMB = file.size / 1000 / 1000; //MB (Not MiB)
-
-            if (sizeMB > this.sizeValue) {
-                alert(this.errorSizeValue.replace(':name', file.name));
-                return;
-            }
-
             this.upload(file);
         });
 
@@ -64,70 +61,115 @@ export default class extends ApplicationController {
         this.loadingValue = this.loadingValue + 1;
         this.element.ariaBusy = 'true';
 
-        fetch(this.prefix('/systems/files'), {
-            method: 'POST',
-            body: data,
-            headers: {
-                'X-CSRF-Token': document.head.querySelector('meta[name="csrf_token"]').content,
-            },
+        var tag = document.getElementById("bucket").value;
+
+        fetch(`http://localhost:8080/autumn/${tag}`, {
+            method: 'post',
+            body: data
+        }).then((res) => {
+            if (res.ok) {
+                this.process(res.json(), tag)
+            } else {
+                this.element.ariaBusy = 'false';
+                this.loadingValue = this.loadingValue - 1;
+                this.togglePlaceholderShow();
+
+                this.displayError(res.json())
+            }
         })
-            .then((response) => response.json())
-            .then((attachment) => {
-                this.element.ariaBusy = 'false';
-                this.loadingValue = this.loadingValue - 1;
-
-                let limit = this.attachmentValue.length < this.countValue;
-
-                if (!limit) {
-                    return;
-                }
-
-                this.attachmentValue = [...this.attachmentValue, attachment];
-
-                // Update Label after push
-                this.togglePlaceholderShow();
-                this.renderPreview(attachment);
-            })
-            .catch((error) => {
-                this.element.ariaBusy = 'false';
-                this.loadingValue = this.loadingValue - 1;
-                this.togglePlaceholderShow();
-                console.error('Error:', error);
-                alert(this.errorTypeValue);
-            });
     }
 
     remove(event) {
-        const i = event.currentTarget.getAttribute('data-index');
         event.currentTarget.closest('.pip').remove();
-
-        this.attachmentValue = this.attachmentValue.filter((id) => String(id) !== String(i));
-
         this.togglePlaceholderShow();
+    }
+    
+    displayError(error) {
+        error.then(result => {
+            if (result.type == "Malware") {
+                this.toast("A malware was detected, we cannot send the file.", "danger")
+            } else if (result.type == "S3Error") {
+                this.toast("The ObjectStorage backend is offline", "danger")
+            } else if (result.type == "DatabaseError") {
+                this.toast("The database has struggles to answer.", "danger")
+            } else if (result.type == "FileTypeNotAllowed") {
+                this.toast("Incorrect file type for this tag.", "danger")
+            } else if (result.type == "UnknownTag") {
+                this.toast("This tag does not exists.", "danger")
+            } else if (result.type == "MissingData") {
+                this.toast("Missing data in the request.", "danger")
+            } else if (result.type == "FailedToReceive") {
+                this.toast("The upload was aborted.", "danger")
+            } else if (result.type == "FileTooLarge") {
+                this.toast("This file is too large ( Maximum size allowed : " + (error.max_size / 1000 / 1000) + " Mb )", "danger")
+            } else { 
+                this.toast("Autumn have not responded, is the fox gone OwO? *screech*")
+            }
+        })
+    }
+
+    process(data, tag) {
+        data.then(async result => {
+            this.element.ariaBusy = 'false';
+            this.loadingValue = this.loadingValue - 1;
+                
+            var objectId = result.id;
+
+            // Update Label after push
+            this.togglePlaceholderShow();
+            this.renderPreview(objectId, tag);
+
+            var body = new FormData();
+            body.append('id', objectId)
+            body.append('tag', tag)
+            body.append('user_id', parseInt(document.getElementById("user_id").value))
+            body.append('action_id', document.getElementById("action_id").value)
+
+            await fetch(this.prefix("/systems/uploaded"), {
+                method: 'post',
+                body: body,
+                headers: {
+                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf_token"]').content
+                }
+            })
+            .then(res => {
+                if (res.ok) {
+                    res.json().then(data => {
+                        this.toast("File uploaded. (" + data.objectId.substring(0, 8) + " )")
+                    })
+                } else {
+                    this.element.ariaBusy = 'false';
+                    this.loadingValue = this.loadingValue - 1;
+                    this.togglePlaceholderShow();
+
+                    this.toast("File validation error", "danger")
+                }
+            })
+        })
     }
 
     /**
      *
      */
     togglePlaceholderShow() {
-        this.containerTarget.classList.toggle('d-none', this.attachmentValue.length >= this.countValue);
+        this.containerTarget.classList.toggle('d-none', false);
     }
 
     /**
      *
      * @param attachment
+     * @param bucket the remote tag from Autumn
      * @param replace
      */
-    renderPreview(attachment, replace = null) {
+    renderPreview(attachment, bucket, replace = null) {
         const pip = document.createElement('div');
         pip.id = `attachment-${attachment.id}`;
         pip.classList.add('pip', 'col', 'position-relative');
 
         pip.innerHTML = `
-          <input type="hidden" name="${this.nameValue}" value="${attachment.id}">
-          <img class="attach-image rounded border user-select-none" src="${attachment.url}"/>
-          <button class="btn-close border shadow position-absolute end-0 top-0" type="button" data-action="click->attach#remove" data-index="${attachment.id}"></button>
-      `;
+            <input type="hidden" name="${this.nameValue}" value="${attachment}">
+            <img class="attach-image rounded border user-select-none" src="http://localhost:3000/${bucket}/${attachment}"/>
+        `;
 
         if (replace !== null) {
             this.element.querySelector(`#attachment-${replace}`).outerHTML = pip.outerHTML;

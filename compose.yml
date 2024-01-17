@@ -7,6 +7,9 @@ configs:
   db-config:
     file: ./infra/docker/mysql/my.cnf
 
+networks:
+    app-network:
+
 services:
   dashboard:
     build:
@@ -159,7 +162,7 @@ services:
         volume:
           nocopy: true
     environment:
-      - MYSQL_DATABASE=${DB_DATABASE:-laravel}
+      - MYSQL_DATABASE=${DB_DATABASE:-fluffici_test}
       - MYSQL_USER=${DB_USERNAME:-phper}
       - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
@@ -191,6 +194,8 @@ services:
     image: clamav/clamav:stable
     restart: always
     container_name: clamd-server
+    ports:
+      - '3310:3310'
 
   autumn:
     build:
@@ -213,3 +218,5 @@ services:
       - AWS_ACCESS_KEY_ID=${MINIO_ROOT_USER:-minioautumn}
       - AWS_SECRET_ACCESS_KEY=${MINIO_ROOT_PASSWORD:-minioautumn}
       - AUTUMN_PUBLIC_URL=${AUTUMN_PUBLIC_URL:-http://caddy:8080/autumn}
+    ports:
+      - '3000:3000'

@@ -80,7 +80,7 @@ class SearchScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::wrapper('platform::partials.result', [
+            Layout::wrapper('partials.result', [
                 'radios' => SearchLayout::class,
             ]),
         ];
@@ -129,7 +129,7 @@ class SearchScreen extends Screen
             })
             ->filter();
 
-        return view('platform::partials.result-compact', [
+        return view('partials.result-compact', [
             'results' => $results,
             'total'   => $total,
             'query'   => $query,

@@ -6,6 +6,7 @@ namespace Orchid\Screen\Fields;
 
 use Orchid\Screen\Concerns\Multipliable;
 use Orchid\Screen\Field;
+use Orchid\Screen\Action;
 
 /**
  * Class Attach.
@@ -27,7 +28,7 @@ class Attach extends Field
     /**
      * @var string
      */
-    protected $view = 'platform::fields.attach';
+    protected $view = 'fields.attach';
 
     /**
      * Default attributes value.
@@ -35,12 +36,16 @@ class Attach extends Field
      * @var array
      */
     protected $attributes = [
-        'maxCount'            => 999,
-        'maxSize'             => 90, // MB
+        'maxCount'            => 1,
+        'maxSize'             => 400, // MB
         'accept'              => '*/*',
         'placeholder'         => 'Upload file',
         'errorMaxSizeMessage' => 'File ":name" is too large to upload',
         'errorTypeMessage'    => 'The attached file must be an image',
+        'actionId' => '',
+        'remoteTag' => 'attachments',
+        'userId' => '',
+        'objectId' => null
     ];
 
     /**
@@ -50,7 +55,6 @@ class Attach extends Field
      */
     protected $inlineAttributes = [
         'accept',
-        'multiple',
-        'required',
+        'required'
     ];
 }

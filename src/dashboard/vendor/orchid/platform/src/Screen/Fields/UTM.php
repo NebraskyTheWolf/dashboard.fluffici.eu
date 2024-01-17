@@ -30,7 +30,7 @@ class UTM extends Field
     /**
      * @var string
      */
-    protected $view = 'platform::fields.utm';
+    protected $view = 'fields.utm';
 
     /**
      * Default attributes value.

@@ -15,7 +15,7 @@ class IndexController extends Controller
 {
     public function index(): RedirectResponse
     {
-        return redirect()->route(config('platform.index'));
+        return redirect()->route("main");
     }
 
     /**
@@ -23,6 +23,6 @@ class IndexController extends Controller
      */
     public function fallback()
     {
-        return view('platform::errors.404');
+        return view('errors.404');
     }
 }

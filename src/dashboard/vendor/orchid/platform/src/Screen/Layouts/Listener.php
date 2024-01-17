@@ -14,7 +14,7 @@ abstract class Listener extends Layout
     /**
      * @var string
      */
-    protected $template = 'platform::layouts.listener';
+    protected $template = 'layouts.listener';
 
     /**
      * List of field names for which values will be listened.
@@ -76,7 +76,7 @@ abstract class Listener extends Layout
             return null;
         }
 
-        return route('platform.async.listener', [
+        return route('async.listener', [
             'screen' => Crypt::encryptString(get_class($screen)),
             'layout' => Crypt::encryptString(static::class),
         ]);

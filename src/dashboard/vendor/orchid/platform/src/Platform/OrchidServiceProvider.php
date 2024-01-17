@@ -74,7 +74,7 @@ abstract class OrchidServiceProvider extends ServiceProvider
     private function defineMenu(): static
     {
         // Register the menu items
-        View::composer('platform::dashboard', function () {
+        View::composer('dashboard', function () {
             $elements = [...$this->menu(), ...$this->registerMenu(), ...$this->registerMainMenu(), ...$this->registerProfileMenu()];
 
             foreach ($elements as $element) {

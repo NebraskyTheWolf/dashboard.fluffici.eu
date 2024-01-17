@@ -39,7 +39,7 @@ class Cropper extends Picture
     /**
      * @var string
      */
-    protected $view = 'platform::fields.cropper';
+    protected $view = 'fields.cropper';
 
     /**
      * Default attributes value.
@@ -61,6 +61,9 @@ class Cropper extends Picture
         'acceptedFiles'          => 'image/*',
         'keepOriginalType'       => false,
         'maxSizeValidateMessage' => 'The upload file is too large. Max size: {value} MB',
+        'remoteTag' => 'attachments',
+        'actionId' => '',
+        'objectId' => null
     ];
 
     /**

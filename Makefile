@@ -28,8 +28,17 @@ install:
 build:
 	docker-compose build --build-arg GIT_COMMIT=$(GIT_SHA_FETCH)
 
+routes:
+	docker compose exec dashboard php artisan route:list
+
+make-user:
+	docker compose exec dashboard php artisan orchid:admin
+
 revision:
 	@echo $(GIT_SHA_FETCH)
+
+status:
+	docker compose exec dashboard php artisan migrate:status
 
 up:
 	docker compose up -d
@@ -78,6 +87,10 @@ optimize-clear:
 	docker compose exec www php artisan optimize:clear
 	docker compose exec shop php artisan optimize:clear
 	docker compose exec akce php artisan optimize:clear
+
+clear-config:
+	docker compose exec dashboard php artisan config:clear
+
 db:
 	docker compose exec db bash
 sql:

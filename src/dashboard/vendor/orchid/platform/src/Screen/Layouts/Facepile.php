@@ -13,7 +13,7 @@ class Facepile extends Content
     /**
      * @var string
      */
-    protected $template = 'platform::layouts.facepile';
+    protected $template = 'layouts.facepile';
 
     /**
      * @param Personable[] $users

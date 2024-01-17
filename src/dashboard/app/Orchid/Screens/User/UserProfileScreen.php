@@ -17,9 +17,14 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\Actions\Attach ;
+use Orchid\Screen\Actions\Picture ;
+use App\Models\User as AUser;
 
 class UserProfileScreen extends Screen
 {
+
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -61,12 +66,12 @@ class UserProfileScreen extends Screen
                 ->novalidate()
                 ->canSee(Impersonation::isSwitch())
                 ->icon('bs.people')
-                ->route('platform.switch.logout'),
+                ->route('switch.logout'),
 
             Button::make('Sign out')
                 ->novalidate()
                 ->icon('bs.box-arrow-left')
-                ->route('platform.logout'),
+                ->route('logout'),
         ];
     }
 
@@ -79,12 +84,12 @@ class UserProfileScreen extends Screen
             Layout::block(UserEditLayout::class)
                 ->title(__('Profile Information'))
                 ->description(__("Update your account's profile information and email address."))
-                ->commands(
+                ->commands([
                     Button::make(__('Save'))
-                        ->type(Color::BASIC())
+                        ->type(Color::PRIMARY)
                         ->icon('bs.check-circle')
-                        ->method('save')
-                ),
+                        ->method('save'),
+                ]),
 
             Layout::block(ProfilePasswordLayout::class)
                 ->title(__('Update Password'))

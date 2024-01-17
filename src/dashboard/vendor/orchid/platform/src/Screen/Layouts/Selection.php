@@ -17,12 +17,12 @@ abstract class Selection extends Layout
     /**
      * Drop-down filters.
      */
-    public const TEMPLATE_DROP_DOWN = 'platform::layouts.selection';
+    public const TEMPLATE_DROP_DOWN = 'layouts.selection';
 
     /**
      * Line filters.
      */
-    public const TEMPLATE_LINE = 'platform::layouts.filter';
+    public const TEMPLATE_LINE = 'layouts.filter';
 
     /**
      * @var string

@@ -51,7 +51,7 @@ class Modal extends Layout
     /**
      * @var string
      */
-    protected $template = 'platform::layouts.modal';
+    protected $template = 'layouts.modal';
 
     /**
      * Modal constructor.
@@ -232,7 +232,7 @@ class Modal extends Layout
             return null;
         }
 
-        return route('platform.async', [
+        return route('async', [
             'screen'   => Crypt::encryptString(get_class($screen)),
             'method'   => $this->method,
             'template' => $this->getSlug(),

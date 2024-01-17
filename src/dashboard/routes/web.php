@@ -3,10 +3,16 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\PostsController;
-use App\Http\Controllers\PagesController;
-use App\Http\Controllers\Shop\ShopController;
+use Orchid\Platform\Http\Controllers\LoginController;
+
+use Orchid\Platform\Http\Controllers\AsyncController;
+use Orchid\Platform\Http\Controllers\AttachmentController;
+use Orchid\Platform\Http\Controllers\IndexController;
+use Orchid\Platform\Http\Controllers\RelationController;
+use Orchid\Platform\Http\Controllers\SortableController;
+use Orchid\Platform\Http\Screens\NotificationScreen;
+use Orchid\Platform\Http\Screens\SearchScreen;
+use Tabuna\Breadcrumbs\Trail;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,52 +25,57 @@ use App\Http\Controllers\Shop\ShopController;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+//Route::get('/', [LoginController::class, 'showLoginForm']);
 
-Route::get('/events', [EventController::class, 'index'])->name('events');
-Route::get('/events/interested/counts', [EventController::class, 'interestedCounts'])->name('events.interested.counts');
-Route::post('/events/interested', [EventController::class, 'interested'])->name('events.interested');
+  // Authentication Routes...
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
+Route::middleware('throttle:60,1')
+    ->post('login', [LoginController::class, 'login'])
+    ->name('login.auth');
 
-Route::get('/posts', [PostsController::class, 'index'])->name("posts");
-Route::post('/posts/{postid}/add/comment', [PostsController::class, 'comment'])->name("posts.comment");
-
-Route::get('/pages/{pageslug}', [PagesController::class, 'index'])->name('pages');
-
-Route::group(['namespace' => 'Shop', 'prefix' => 'shop'], function () {
-    Route::get('/', [ShopController::class, 'index'])->name("shop.home");
-    Route::get('/product/{productSlug}', [ShopController::class, 'product'])->name("shop.product");
-    Route::get('/product/{productSlug}/image/{size}', [ShopController::class, 'productImage'])->name("shop.product.image");
-    Route::get('/category/{categoryid}', [ShopController::class, 'category'])->name("shop.category");
-
-    Route::get('/cart', [ShopController::class, 'cart']);
-    Route::post('/cart/confirm', [ShopController::class, 'confirmCart']);
-    Route::post('/cart/remove', [ShopController::class, 'removeItem']);
-    Route::post('/cart/clear', [ShopController::class, 'clearCart']);
-    Route::post('/cart/add', [ShopController::class, 'addItem']);
-
-    Route::get('/success', [ShopController::class, 'paymentSuccess']);
-    Route::get('/failed/{message}', [ShopController::class, 'paymentFailed']);
-
-    Route::post('/payment/paypal/notification', [ShopController::class, 'paypalCallback']);
-    Route::post('/payment/paysafecard/notification', [ShopController::class, 'paysafeCallback']);
-
-    Route::get('/products/search', function (Request $request) {
-        return response()->json([
-            'status' => true,
-            'products' => array_map(function ($user) {
-                return [
-                'product' => $user['name'],
-                'img' => url('/shop/product/') . $user['name'] . '/image/32',
-                'url' => url('/shop/product/' . $user['name'])
-                ];
-            }, \App\Models\ShopProducts::where('name', 'LIKE', '%' . $_GET['q'] . '%')->get()->toArray())
-        ]);
-    });
-});
+Route::get('lock', [LoginController::class, 'resetCookieLockMe'])->name('login.lock');
+Route::get('switch-logout', [LoginController::class, 'switchLogout']);
+Route::post('switch-logout', [LoginController::class, 'switchLogout'])->name('switch.logout');
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/health', function (Request $request) {
     return [
         'status' => "ok",
         'version' => file_get_contents('../VERSION'),
     ];
+})->name("health");
+
+
+Route::prefix('dashboard')->group(function () {
+    Route::get('/', [IndexController::class, 'index'])
+        ->name('index')
+        ->breadcrumbs(fn (Trail $trail) => $trail->push(__('Home'), route('index')));
+
+    Route::screen('search/{query}', SearchScreen::class)
+        ->name('search')
+        ->breadcrumbs(fn (Trail $trail, string $query) => $trail->parent('index')
+            ->push(__('Search'))
+            ->push($query));
 });
+
+Route::post('async/{screen}/{method?}/{template?}', [AsyncController::class, 'load'])
+->name('async');
+
+Route::post('listener/{screen}/{layout}', [AsyncController::class, 'listener'])
+->name('async.listener');
+
+// TODO: Remove group
+Route::prefix('systems')->group(function () {
+    Route::post('uploaded', [AttachmentController::class, 'uploaded'])
+        ->name('systems.files.uploaded');
+});
+
+Route::screen('notifications/{id?}', NotificationScreen::class)
+->name('notifications')
+->breadcrumbs(fn (Trail $trail) => $trail->parent('index')
+    ->push(__('Notifications')));
+    
+Route::post('api/notifications', [NotificationScreen::class, 'unreadNotification'])
+->name('api.notifications');
+
+//Route::fallback([IndexController::class, 'fallback']);

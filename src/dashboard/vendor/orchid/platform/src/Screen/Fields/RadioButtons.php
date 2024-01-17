@@ -27,7 +27,7 @@ class RadioButtons extends Field
     /**
      * @var string
      */
-    protected $view = 'platform::fields.radiobutton';
+    protected $view = 'fields.radiobutton';
 
     /**
      * Default attributes value.

@@ -84,7 +84,7 @@ class File
      *
      * @return Model|Attachment
      */
-    public function load($bucket): Model
+    public function load(): Model
     {
         $attachment = $this->getMatchesHash();
 
@@ -99,7 +99,7 @@ class File
             'group'         => $this->group,
         ]);
 
-        $attachment->save($bucket);
+        $attachment->save();
 
         event(new ReplicateFileEvent($attachment, $this->engine->time()));
 
@@ -141,7 +141,7 @@ class File
      *
      * @return Model|Attachment
      */
-    private function save($bucket): Model {
+    private function save(): Model {
         $this->storage->putFileAs($this->engine->path(), $this->file, $this->engine->fullName(), [
             'mime_type' => $this->engine->mime(),
         ]);
@@ -155,11 +155,11 @@ class File
             'size'          => $this->file->getSize(),
             'path'          => Str::finish($this->engine->path(), '/'),
             'disk'          => $this->disk,
-            'group'         => $bucket,
+            'group'         => $this->group,
             'user_id'       => Auth::id(),
         ]);
 
-        event(new UploadFileEvent($attachment, $this->engine->time(), $bucket ?: "attachments"));
+        event(new UploadFileEvent($attachment, $this->engine->time()));
 
         return $attachment;
     }

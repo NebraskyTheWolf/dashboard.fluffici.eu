@@ -23,7 +23,7 @@ class Button extends Action
     /**
      * @var string
      */
-    protected $view = 'platform::actions.button';
+    protected $view = 'actions.button';
 
     /**
      * Default attributes value.

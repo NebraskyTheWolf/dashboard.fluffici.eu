@@ -18,3 +18,5 @@
 
 .env
 .autumn
+
+/src/dashboard/vendor/orchid/platform/node_modules

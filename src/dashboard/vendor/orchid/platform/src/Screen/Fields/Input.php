@@ -50,7 +50,7 @@ class Input extends Field
     /**
      * @var string
      */
-    protected $view = 'platform::fields.input';
+    protected $view = 'fields.input';
 
     /**
      * Default attributes value.

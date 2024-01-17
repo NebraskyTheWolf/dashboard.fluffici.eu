@@ -48,7 +48,7 @@ class Code extends Field
     /**
      * @var string
      */
-    protected $view = 'platform::fields.code';
+    protected $view = 'fields.code';
 
     /**
      * Default attributes value.

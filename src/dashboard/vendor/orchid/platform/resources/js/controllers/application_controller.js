@@ -65,7 +65,7 @@ export default class ApplicationController extends Controller {
 
         return output;
     }
-
+    
     /**
      *
      * @param url

@@ -49,7 +49,10 @@ class UserPresenter extends Presenter implements Personable, Searchable
     /**
      * Returns the URL for the user's Gravatar image, or a default image if one is not found.
      */
-    public function image(): ?string{
+    public function image(): ?string {
+        if ($this->entity->avatar == 1) {
+            return env("AUTUMN_HOST", "http://localhost:3000/avatars") . '/' . $this->entity->avatar_id . '?width=256&height=256';
+        }
         return 'https://ui-avatars.com/api/?name=' . $this->title() . '&background=0D8ABC&color=fff';
     }
 

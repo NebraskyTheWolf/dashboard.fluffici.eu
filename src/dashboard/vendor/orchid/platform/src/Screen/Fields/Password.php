@@ -40,7 +40,7 @@ class Password extends Field
     /**
      * @var string
      */
-    protected $view = 'platform::fields.password';
+    protected $view = 'fields.password';
 
     /**
      * Default attributes value.

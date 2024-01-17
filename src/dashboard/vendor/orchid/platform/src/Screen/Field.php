@@ -372,7 +372,7 @@ class Field implements Fieldable, Htmlable
      */
     public function vertical(): self
     {
-        $this->typeForm = 'platform::partials.fields.vertical';
+        $this->typeForm = 'partials.fields.vertical';
 
         return $this;
     }
@@ -384,7 +384,7 @@ class Field implements Fieldable, Htmlable
      */
     public function clear(): self
     {
-        $this->typeForm = 'platform::partials.fields.clear';
+        $this->typeForm = 'partials.fields.clear';
 
         return $this;
     }
@@ -396,7 +396,7 @@ class Field implements Fieldable, Htmlable
      */
     public function horizontal(): self
     {
-        $this->typeForm = 'platform::partials.fields.horizontal';
+        $this->typeForm = 'partials.fields.horizontal';
 
         return $this;
     }

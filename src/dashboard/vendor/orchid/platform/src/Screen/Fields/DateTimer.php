@@ -35,7 +35,7 @@ class DateTimer extends Field
     /**
      * @var string
      */
-    protected $view = 'platform::fields.datetime';
+    protected $view = 'fields.datetime';
 
     /**
      * Default attributes value.
