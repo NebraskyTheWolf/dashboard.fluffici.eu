@@ -16,11 +16,10 @@ jobs:
       with:
         php-version: '8.0'
     - uses: actions/checkout@v3
-    - name: Setting up env
+    - name: Setting up dashboard
       run: |
-        php -r "file_exists('.env') || copy('.env.example', '.env');"
+        cd ./src/dashboard
         composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-        php artisan key:generate
         chmod -R 777 storage bootstrap/cache
     - name: Create Database
       run: |
