@@ -32,7 +32,7 @@ kamadak-exif = "0.5.4"
 sanitize-filename = "0.4.0"
 content_inspector = "0.2.4"
 serde = { version = "1.0.118", features = ["derive"] }
-tokio = { version = "1.4.0", features = ["rt", "io-util", "fs", "time"] }
+tokio = { version = "1.16.1", features = ["rt", "io-util", "fs", "time"] }
 
 tokio-cron-scheduler = "*"
 rust-s3 = "0.27.0-rc4"
