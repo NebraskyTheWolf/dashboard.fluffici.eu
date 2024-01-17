@@ -1,0 +1,6 @@
+{$AKCE_HOSTNAME} {
+	root * /workspace/public
+	encode gzip
+	php_fastcgi akce:9000
+	file_server
+}
