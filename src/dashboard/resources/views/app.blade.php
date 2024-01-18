@@ -32,6 +32,10 @@
     <script src="{{ mix('/js/orchid.js','vendor/orchid') }}" type="text/javascript"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 
+    @if (Auth::check())
+        <input type="number" value="{{Auth::id()}}" id="userId" hidden>
+    @endif
+
     @foreach(Dashboard::getResource('stylesheets') as $stylesheet)
         <link rel="stylesheet" href="{{  $stylesheet }}">
     @endforeach
@@ -60,6 +64,49 @@
 </div>
 
 @stack('scripts')
+
+<script>
+
+    window.Echo.channel('statistics').listen('Statistics', (data) => {
+        var beautify = JSON.stringify(data.data)
+        var reverty = JSON.parse(beautify)
+
+        for (var key in reverty) {
+            document.getElementById(reverty[key].field).innerHTML = 
+            `<p class="h3 text-black fw-light mt-auto" id="${reverty[key].field}">
+                ${reverty[key].result}
+            </p>`;
+        }
+    });
+
+    window.Echo.channel(`user.${document.getElementById('userId').value}`).listen('UserUpdated', (data) => {
+        var beautify = JSON.stringify(data.data)
+        var reverty = JSON.parse(beautify)
+
+        for (var key in reverty) {
+            switch (reverty[key].field) {
+                case 'persona-avatar':
+                    document.getElementById('persona-avatar').innerHTML= `<img src="${reverty[key].result}" class="bg-light" id="persona-avatar">`;
+                    break;
+                case 'persona-subtitle':
+                    document.getElementById('persona-subtitle').innerHTML= `<small class="text-muted" id="persona-subtitle">${reverty[key].result}</small>`;
+                    break;
+                case 'persona-title':
+                    document.getElementById('persona-title').innerHTML= `<p class="mb-0" id="persona-title">${reverty[key].result}</p>`;
+                    break;
+                default:
+                    break;
+            }
+        }
+    });
+
+    function GetElementInsideContainer(containerID, childID) {
+        var elm = document.getElementById(childID);
+        var parent = elm ? elm.parentNode : {};
+        return (parent.id && parent.id === containerID) ? elm : {};
+    }
+
+</script>
 
 </body>
 </html>

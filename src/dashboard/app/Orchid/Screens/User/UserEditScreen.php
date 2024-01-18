@@ -20,6 +20,10 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Facades\Auth;
+
+use App\Events\UpdateAudit;
+use App\Events\UserUpdated;
 
 class UserEditScreen extends Screen
 {
@@ -168,6 +172,9 @@ class UserEditScreen extends Screen
 
         $user->replaceRoles($request->input('user.roles'));
 
+        event(new UpdateAudit("user_change", "Changed " . $user->name . " profile.", Auth::user()->name));
+        event(new UserUpdated($user->id));
+
         Toast::info(__('User was saved.'));
 
         return redirect()->route('platform.systems.users');
@@ -184,6 +191,8 @@ class UserEditScreen extends Screen
 
         Toast::info(__('User was removed'));
 
+        event(new UpdateAudit("deleted_user", "Deleted " . $user->name . " profile.", Auth::user()->name));
+
         return redirect()->route('platform.systems.users');
     }
 
@@ -195,6 +204,8 @@ class UserEditScreen extends Screen
         Impersonation::loginAs($user);
 
         Toast::info(__('You are now impersonating this user'));
+
+        event(new UpdateAudit("impersonate", "Impersonating " . $user->name . " profile.", Auth::user()->name));
 
         return redirect()->route(config('platform.index'));
     }

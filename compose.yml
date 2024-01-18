@@ -23,6 +23,20 @@ services:
         source: ./src/dashboard
         target: /workspace
   
+  dashboard-ws:
+    build:
+      context: .
+      dockerfile: ./infra/docker/php/Dockerfile.ws
+    restart: always
+    env_file: .env
+    container_name: dashboard-ws
+    volumes:
+      - type: bind
+        source: ./src/dashboard
+        target: /workspace
+    ports:
+      - '6001:6001'
+
   akce:
     build:
       context: .

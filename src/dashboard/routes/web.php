@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PagesController;
 use Orchid\Platform\Http\Controllers\LoginController;
 
 use Orchid\Platform\Http\Controllers\AsyncController;
@@ -25,9 +25,7 @@ use Tabuna\Breadcrumbs\Trail;
 |
 */
 
-//Route::get('/', [LoginController::class, 'showLoginForm']);
-
-  // Authentication Routes...
+// Authentication Routes...
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 Route::middleware('throttle:60,1')
     ->post('login', [LoginController::class, 'login'])
@@ -38,13 +36,7 @@ Route::get('switch-logout', [LoginController::class, 'switchLogout']);
 Route::post('switch-logout', [LoginController::class, 'switchLogout'])->name('switch.logout');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/health', function (Request $request) {
-    return [
-        'status' => "ok",
-        'version' => file_get_contents('../VERSION'),
-    ];
-})->name("health");
-
+Route::get('/pages/{slug}', [PagesController::class, 'index']);
 
 Route::prefix('dashboard')->group(function () {
     Route::get('/', [IndexController::class, 'index'])
@@ -78,4 +70,15 @@ Route::screen('notifications/{id?}', NotificationScreen::class)
 Route::post('api/notifications', [NotificationScreen::class, 'unreadNotification'])
 ->name('api.notifications');
 
-//Route::fallback([IndexController::class, 'fallback']);
+Route::get('/health', function (Request $request) {
+    return [
+        'status' => "ok"
+    ];
+})->name("health");
+
+Route::get('/build', function (Request $request) {
+    return [
+        'version' => file_get_contents('../VERSION'),
+        'rev' => env('GIT_COMMIT', "No revision")
+    ];
+})->name("build");

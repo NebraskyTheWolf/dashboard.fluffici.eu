@@ -5,6 +5,16 @@
 		reverse_proxy http://autumn:3000
 	}
 
+	route /ws {
+		@upgrade {
+			header Connection *Upgrade*
+			header Upgrade websocket
+		}
+
+		uri strip_prefix /ws
+		reverse_proxy @upgrade http://dashboard-ws:6001
+	}
+
 	root * /workspace/public
 	encode gzip
 	php_fastcgi dashboard:9000

@@ -15,6 +15,8 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
+use App\Events\UpdateAudit;
+
 class RoleEditScreen extends Screen
 {
     /**
@@ -123,6 +125,8 @@ class RoleEditScreen extends Screen
 
         Toast::info(__('Role was saved'));
 
+        event(new UpdateAudit("role_changed", "Updated " . $role->name, Auth::user()->name));
+
         return redirect()->route('platform.systems.roles');
     }
 
@@ -136,6 +140,9 @@ class RoleEditScreen extends Screen
         $role->delete();
 
         Toast::info(__('Role was removed'));
+
+        event(new UpdateAudit("role_removed", "Removed " . $role->name, Auth::user()->name));
+
 
         return redirect()->route('platform.systems.roles');
     }
