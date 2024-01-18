@@ -22,7 +22,7 @@ services:
       - type: bind
         source: ./src/dashboard
         target: /workspace
-  
+
   dashboard-ws:
     build:
       context: .
@@ -60,7 +60,7 @@ services:
       - type: bind
         source: ./src/shop
         target: /workspace
-  
+
   www:
     build:
       context: .
@@ -79,7 +79,7 @@ services:
     env_file: .env
     container_name: caddy
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./config/Caddyfile:/etc/caddy/Caddyfile
       - ./data/caddy-data:/data
       - ./data/caddy-config:/config
       - type: bind
@@ -97,7 +97,7 @@ services:
     env_file: .env
     container_name: caddy-www
     volumes:
-      - ./Caddyfile.www:/etc/caddy/Caddyfile
+      - ./config/Caddyfile.www:/etc/caddy/Caddyfile
       - ./data/caddy-www-data:/data
       - ./data/caddy-www-config:/config
       - type: bind
@@ -115,7 +115,7 @@ services:
     env_file: .env
     container_name: caddy-shop
     volumes:
-      - ./Caddyfile.shop:/etc/caddy/Caddyfile
+      - ./config/Caddyfile.shop:/etc/caddy/Caddyfile
       - ./data/caddy-shop-data:/data
       - ./data/caddy-shop-config:/config
       - type: bind
@@ -133,7 +133,7 @@ services:
     env_file: .env
     container_name: caddy-akce
     volumes:
-      - ./Caddyfile.akce:/etc/caddy/Caddyfile
+      - ./config/Caddyfile.akce:/etc/caddy/Caddyfile
       - ./data/caddy-akce-data:/data
       - ./data/caddy-akce-config:/config
       - type: bind
@@ -192,7 +192,7 @@ services:
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioautumn}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioautumn}
-  
+
   database:
     image: mongo
     container_name: database

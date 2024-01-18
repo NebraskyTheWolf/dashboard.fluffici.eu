@@ -27,4 +27,4 @@
 **.gitignore
 **.md
 
-/src-backend/node_modules
+/src/dashboard/vendor/orchid/platform/node_modules

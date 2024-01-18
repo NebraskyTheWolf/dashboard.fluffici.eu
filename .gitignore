@@ -7,6 +7,7 @@
 /config/.env.caddy
 /data
 /src/autumn/target
+/src/dashboard/node_modules
 
 /src/shop/vendor
 /src/main/vendor
@@ -20,3 +21,8 @@
 .autumn
 
 /src/dashboard/vendor/orchid/platform/node_modules
+/data/
+
+/vendor
+/composer.json
+/composer.lock
