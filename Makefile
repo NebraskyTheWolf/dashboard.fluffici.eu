@@ -1,6 +1,9 @@
 GIT_SHA_FETCH := $(shell git rev-parse HEAD)
 export GIT_SHA=$(GIT_SHA_FETCH)
 
+push:
+	./src/dashboard/update.sh
+
 install:
 	@make build
 	@make up

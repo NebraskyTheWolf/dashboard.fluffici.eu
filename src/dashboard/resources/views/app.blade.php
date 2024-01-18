@@ -27,10 +27,21 @@
         <meta name="turbo-cache-control" content="no-cache">
     @endif
 
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     <script src="{{ mix('/js/manifest.js','vendor/orchid') }}" type="text/javascript"></script>
     <script src="{{ mix('/js/vendor.js','vendor/orchid') }}" type="text/javascript"></script>
     <script src="{{ mix('/js/orchid.js','vendor/orchid') }}" type="text/javascript"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="{{url('/js/app.js')}}"></script>
+
+    <link rel="stylesheet" href="{{ url('/css/app.css')}}">
+    <link rel="stylesheet" href="{{ url('/css/loader.css')}}">
+
+    <link rel="stylesheet" href="{{ url('/semantic/semantic.min.css')}}">
+    <script type="text/javascript" src="{{url('/semantic/semantic.min.js')}}"></script>
 
     @if (Auth::check())
         <input type="number" value="{{Auth::id()}}" id="userId" hidden>
@@ -49,8 +60,25 @@
 
 <body class="{{ \Orchid\Support\Names::getPageNameClass() }}" data-controller="pull-to-refresh">
 
-<div class="container-fluid" data-controller="@yield('controller')" @yield('controller-data')>
 
+<body class="antialiased">
+    <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter  selection:bg-red-500 selection:text-white" id="loader" hidden>
+        <div class="max-w-7xl mx-auto p-6 lg:p-8">
+            <div class="mt-16">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+                    <img class="centered-bar error-mask" id="error-mark" src="{{url('/img/info.png')}}" alt="error">
+                    <div class="centered-bar" id="loader-bar"></div>
+                </div>
+                <p class="styled centered-bar" id="loading-text">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <input type="number" id="user_id" value="{{Auth::id()}}" hidden="">
+    <input type="number" id="isLogged" value="{{Auth::check()}}" hidden="">
+</body>
+
+<div data-controller="@yield('controller')" @yield('controller-data') id="loading">
     <div class="row justify-content-center d-md-flex h-100">
         @yield('aside')
 
@@ -59,54 +87,10 @@
         </div>
     </div>
 
-
     @include('partials.toast')
 </div>
 
 @stack('scripts')
-
-<script>
-
-    window.Echo.channel('statistics').listen('Statistics', (data) => {
-        var beautify = JSON.stringify(data.data)
-        var reverty = JSON.parse(beautify)
-
-        for (var key in reverty) {
-            document.getElementById(reverty[key].field).innerHTML = 
-            `<p class="h3 text-black fw-light mt-auto" id="${reverty[key].field}">
-                ${reverty[key].result}
-            </p>`;
-        }
-    });
-
-    window.Echo.channel(`user.${document.getElementById('userId').value}`).listen('UserUpdated', (data) => {
-        var beautify = JSON.stringify(data.data)
-        var reverty = JSON.parse(beautify)
-
-        for (var key in reverty) {
-            switch (reverty[key].field) {
-                case 'persona-avatar':
-                    document.getElementById('persona-avatar').innerHTML= `<img src="${reverty[key].result}" class="bg-light" id="persona-avatar">`;
-                    break;
-                case 'persona-subtitle':
-                    document.getElementById('persona-subtitle').innerHTML= `<small class="text-muted" id="persona-subtitle">${reverty[key].result}</small>`;
-                    break;
-                case 'persona-title':
-                    document.getElementById('persona-title').innerHTML= `<p class="mb-0" id="persona-title">${reverty[key].result}</p>`;
-                    break;
-                default:
-                    break;
-            }
-        }
-    });
-
-    function GetElementInsideContainer(containerID, childID) {
-        var elm = document.getElementById(childID);
-        var parent = elm ? elm.parentNode : {};
-        return (parent.id && parent.id === containerID) ? elm : {};
-    }
-
-</script>
 
 </body>
 </html>

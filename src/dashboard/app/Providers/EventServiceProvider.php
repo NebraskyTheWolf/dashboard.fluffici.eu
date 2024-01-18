@@ -13,7 +13,7 @@ use App\Events\UpdateAudit;
 use App\Events\Statistics;
 use App\Listeners\StatisticsListener;
 
-use App\Events\UserUpdate;
+use App\Events\UserUpdated;
 use App\Listeners\UserUpdateListener;
 
 class EventServiceProvider extends ServiceProvider
@@ -33,7 +33,7 @@ class EventServiceProvider extends ServiceProvider
         Statistics::class => [
             StatisticsListener::class,
         ],
-        UserUpdate::class => [
+        UserUpdated::class => [
             UserUpdateListener::class,
         ],
     ];

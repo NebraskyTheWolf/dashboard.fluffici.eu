@@ -16,8 +16,6 @@ use App\Models\Events as DEvents;
 use App\Models\ShopOrders;
 use App\Models\ShopSupportTickets;
 
-
-
 class Statistics implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;

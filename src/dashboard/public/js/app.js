@@ -1,64 +1,94 @@
-/*
-=== GLOBAL ===
-*/
-if (($('body.front').length))
-{
-    $('.ui.menu.navbar').clone().insertBefore('.pusher').addClass('inverted vertical masthead sidebar')
-    $(document).ready(function () {
-        $('.dropdown').dropdown({on: 'hover'})
-        $('.ui.checkbox').checkbox()
+$(document).ready(function($) {
+    $("#error-mask").hide()
+    window.Echo.connector.pusher.connection.bind('connected', () => {
+          $("#loader").remove()
+          $("#loading").show().css("display","inline").removeAttr('hidden')
+    });
+
+    window.Echo.connector.pusher.connection.bind('error', () => {
+          $("#loading").hide()
+          $("#loader").show().removeAttr('hidden').css({
+              'display': 'initial'
+          })
+          $("#loader-bar").hide()
+          $("#error-mask").show().removeAttr('hidden').css({
+              'display': 'initial'
+          })
+          $("#loading-text").html('A error occurred.')
+    });
+
+    window.Echo.connector.pusher.connection.bind('disconnected', () => {
+          $("#loading").hide()
+          $("#loader").show().removeAttr('hidden')
+          $("#loader-bar").hide()
+          $("#error-mask").show().removeAttr('hidden').css({
+              'display': 'initial'
+          })
+          $("#loading-text").html('The server is currently down.')
+    });
+
+    axios.get('http://' + window.location.hostname + ":8080/build").then(function (response) {
+        if (response.status !== 200) {
+            console.log('Cannot update fields for versioning.')
+        } else {
+            $('#version').text('Version : ' + response.data.version)
+            $('#rev').text('Rev : ' + response.data.rev.substring(0, 8))
+        }
     })
-}
 
-function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
-}
+    axios.get('http://' + window.location.hostname + ":8080/autumn").then(function (response) {
+          if (response.status !== 200) {
+            console.log('Cannot update fields for versioning.')
+        } else {
+            $('#autumn').text('Autumn : ' + response.data.autumn)
+        }
+    })
 
-function nFormatter(num, digits) {
-  var si = [
-    { value: 1E18, symbol: "E" },
-    { value: 1E15, symbol: "P" },
-    { value: 1E12, symbol: "T" },
-    { value: 1E9,  symbol: "G" },
-    { value: 1E6,  symbol: "M" },
-    { value: 1E3,  symbol: "k" }
-  ], rx = /\.0+$|(\.[0-9]*[1-9])0+$/, i;
-  for (i = 0; i < si.length; i++) {
-    if (num >= si[i].value) {
-      return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
+    if (document.getElementById('isLogged').value == 1) {
+        window.Echo.channel('statistics').listen('Statistics', (data) => {
+            var beautify = JSON.stringify(data.data)
+            var reverty = JSON.parse(beautify)
+
+            for (var key in reverty) {
+                document.getElementById(reverty[key].field).innerHTML =
+                    `<p class="h3 text-black fw-light mt-auto" id="${reverty[key].field}">
+              ${reverty[key].result}
+          </p>`;
+            }
+        });
+
+        console.log(document.getElementById('user_id').value)
+
+        window.Echo.channel(`user.${document.getElementById('userId').value}`).listen('UserUpdated', (data) => {
+            var beautify = JSON.stringify(data.data)
+            var reverty = JSON.parse(beautify)
+
+            for (var key in reverty) {
+                switch (reverty[key].field) {
+                    case 'persona-avatar':
+                        document.getElementById('persona-avatar').innerHTML= `<img src="${reverty[key].result}" class="bg-light" id="persona-avatar" alt="persona-avatar">`;
+                        break;
+                    case 'persona-subtitle':
+                        document.getElementById('persona-subtitle').innerHTML= `<small class="text-muted" id="persona-subtitle">${reverty[key].result}</small>`;
+                        break;
+                    case 'persona-title':
+                        document.getElementById('persona-title').innerHTML= `<p class="mb-0" id="persona-title">${reverty[key].result}</p>`;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
-  }
-  return num.toFixed(digits).replace(rx, "$1");
-}
 
-/*
-  === CSRF ===
-*/
-$.ajaxSetup({
-  headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-  }
-})
+});
 
-var datatableLang = {
-    "sProcessing":     "Traitement en cours...",
-    "sSearch":         "Rechercher&nbsp;:",
-    "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
-    "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-    "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
-    "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-    "sInfoPostFix":    "",
-    "sLoadingRecords": "Chargement en cours...",
-    "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-    "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
-    "oPaginate": {
-        "sFirst":      "Premier",
-        "sPrevious":   "Pr&eacute;c&eacute;dent",
-        "sNext":       "Suivant",
-        "sLast":       "Dernier"
-    },
-    "oAria": {
-        "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
-        "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
-    }
+
+
+
+
+function GetElementInsideContainer(containerID, childID) {
+  var elm = document.getElementById(childID);
+  var parent = elm ? elm.parentNode : {};
+  return (parent.id && parent.id === containerID) ? elm : {};
 }
