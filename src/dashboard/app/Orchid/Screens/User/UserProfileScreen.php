@@ -22,6 +22,9 @@ use Orchid\Screen\Actions\Attach ;
 use Orchid\Screen\Actions\Picture ;
 use App\Models\User as AUser;
 
+use App\Events\UpdateAudit;
+use App\Events\UserUpdate;
+
 class UserProfileScreen extends Screen
 {
 
@@ -117,6 +120,9 @@ class UserProfileScreen extends Screen
             ->fill($request->get('user'))
             ->save();
 
+        event(new UpdateAudit("profile_updated", "Updated their profile."));
+
+
         Toast::info(__('Profile updated.'));
     }
 
@@ -131,6 +137,10 @@ class UserProfileScreen extends Screen
         tap($request->user(), function ($user) use ($request) {
             $user->password = Hash::make($request->get('password'));
         })->save();
+
+
+        event(new UpdateAudit("profile_change", "Password changed."));
+        event(new UserUpdate($request->user()->id));
 
         Toast::info(__('Password changed.'));
     }

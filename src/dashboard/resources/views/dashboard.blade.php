@@ -19,9 +19,11 @@
 
             @include('partials.search')
 
-            <ul class="nav flex-column mb-md-1 mb-auto ps-0">
-                {!! Dashboard::renderMenu(\Orchid\Platform\Dashboard::MENU_MAIN) !!}
-            </ul>
+            <div id="navbar-content">
+                <ul class="nav flex-column mb-md-1 mb-auto ps-0" >
+                    {!! Dashboard::renderMenu(\Orchid\Platform\Dashboard::MENU_MAIN) !!}
+                </ul>
+            </div>
 
             <div class="h-100 w-100 position-relative to-top cursor d-none d-md-flex mt-md-5"
                  data-action="click->html-load#goToTop"

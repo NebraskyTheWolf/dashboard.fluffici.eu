@@ -21,16 +21,16 @@ use App\Orchid\Screens\User\UserProfileScreen;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
 
-use App\Orchid\Screens\PostEditScreen;
-use App\Orchid\Screens\PostListScreen;
+use App\Orchid\Screens\Posts\PostEditScreen;
+use App\Orchid\Screens\Posts\PostListScreen;
 
-use App\Orchid\Screens\EventsEditScreen;
-use App\Orchid\Screens\EventsListScreen;
+use App\Orchid\Screens\Events\EventsEditScreen;
+use App\Orchid\Screens\Events\EventsListScreen;
 
-use App\Orchid\Screens\PagesEditScreen;
-use App\Orchid\Screens\PagesListScreen;
+use App\Orchid\Screens\Pages\PagesEditScreen;
+use App\Orchid\Screens\Pages\PagesListScreen;
 
-use App\Orchid\Screens\AuditLogsListScreen;
+use App\Orchid\Screens\Audit\AuditLogsListScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,24 +95,6 @@ Route::screen('roles', RoleListScreen::class)
     ->breadcrumbs(fn (Trail $trail) => $trail
         ->parent('index')
         ->push(__('Roles'), route('platform.systems.roles')));
-
-// Example...
-
-
-Route::screen('/examples/form/fields', ExampleFieldsScreen::class)->name('platform.example.fields');
-Route::screen('/examples/form/advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
-Route::screen('/examples/form/editors', ExampleTextEditorsScreen::class)->name('platform.example.editors');
-Route::screen('/examples/form/actions', ExampleActionsScreen::class)->name('platform.example.actions');
-
-Route::screen('/examples/layouts', ExampleLayoutsScreen::class)->name('platform.example.layouts');
-Route::screen('/examples/grid', ExampleGridScreen::class)->name('platform.example.grid');
-Route::screen('/examples/charts', ExampleChartsScreen::class)->name('platform.example.charts');
-Route::screen('/examples/cards', ExampleCardsScreen::class)->name('platform.example.cards');
-
-
-Route::screen('/settings/seo', SeoScreen::class)->name('platform.settings.seo');
-
-//Route::screen('idea', Idea::class, 'platform.screens.idea');
 
 
 Route::screen('post/{post?}', PostEditScreen::class)

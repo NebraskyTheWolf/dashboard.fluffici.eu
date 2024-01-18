@@ -22,9 +22,18 @@ class PlatformScreen extends Screen
     {
         return [
             'metrics' => [
-                'visitors' => ['value' => number_format(intval(Pages::sum('visits')))],
-                'tickets'   => ['value' => number_format(ShopSupportTickets::where('status', 'PENDING')->count())],
-                'orders'   => ['value' => number_format(ShopOrders::where('status', 'PENDING')->count())],
+                'visitors' => [
+                    'key' => 'visits',
+                    'value' => number_format(intval(Pages::sum('visits')))
+                ],
+                'tickets'   => [
+                    'key' => 'tickets',
+                    'value' => number_format(ShopSupportTickets::where('status', 'PENDING')->count())
+                ],
+                'orders'   => [
+                    'key' => 'orders',
+                    'value' => number_format(ShopOrders::where('status', 'PENDING')->count())
+                ],
             ],
         ];
     }

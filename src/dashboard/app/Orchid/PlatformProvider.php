@@ -44,7 +44,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->list([
                     Menu::make('Social Media')
                         ->icon('bs.person-walking')
-                        ->route('platform.example.layouts')
+                        ->route('platform.systems.users')
                         ->permission('platform.systems.social'),
                     Menu::make("Users")
                         ->icon('bs.people')
@@ -73,6 +73,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Events')
                         ->icon('bs.calendar-event')
                         ->route('platform.events.list')
+                        ->slug('events')
                         ->badge(fn () => Events::where('status', 'INCOMING')->count() ?: 0)
                         ->permission('platform.systems.events'),
                     Menu::make('Pages')
@@ -88,38 +89,40 @@ class PlatformProvider extends OrchidServiceProvider
                 ->list([
                     Menu::make('Statistics')
                         ->icon('bs.graph-up')
-                        ->route('platform.example.layouts')
+                        //->route('platform.systems.users')
                         ->title("GROWTH"),
                     Menu::make('Products')
                         ->icon('bs.window-sidebar')
-                        ->route('platform.example.layouts')
+                        //->route('platform.systems.users')
                         ->permission('platform.systems.eshop.products')
                         ->title("PRODUCTS AND SALES"),
                     Menu::make('Sales')
                         ->icon('bs.credit-card-2-front')
-                        ->route('platform.example.layouts')
+                        //->route('platform.systems.users')
                         ->permission('platform.systems.eshop.sales')
                         ->canSee(false),
                     Menu::make('Vouchers')
                         ->icon('bs.card-list')
-                        ->route('platform.example.layouts')
+                        //->route('platform.systems.users')
                         ->permission('platform.systems.eshop.vouchers')
                         ->title("VOUCHERS")
                         ->canSee(false),
                     Menu::make('Orders')
                         ->icon('bs.box-seam')
-                        ->route('platform.example.layouts')
+                        //->route('platform.systems.users')
                         ->badge(fn () => ShopOrders::where('status', 'PENDING')->count() ?: 0)
                         ->permission('platform.systems.eshop.orders')
+                        ->slug('orders')
                         ->title("ORDERS AND SUPPORT"),
                     Menu::make('Support Tickets')
                         ->icon('bs.chat-right-text')
-                        ->route('platform.example.layouts')
+                        ->slug('tickets')
+                        //->route('platform.systems.users')
                         ->badge(fn () => ShopSupportTickets::where('status', 'PENDING')->count() ?: 0)
                         ->permission('platform.systems.eshop.support'),
                     Menu::make('Settings')
                         ->icon('bs.gear')
-                        ->route('platform.example.layouts')
+                        //->route('platform.systems.users')
                         ->permission('platform.systems.eshop.settings')
                         ->title("SHOP MANAGEMENT")
                 ])

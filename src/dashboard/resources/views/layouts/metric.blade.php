@@ -9,14 +9,8 @@
             <div class="col">
                 <div class="p-4 bg-white rounded shadow-sm h-100 d-flex flex-column">
                     <small class="text-muted d-block mb-1">{{ __($key) }}</small>
-                    <p class="h3 text-black fw-light mt-auto">
+                    <p class="h3 text-black fw-light mt-auto" id="{{  $metric['key'] }}">
                         {{ is_array($metric) ? $metric['value'] : $metric }}
-
-                        @if(isset($metric['diff']) && (float)$metric['diff'] !== 0.0)
-                            <small class="small {{ (float)$metric['diff'] < 0 ? 'text-danger': 'text-success' }}">
-                                {{ round($metric['diff'], 2) }} %
-                            </small>
-                        @endif
                     </p>
                 </div>
             </div>

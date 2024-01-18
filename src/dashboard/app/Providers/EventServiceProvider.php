@@ -7,8 +7,14 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
-use App\Listeners\UploadListener;
-use Orchid\Platform\Events\UploadedFileEvent;
+use App\Listeners\AuditListener;
+use App\Events\UpdateAudit;
+
+use App\Events\Statistics;
+use App\Listeners\StatisticsListener;
+
+use App\Events\UserUpdate;
+use App\Listeners\UserUpdateListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -21,8 +27,14 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        UploadedFileEvent::class => [
-            UploadListener::class,
+        UpdateAudit::class => [
+            AuditListener::class,
+        ],
+        Statistics::class => [
+            StatisticsListener::class,
+        ],
+        UserUpdate::class => [
+            UserUpdateListener::class,
         ],
     ];
 
