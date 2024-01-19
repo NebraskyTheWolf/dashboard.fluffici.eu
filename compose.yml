@@ -7,9 +7,6 @@ configs:
   db-config:
     file: ./infra/docker/mysql/my.cnf
 
-networks:
-    app-network:
-
 services:
   dashboard:
     build:
@@ -20,7 +17,7 @@ services:
     container_name: dashboard
     volumes:
       - type: bind
-        source: ./src/dashboard
+        source: ./src
         target: /workspace
 
   dashboard-ws:
@@ -32,47 +29,11 @@ services:
     container_name: dashboard-ws
     volumes:
       - type: bind
-        source: ./src/dashboard
+        source: ./src
         target: /workspace
     ports:
       - '6001:6001'
-
-  akce:
-    build:
-      context: .
-      dockerfile: ./infra/docker/php/Dockerfile.events
-    restart: always
-    env_file: .env
-    container_name: akce
-    volumes:
-      - type: bind
-        source: ./src/events
-        target: /workspace
-
-  shop:
-    build:
-      context: .
-      dockerfile: ./infra/docker/php/Dockerfile.shop
-    restart: always
-    env_file: .env
-    container_name: shop
-    volumes:
-      - type: bind
-        source: ./src/shop
-        target: /workspace
-
-  www:
-    build:
-      context: .
-      dockerfile: ./infra/docker/php/Dockerfile.main
-    restart: always
-    env_file: .env
-    container_name: www
-    volumes:
-      - type: bind
-        source: ./src/main
-        target: /workspace
-
+      
   caddy:
     image: caddy:2.7.6
     restart: unless-stopped
@@ -83,68 +44,14 @@ services:
       - ./data/caddy-data:/data
       - ./data/caddy-config:/config
       - type: bind
-        source: ./src/dashboard
+        source: ./src
         target: /workspace
     ports:
       - 8080:8080
     depends_on:
       - dashboard
       - db
-
-  caddy-www:
-    image: caddy:2.7.6
-    restart: unless-stopped
-    env_file: .env
-    container_name: caddy-www
-    volumes:
-      - ./config/Caddyfile.www:/etc/caddy/Caddyfile
-      - ./data/caddy-www-data:/data
-      - ./data/caddy-www-config:/config
-      - type: bind
-        source: ./src/main
-        target: /workspace
-    ports:
-      - 8081:8081
-    depends_on:
-      - www
-      - db
-
-  caddy-shop:
-    image: caddy:2.7.6
-    restart: unless-stopped
-    env_file: .env
-    container_name: caddy-shop
-    volumes:
-      - ./config/Caddyfile.shop:/etc/caddy/Caddyfile
-      - ./data/caddy-shop-data:/data
-      - ./data/caddy-shop-config:/config
-      - type: bind
-        source: ./src/shop
-        target: /workspace
-    ports:
-      - 8082:8082
-    depends_on:
-      - shop
-      - db
-
-  caddy-akce:
-    image: caddy:2.7.6
-    restart: unless-stopped
-    env_file: .env
-    container_name: caddy-akce
-    volumes:
-      - ./config/Caddyfile.akce:/etc/caddy/Caddyfile
-      - ./data/caddy-akce-data:/data
-      - ./data/caddy-akce-config:/config
-      - type: bind
-        source: ./src/akce
-        target: /workspace
-    ports:
-      - 8083:8083
-    depends_on:
-      - akce
-      - db
-
+      
   mailpit:
     image: axllent/mailpit
     env_file: .env
@@ -180,57 +87,3 @@ services:
       - MYSQL_USER=${DB_USERNAME:-phper}
       - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
-
-  minio:
-    image: minio/minio
-    container_name: minio
-    command: server /data
-    env_file: .env
-    volumes:
-      - ./data/minio:/data
-    restart: always
-    environment:
-      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioautumn}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioautumn}
-
-  database:
-    image: mongo
-    container_name: database
-    restart: always
-    volumes:
-      - ./data/db:/data/db
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=fluffici
-      - MONGO_INITDB_ROOT_PASSWORD=mongodb
-      - ME_CONFIG_MONGODB_URL=mongodb://fluffici:mongodb@database:27017/
-
-  clamd-server:
-    image: clamav/clamav:stable
-    restart: always
-    container_name: clamd-server
-    ports:
-      - '3310:3310'
-
-  autumn:
-    build:
-      context: .
-      dockerfile: ./infra/docker/cargo/Dockerfile
-    restart: always
-    env_file: .env
-    container_name: autumn
-    depends_on:
-      - minio
-      - database
-      - caddy
-    environment:
-      - AUTUMN_MONGO_URI=mongodb://fluffici:mongodb@database:27017/
-      - AUTUMN_MONGO_DATABASE=autumn
-      - AUTUMN_S3_REGION=${AUTUMN_S3_REGION:-minio}
-      - AUTUMN_S3_ENDPOINT=${AUTUMN_S3_ENDPOINT:-http://minio:9000}
-      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioautumn}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioautumn}
-      - AWS_ACCESS_KEY_ID=${MINIO_ROOT_USER:-minioautumn}
-      - AWS_SECRET_ACCESS_KEY=${MINIO_ROOT_PASSWORD:-minioautumn}
-      - AUTUMN_PUBLIC_URL=${AUTUMN_PUBLIC_URL:-http://caddy:8080/autumn}
-    ports:
-      - '3000:3000'

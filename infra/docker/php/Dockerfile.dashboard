@@ -40,7 +40,7 @@ RUN <<EOF
 EOF
 
 COPY ./infra/docker/php/php.development.ini /usr/local/etc/php/php.ini
-COPY ./zz-nolog.conf /usr/local/etc/php-fpm.d/zz-nolog.conf
+COPY ./config/zz-nolog.conf /usr/local/etc/php-fpm.d/zz-nolog.conf
 
 FROM development AS development-xdebug
 
@@ -54,7 +54,7 @@ COPY ./infra/docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 FROM base AS deploy
 
 COPY ./infra/docker/php/php.deploy.ini /usr/local/etc/php/php.ini
-COPY ./src/dashboard /workspace
+COPY ./src /workspace
 
 RUN <<EOF
   chmod -R 777 storage bootstrap/cache

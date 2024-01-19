@@ -7,20 +7,12 @@
 /config/.env.caddy
 /data
 /src/autumn/target
-/src/dashboard/node_modules
-
-/src/shop/vendor
-/src/main/vendor
-/src/events/vendor
-
-/src/shop/storage
-/src/main/storage
-/src/events/storage
+/src/node_modules
 
 .env
 .autumn
 
-/src/dashboard/vendor/orchid/platform/node_modules
+/src/vendor/orchid/platform/node_modules
 /data/
 
 /vendor
