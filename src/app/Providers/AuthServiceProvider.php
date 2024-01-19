@@ -12,23 +12,8 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array<class-string, class-string>
      */
-<<<<<<< HEAD
-    protected $policies = [ ];
-=======
-    protected $policies = [
-        //
-    ];
->>>>>>> 10223f9b78d8fa2d63823686a7307cb95204bfe1
 
-    /**
-     * Register any authentication / authorization services.
-     */
-<<<<<<< HEAD
+    protected $policies = [ ];
+
     public function boot(): void { }
-=======
-    public function boot(): void
-    {
-        //
-    }
->>>>>>> 10223f9b78d8fa2d63823686a7307cb95204bfe1
 }
