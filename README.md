@@ -1,13 +1,13 @@
 ![SamaGames](https://cdn.discordapp.com/attachments/1085403957519728744/1197610110328000544/favicon.png "SamaGames logo")
 
-## Fluffici - Web Microservices
+## Fluffici - Dashboard
 
 ------------------------------------
 
-- Name : www.fluffici.eu
-- Type : Infrastructure
+- Name : Dashboard
+- Type : Web Application
 - État : Continuous progression
-- Developer(s) : Vakea, Technik
+- Developer(s) : Vakea
 - COC : [Code of Conduct](https://github.com/NebraskyTheWolf/www.fluffici.eu/blob/master/docs/CODE_OF_CONDUCT.md)
 
 ## Contributions
