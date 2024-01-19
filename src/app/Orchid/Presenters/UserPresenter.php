@@ -34,8 +34,8 @@ class UserPresenter extends Presenter implements Personable, Searchable
         $roles = $this->entity->roles->pluck('name')->implode(' / ');
 
         return (string) Str::of($roles)
-            ->limit(20)
-            ->whenEmpty(fn () => __('No Access'));
+            ->limit(2)
+            ->whenEmpty(fn () => 'Guest');
     }
 
     /**
@@ -44,6 +44,11 @@ class UserPresenter extends Presenter implements Personable, Searchable
     public function url(): string
     {
         return route('platform.systems.users.edit', $this->entity);
+    }
+
+    public function status(): ?string
+    {
+        return '';
     }
 
     /**
@@ -71,5 +76,9 @@ class UserPresenter extends Presenter implements Personable, Searchable
     public function searchQuery(?string $query = null): Builder
     {
         return $this->entity->search($query);
+    }
+
+    public function getId(): int {
+        return $this->entity->id;
     }
 }

@@ -10,7 +10,6 @@ $(document).ready(function($) {
           $("#loader").show().removeAttr('hidden').css({
               'display': 'initial'
           })
-          $("#loader-bar").hide()
           $("#error-mask").show().removeAttr('hidden').css({
               'display': 'initial'
           })
@@ -20,7 +19,6 @@ $(document).ready(function($) {
     window.Echo.connector.pusher.connection.bind('disconnected', () => {
           $("#loading").hide()
           $("#loader").show().removeAttr('hidden')
-          $("#loader-bar").hide()
           $("#error-mask").show().removeAttr('hidden').css({
               'display': 'initial'
           })
@@ -36,7 +34,7 @@ $(document).ready(function($) {
         }
     })
 
-    axios.get('http://' + window.location.hostname + ":8080/autumn").then(function (response) {
+    axios.get('http://' + window.location.hostname + ":3000/autumn").then(function (response) {
           if (response.status !== 200) {
             console.log('Cannot update fields for versioning.')
         } else {
@@ -80,12 +78,7 @@ $(document).ready(function($) {
             }
         });
     }
-
 });
-
-
-
-
 
 function GetElementInsideContainer(containerID, childID) {
   var elm = document.getElementById(childID);

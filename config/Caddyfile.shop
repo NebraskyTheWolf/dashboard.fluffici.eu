@@ -1,6 +1,0 @@
-{$SHOP_HOSTNAME} {
-	root * /workspace/public
-	encode gzip
-	php_fastcgi shop:9000
-	file_server
-}

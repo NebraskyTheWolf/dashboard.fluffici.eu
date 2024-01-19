@@ -1,6 +1,0 @@
-{$MAIN_HOSTNAME} {
-	root * /workspace/public
-	encode gzip
-	php_fastcgi www:9000
-	file_server
-}
