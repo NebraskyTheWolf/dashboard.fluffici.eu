@@ -48,17 +48,6 @@ services:
       - dashboard
       - db
 
-  mailpit:
-    image: axllent/mailpit
-    env_file: .env
-    restart: always
-    container_name: mailpit
-    ports:
-      - target: 8025
-        published: ${MAILPIT_PUBLISHED_PORT:-8025}
-        protocol: tcp
-        mode: host
-
   db:
     build:
       context: .
@@ -66,7 +55,7 @@ services:
     container_name: db
     ports:
       - target: 3306
-        published: ${DB_PUBLISHED_PORT:-3306}
+        published: 3306
         protocol: tcp
         mode: host
     volumes:
