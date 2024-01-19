@@ -34,7 +34,7 @@ class UserPresenter extends Presenter implements Personable, Searchable
         $roles = $this->entity->roles->pluck('name')->implode(' / ');
 
         return (string) Str::of($roles)
-            ->limit(2)
+            ->limit(20)
             ->whenEmpty(fn () => 'Guest');
     }
 

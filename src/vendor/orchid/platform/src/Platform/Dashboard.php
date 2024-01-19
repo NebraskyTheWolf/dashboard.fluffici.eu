@@ -172,7 +172,13 @@ class Dashboard
     {
         $current = dirname(__DIR__, 2);
 
-        return realpath($current.($path ? DIRECTORY_SEPARATOR.$path : $path));
+        $result = realpath($current.($path ? DIRECTORY_SEPARATOR.$path : $path));
+
+        if ($result === false) {
+            return $path;
+        }
+
+        return $result;
     }
 
     /**
