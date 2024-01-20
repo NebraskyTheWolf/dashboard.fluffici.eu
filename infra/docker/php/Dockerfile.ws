@@ -80,7 +80,5 @@ ENV GIT_COMMIT=$GIT_COMMIT
 # Install the PDO and utilities.
 RUN docker-php-ext-install pdo_mysql pdo
 
-RUN chown -R root:root /workspace
-RUN chmod -R 777 /workspace
 
 CMD ["php", "artisan", "websockets:serve"]

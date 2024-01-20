@@ -27,7 +27,7 @@ window.addEventListener('turbo:before-fetch-request', (event) => {
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: '521a8d3a78ab50e2c14d',
-    wsHost: 'localhost',
+    wsHost: '85.215.202.21',
     wsPort: 6001,
     forceTLS: false,
     disableStats: true,

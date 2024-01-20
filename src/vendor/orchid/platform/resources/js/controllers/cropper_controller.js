@@ -126,7 +126,7 @@ export default class extends ApplicationController {
 
             var tag = document.getElementById("bucket").value;
 
-            fetch(`http://localhost:8080/autumn/${tag}`, {
+            fetch(`https://autumn.rsiniya.uk/${tag}`, {
                 method: 'post',
                 body: formData
             }).then((res) => {

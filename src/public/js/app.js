@@ -55,6 +55,8 @@ $(document).ready(function($) {
         }
     })
 
+
+
     if (document.getElementById('isLogged').value == 1) {
         window.Echo.channel('statistics').listen('Statistics', (data) => {
             var beautify = JSON.stringify(data.data)
