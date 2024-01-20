@@ -58,9 +58,17 @@ COPY ./src /workspace
 
 RUN <<EOF
   chmod -R 777 storage bootstrap/cache
+  mkdir storage/framework/cache
+  mkdir storage/framework/sessions
+  mkdir storage/framework/testing
+  mkdir storage/framework/views
+  mkdir storage/cache
+  mkdir storage/app/public
+  mkdir storage/logs
   php artisan optimize:clear
   php artisan optimize
   apt-get clean
+  chmod -R 777 storage
   rm -rf /var/lib/apt/lists/*
 EOF
 
