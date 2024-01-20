@@ -2,6 +2,8 @@ FROM php:8.3-fpm-bullseye AS base
 
 WORKDIR /workspace
 
+USER root
+
 # timezone environment
 ENV TZ=UTC \
   # locale
