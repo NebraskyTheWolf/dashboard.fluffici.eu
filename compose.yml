@@ -29,43 +29,20 @@ services:
         target: /workspace
     ports:
       - '6001:6001'
-    networks:
-      caddy_proxy:
 
-  caddy:
-    image: caddy:latest
-    restart: unless-stopped
-    env_file: .env
-    container_name: caddy
-    volumes:
-      - ./config/Caddyfile:/etc/caddy/Caddyfile
-      - ./data/caddy-data:/data
-      - ./data/caddy-config:/config
-      - type: bind
-        source: ./src
-        target: /workspace
-    ports:
-      - target: 443
-        published: 8443
-        protocol: tcp
-        mode: host
-      - target: 80
-        published: 8080
-        protocol: tcp
-        mode: host
-    depends_on:
-      - dashboard
-      - db
-    networks:
-      caddy_proxy:
-    cap_add:
-      - NET_ADMIN
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://caddy:2019/metrics", "||", "exit", "1"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+  nginx:
+      build:
+        context: .
+        dockerfile: ./infra/docker/nginx/Dockerfile
+      ports:
+        - target: 80
+          published: 80
+          protocol: tcp
+          mode: host
+      volumes:
+        - type: bind
+          source: ./src
+          target: /workspace
 
   db:
     build:
@@ -88,9 +65,3 @@ services:
       - MYSQL_USER=${DB_USERNAME:-phper}
       - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
-    networks:
-      caddy_proxy:
-
-networks:
-  caddy_proxy:
-    external: true

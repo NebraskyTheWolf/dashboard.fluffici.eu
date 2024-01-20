@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{  app()->getLocale() }}" data-controller="html-load" dir="en">
+<html lang="{{  app()->getLocale() }}" data-controller="html-load" dir="ltr">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -69,7 +69,7 @@
                     <img class="centered-bar error-mask" id="error-mark" src="{{url('/img/info.png')}}" alt="error">
                     <div class="centered-bar" id="loader-bar"></div>
                 </div>
-                <p class="styled centered-bar" id="loading-text">Loading...</p>
+                <p class="styled centered-bar" id="loading-text"></p>
             </div>
         </div>
     </div>

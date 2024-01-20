@@ -8,8 +8,6 @@ use Orchid\Platform\Http\Controllers\LoginController;
 use Orchid\Platform\Http\Controllers\AsyncController;
 use Orchid\Platform\Http\Controllers\AttachmentController;
 use Orchid\Platform\Http\Controllers\IndexController;
-use Orchid\Platform\Http\Controllers\RelationController;
-use Orchid\Platform\Http\Controllers\SortableController;
 use Orchid\Platform\Http\Screens\NotificationScreen;
 use Orchid\Platform\Http\Screens\SearchScreen;
 use Tabuna\Breadcrumbs\Trail;
@@ -66,7 +64,7 @@ Route::screen('notifications/{id?}', NotificationScreen::class)
 ->name('notifications')
 ->breadcrumbs(fn (Trail $trail) => $trail->parent('index')
     ->push(__('Notifications')));
-    
+
 Route::post('api/notifications', [NotificationScreen::class, 'unreadNotification'])
 ->name('api.notifications');
 

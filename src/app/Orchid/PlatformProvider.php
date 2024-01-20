@@ -26,8 +26,6 @@ class PlatformProvider extends OrchidServiceProvider
     public function boot(Dashboard $dashboard): void
     {
         parent::boot($dashboard);
-
-        // ...
     }
 
     /**
@@ -154,7 +152,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.eshop.products', "EShop Products (read/write)")
                 ->addPermission('platform.systems.eshop.vouchers', "EShop Vouchers (write)")
                 ->addPermission('platform.systems.eshop.sales', "EShop Sales (read/write)"),
-            
+
             ItemPermission::group("Pages & Event management")
                 ->addPermission('platform.systems.posts', "Posts (Navbar)")
                 ->addPermission('platform.systems.events', "Events (Navbar)")
