@@ -77,5 +77,8 @@ EOF
 ARG GIT_COMMIT
 ENV GIT_COMMIT=$GIT_COMMIT
 
+RUN chown -R root:root /workspace
+RUN chmod -R 777 /workspace
+
 # Install the PDO and utilities.
 RUN docker-php-ext-install pdo_mysql pdo
