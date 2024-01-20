@@ -1,5 +1,15 @@
 $(document).ready(function($) {
     $("#error-mask").hide()
+
+    window.Echo.connector.pusher.connection.bind('connecting', () => {
+        $("#loader").show().css("display","inline").removeAttr('hidden')
+        $("#loader-bar").show().removeAttr('hidden').css({
+            'display': 'initial'
+        })
+        $("#loading-text").html('Connecting...')
+        $("#loading").hide()
+    });
+
     window.Echo.connector.pusher.connection.bind('connected', () => {
           $("#loader").remove()
           $("#loading").show().css("display","inline").removeAttr('hidden')
@@ -11,6 +21,9 @@ $(document).ready(function($) {
               'display': 'initial'
           })
           $("#error-mask").show().removeAttr('hidden').css({
+              'display': 'initial'
+          })
+          $("#loader-bar").show().removeAttr('hidden').css({
               'display': 'initial'
           })
           $("#loading-text").html('A error occurred.')
@@ -25,7 +38,7 @@ $(document).ready(function($) {
           $("#loading-text").html('The server is currently down.')
     });
 
-    axios.get('http://' + window.location.hostname + ":8080/build").then(function (response) {
+    axios.get('https://' + window.location.hostname + "/build").then(function (response) {
         if (response.status !== 200) {
             console.log('Cannot update fields for versioning.')
         } else {
@@ -34,7 +47,7 @@ $(document).ready(function($) {
         }
     })
 
-    axios.get('http://' + window.location.hostname + ":3000/autumn").then(function (response) {
+    axios.get("https://autumn.rsiniya.uk").then(function (response) {
           if (response.status !== 200) {
             console.log('Cannot update fields for versioning.')
         } else {
@@ -50,8 +63,8 @@ $(document).ready(function($) {
             for (var key in reverty) {
                 document.getElementById(reverty[key].field).innerHTML =
                     `<p class="h3 text-black fw-light mt-auto" id="${reverty[key].field}">
-              ${reverty[key].result}
-          </p>`;
+                      ${reverty[key].result}
+                    </p>`;
             }
         });
 

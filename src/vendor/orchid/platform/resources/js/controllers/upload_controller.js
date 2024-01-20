@@ -107,7 +107,7 @@ export default class extends ApplicationController {
         }
 
         axios
-            .post("http://127.0.0.1:3000/autumn/attachments", attach)
+            .post("https://autumn.rsiniya.uk/attachments", attach)
             .then(result => {
                 if (result.id != null || result.id != undefined) {
                     this.this.attachments[name].remote_id = result.id

@@ -24,11 +24,10 @@ window.addEventListener('turbo:before-fetch-request', (event) => {
     }
 });
 
-
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: '521a8d3a78ab50e2c14d',
-    wsHost: window.location.hostname,
+    wsHost: 'localhost',
     wsPort: 6001,
     forceTLS: false,
     disableStats: true,

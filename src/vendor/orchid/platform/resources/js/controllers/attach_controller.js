@@ -38,7 +38,7 @@ export default class extends ApplicationController {
     connect() {
         this.togglePlaceholderShow();
         var avatarId = document.getElementById("avatar_id").value;
-        if (avatarId != null 
+        if (avatarId != null
             || avatarId != undefined) {
             this.renderPreview(avatarId, 'avatars');
         }
@@ -63,7 +63,7 @@ export default class extends ApplicationController {
 
         var tag = document.getElementById("bucket").value;
 
-        fetch(`http://localhost:8080/autumn/${tag}`, {
+        fetch(`https://autumn.rsiniya.uk/${tag}`, {
             method: 'post',
             body: data
         }).then((res) => {
@@ -83,7 +83,7 @@ export default class extends ApplicationController {
         event.currentTarget.closest('.pip').remove();
         this.togglePlaceholderShow();
     }
-    
+
     displayError(error) {
         error.then(result => {
             if (result.type == "Malware") {
@@ -102,7 +102,7 @@ export default class extends ApplicationController {
                 this.toast("The upload was aborted.", "danger")
             } else if (result.type == "FileTooLarge") {
                 this.toast("This file is too large ( Maximum size allowed : " + (error.max_size / 1000 / 1000) + " Mb )", "danger")
-            } else { 
+            } else {
                 this.toast("Autumn have not responded, is the fox gone OwO? *screech*")
             }
         })
@@ -112,7 +112,7 @@ export default class extends ApplicationController {
         data.then(async result => {
             this.element.ariaBusy = 'false';
             this.loadingValue = this.loadingValue - 1;
-                
+
             var objectId = result.id;
 
             // Update Label after push
@@ -168,7 +168,7 @@ export default class extends ApplicationController {
 
         pip.innerHTML = `
             <input type="hidden" name="${this.nameValue}" value="${attachment}">
-            <img class="attach-image rounded border user-select-none" src="http://localhost:3000/${bucket}/${attachment}"/>
+            <img class="attach-image rounded border user-select-none" src="https://autumn.rsiniya.uk/${bucket}/${attachment}"/>
         `;
 
         if (replace !== null) {

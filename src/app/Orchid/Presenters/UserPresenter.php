@@ -56,7 +56,7 @@ class UserPresenter extends Presenter implements Personable, Searchable
      */
     public function image(): ?string {
         if ($this->entity->avatar == 1) {
-            return env("AUTUMN_HOST", "http://localhost:3000/avatars") . '/' . $this->entity->avatar_id . '?width=256&height=256';
+            return env("AUTUMN_HOST", "https://autumn.rsiniya.uk") . '/' . $this->entity->avatar_id . '?width=256&height=256';
         }
         return 'https://ui-avatars.com/api/?name=' . $this->title() . '&background=0D8ABC&color=fff';
     }
