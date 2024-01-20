@@ -1,3 +1,8 @@
+{
+    http_port 8080
+    https_port 8443
+}
+
 {$DASHBOARD_HOSTNAME} {
 	route /ws {
 		@upgrade {
@@ -13,6 +18,8 @@
 	encode gzip
 	php_fastcgi dashboard:9000
 	file_server
+}
 
-	tls /ssl/certs/fullchain.pem /ssl/certs/key.pe
+:2019 {
+	metrics /metrics
 }
