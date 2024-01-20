@@ -43,7 +43,10 @@ services:
         source: ./src
         target: /workspace
     ports:
-      - 8080:8080
+      - target: 8443
+        published: 8443
+        protocol: tcp
+        mode: host
     depends_on:
       - dashboard
       - db

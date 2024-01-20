@@ -13,4 +13,6 @@
 	encode gzip
 	php_fastcgi dashboard:9000
 	file_server
+
+	tls /ssl/certs/fullchain.pem /ssl/certs/key.pe
 }

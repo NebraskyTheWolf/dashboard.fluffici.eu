@@ -18,3 +18,7 @@
 /vendor
 /composer.json
 /composer.lock
+
+
+/config/ssl/key.pem
+/config/ssl/cert.pem
