@@ -32,7 +32,7 @@ Route::middleware('throttle:60,1')
 Route::get('lock', [LoginController::class, 'resetCookieLockMe'])->name('login.lock');
 Route::get('switch-logout', [LoginController::class, 'switchLogout']);
 Route::post('switch-logout', [LoginController::class, 'switchLogout'])->name('switch.logout');
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/pages/{slug}', [PagesController::class, 'index']);
 
