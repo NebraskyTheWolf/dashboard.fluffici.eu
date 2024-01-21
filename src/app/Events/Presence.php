@@ -15,8 +15,8 @@ use Illuminate\Queue\SerializesModels;
 class Presence implements ShouldBroadcast {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private UserPresenter $user;
-    private PresenceBuilder $payload;
+    public UserPresenter $user;
+    public PresenceBuilder $payload;
 
     public function __construct(User $user, PresenceBuilder $payload) {
         $this->user = new UserPresenter($user);
@@ -24,7 +24,12 @@ class Presence implements ShouldBroadcast {
     }
 
     public function broadcastOn() {
-        return new PresenceChannel('user');
+        return new PresenceChannel('user.1');
+    }
+
+    public function broadcastAs()
+    {
+        return 'user-presence';
     }
 
     public function broadcastWith()

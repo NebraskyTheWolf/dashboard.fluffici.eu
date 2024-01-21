@@ -29,7 +29,7 @@ class PagesController extends Controller {
 
             return view('pages.index', compact('page'));
         } catch (exception) {
-            return view('errors.error');
+            return view('errors.404');
         }
     }
 }

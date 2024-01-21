@@ -24,7 +24,7 @@ class Dashboard
     public const VERSION = '14.17.1';
 
     /**
-     * @deprecated
+     *
      *
      * Slug for main menu.
      */

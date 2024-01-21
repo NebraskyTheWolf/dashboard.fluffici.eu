@@ -2,12 +2,12 @@
 
 namespace App\Orchid\Layouts;
 
+use App\Models\User;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use App\Models\AuditLogs;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Persona;
-use Orchid\Platform\Models\User;
 use App\Orchid\Presenters\UserPresenter;
 
 class AuditLogsListLayout extends Table
@@ -43,7 +43,7 @@ class AuditLogsListLayout extends Table
                 ->render(function (AuditLogs $auditLogs) {
                     return strtoupper($auditLogs->slug);
                 }),
-            
+
             TD::make('type', 'Operation')
                 ->render(function (AuditLogs $auditLogs) {
                     if ($auditLogs->type == "DELETE" || $auditLogs->type == "CANCELLED") {

@@ -2,8 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Events\Presence;
+use App\Lib\PresenceBuilder;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class Cors
@@ -18,6 +21,10 @@ class Cors
         header('Access-Control-Allow-Origin:  *');
         header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Authorization, Origin');
         header('Access-Control-Allow-Methods:  POST, PUT');
+
+        if (Auth::check()) {
+            event(new Presence(Auth::user(), new PresenceBuilder("", [])));
+        }
 
         return $next($request);
     }

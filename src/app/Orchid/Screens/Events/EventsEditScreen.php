@@ -8,18 +8,13 @@ use Illuminate\Http\Request;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Quill;
-use Orchid\Screen\Fields\Relation;
-use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Fields\Cropper;
-use Orchid\Screen\Fields\Picture;
-use Orchid\Screen\Layouts\View;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\Map;
 use Ramsey\Uuid\Uuid;
-use Orchid\Screen\TD;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Facades\Auth;
@@ -85,7 +80,7 @@ class EventsEditScreen extends Screen
                 ->method('cancel')
                 ->canSee($this->events->exists && $this->events->status == "INCOMING")
                 ->type(Color::DANGER),
-            
+
             Button::make('Undo')
                 ->icon('bs.arrow-clockwise')
                 ->method('undo')
@@ -138,12 +133,12 @@ class EventsEditScreen extends Screen
                     DateTimer::make('events.begin')
                         ->title('The date of the begining.')
                         ->disabled($this->events->status == "CANCELLED"),
-                
+
                     DateTimer::make('events.end')
                         ->title('The date of the ending.')
                         ->disabled($this->events->status == "CANCELLED"),
                 ]),
-            
+
                 Group::make([
                     Map::make('events.min')
                         ->title('Select the first enplacement.')
@@ -169,14 +164,14 @@ class EventsEditScreen extends Screen
                     ->maxWidth(1500)
                     ->minHeight(250)
                     ->maxHeight(500)
-                    ->maxFileSize(200)                
-                
+                    ->maxFileSize(200)
+
             ])->title('Event informations'),
         ];
     }
 
     public function createOrUpdate(Request $request) {
-        
+
         $this->events->fill($request->get('events'))->save();
 
         Toast::info('You have successfully created a new event.');
@@ -187,7 +182,7 @@ class EventsEditScreen extends Screen
     }
 
     public function cancel() {
-        
+
         Events::updateOrCreate(
             ['event_id' => $this->events->event_id],
             [
@@ -203,7 +198,7 @@ class EventsEditScreen extends Screen
     }
 
     public function finish() {
-        
+
         Events::updateOrCreate(
             ['event_id' => $this->events->event_id],
             [
