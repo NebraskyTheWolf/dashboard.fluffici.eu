@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
 class ShopCategories extends Screen
@@ -13,7 +14,9 @@ class ShopCategories extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'categories' => \App\Models\ShopCategories::paginate()
+        ];
     }
 
     /**
@@ -23,7 +26,7 @@ class ShopCategories extends Screen
      */
     public function name(): ?string
     {
-        return 'ShopCategories';
+        return 'Shop Categories';
     }
 
     /**
@@ -33,7 +36,11 @@ class ShopCategories extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make("New")
+                ->icon('bs.plus')
+                ->route('platform.shop.categories.create'),
+        ];
     }
 
     /**

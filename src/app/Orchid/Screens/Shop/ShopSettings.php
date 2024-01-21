@@ -2,6 +2,10 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use App\Models\Pages;
+use App\Models\ShopOrders;
+use App\Models\ShopSupportTickets;
+use Carbon\Carbon;
 use Orchid\Screen\Screen;
 
 class ShopSettings extends Screen
@@ -13,6 +17,7 @@ class ShopSettings extends Screen
      */
     public function query(): iterable
     {
+
         return [];
     }
 

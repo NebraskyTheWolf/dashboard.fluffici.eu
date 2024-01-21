@@ -2,7 +2,11 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use App\Models\ShopOrders;
+use App\Orchid\Layouts\ShopProfit;
+use Carbon\Carbon;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 
 class ShopStatistics extends Screen
 {
@@ -13,7 +17,27 @@ class ShopStatistics extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        $start = Carbon::now();
+
+        return [
+            'metrics' => [
+                'products' => [
+                    'key' => 'products',
+                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->sum())
+                ],
+                'overall'   => [
+                    'key' => 'overall',
+                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->sum('total_price'))
+                ],
+                'monthly'   => [
+                    'key' => 'monthly',
+                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->whereBetween('created_at',
+                                $start->startOfMonth()->format('Y-m-d'),
+                                $start->endOfMonth()->format('Y-m-d')
+                            )->sum('total_price'))
+                ],
+            ],
+        ];
     }
 
     /**
@@ -23,7 +47,7 @@ class ShopStatistics extends Screen
      */
     public function name(): ?string
     {
-        return 'ShopStatistics';
+        return 'Shop Growth';
     }
 
     /**
@@ -43,6 +67,14 @@ class ShopStatistics extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::metrics([
+                'Products sold' => 'metrics.products',
+                'Overall profit' => 'metrics.overall',
+                'Profit for this month' => 'metrics.monthly',
+            ]),
+
+            ShopProfit::class
+        ];
     }
 }
