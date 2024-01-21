@@ -1,3 +1,7 @@
+window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+window.axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Content-Type, X-Auth-Token, Authorization, Origin'
+window.axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'POST, PUT, GET, DELETE, OPTIONS'
+
 $(document).ready(function($) {
     $("#error-mask").hide()
 
@@ -37,8 +41,7 @@ $(document).ready(function($) {
           })
           $("#loading-text").html('The server is currently down.')
     });
-
-    axios.get('https://' + window.location.hostname + "/build").then(function (response) {
+    axios.get('https://dashboard.rsiniya.uk/build').then(function (response) {
         if (response.status !== 200) {
             console.log('Cannot update fields for versioning.')
         } else {
@@ -47,7 +50,7 @@ $(document).ready(function($) {
         }
     })
 
-    axios.get("https://autumn.rsiniya.uk").then(function (response) {
+    axios.get("https://autumn.rsiniya.uk/").then(function (response) {
           if (response.status !== 200) {
             console.log('Cannot update fields for versioning.')
         } else {

@@ -27,9 +27,9 @@ window.addEventListener('turbo:before-fetch-request', (event) => {
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: '521a8d3a78ab50e2c14d',
-    wsHost: '85.215.202.21',
+    wsHost: 'websocket.rsiniya.uk',
     wsPort: 6001,
-    forceTLS: false,
+    forceTLS: true,
     disableStats: true,
     cluster: 'eu'
 });
