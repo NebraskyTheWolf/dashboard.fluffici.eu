@@ -40,6 +40,10 @@ services:
           published: ${NGINX_PORT:-3909}
           protocol: tcp
           mode: host
+        - target: 443
+          published: ${NGINX_SSL_PORT:-8443}
+          protocol: tcp
+          mode: host
       volumes:
         - type: bind
           source: ./src
