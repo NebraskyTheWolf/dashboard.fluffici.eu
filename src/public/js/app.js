@@ -35,12 +35,16 @@ $(document).ready(function($) {
           $("#error-mask").show().removeAttr('hidden').css({
               'display': 'initial'
           })
+          $("#loader-bar").show().removeAttr('hidden').css({
+              'display': 'initial'
+          })
           $("#loading-text").html('The server is currently down.')
     });
     axios.get('https://dashboard.rsiniya.uk/build').then(function (response) {
         if (response.status !== 200) {
             console.log('Cannot update fields for versioning.')
         } else {
+            console.log(response.data.rev)
             $('#version').text('Version : ' + response.data.version)
             $('#rev').text('Rev : ' + response.data.rev.substring(0, 8))
         }
