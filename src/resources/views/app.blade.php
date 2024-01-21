@@ -23,9 +23,7 @@
     <meta name="turbo-root" content="{{  Dashboard::prefix() }}">
     <meta name="dashboard-prefix" content="{{  Dashboard::prefix() }}">
 
-    @if(!config('turbo.cache', false))
-        <meta name="turbo-cache-control" content="no-cache">
-    @endif
+    <meta name="turbo-cache-control" content="no-cache">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
