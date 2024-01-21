@@ -2,7 +2,7 @@
     <meta name="robots" content="noindex"/>
     <meta name="google" content="notranslate">
     <link
-          href="{{ asset('/vendor/orchid/favicon.png') }}"
+          href="https://autumn.rsiniya.uk/attachments/xoc4VuUvf2F0D7v1qLHhXhhXFAMzk-yFF47-oJypue/favicon.png?width=128&height=128"
           sizes="any"
           type="image/png"
           id="favicon"
@@ -15,7 +15,7 @@
 
 <div class="h2 d-flex align-items-center">
     @auth
-        <x-orchid-icon path="bs.house" class="d-inline d-xl-none"/>
+        <i class="home icon"></i>
     @endauth
 
 

@@ -2,11 +2,14 @@
 
 
 @section('body')
+
+    <img class="logo" src="https://autumn.rsiniya.uk/attachments/xoc4VuUvf2F0D7v1qLHhXhhXFAMzk-yFF47-oJypue/favicon.png?width=64&height=64" alt="fliffici_logo">
+
+
     <div class="container-md">
         <div class="form-signin h-full min-vh-100 d-flex flex-column justify-content-center">
 
             <a class="d-flex justify-content-center mb-4 p-0 px-sm-5" href="{{Dashboard::prefix()}}">
-                <img src="{{ env('AUTUMN_HOST')}}/attachments/{{env("AUTUMN_FLUFFICI_ICON", 0)}}" alt="fliffici_logo" srcset="fluffici">
                 @includeFirst(['header'])
             </a>
 

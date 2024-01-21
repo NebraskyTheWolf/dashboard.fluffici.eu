@@ -57,7 +57,7 @@
     @endforeach
 </head>
 
-<body class="{{ \Orchid\Support\Names::getPageNameClass() }}" data-controller="pull-to-refresh">
+<body class="{{ \Orchid\Support\Names::getPageNameClass() }} styled-text" data-controller="pull-to-refresh">
 
 
 <body class="antialiased">
@@ -78,7 +78,7 @@
 </body>
 
 <div data-controller="@yield('controller')" @yield('controller-data') id="loading">
-    <div class="row justify-content-center d-md-flex h-100">
+    <div class="row justify-content-center d-md-flex h-100 dark:bg-dots-lighter">
         @yield('aside')
 
         <div class="col-xxl col-xl-9 col-12">
