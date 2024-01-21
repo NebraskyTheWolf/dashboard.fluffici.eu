@@ -4,17 +4,8 @@ namespace App\Orchid\Screens\Shop;
 
 use Orchid\Screen\Screen;
 
-use App\Models\ShopSettings;
-
-use Illuminate\Http\Request;
-use Orchid\Support\Facades\Toast;
-
-
-class ShopSettingsScreen extends Screen
+class ShopStatistics extends Screen
 {
-
-    public $settings;
-
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -22,9 +13,7 @@ class ShopSettingsScreen extends Screen
      */
     public function query(): iterable
     {
-        return [
-            'settings' => ShopSettings::where('id', 0)->paginate()
-        ];
+        return [];
     }
 
     /**
@@ -34,14 +23,7 @@ class ShopSettingsScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Shop Settings';
-    }
-
-    public function permission(): iterable
-    {
-        return [
-            'platform.system.eshop.settings.write'
-        ];
+        return 'ShopStatistics';
     }
 
     /**
@@ -62,14 +44,5 @@ class ShopSettingsScreen extends Screen
     public function layout(): iterable
     {
         return [];
-    }
-
-
-    public function update(Request $request) {
-        $this->settings->fill($request->get('settings'))->save();
-
-        Toast::info('You have successfully updated the shop settings.');
-
-        return redirect()->route('platform.shop.settings');
     }
 }

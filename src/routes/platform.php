@@ -107,3 +107,33 @@ Route::screen('pages', PagesListScreen::class)
 
 Route::screen('audit', AuditLogsListScreen::class)
     ->name('platform.audit');
+
+Route::screen('files', \App\Orchid\Screens\AttachmentsScreen::class)
+    ->name('platform.attachments');
+
+Route::screen('reports', \App\Orchid\Screens\AttachmentsScreen::class)
+    ->name('platform.reports');
+
+Route::screen('shop/statistics', \App\Orchid\Screens\Shop\ShopStatistics::class)
+    ->name('platform.shop.statistics');
+
+Route::screen('shop/products', \App\Orchid\Screens\Shop\ShopProducts::class)
+    ->name('platform.shop.products');
+
+Route::screen('shop/categories', \App\Orchid\Screens\Shop\ShopCategories::class)
+    ->name('platform.shop.categories');
+
+Route::screen('shop/sales', \App\Orchid\Screens\Shop\ShopSales::class)
+    ->name('platform.shop.sales');
+
+Route::screen('shop/vouchers', \App\Orchid\Screens\Shop\ShopVouchers::class)
+    ->name('platform.shop.vouchers');
+
+Route::screen('shop/orders', \App\Orchid\Screens\Shop\ShopOrders::class)
+    ->name('platform.shop.orders');
+
+Route::screen('shop/support', \App\Orchid\Screens\Shop\ShopSupport::class)
+    ->name('platform.shop.support');
+
+Route::screen('shop/settings', \App\Orchid\Screens\Shop\ShopSettings::class)
+    ->name('platform.shop.settings');

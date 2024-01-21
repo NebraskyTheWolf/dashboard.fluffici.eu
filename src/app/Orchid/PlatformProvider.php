@@ -61,6 +61,22 @@ class PlatformProvider extends OrchidServiceProvider
                 ->divider()
                 ->permission('platform.systems.settings'),
 
+            Menu::make('Attachments')
+                ->icon('bs.archive')
+                ->title('Attachments')
+                ->list([
+                    Menu::make('Files')
+                        ->icon('bs.images')
+                        ->route('platform.attachments')
+                        ->permission('platform.systems.attachments.files'),
+                    Menu::make("Reports & DMCA Request")
+                        ->icon('bs.exclamation-octagon')
+                        ->route('platform.reports')
+                        ->permission('platform.systems.attachments.reports')
+                ])
+                ->divider()
+                ->permission('platform.systems.attachments'),
+
             Menu::make('Main page')
                 ->icon('bs.chat-right-text')
                 ->list([
@@ -87,27 +103,31 @@ class PlatformProvider extends OrchidServiceProvider
                 ->list([
                     Menu::make('Statistics')
                         ->icon('bs.graph-up')
-                        //->route('platform.systems.users')
+                        ->route('platform.shop.statistics')
                         ->title("GROWTH"),
                     Menu::make('Products')
                         ->icon('bs.window-sidebar')
-                        //->route('platform.systems.users')
+                        ->route('platform.shop.products')
                         ->permission('platform.systems.eshop.products')
                         ->title("PRODUCTS AND SALES"),
+                    Menu::make('Categories')
+                        ->icon('bs.window-sidebar')
+                        ->route('platform.shop.categories')
+                        ->permission('platform.systems.eshop.products'),
                     Menu::make('Sales')
                         ->icon('bs.credit-card-2-front')
-                        //->route('platform.systems.users')
+                        ->route('platform.shop.sales')
                         ->permission('platform.systems.eshop.sales')
                         ->canSee(false),
                     Menu::make('Vouchers')
                         ->icon('bs.card-list')
-                        //->route('platform.systems.users')
+                        ->route('platform.shop.vouchers')
                         ->permission('platform.systems.eshop.vouchers')
                         ->title("VOUCHERS")
                         ->canSee(false),
                     Menu::make('Orders')
                         ->icon('bs.box-seam')
-                        //->route('platform.systems.users')
+                        ->route('platform.shop.orders')
                         ->badge(fn () => ShopOrders::where('status', 'PENDING')->count() ?: 0)
                         ->permission('platform.systems.eshop.orders')
                         ->slug('orders')
@@ -115,12 +135,12 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Support Tickets')
                         ->icon('bs.chat-right-text')
                         ->slug('tickets')
-                        //->route('platform.systems.users')
+                        ->route('platform.shop.support')
                         ->badge(fn () => ShopSupportTickets::where('status', 'PENDING')->count() ?: 0)
                         ->permission('platform.systems.eshop.support'),
                     Menu::make('Settings')
                         ->icon('bs.gear')
-                        //->route('platform.systems.users')
+                        ->route('platform.shop.settings')
                         ->permission('platform.systems.eshop.settings')
                         ->title("SHOP MANAGEMENT")
                 ])
@@ -152,6 +172,13 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.eshop.products', "EShop Products (read/write)")
                 ->addPermission('platform.systems.eshop.vouchers', "EShop Vouchers (write)")
                 ->addPermission('platform.systems.eshop.sales', "EShop Sales (read/write)"),
+
+            ItemPermission::group('Attachments')
+                ->addPermission('platform.systems.attachments.files', 'Files (Read)')
+                ->addPermission('platform.systems.attachments.files.write', 'Files (Write)')
+                ->addPermission('platform.systems.attachments.reports', 'Reports (Read)')
+                ->addPermission('platform.systems.attachments.reports.write', 'Reports (Write)')
+                ->addPermission('platform.systems.attachments', 'Attachments (Navbar)'),
 
             ItemPermission::group("Pages & Event management")
                 ->addPermission('platform.systems.posts', "Posts (Navbar)")
