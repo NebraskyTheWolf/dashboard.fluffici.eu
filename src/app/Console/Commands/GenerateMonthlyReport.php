@@ -68,6 +68,10 @@ class GenerateMonthlyReport extends Command
             'overallProfit' => number_format($total),
             'lossPercentage' => number_format($percentage)
         ]);
+        $document->setEncryption($reportId);
+        $document->getDomPDF()->getCss()->resolve_url("https://dashboard.rsiniya.uk/css/style.css");
+        $document->getDomPDF()->getOptions()->setDefaultPaperSize("A4");
+
         $document->render();
         $filename = 'report-' . $today . '-' . $reportId . '.pdf';
 
@@ -75,6 +79,9 @@ class GenerateMonthlyReport extends Command
 
         $client = new Client();
         $response = $client->post('https://autumn.rsiniya.uk/attachments', [
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
             'multipart' => [
                 [
                     'name' => $filename,
@@ -85,7 +92,7 @@ class GenerateMonthlyReport extends Command
         ]);
 
         if ($response->getStatusCode() === 200) {
-            $body = json_decode($response->getBody(), true);
+            $body = json_decode($response->getBody()->getContents(), true);
 
             $report = new ShopReports();
             $report->attachment_id = $body->id;

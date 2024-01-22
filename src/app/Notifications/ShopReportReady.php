@@ -8,6 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Orchid\Platform\Notifications\DashboardChannel;
 use Orchid\Platform\Notifications\DashboardMessage;
+use Orchid\Support\Color;
 
 class ShopReportReady extends Notification
 {
@@ -45,7 +46,8 @@ class ShopReportReady extends Notification
     {
         return (new DashboardMessage())
             ->title('New monthly report.')
-            ->message('The last shop report is now available.')
+            ->message('The last shop report is now available. The password is ' . $this->reportId)
+            ->type(Color::SUCCESS)
             ->action(url('/shop/documents'));
     }
 
