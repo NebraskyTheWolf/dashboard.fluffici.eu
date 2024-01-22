@@ -1,38 +1,50 @@
-<div class="tm_container">
-    <div class="tm_invoice_wrap">
-        <div class="tm_invoice tm_style1" id="tm_download_section">
-            <div class="tm_invoice_in">
-                <div class="tm_invoice_head tm_mb20">
-                    <div class="tm_invoice_left">
-                        <div class="tm_logo tm_size1"><img src="https://autumn.rsiniya.uk/attachments/qffASusil8eQOZ-wKZ3xcztZb5wvrWc6LxJm9tPSV5" alt="Logo"></div>
-                    </div>
-                    <div class="tm_invoice_right tm_text_right">
-                        <b class="tm_f20 tm_medium tm_primary_color">Shop Report</b>
-                        <p class="tm_m0 tm_f12"></p>
-                    </div>
-                </div>
-                <hr class="tm_mb8">
-                <div class="tm_flex tm_flex_column_sm tm_justify_between tm_align_center tm_align_start_sm tm_medium tm_mb10">
-                    <p class="tm_m0">Report No: <br><b class="tm_primary_color">{{ $reportId }}</b></p>
-                    <p class="tm_m0">Invoice Date: <br><b class="tm_primary_color">{{ $reportDate }}</b></p>
-                    <p class="tm_m0">Date of Export: <br><b class="tm_primary_color">{{ $reportExportDate }}</b></p>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 
-                    <p class="tm_m0">Loss: <br><b class="tm_primary_color"></b>{{ $lossPercentage }}% of the profit has been lost because of sales.</p>
-                </div>
-                <hr class="tm_mb20">
-                <div class="tm_table tm_style1">
-                    <div class="tm_border">
-                        <div class="tm_table_responsive">
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th class="tm_width_6 tm_semi_bold tm_primary_color tm_gray_bg">Product</th>
-                                    <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg">Price</th>
-                                    <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg">Qty</th>
-                                    <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg tm_text_right">Total</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+    <link href="https://dashboard.rsiniya.uk/css/style.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="tm_container">
+        <div class="tm_invoice_wrap">
+            <div class="tm_invoice tm_style1" id="tm_download_section">
+                <div class="tm_invoice_in">
+                    <div class="tm_invoice_head tm_mb20">
+                        <div class="tm_invoice_left">
+                            <div class="tm_logo tm_size1"><img alt="" src="data:image/x-icon;base64,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" /></div>
+                        </div>
+                        <div class="tm_invoice_right tm_text_right">
+                            <b class="tm_f20 tm_medium tm_primary_color">Shop Report</b>
+                            <p class="tm_m0 tm_f12"></p>
+                        </div>
+                    </div>
+                    <hr class="tm_mb8">
+                    <div class="tm_flex tm_flex_column_sm tm_justify_between tm_align_center tm_align_start_sm tm_medium tm_mb10">
+                        <p class="tm_m0">Report No: <br><b class="tm_primary_color">{{ $reportId }}</b></p>
+                        <p class="tm_m0">Invoice Date: <br><b class="tm_primary_color">{{ $reportDate }}</b></p>
+                        <p class="tm_m0">Date of Export: <br><b class="tm_primary_color">{{ $reportExportDate }}</b></p>
+
+                        <p class="tm_m0">Loss: <br><b class="tm_primary_color"></b>{{ $lossPercentage }}% of the profit has been lost because of sales.</p>
+                    </div>
+                    <hr class="tm_mb20">
+                    <div class="tm_table tm_style1">
+                        <div class="tm_border">
+                            <div class="tm_table_responsive">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th class="tm_width_6 tm_semi_bold tm_primary_color tm_gray_bg">Product</th>
+                                        <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg">Price</th>
+                                        <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg">Qty</th>
+                                        <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg tm_text_right">Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
                                     @if(empty($reportProducts))
                                         <tr>
                                             <td class="tm_width_6">No orders passed this month.</td>
@@ -50,32 +62,34 @@
                                             </tr>
                                         @endforeach
                                     @endif
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                    <div class="tm_invoice_footer tm_mb30 tm_m0_md">
-                        <div class="tm_right_footer">
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Fees <span class="tm_ternary_color">(5%)</span></td>
-                                    <td class="tm_width_3 tm_success_color tm_text_right tm_border_none tm_pt0" style="color: lime;">+ {{ $fees }} Kc</td>
-                                </tr>
-                                <tr>
-                                    <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Sales</td>
-                                    <td class="tm_width_3 tm_danger_color tm_text_right tm_border_none tm_pt0">- {{ $sales }} (-{{ $lossPercentage  }}%) Kc</td>
-                                </tr>
-                                <tr>
-                                    <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Overall Profit</td>
-                                    <td class="tm_width_3 tm_success_color tm_text_right tm_border_none tm_bold" style="color: lime;">+ {{ $overallProfit }} Kc</td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="tm_invoice_footer tm_mb30 tm_m0_md">
+                            <div class="tm_right_footer">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Fees <span class="tm_ternary_color">(5%)</span></td>
+                                        <td class="tm_width_3 tm_success_color tm_text_right tm_border_none tm_pt0" style="color: lime;">+ {{ $fees }} Kc</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Sales</td>
+                                        <td class="tm_width_3 tm_danger_color tm_text_right tm_border_none tm_pt0">- {{ $sales }} (-{{ $lossPercentage  }}%) Kc</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Overall Profit</td>
+                                        <td class="tm_width_3 tm_success_color tm_text_right tm_border_none tm_bold" style="color: lime;">+ {{ $overallProfit }} Kc</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</body>
+</html>

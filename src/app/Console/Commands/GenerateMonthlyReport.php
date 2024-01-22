@@ -76,6 +76,7 @@ class GenerateMonthlyReport extends Command
             'lossPercentage' => number_format($percentage)
         ]);
         $filename = 'report-' . $today . '-' . $reportId . '.pdf';
+
         $document->save($filename, 'public');
 
 
@@ -84,7 +85,7 @@ class GenerateMonthlyReport extends Command
             'multipart' => [
                 'name' => $filename,
                 'filename' => $filename,
-                'contents' => fopen(storage_path($filename), 'r')
+                'contents' => fopen(public_path($filename), 'r')
             ]
         ]);
 
