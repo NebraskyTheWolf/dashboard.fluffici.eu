@@ -55,7 +55,8 @@ class GenerateMonthlyReport extends Command
         // This happens when a discounts has been placed in the order.
         $loss = $total - $paidPrice;
 
-        $percentage = ($loss/$total) * 100;
+        // Using a function to avoid non-divisible values.
+        $percentage = $this->percent($loss, $total); // ($loss/$total) * 100
 
         $orders = ShopOrders::paginate();
 
@@ -103,5 +104,12 @@ class GenerateMonthlyReport extends Command
                 $user->notify(new ShopReportError());
             }
         }
+    }
+
+    public function percent($first, $second): float|int
+    {
+        if ($first <= 0 || $second <= 0)
+            return 0;
+        return ($first/$second) * 100;
     }
 }
