@@ -41,17 +41,25 @@ class GenerateMonthlyReport extends Command
      */
     public function handle() {
         $today = Carbon::now()->format("Y-m-d");
+
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
-        $total = ShopOrders::all()->sum('total_price');
-        $paidPrice = ShopOrders::all()->sum('total_price');
+        $total = ShopOrders::whereBetween('created_at', [
+            Carbon::now()->startOfMonth(),
+            Carbon::now()->endOfMonth()
+        ])->sum('total_price');
+        $paidPrice = ShopOrders::whereBetween('created_at', [
+            Carbon::now()->startOfMonth(),
+            Carbon::now()->endOfMonth()
+        ])->sum('total_price');
 
         // This happens when a discounts has been placed in the order.
         $loss = $total - $paidPrice;
+        $percentage = ($loss/$total) * 100;
 
         $orders = ShopOrders::paginate();
 
         foreach ($orders as $order) {
-            foreach ($order->products as $product) {
+            foreach ($order->products->toArray() as $product) {
                 $this->products[] = ShopProducts::where('name', $product);
             }
         }
@@ -63,7 +71,8 @@ class GenerateMonthlyReport extends Command
             'reportProducts' => $this->products,
             'fees' => 0,
             'sales' => number_format($loss),
-            'overallProfit' => number_format($total)
+            'overallProfit' => number_format($total),
+            'lossPercentage' => number_format($percentage)
         ]);
         $filename = 'report-' . $today . '-' . $reportId;
         $document->save($filename);

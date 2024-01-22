@@ -16,6 +16,8 @@
                     <p class="tm_m0">Report No: <br><b class="tm_primary_color">{{ $reportId }}</b></p>
                     <p class="tm_m0">Invoice Date: <br><b class="tm_primary_color">{{ $reportDate }}</b></p>
                     <p class="tm_m0">Date of Export: <br><b class="tm_primary_color">{{ $reportExportDate }}</b></p>
+
+                    <p class="tm_m0">Loss: <br><b class="tm_primary_color"></b>{{ $lossPercentage }}% of the profit has been lost because of sales.</p>
                 </div>
                 <hr class="tm_mb20">
                 <div class="tm_table tm_style1">
@@ -62,7 +64,7 @@
                                 </tr>
                                 <tr>
                                     <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Sales</td>
-                                    <td class="tm_width_3 tm_danger_color tm_text_right tm_border_none tm_pt0">- {{ $sales }} Kc</td>
+                                    <td class="tm_width_3 tm_danger_color tm_text_right tm_border_none tm_pt0">- {{ $sales }} (-{{ $lossPercentage  }}%) Kc</td>
                                 </tr>
                                 <tr>
                                     <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Overall Profit</td>
