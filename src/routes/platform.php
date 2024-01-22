@@ -108,10 +108,10 @@ Route::screen('pages', PagesListScreen::class)
 Route::screen('audit', AuditLogsListScreen::class)
     ->name('platform.audit');
 
-Route::screen('files', \App\Orchid\Screens\AttachmentsScreen::class)
+Route::screen('files', \App\Orchid\Screens\AttachmentLists::class)
     ->name('platform.attachments');
 
-Route::screen('reports', \App\Orchid\Screens\AttachmentsScreen::class)
+Route::screen('reports', \App\Orchid\Screens\AttachmentReports::class)
     ->name('platform.reports');
 
 Route::screen('shop/statistics', \App\Orchid\Screens\Shop\ShopStatistics::class)

@@ -2,11 +2,10 @@
 
 namespace App\Orchid\Screens;
 
-use App\Compoenents\FilesViewComponent;
-use App\Orchid\Layouts\AttachmentsLayout;
+use App\Orchid\Layouts\AttachmentReportLayout;
 use Orchid\Screen\Screen;
 
-class AttachmentsScreen extends Screen
+class AttachmentReports extends Screen
 {
     /**
      * Fetch data to be displayed on the screen.
@@ -25,7 +24,7 @@ class AttachmentsScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'AttachmentsScreen';
+        return 'Nahlášený obsah';
     }
 
     /**
@@ -46,7 +45,7 @@ class AttachmentsScreen extends Screen
     public function layout(): iterable
     {
         return [
-            AttachmentsLayout::class
+            AttachmentReportLayout::class
         ];
     }
 }

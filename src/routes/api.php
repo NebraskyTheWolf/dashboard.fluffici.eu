@@ -27,7 +27,7 @@ Route::get('/test', function (Request $request) {
 Route::get('/user/notifications/{id}', function (Request $request) {
     if ($request->has('id')) {
 
-        $notifications = \Orchid\Platform\Models\User::where('id', $request->input('id'))
+        $notifications = \Orchid\Platform\Models\User::where('id', $request->input('id'));
 
 
     } else {

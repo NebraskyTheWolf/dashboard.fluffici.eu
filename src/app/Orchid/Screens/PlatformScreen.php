@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens;
 
+use App\Models\EventsInteresteds;
 use App\Orchid\Layouts\ShopProfit;
 use Illuminate\Support\Carbon;
 use Orchid\Screen\Screen;
@@ -39,6 +40,9 @@ class PlatformScreen extends Screen
             ],
             'dataset' => [
                 Pages::averageByDays('visits')->toChart('Visits'),
+            ],
+            'events' => [
+                EventsInteresteds::averageByDays("id")->toChart('Interested'),
             ]
         ];
     }
@@ -56,7 +60,7 @@ class PlatformScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'Welcome to your Dashboard.';
+        return 'Vítejte na dashbordu';
     }
 
     /**
@@ -78,19 +82,12 @@ class PlatformScreen extends Screen
     {
         return [
             Layout::metrics([
-                'Pending Orders' => 'metrics.orders',
-                'Pending Tickets' => 'metrics.tickets',
-                'Visits' => 'metrics.visitors',
+                'Nevyřízené objednávky' => 'metrics.orders',
+                'Nevyřízené tikety podpory' => 'metrics.tickets',
+                'Návštěvy' => 'metrics.visitors',
             ]),
-            ShopProfit::make('dataset', 'Overall visits until now.')
+            ShopProfit::make('dataset', 'Celkové dosavadní návštěvy.'),
+            ShopProfit::make('events', 'Celková dosavadní aktivita v rámci akce.')
         ];
-    }
-
-    private function calculateDiff($new, $old) : float {
-        // Formula
-        // a - b = c
-        // c / a * 100 = d
-
-        return (($new - $old) / ($old * 100));
     }
 }

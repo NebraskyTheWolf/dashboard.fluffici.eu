@@ -36,24 +36,24 @@ class PlatformProvider extends OrchidServiceProvider
     public function menu(): array
     {
         return [
-            Menu::make('Settings')
+            Menu::make('Nastavení')
                 ->icon('bs.gear')
                 ->title('Navigation')
                 ->list([
-                    Menu::make('Social Media')
+                    Menu::make('Sociální sítě')
                         ->icon('bs.person-walking')
                         ->route('platform.systems.users')
                         ->permission('platform.systems.social'),
-                    Menu::make("Users")
+                    Menu::make("Uživatelé")
                         ->icon('bs.people')
                         ->route('platform.systems.users')
                         ->permission('platform.systems.users')
-                        ->title("Access Controls"),
-                    Menu::make("Roles & Permissions")
+                        ->title("Povolení Řízení Přístupu"),
+                    Menu::make("Role a oprávnění")
                         ->icon('bs.shield')
                         ->route('platform.systems.roles')
                         ->permission('platform.systems.roles'),
-                    Menu::make("Audit Logs")
+                    Menu::make("Protokoly o auditu")
                         ->icon('bs.clipboard2')
                         ->route('platform.audit')
                         ->permission('platform.audit.read')
@@ -61,15 +61,14 @@ class PlatformProvider extends OrchidServiceProvider
                 ->divider()
                 ->permission('platform.systems.settings'),
 
-            Menu::make('Attachments')
+            Menu::make('Přílohy')
                 ->icon('bs.archive')
-                ->title('Attachments')
                 ->list([
-                    Menu::make('Files')
+                    Menu::make('Soubory')
                         ->icon('bs.images')
                         ->route('platform.attachments')
                         ->permission('platform.systems.attachments.files'),
-                    Menu::make("Reports & DMCA Request")
+                    Menu::make("Reports & DMCA")
                         ->icon('bs.exclamation-octagon')
                         ->route('platform.reports')
                         ->permission('platform.systems.attachments.reports')
@@ -80,17 +79,17 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Main page')
                 ->icon('bs.chat-right-text')
                 ->list([
-                    Menu::make('Posts')
+                    Menu::make('Zprávy')
                         ->icon('bs.book')
                         ->route('platform.post.list')
                         ->permission('platform.systems.posts'),
-                    Menu::make('Events')
+                    Menu::make('Akce')
                         ->icon('bs.calendar-event')
                         ->route('platform.events.list')
                         ->slug('events')
                         ->badge(fn () => Events::where('status', 'INCOMING')->count() ?: 0)
                         ->permission('platform.systems.events'),
-                    Menu::make('Pages')
+                    Menu::make('Stranky')
                         ->icon('bs.file-earmark')
                         ->route('platform.pages.list')
                         ->permission('platform.systems.pages')
@@ -101,48 +100,48 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('E-Shop')
                 ->icon('bs.cart2')
                 ->list([
-                    Menu::make('Statistics')
+                    Menu::make('Statistiky')
                         ->icon('bs.graph-up')
                         ->route('platform.shop.statistics')
                         ->title("GROWTH"),
-                    Menu::make('Products')
+                    Menu::make('Produkty')
                         ->icon('bs.window-sidebar')
                         ->route('platform.shop.products')
                         ->permission('platform.systems.eshop.products')
-                        ->title("PRODUCTS AND SALES"),
-                    Menu::make('Categories')
+                        ->title("PRODUKTY A PRODEJ"),
+                    Menu::make('Kategorie')
                         ->icon('bs.window-sidebar')
                         ->route('platform.shop.categories')
                         ->permission('platform.systems.eshop.products'),
-                    Menu::make('Sales')
+                    Menu::make('Prodej')
                         ->icon('bs.credit-card-2-front')
                         ->route('platform.shop.sales')
                         ->permission('platform.systems.eshop.sales')
                         ->canSee(false),
-                    Menu::make('Vouchers')
+                    Menu::make('Poukázky')
                         ->icon('bs.card-list')
                         ->route('platform.shop.vouchers')
                         ->permission('platform.systems.eshop.vouchers')
-                        ->title("VOUCHERS")
+                        ->title("POUKÁZKY")
                         ->canSee(false),
-                    Menu::make('Orders')
+                    Menu::make('Objednávky')
                         ->icon('bs.box-seam')
                         ->route('platform.shop.orders')
                         ->badge(fn () => ShopOrders::where('status', 'PROCESSING')->count() ?: 0)
                         ->permission('platform.systems.eshop.orders')
                         ->slug('orders')
-                        ->title("ORDERS AND SUPPORT"),
-                    Menu::make('Support Tickets')
+                        ->title("OBJEDNÁVKY A PODPORA"),
+                    Menu::make('Vstupenky na podporu')
                         ->icon('bs.chat-right-text')
                         ->slug('tickets')
                         ->route('platform.shop.support')
                         ->badge(fn () => ShopSupportTickets::where('status', 'PENDING')->count() ?: 0)
                         ->permission('platform.systems.eshop.support'),
-                    Menu::make('Settings')
+                    Menu::make('Nastavení')
                         ->icon('bs.gear')
                         ->route('platform.shop.settings')
                         ->permission('platform.systems.eshop.settings')
-                        ->title("SHOP MANAGEMENT")
+                        ->title("SPRÁVA PRODEJEN")
                 ])
                 ->divider()
                 ->permission('platform.systems.eshop')

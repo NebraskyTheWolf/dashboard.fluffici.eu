@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Events\UpdateAudit;
 use App\Models\AuditLogs;
@@ -20,7 +19,5 @@ class AuditListener
         $audit->save();
 
         event(new Statistics());
-
-        broadcast(new Channel('audit-update'));
     }
 }
