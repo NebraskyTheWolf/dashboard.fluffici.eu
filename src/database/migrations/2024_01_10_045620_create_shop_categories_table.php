@@ -65,12 +65,10 @@ return new class extends Migration
             $table->bigInteger('price_paid')->default(0);
             $table->bigInteger('total_price')->default(0);
 
-            $table->string('products');
-
             $table->string('payment_method');
             $table->string('payment_id');
             $table->string('payment_status');
-        
+
             $table->timestamps();
         });
     }

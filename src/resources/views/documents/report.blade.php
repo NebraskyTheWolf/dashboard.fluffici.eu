@@ -43,7 +43,7 @@
                                     @else
                                         @foreach($reportProducts as $product)
                                             <tr>
-                                                <td class="tm_width_6">{{$product->name}}</td>
+                                                <td class="tm_width_6">{{$product->product_name}}</td>
                                                 <td class="tm_width_2">{{$product->price}}</td>
                                                 <td class="tm_width_2">{{$product->quantity}}</td>
                                                 <td class="tm_width_2 tm_text_right">{{$product->price * $product->quantity}}</td>

@@ -2,6 +2,8 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use App\Models\OrderPayment;
+use App\Models\OrderedProduct;
 use App\Models\Pages;
 use App\Models\ShopOrders;
 use App\Orchid\Layouts\Pie;
@@ -23,22 +25,22 @@ class ShopStatistics extends Screen
             'metrics' => [
                 'products' => [
                     'key' => 'products',
-                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->sum('products'))
+                    'value' => number_format(OrderedProduct::all()->sum('quantity'))
                 ],
                 'overall'   => [
                     'key' => 'overall',
-                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->sum('price_paid')) . ' Kc'
+                    'value' => number_format(OrderPayment::where('status', 'PAID')->sum('price')) . ' Kc'
                 ],
                 'monthly'   => [
                     'key' => 'monthly',
-                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->whereBetween('created_at', [
+                    'value' => number_format(OrderPayment::where('status', 'PAID')->whereBetween('created_at', [
                             Carbon::now()->subDay(1),
                             Carbon::now()->subDay(30)
-                    ])->sum('total_price')) . ' Kc'
+                    ])->sum('price')) . ' Kc'
                 ],
             ],
             'pie' => [
-                ShopOrders::sumByDays('country')->toChart('Country'),
+                OrderedProduct::sumByDays('product_name')->toChart('Product'),
             ],
             'dataset' => [
                 ShopOrders::sumByDays('total_price')->toChart('Price'),
@@ -88,14 +90,14 @@ class ShopStatistics extends Screen
     {
         return [
             Layout::metrics([
-                'Products sold' => 'metrics.products',
-                'Overall profit' => 'metrics.overall',
-                'Profit for this month' => 'metrics.monthly',
+                'Prodané produkty' => 'metrics.products',
+                'Celkové zisky' => 'metrics.overall',
+                'Zisk za tento měsíc' => 'metrics.monthly',
             ]),
 
-            Pie::make('pie', 'Most frequent country'),
-            ShopProfit::make('dataset', 'Overall profit the past 7 days.'),
-            ShopProfit::make('order', 'Overall orders the past 7 days.'),
+            Pie::make('pie', 'Nejčastěji nakupované'),
+            ShopProfit::make('dataset', 'Celkový zisk za posledních 7 dní.'),
+            ShopProfit::make('order', 'Celkové objednávky za posledních 7 dní.'),
         ];
     }
 }

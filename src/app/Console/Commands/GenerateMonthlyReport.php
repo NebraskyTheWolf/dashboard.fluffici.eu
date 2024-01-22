@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\OrderCarrier;
+use App\Models\OrderPayment;
+use App\Models\OrderedProduct;
 use App\Models\PlatformAttachments;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
@@ -43,14 +46,18 @@ class GenerateMonthlyReport extends Command
         $today = Carbon::today()->format("Y-m-d");
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
-        $total = ShopOrders::whereBetween('created_at', [
+        $total = OrderedProduct::whereBetween('created_at', [
             Carbon::today()->startOfMonth(),
             Carbon::today()->endOfMonth()
-        ])->sum('total_price');
-        $paidPrice = ShopOrders::whereBetween('created_at', [
+        ])->sum('price');
+        $paidPrice = OrderPayment::whereBetween('created_at', [
             Carbon::today()->startOfMonth(),
             Carbon::today()->endOfMonth()
         ])->sum('price_paid');
+        $carrierFees = OrderCarrier::whereBetween('created_at', [
+            Carbon::today()->startOfMonth(),
+            Carbon::today()->endOfMonth()
+        ])->sum('price');
 
         // This happens when a discounts has been placed in the order.
         $loss = $total - $paidPrice;
@@ -58,20 +65,12 @@ class GenerateMonthlyReport extends Command
         // Using a function to avoid non-divisible values.
         $percentage = $this->percent($loss, $total); // ($loss/$total) * 100
 
-        $orders = ShopOrders::paginate();
-
-        foreach ($orders as $order) {
-            foreach ($order->products->toArray() as $product) {
-                $this->products[] = ShopProducts::where('name', $product);
-            }
-        }
-
         $document = Pdf::loadView('documents.report', [
             'reportId' => $reportId,
             'reportDate' => $today,
             'reportExportDate' => $today,
-            'reportProducts' => $this->products,
-            'fees' => 0,
+            'reportProducts' => OrderedProduct::paginate(),
+            'fees' => $carrierFees,
             'sales' => number_format($loss),
             'overallProfit' => number_format($total),
             'lossPercentage' => number_format($percentage)
