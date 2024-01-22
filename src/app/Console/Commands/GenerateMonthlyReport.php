@@ -53,7 +53,7 @@ class GenerateMonthlyReport extends Command
         $paidPrice = OrderPayment::whereBetween('created_at', [
             Carbon::today()->startOfMonth(),
             Carbon::today()->endOfMonth()
-        ])->sum('price_paid');
+        ])->sum('price');
         $carrierFees = OrderCarrier::whereBetween('created_at', [
             Carbon::today()->startOfMonth(),
             Carbon::today()->endOfMonth()
