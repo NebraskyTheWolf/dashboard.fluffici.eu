@@ -31,8 +31,8 @@ class ShopOrderLayout extends Table
         return [
             TD::make('first_name', 'First name')
                 ->render(function (ShopOrders $shopOrders) {
-                    return Link::make($shopOrders->first_name);
-                        //->route('platform.events.edit', $shopOrders);
+                    return Link::make($shopOrders->first_name)
+                        ->route('platform.shop.orders.edit', $shopOrders);
                 }),
             TD::make('last_name', 'Last name'),
             TD::make('email', 'Email'),

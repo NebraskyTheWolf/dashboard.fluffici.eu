@@ -132,6 +132,9 @@ Route::screen('shop/vouchers', \App\Orchid\Screens\Shop\ShopVouchers::class)
 Route::screen('shop/orders', \App\Orchid\Screens\Shop\ShopOrders::class)
     ->name('platform.shop.orders');
 
+Route::screen('shop/orders/{order?}', \App\Orchid\Screens\Shop\ShopOrders::class)
+    ->name('platform.shop.orders.edit');
+
 Route::screen('shop/support', \App\Orchid\Screens\Shop\ShopSupport::class)
     ->name('platform.shop.support');
 

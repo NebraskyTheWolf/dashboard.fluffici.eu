@@ -12,23 +12,18 @@ use App\Events\Statistics;
 
 class PagesController extends Controller {
 
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $pageSlug = (isset($request->slug)) ? $request->slug : false;
+        $page = Pages::where('page_slug', $pageSlug)->firstOrFail();
 
-        if (!$pageSlug) {
-            return view('errors.error');
-        }
-
-        try {
-            $page = Pages::where('page_slug', $pageSlug)->firstOrFail();
+        if ($page->exists()) {
             $page->increment('visits', 1);
             $page->save();
 
             event(new Statistics());
 
             return view('pages.index', compact('page'));
-        } catch (exception) {
+        } else {
             return view('errors.404');
         }
     }
