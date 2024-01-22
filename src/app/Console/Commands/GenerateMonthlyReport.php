@@ -78,45 +78,42 @@ class GenerateMonthlyReport extends Command
         $document->save($filename, 'public');
 
         $client = new Client();
+        $storage =  Storage::disk('public');
         try {
-            $response = $client->post('https://autumn.rsiniya.uk/attachments', [
-                'headers' => [
-                    'Content-Type' => 'multipart/form-data',
-                ],
-                'multipart' => [
-                    [
-                        'name' => $filename,
-                        'filename' => $filename,
-                        'contents' => Storage::disk('public')->get($filename)
+
+            if ($storage->exists($filename)) {
+                $response = $client->post('https://autumn.rsiniya.uk/attachments', [
+                    'headers' => [
+                        'Content-Type' => 'multipart/form-data',
+                    ],
+                    'multipart' => [
+                        [
+                            'name' => $filename,
+                            'filename' => $filename,
+                            'contents' => Storage::disk('public')->get($filename)
+                        ]
                     ]
-                ]
-            ]);
+                ]);
 
-            if ($response->getStatusCode() === 200) {
-                $body = json_decode($response->getBody()->getContents(), true);
+                if ($response->getStatusCode() === 200) {
+                    $body = json_decode($response->getBody()->getContents(), true);
 
-                $report = new ShopReports();
-                $report->attachment_id = $body->id;
-                $report->report_id = $reportId;
-                $report->save();
+                    $report = new ShopReports();
+                    $report->attachment_id = $body->id;
+                    $report->report_id = $reportId;
+                    $report->save();
 
-                printf($body->id);
+                    printf($body->id);
 
-                $users = User::paginate();
-                foreach ($users as $user) {
-                    $user->notify(new ShopReportReady($reportId));
+                    \Illuminate\Support\Facades\Notification::send(User::paginate(), new ShopReportReady($reportId));
+                } else {
+                    \Illuminate\Support\Facades\Notification::send(User::paginate(), new ShopReportError());
                 }
             } else {
-                $users = User::paginate();
-                foreach ($users as $user) {
-                    $user->notify(new ShopReportError());
-                }
+                \Illuminate\Support\Facades\Notification::send(User::paginate(), new ShopReportError());
             }
         } catch (\Exception $exception) {
-            $users = User::paginate();
-            foreach ($users as $user) {
-                $user->notify(new ShopReportError());
-            }
+            \Illuminate\Support\Facades\Notification::send(User::paginate(), new ShopReportError());
         }
     }
 
