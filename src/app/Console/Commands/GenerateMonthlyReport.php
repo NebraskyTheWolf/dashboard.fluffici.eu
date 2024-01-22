@@ -40,20 +40,21 @@ class GenerateMonthlyReport extends Command
      * @throws GuzzleException
      */
     public function handle() {
-        $today = Carbon::now()->format("Y-m-d");
+        $today = Carbon::today()->format("Y-m-d");
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
         $total = ShopOrders::whereBetween('created_at', [
-            Carbon::now()->startOfMonth(),
-            Carbon::now()->endOfMonth()
+            Carbon::today()->startOfMonth(),
+            Carbon::today()->endOfMonth()
         ])->sum('total_price');
         $paidPrice = ShopOrders::whereBetween('created_at', [
-            Carbon::now()->startOfMonth(),
-            Carbon::now()->endOfMonth()
-        ])->sum('total_price');
+            Carbon::today()->startOfMonth(),
+            Carbon::today()->endOfMonth()
+        ])->sum('price_paid');
 
         // This happens when a discounts has been placed in the order.
         $loss = $total - $paidPrice;
+
         $percentage = ($loss/$total) * 100;
 
         $orders = ShopOrders::paginate();

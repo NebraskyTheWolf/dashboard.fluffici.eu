@@ -27,7 +27,7 @@ class ShopStatistics extends Screen
                 ],
                 'overall'   => [
                     'key' => 'overall',
-                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->sum('total_price')) . ' Kc'
+                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->sum('price_paid')) . ' Kc'
                 ],
                 'monthly'   => [
                     'key' => 'monthly',
