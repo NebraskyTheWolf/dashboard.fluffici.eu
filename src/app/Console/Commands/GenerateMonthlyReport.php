@@ -48,15 +48,15 @@ class GenerateMonthlyReport extends Command
         $today = Carbon::today()->format("Y-m-d");
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
-        $total = OrderedProduct::whereBetween('created_at', 'updated_at', [
+        $total = OrderedProduct::whereBetween('created_at', [
             Carbon::today()->startOfMonth(),
             Carbon::today()->endOfMonth()
         ])->sum('price');
-        $paidPrice = OrderPayment::whereBetween('created_at', 'updated_at', [
+        $paidPrice = OrderPayment::whereBetween('created_at', [
             Carbon::today()->startOfMonth(),
             Carbon::today()->endOfMonth()
         ])->sum('price');
-        $carrierFees = OrderCarrier::whereBetween('created_at', 'updated_at', [
+        $carrierFees = OrderCarrier::whereBetween('created_at', [
             Carbon::today()->startOfMonth(),
             Carbon::today()->endOfMonth()
         ])->sum('price');
