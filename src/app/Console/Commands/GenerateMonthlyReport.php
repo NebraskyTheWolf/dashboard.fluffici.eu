@@ -48,7 +48,7 @@ class GenerateMonthlyReport extends Command
         // This happens when a discounts has been placed in the order.
         $loss = $total - $paidPrice;
 
-        $orders = ShopOrders::all();
+        $orders = ShopOrders::paginate();
 
         foreach ($orders as $order) {
             foreach ($order->products as $product) {
@@ -83,12 +83,12 @@ class GenerateMonthlyReport extends Command
             $report->report_id = $reportId;
             $report->save();
 
-            $users = User::all();
+            $users = User::paginate();
             foreach ($users as $user) {
                 $user->notify(new ShopReportReady($reportId));
             }
         } else {
-            $users = User::all();
+            $users = User::paginate();
             foreach ($users as $user) {
                 $user->notify(new ShopReportError());
             }
