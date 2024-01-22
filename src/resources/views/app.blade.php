@@ -37,6 +37,8 @@
     <script type="text/javascript" src="{{url('/js/presence.js')}}"></script>
 
     <link rel="stylesheet" href="{{ url('/css/app.css')}}">
+    <link rel="stylesheet" href="{{ url('/css/style.min.css')}}">
+
     <link rel="stylesheet" href="{{ url('/css/loader.css')}}">
 
     <link rel="stylesheet" href="{{ url('/semantic/semantic.min.css')}}">

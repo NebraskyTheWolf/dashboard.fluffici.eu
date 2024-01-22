@@ -75,15 +75,16 @@ class GenerateMonthlyReport extends Command
             'overallProfit' => number_format($total),
             'lossPercentage' => number_format($percentage)
         ]);
-        $filename = 'report-' . $today . '-' . $reportId;
-        $document->save($filename);
+        $filename = 'report-' . $today . '-' . $reportId . '.pdf';
+        $document->save($filename, 'public');
+
 
         $client = new Client();
         $response = $client->post('https://autumn.rsiniya.uk/attachments', [
             'multipart' => [
                 'name' => $filename,
-                'filename' => $filename . '.pdf',
-                'contents' => fopen(public_path($filename), 'r')
+                'filename' => $filename,
+                'contents' => fopen(storage_path($filename), 'r')
             ]
         ]);
 
