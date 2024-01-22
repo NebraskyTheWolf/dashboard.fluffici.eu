@@ -48,18 +48,9 @@ class GenerateMonthlyReport extends Command
         $today = Carbon::today()->format("Y-m-d");
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
-        $total = OrderedProduct::whereBetween('created_at', [
-            Carbon::today()->startOfMonth(),
-            Carbon::today()->endOfMonth()
-        ])->sum('price');
-        $paidPrice = OrderPayment::whereBetween('created_at', [
-            Carbon::today()->startOfMonth(),
-            Carbon::today()->endOfMonth()
-        ])->sum('price');
-        $carrierFees = OrderCarrier::whereBetween('created_at', [
-            Carbon::today()->startOfMonth(),
-            Carbon::today()->endOfMonth()
-        ])->sum('price');
+        $total = OrderedProduct::where('created_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')))->sum('price');
+        $paidPrice = OrderPayment::where('created_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')))->sum('price');
+        $carrierFees = OrderCarrier::where('created_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')))->sum('price');
 
         // This happens when a discounts has been placed in the order.
         $loss = $total - $paidPrice;
@@ -82,7 +73,6 @@ class GenerateMonthlyReport extends Command
 
         $document->save($filename, 'public');
 
-
         $client = new Client();
         $response = $client->post('https://autumn.rsiniya.uk/attachments', [
             'multipart' => [
@@ -95,10 +85,14 @@ class GenerateMonthlyReport extends Command
         ]);
 
         if ($response->getStatusCode() === 200) {
+            $body = json_decode($response->getBody(), true);
+
             $report = new ShopReports();
-            $report->attachment_id = $response->getBody()->getContents()->id;
+            $report->attachment_id = $body->id;
             $report->report_id = $reportId;
             $report->save();
+
+            printf($body->id);
 
             $users = User::paginate();
             foreach ($users as $user) {
@@ -112,8 +106,7 @@ class GenerateMonthlyReport extends Command
         }
     }
 
-    public function percent($first, $second): float|int
-    {
+    public function percent($first, $second): float|int {
         if ($first <= 0 || $second <= 0)
             return 0;
         return ($first/$second) * 100;

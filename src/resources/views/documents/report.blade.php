@@ -79,7 +79,7 @@
                                     </tr>
                                     <tr>
                                         <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Sales</td>
-                                        <td class="tm_width_3 tm_danger_color tm_text_right tm_border_none tm_pt0">- {{ $sales }} (-{{ $lossPercentage  }}%) Kc</td>
+                                        <td class="tm_width_3 tm_danger_color tm_text_right tm_border_none tm_pt0">- {{ $sales }} ({{ $lossPercentage  }}%) Kc</td>
                                     </tr>
                                     <tr>
                                         <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Overall Profit</td>
