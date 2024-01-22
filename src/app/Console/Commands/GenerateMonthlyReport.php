@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 use Orchid\Platform\Components\Notification;
 use Orchid\Platform\Models\User;
 use Ramsey\Uuid\Uuid;
@@ -41,20 +42,21 @@ class GenerateMonthlyReport extends Command
     /**
      * Execute the console command.
      * @throws GuzzleException
+     * @throws \Exception
      */
     public function handle() {
         $today = Carbon::today()->format("Y-m-d");
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
-        $total = OrderedProduct::whereBetween('created_at', [
+        $total = OrderedProduct::whereBetween('created_at', 'updated_at', [
             Carbon::today()->startOfMonth(),
             Carbon::today()->endOfMonth()
         ])->sum('price');
-        $paidPrice = OrderPayment::whereBetween('created_at', [
+        $paidPrice = OrderPayment::whereBetween('created_at', 'updated_at', [
             Carbon::today()->startOfMonth(),
             Carbon::today()->endOfMonth()
         ])->sum('price');
-        $carrierFees = OrderCarrier::whereBetween('created_at', [
+        $carrierFees = OrderCarrier::whereBetween('created_at', 'updated_at', [
             Carbon::today()->startOfMonth(),
             Carbon::today()->endOfMonth()
         ])->sum('price');
@@ -75,6 +77,7 @@ class GenerateMonthlyReport extends Command
             'overallProfit' => number_format($total),
             'lossPercentage' => number_format($percentage)
         ]);
+        $document->render();
         $filename = 'report-' . $today . '-' . $reportId . '.pdf';
 
         $document->save($filename, 'public');
@@ -85,7 +88,7 @@ class GenerateMonthlyReport extends Command
             'multipart' => [
                 'name' => $filename,
                 'filename' => $filename,
-                'contents' => fopen(public_path($filename), 'r')
+                'contents' => Storage::disk('public')->get($filename)
             ]
         ]);
 
