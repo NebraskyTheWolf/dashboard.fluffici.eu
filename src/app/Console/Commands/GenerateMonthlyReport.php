@@ -86,9 +86,11 @@ class GenerateMonthlyReport extends Command
         $client = new Client();
         $response = $client->post('https://autumn.rsiniya.uk/attachments', [
             'multipart' => [
-                'name' => $filename,
-                'filename' => $filename,
-                'contents' => Storage::disk('public')->get($filename)
+                [
+                    'name' => $filename,
+                    'filename' => $filename,
+                    'contents' => Storage::disk('public')->get($filename)
+                ]
             ]
         ]);
 
