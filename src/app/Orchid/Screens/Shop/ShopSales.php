@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
 class ShopSales extends Screen
@@ -23,7 +24,14 @@ class ShopSales extends Screen
      */
     public function name(): ?string
     {
-        return 'ShopSales';
+        return 'Sales';
+    }
+
+    public function permission(): ?iterable
+    {
+        return [
+            'platform.shop.sales.read',
+        ];
     }
 
     /**
@@ -33,7 +41,11 @@ class ShopSales extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make(__('Add'))
+                ->icon('bs.plus-circle')
+                ->href(route('platform.systems.roles.create')),
+        ];
     }
 
     /**

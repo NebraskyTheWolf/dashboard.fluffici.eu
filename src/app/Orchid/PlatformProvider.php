@@ -128,7 +128,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Orders')
                         ->icon('bs.box-seam')
                         ->route('platform.shop.orders')
-                        ->badge(fn () => ShopOrders::where('status', 'PENDING')->count() ?: 0)
+                        ->badge(fn () => ShopOrders::where('status', 'PROCESSING')->count() ?: 0)
                         ->permission('platform.systems.eshop.orders')
                         ->slug('orders')
                         ->title("ORDERS AND SUPPORT"),
@@ -165,13 +165,30 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.social', "Social Media Management (read/write)"),
 
             ItemPermission::group("Shop Management")
-                ->addPermission('platform.systems.eshop', "EShop (Navbar)")
-                ->addPermission('platform.systems.eshop.settings', "EShop Settings (read/write)")
-                ->addPermission('platform.systems.eshop.support', "EShop Support (read/write)")
-                ->addPermission('platform.systems.eshop.orders', "EShop Orders (read/write)")
-                ->addPermission('platform.systems.eshop.products', "EShop Products (read/write)")
-                ->addPermission('platform.systems.eshop.vouchers', "EShop Vouchers (write)")
-                ->addPermission('platform.systems.eshop.sales', "EShop Sales (read/write)"),
+                ->addPermission('platform.systems.eshop', 'EShop (Navbar)')
+
+                ->addPermission('platform.shop.categories.read', 'Categories (Read)')
+                ->addPermission('platform.shop.categories.write', 'Categories (Write)')
+                ->addPermission('platform.shop.orders.read', 'Orders (Read)')
+                ->addPermission('platform.shop.products.read', 'Products (Read)')
+                ->addPermission('platform.shop.products.write', 'Products (Write)')
+                ->addPermission('platform.shop.sales.read', 'Sales (Read)')
+                ->addPermission('platform.shop.sales.write', 'Sales (Write)')
+                ->addPermission('platform.shop.settings.read', 'Settings (Read)')
+                ->addPermission('platform.shop.settings.write', 'Settings (Write)')
+                ->addPermission('platform.shop.statistics.read', 'Statistics (Read)')
+                ->addPermission('platform.shop.statistics.write', 'Statistics (Write)')
+                ->addPermission('platform.shop.support.read', 'Support (Read)')
+                ->addPermission('platform.shop.support.write', 'Support (Write)')
+                ->addPermission('platform.shop.vouchers.read', 'Vouchers (Read)')
+                ->addPermission('platform.shop.vouchers.write', 'Vouchers (Write)')
+
+                ->addPermission('platform.systems.eshop.settings', 'EShop Settings (read/write)')
+                ->addPermission('platform.systems.eshop.support', 'EShop Support (read/write)')
+                ->addPermission('platform.systems.eshop.orders', 'EShop Orders (read/write)')
+                ->addPermission('platform.systems.eshop.products', 'EShop Products (read/write)')
+                ->addPermission('platform.systems.eshop.vouchers', 'EShop Vouchers (write)')
+                ->addPermission('platform.systems.eshop.sales', 'EShop Sales (read/write)'),
 
             ItemPermission::group('Attachments')
                 ->addPermission('platform.systems.attachments.files', 'Files (Read)')

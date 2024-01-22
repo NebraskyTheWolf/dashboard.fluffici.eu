@@ -2,7 +2,9 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use App\Models\Pages;
 use App\Models\ShopOrders;
+use App\Orchid\Layouts\Pie;
 use App\Orchid\Layouts\ShopProfit;
 use Carbon\Carbon;
 use Orchid\Screen\Screen;
@@ -17,26 +19,36 @@ class ShopStatistics extends Screen
      */
     public function query(): iterable
     {
-        $start = Carbon::now();
-
         return [
             'metrics' => [
                 'products' => [
                     'key' => 'products',
-                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->sum())
+                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->sum('products'))
                 ],
                 'overall'   => [
                     'key' => 'overall',
-                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->sum('total_price'))
+                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->sum('total_price')) . ' Kc'
                 ],
                 'monthly'   => [
                     'key' => 'monthly',
-                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->whereBetween('created_at',
-                                $start->startOfMonth()->format('Y-m-d'),
-                                $start->endOfMonth()->format('Y-m-d')
-                            )->sum('total_price'))
+                    'value' => number_format(ShopOrders::where('status', 'COMPLETED')->whereBetween('created_at', [
+                            Carbon::now()->subDay(1),
+                            Carbon::now()->subDay(30)
+                    ])->sum('total_price')) . ' Kc'
                 ],
             ],
+            'pie' => [
+                ShopOrders::sumByDays('country')->toChart('Country'),
+            ],
+            'dataset' => [
+                ShopOrders::sumByDays('total_price')->toChart('Price'),
+            ],
+            'order' => [
+                ShopOrders::where('status', 'COMPLETED')->averageByDays('total_price')->toChart('Completed'),
+                ShopOrders::where('status', 'REFUNDED')->averageByDays('total_price')->toChart('Refunded'),
+                ShopOrders::where('status', 'DISPUTED')->averageByDays('total_price')->toChart('Disputed'),
+                ShopOrders::where('status', 'PROCESSING')->averageByDays('total_price')->toChart('Processing'),
+            ]
         ];
     }
 
@@ -47,7 +59,14 @@ class ShopStatistics extends Screen
      */
     public function name(): ?string
     {
-        return 'Shop Growth';
+        return 'Growth';
+    }
+
+    public function permission(): ?iterable
+    {
+        return [
+            'platform.shop.statistics.read',
+        ];
     }
 
     /**
@@ -74,7 +93,9 @@ class ShopStatistics extends Screen
                 'Profit for this month' => 'metrics.monthly',
             ]),
 
-            ShopProfit::class
+            Pie::make('pie', 'Most frequent country'),
+            ShopProfit::make('dataset', 'Overall profit the past 7 days.'),
+            ShopProfit::make('order', 'Overall orders the past 7 days.'),
         ];
     }
 }

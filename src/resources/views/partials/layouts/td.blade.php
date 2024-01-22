@@ -1,9 +1,9 @@
-<td class="text-{{$align}} @if(!$width) text-truncate @endif {{ $class }}"
+<td class="text-{{$align}} @if(!$width)  @endif {{ $class }}"
     data-column="{{ $slug }}" colspan="{{ $colspan }}"
-        @style([
+    @style([
         "min-width:$width;" => $width,
         "$style" => $style,
-        ])
+    ])
 >
     <div>
         @isset($render)

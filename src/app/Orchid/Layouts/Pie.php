@@ -2,10 +2,9 @@
 
 namespace App\Orchid\Layouts;
 
-use App\Models\ShopOrders;
 use Orchid\Screen\Layouts\Chart;
 
-class ShopProfit extends Chart
+class Pie extends Chart
 {
     /**
      * Available options:
@@ -14,7 +13,7 @@ class ShopProfit extends Chart
      *
      * @var string
      */
-    protected $type = 'line';
+    protected $type = 'pie';
 
     /**
      * Determines whether to display the export button.

@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 
 class ShopSupport extends Screen
@@ -23,7 +24,14 @@ class ShopSupport extends Screen
      */
     public function name(): ?string
     {
-        return 'ShopSupport';
+        return 'Support';
+    }
+
+    public function permission(): ?iterable
+    {
+        return [
+            'platform.shop.support.read',
+        ];
     }
 
     /**
@@ -33,7 +41,11 @@ class ShopSupport extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Refresh')
+                ->icon('bs.arrow-clockwise')
+                ->method('refresh')
+        ];
     }
 
     /**

@@ -5,8 +5,15 @@ namespace App\Orchid\Screens\Shop;
 use App\Models\Pages;
 use App\Models\ShopOrders;
 use App\Models\ShopSupportTickets;
+use App\Orchid\Layouts\Shop\ShopCarriersSettings;
+use App\Orchid\Layouts\Shop\ShopFeaturesSettings;
+use App\Orchid\Layouts\Shop\ShopGeneralSettings;
+use App\Orchid\Layouts\Shop\ShopMaintenanceSettings;
+use App\Orchid\Layouts\Shop\ShopPaymentSettings;
 use Carbon\Carbon;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 
 class ShopSettings extends Screen
 {
@@ -18,7 +25,9 @@ class ShopSettings extends Screen
     public function query(): iterable
     {
 
-        return [];
+        return [
+            'settings' => \App\Models\ShopSettings::where('id', 1)
+        ];
     }
 
     /**
@@ -28,7 +37,14 @@ class ShopSettings extends Screen
      */
     public function name(): ?string
     {
-        return 'ShopSettings';
+        return 'Settings';
+    }
+
+    public function permission(): ?iterable
+    {
+        return [
+            'platform.shop.categories.write',
+        ];
     }
 
     /**
@@ -38,16 +54,23 @@ class ShopSettings extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Save')
+                ->icon('bs.save')
+                ->method('createOrUpdate')
+        ];
     }
 
-    /**
-     * The screen's layout elements.
-     *
-     * @return \Orchid\Screen\Layout[]|string[]
-     */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::tabs([
+                'General' => ShopGeneralSettings::class,
+                'Payments Methods' => ShopPaymentSettings::class,
+                'Carrier' => ShopCarriersSettings::class,
+                'Features' => ShopFeaturesSettings::class,
+                'Maintenance' => ShopMaintenanceSettings::class
+            ])->activeTab('General')
+        ];
     }
 }

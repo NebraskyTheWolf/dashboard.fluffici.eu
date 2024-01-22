@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use App\Orchid\Layouts\ShopCategoriesLayout;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
@@ -26,7 +27,14 @@ class ShopCategories extends Screen
      */
     public function name(): ?string
     {
-        return 'Shop Categories';
+        return 'Categories';
+    }
+
+    public function permission(): ?iterable
+    {
+        return [
+            'platform.shop.categories.read',
+        ];
     }
 
     /**
@@ -39,7 +47,7 @@ class ShopCategories extends Screen
         return [
             Link::make("New")
                 ->icon('bs.plus')
-                ->route('platform.shop.categories.create'),
+                //->route('platform.shop.categories.create'),
         ];
     }
 
@@ -50,6 +58,8 @@ class ShopCategories extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            ShopCategoriesLayout::class
+        ];
     }
 }

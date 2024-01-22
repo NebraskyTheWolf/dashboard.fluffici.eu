@@ -23,3 +23,17 @@ Route::get('/test', function (Request $request) {
         'message' => 'OwO'
     ];
 });
+
+Route::get('/user/notifications/{id}', function (Request $request) {
+    if ($request->has('id')) {
+
+        $notifications = \Orchid\Platform\Models\User::where('id', $request->input('id'))
+
+
+    } else {
+        return response()->json([
+            'status' => false,
+            'error' => 'The user id is missing.'
+        ]);
+    }
+});

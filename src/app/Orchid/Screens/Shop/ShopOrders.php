@@ -2,7 +2,10 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use App\Orchid\Layouts\ShopOrderLayout;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Toast;
 
 class ShopOrders extends Screen
 {
@@ -13,7 +16,9 @@ class ShopOrders extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'shop_orders' => \App\Models\ShopOrders::paginate()
+        ];
     }
 
     /**
@@ -23,7 +28,14 @@ class ShopOrders extends Screen
      */
     public function name(): ?string
     {
-        return 'ShopOrders';
+        return 'Orders';
+    }
+
+    public function permission(): ?iterable
+    {
+        return [
+            'platform.shop.orders.read',
+        ];
     }
 
     /**
@@ -33,7 +45,11 @@ class ShopOrders extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Button::make('Refresh')
+                ->icon('bs.arrow-clockwise')
+                ->method('refresh')
+        ];
     }
 
     /**
@@ -43,6 +59,13 @@ class ShopOrders extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            ShopOrderLayout::class
+        ];
+    }
+
+    public function refresh() {
+        Toast::info('The data has been refreshed.');
+        return redirect()->route('platform.shop.orders');
     }
 }

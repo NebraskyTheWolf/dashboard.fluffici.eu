@@ -38,14 +38,14 @@ class PostListLayout extends Table
 
             TD::make('likes')
                 ->render(function (Post $post) {
-                    return PostsLikes::where('post_id', $post->id)->firstOrFail()->likes ?: 0;
+                    return PostsLikes::where('post_id', $post->id)->count() ?: 0;
                 }),
-            
+
             TD::make('comments')
                 ->render(function (Post $post) {
                     return PostsComments::where('post_id', $post->id)->count();
                 }),
-            
+
             TD::make('created_at', 'Created')
                 ->render(function (Post $post) {
                     return $post->created_at->diffForHumans();

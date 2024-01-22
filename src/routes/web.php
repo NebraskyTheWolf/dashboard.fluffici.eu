@@ -60,6 +60,11 @@ Route::prefix('systems')->group(function () {
         ->name('systems.files.uploaded');
 });
 
+
+Route::post('relation', [\Orchid\Platform\Http\Controllers\RelationController::class, 'view'])
+    ->name('platform.systems.relation');
+
+
 Route::screen('notifications/{id?}', NotificationScreen::class)
 ->name('notifications')
 ->breadcrumbs(fn (Trail $trail) => $trail->parent('index')

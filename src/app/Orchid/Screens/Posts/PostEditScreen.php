@@ -5,14 +5,15 @@ namespace App\Orchid\Screens\Posts;
 
 use App\Models\Post;
 use App\Models\PostsComments;
-use App\Orchid\Layouts\PostsCommentsLayout;
+use App\Models\PostsLikes;
+use App\Orchid\Layouts\PostCommentLayout;
 use App\Models\User;
+use App\Orchid\Layouts\ShopProfit;
 use Illuminate\Http\Request;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\TextArea;
-use Orchid\Screen\Fields\Upload;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -40,7 +41,11 @@ class PostEditScreen extends Screen
     {
         return [
             'post' => $post,
-            'posts_comments' => PostsComments::where('post_id', $post->post_id)->paginate()
+            'posts_comments' => PostsComments::where('post_id', $post->id)->paginate(),
+            'likes' => [
+                PostsLikes::where('post_id', $post->id)->sumByDays('post_id')->toChart('Likes'),
+                PostsComments::where('post_id', $post->id)->sumByDays('post_id')->toChart('Comments')
+            ]
         ];
     }
 
@@ -99,27 +104,72 @@ class PostEditScreen extends Screen
      */
     public function layout(): array
     {
-        return [
-            Layout::rows([
-                Input::make('post.title')
-                    ->title('Title')
-                    ->placeholder('Attractive but mysterious title')
-                    ->help('Specify a short descriptive title for this post.'),
+        if ($this->post->exists) {
+            return [
+                Layout::tabs([
+                    'Post Information' => [
+                        Layout::rows([
+                            Input::make('post.title')
+                                ->title('Title')
+                                ->placeholder('Attractive but mysterious title')
+                                ->help('Specify a short descriptive title for this post.')
+                                ->disabled($this->post->exists),
 
-                TextArea::make('post.description')
-                    ->title('Description')
-                    ->rows(3)
-                    ->maxlength(200)
-                    ->placeholder('Brief description for preview'),
+                            TextArea::make('post.description')
+                                ->title('Description')
+                                ->rows(3)
+                                ->maxlength(200)
+                                ->placeholder('Brief description for preview')
+                                ->disabled($this->post->exists),
 
-                Relation::make('post.author')
-                    ->title('Author')
-                    ->fromModel(User::class, 'name'),
+                            Relation::make('post.author')
+                                ->title('Author')
+                                ->fromModel(User::class, 'name')
+                                ->disabled($this->post->exists),
 
-                Quill::make('post.body')
-                    ->title('Main text'),
-            ])
-        ];
+                            Quill::make('post.body')
+                                ->title('Main text')
+                                ->disabled($this->post->exists),
+                        ])
+                    ],
+                    'Statistics' => [
+                        ShopProfit::make('likes', 'Overall statistics until now'),
+                    ],
+                    'Comments' => new PostCommentLayout('partials.comments', [
+                        'comments' => PostsComments::where('post_id', $this->post->id)->paginate(),
+                        'postId' => $this->post->post_id
+                    ])
+                ])->activeTab('Post Information')
+            ];
+        } else {
+            return [
+                Layout::tabs([
+                    'Post Information' => [
+                        Layout::rows([
+                            Input::make('post.title')
+                                ->title('Title')
+                                ->placeholder('Attractive but mysterious title')
+                                ->help('Specify a short descriptive title for this post.'),
+
+                            TextArea::make('post.description')
+                                ->title('Description')
+                                ->rows(3)
+                                ->maxlength(200)
+                                ->placeholder('Brief description for preview'),
+
+                            Relation::make('post.author')
+                                ->title('Author')
+                                ->fromModel(User::class, 'name'),
+
+                            Quill::make('post.body')
+                                ->title('Main text')
+                        ])
+                    ],
+                    'Statistics' => [],
+                    'Comments' => []
+                ])->activeTab('Post Information')
+            ];
+        }
     }
 
     /**

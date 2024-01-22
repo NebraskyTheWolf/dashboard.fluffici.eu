@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Orchid\Metrics\Chartable;
 use Orchid\Screen\AsSource;
 use Illuminate\Database\Eloquent\Model;
 
 class ShopOrders extends Model
 {
-    use AsSource;
+    use AsSource, Chartable;
 
     protected $fillable = [
         'first_name',

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens;
 
+use App\Orchid\Layouts\ShopProfit;
+use Illuminate\Support\Carbon;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 
@@ -35,6 +37,9 @@ class PlatformScreen extends Screen
                     'value' => number_format(ShopOrders::where('status', 'PENDING')->count())
                 ],
             ],
+            'dataset' => [
+                Pages::averageByDays('visits')->toChart('Visits'),
+            ]
         ];
     }
 
@@ -77,11 +82,12 @@ class PlatformScreen extends Screen
                 'Pending Tickets' => 'metrics.tickets',
                 'Visits' => 'metrics.visitors',
             ]),
+            ShopProfit::make('dataset', 'Overall visits until now.')
         ];
     }
 
     private function calculateDiff($new, $old) : float {
-        // Formula 
+        // Formula
         // a - b = c
         // c / a * 100 = d
 
