@@ -6,7 +6,6 @@ namespace App\Orchid\Layouts;
 use App\Models\DmcaRequest;
 use App\Models\PlatformAttachments;
 use App\Models\ReportedAttachments;
-use App\Models\User;
 use App\Orchid\Presenters\UserPresenter;
 use Carbon\Carbon;
 use Orchid\Screen\Layouts\Persona;
@@ -30,8 +29,7 @@ class AttachmentsLayout extends Table
         return [
             TD::make('user_id', __('attachments.table.attached_by'))
                 ->render(function (PlatformAttachments $platformAttachments) {
-                    $user = User::where('id', $platformAttachments->id)->firstOrFail();
-                    return new Persona(new UserPresenter($user));
+                    return new Persona(new UserPresenter(\Orchid\Platform\Models\User::find($platformAttachments->id)));
                 }),
             TD::make('bucket', __('attachments.table.tag')),
             TD::make('reported', __('attachments.table.reported'))

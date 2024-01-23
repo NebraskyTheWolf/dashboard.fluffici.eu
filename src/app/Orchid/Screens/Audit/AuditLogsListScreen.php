@@ -18,7 +18,7 @@ class AuditLogsListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'audit_logs' => AuditLogs::paginate()
+            'audit_logs' => AuditLogs::defaultSort('created_at', 'desc')->paginate()
         ];
     }
 

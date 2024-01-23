@@ -24,6 +24,7 @@ return [
     // ProfilePasswordLayout.php
     'screen.user.old_password.title' => 'Current password',
     'screen.user.old_password.help' => 'This is your password set at the moment.',
+    'screen.user.old_password.placeholder' => 'Enter the old password',
 
     'screen.user.new_password.title' => 'New password',
     'screen.user.new_password.placeholder' => 'Enter the current password',
