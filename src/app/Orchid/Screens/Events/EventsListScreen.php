@@ -29,12 +29,12 @@ class EventsListScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Events';
+        return __('events.screen.title');
     }
 
     public function description(): ?string
     {
-        return "All the upcoming and past events.";
+        return __('events.screen.descriptions');
     }
 
     public function permission(): iterable
@@ -52,7 +52,7 @@ class EventsListScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Create new')
+            Link::make(__('events.screen.button.create_new'))
                 ->icon('pencil')
                 ->route('platform.events.edit')
         ];

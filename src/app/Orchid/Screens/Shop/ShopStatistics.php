@@ -46,10 +46,10 @@ class ShopStatistics extends Screen
                 ShopOrders::sumByDays('total_price')->toChart('Price'),
             ],
             'order' => [
-                ShopOrders::where('status', 'COMPLETED')->averageByDays('total_price')->toChart('Completed'),
-                ShopOrders::where('status', 'REFUNDED')->averageByDays('total_price')->toChart('Refunded'),
-                ShopOrders::where('status', 'DISPUTED')->averageByDays('total_price')->toChart('Disputed'),
-                ShopOrders::where('status', 'PROCESSING')->averageByDays('total_price')->toChart('Processing'),
+                ShopOrders::where('status', 'COMPLETED')->averageByDays('total_price')->toChart(__('statistics.screen.chart.item.completed')),
+                ShopOrders::where('status', 'REFUNDED')->averageByDays('total_price')->toChart(__('statistics.screen.chart.item.refunded')),
+                ShopOrders::where('status', 'DISPUTED')->averageByDays('total_price')->toChart(__('statistics.screen.chart.item.disputed')),
+                ShopOrders::where('status', 'PROCESSING')->averageByDays('total_price')->toChart(__('statistics.screen.chart.item.processing')),
             ]
         ];
     }
@@ -61,7 +61,7 @@ class ShopStatistics extends Screen
      */
     public function name(): ?string
     {
-        return 'Growth';
+        return __('statistics.screen.title');
     }
 
     public function permission(): ?iterable
@@ -90,14 +90,14 @@ class ShopStatistics extends Screen
     {
         return [
             Layout::metrics([
-                'Prodané produkty' => 'metrics.products',
-                'Celkové zisky' => 'metrics.overall',
-                'Zisk za tento měsíc' => 'metrics.monthly',
+                __('statistics.screen.layout.metrics.products') => 'metrics.products',
+                __('statistics.screen.layout.metrics.overall') => 'metrics.overall',
+                __('statistics.screen.layout.metrics.monthly') => 'metrics.monthly',
             ]),
 
-            Pie::make('pie', 'Nejčastěji nakupované'),
-            ShopProfit::make('dataset', 'Celkový zisk za posledních 7 dní.'),
-            ShopProfit::make('order', 'Celkové objednávky za posledních 7 dní.'),
+            Pie::make('pie',  __('statistics.screen.layout.chart.product_frequency')),
+            ShopProfit::make('dataset',  __('statistics.screen.layout.chart.weekly')),
+            ShopProfit::make('order', __('statistics.screen.layout.chart.weekly_orders')),
         ];
     }
 }

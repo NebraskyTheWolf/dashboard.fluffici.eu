@@ -26,14 +26,14 @@ class UserEditLayout extends Rows
                 ->type('text')
                 ->max(255)
                 ->required()
-                ->title(__('Name'))
-                ->placeholder(__('Name')),
+                ->title(__('user.screen.user.name'))
+                ->placeholder(__('user.screen.user.name')),
 
             Input::make('user.email')
                 ->type('email')
                 ->required()
-                ->title(__('Email'))
-                ->placeholder(__('Email')),
+                ->title(__('user.screen.user.email'))
+                ->placeholder(__('user.screen.user.email.placeholder')),
 
             Cropper::make('user.avatar')
                 ->userId(Auth::id())

@@ -52,7 +52,7 @@ class UserEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return $this->user->exists ? 'Edit User' : 'Create User';
+        return $this->user->exists ? __('user.screen.edit.title') : __('user.screen.edit.title.created');
     }
 
     /**
@@ -60,7 +60,7 @@ class UserEditScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'User profile and privileges, including their associated role.';
+        return __('user.screen.edit.descriptions');
     }
 
     public function permission(): ?iterable
@@ -78,13 +78,13 @@ class UserEditScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make(__('Remove'))
+            Button::make(__('user.screen.edit.remove'))
                 ->icon('bs.trash3')
                 ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
                 ->method('remove')
                 ->canSee($this->user->exists),
 
-            Button::make(__('Save'))
+            Button::make(__('user.screen.edit.save'))
                 ->icon('bs.check-circle')
                 ->method('save'),
         ];
@@ -98,10 +98,10 @@ class UserEditScreen extends Screen
         return [
 
             Layout::block(UserEditLayout::class)
-                ->title(__('Profile Information'))
-                ->description(__('Update your account\'s profile information and email address.'))
+                ->title(__('user.screen.edit.layout.information.title'))
+                ->description(__('user.screen.edit.layout.information.descriptions'))
                 ->commands(
-                    Button::make(__('Save'))
+                    Button::make(__('user.screen.edit.button.save'))
                         ->type(Color::BASIC)
                         ->icon('bs.check-circle')
                         ->canSee($this->user->exists)
@@ -109,8 +109,8 @@ class UserEditScreen extends Screen
                 ),
 
             Layout::block(UserPasswordLayout::class)
-                ->title(__('Password'))
-                ->description(__('Ensure your account is using a long, random password to stay secure.'))
+                ->title(__('user.screen.edit.layout.password.title'))
+                ->description(__('user.screen.edit.layout.password.descriptions'))
                 ->commands(
                     Button::make(__('Save'))
                         ->type(Color::BASIC)
@@ -120,10 +120,10 @@ class UserEditScreen extends Screen
                 ),
 
             Layout::block(UserRoleLayout::class)
-                ->title(__('Roles'))
-                ->description(__('A Role defines a set of tasks a user assigned the role is allowed to perform.'))
+                ->title(__('user.screen.edit.layout.roles.title'))
+                ->description(__('user.screen.edit.layout.roles.descriptions'))
                 ->commands(
-                    Button::make(__('Save'))
+                    Button::make(__('user.screen.edit.button.save'))
                         ->type(Color::BASIC)
                         ->icon('bs.check-circle')
                         ->canSee($this->user->exists)
@@ -131,10 +131,10 @@ class UserEditScreen extends Screen
                 ),
 
             Layout::block(RolePermissionLayout::class)
-                ->title(__('Permissions'))
-                ->description(__('Allow the user to perform some actions that are not provided for by his roles'))
+                ->title(__('user.screen.edit.layout.permissions.title'))
+                ->description(__('user.screen.edit.layout.permissions.descriptions'))
                 ->commands(
-                    Button::make(__('Save'))
+                    Button::make(__('user.screen.edit.button.save'))
                         ->type(Color::BASIC)
                         ->icon('bs.check-circle')
                         ->canSee($this->user->exists)
@@ -175,7 +175,7 @@ class UserEditScreen extends Screen
         event(new UpdateAudit("user_change", "Changed " . $user->name . " profile.", Auth::user()->name));
         event(new UserUpdated($user->id));
 
-        Toast::info(__('User was saved.'));
+        Toast::info(__('user.screen.edit.toast.updated'));
 
         return redirect()->route('platform.systems.users');
     }
@@ -189,7 +189,7 @@ class UserEditScreen extends Screen
     {
         $user->delete();
 
-        Toast::info(__('User was removed'));
+        Toast::info(__('user.screen.edit.toast.removed'));
 
         event(new UpdateAudit("deleted_user", "Deleted " . $user->name . " profile.", Auth::user()->name));
 

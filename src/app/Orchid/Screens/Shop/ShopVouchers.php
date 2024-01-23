@@ -23,7 +23,7 @@ class ShopVouchers extends Screen
      */
     public function name(): ?string
     {
-        return 'Vouchers';
+        return __('vouchers.screen.title');
     }
 
     public function permission(): ?iterable

@@ -26,14 +26,14 @@ class AttachmentReportLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('username', 'Reporter'),
-            TD::make('reason', 'Důvod'),
-            TD::make('isLegalPurpose', 'DMCA')
+            TD::make('username', __('report.reporter')),
+            TD::make('reason', __('report.reason')),
+            TD::make('isLegalPurpose', __('report.dmca'))
                 ->render(function (ReportedAttachments $attachments) {
                       if ($attachments->isLegalPurpose) {
-                          return '<a class="ui green label">Ano</a>';
+                          return '<a class="ui green label">' . __('report.isDMCA.yes') . '</a>';
                       } else {
-                          return '<a class="ui green label">Ne</a>';
+                          return '<a class="ui green label">' . __('report.isDMCA.no') . '</a>';
                       }
                 }),
         ];

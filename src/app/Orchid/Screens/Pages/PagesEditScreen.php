@@ -38,7 +38,7 @@ class PagesEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return $this->pages->exists ? 'Edit page' : 'Creating a new page';
+        return $this->pages->exists ? __('pages.screen.edit.title') : __('pages.screen.edit.title.create');
     }
 
     public function permission(): iterable
@@ -56,17 +56,17 @@ class PagesEditScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Create page')
+            Button::make(__('pages.screen.edit.button.create_page'))
                 ->icon('bs.pencil')
                 ->method('createOrUpdate')
                 ->canSee(!$this->pages->exists),
 
-            Button::make('Update')
+            Button::make(__('pages.screen.edit.button.update'))
                 ->icon('bs.note')
                 ->method('createOrUpdate')
                 ->canSee($this->pages->exists),
 
-            Button::make('Remove')
+            Button::make(__('pages.screen.edit.button.remove'))
                 ->icon('bs.trash')
                 ->method('remove')
                 ->canSee($this->pages->exists),
@@ -84,18 +84,19 @@ class PagesEditScreen extends Screen
             Layout::rows([
                 Group::make([
                     Input::make('pages.page_slug')
-                        ->title('Page slug')
-                        ->placeholder('Add the name related to the page')
-                        ->help('This slug would be used to access the page.'),
+                        ->title(__('pages.screen.input.slug.title'))
+                        ->placeholder(__('pages.screen.input.slug.placeholder'))
+                        ->help(__('pages.screen.input.slug.help')),
+
                     Input::make('pages.title')
-                        ->title('Page title')
-                        ->placeholder('Attractive but mysterious title')
-                        ->help('Specify a short descriptive title for this event.'),
+                        ->title(__('pages.screen.input.title.title'))
+                        ->placeholder(__('pages.screen.input.title.placeholder'))
+                        ->help(__('pages.screen.input.title.help')),
                 ]),
-                
+
                 Quill::make('pages.content')
-                    ->title('Specify the content of the page here.'),
-            ])->title("Create a new page"),
+                    ->title(__('pages.screen.input.content.title')),
+            ])->title(__('pages.screen.group.title')),
         ];
     }
 
@@ -106,7 +107,7 @@ class PagesEditScreen extends Screen
 
         $this->pages->fill($request->get('pages'))->save();
 
-        Toast::info('You have successfully created ' . $this->pages->page_slug);
+        Toast::info(__('screen.toast.created', ['name' => $this->pages->page_slug]));
 
         event(new UpdateAudit("page_updated", "Updated " . $this->pages->page_slug, Auth::user()->name));
 
@@ -116,7 +117,7 @@ class PagesEditScreen extends Screen
     public function remove() {
         $this->pages->delete();
 
-        Toast::info('You have successfully deleted ' . $this->pages->page_slug);
+        Toast::info(__('screen.toast.deleted', ['name' => $this->pages->page_slug]));
 
         event(new UpdateAudit("page_deleted", "Deleted " . $this->pages->page_slug, Auth::user()->name));
 

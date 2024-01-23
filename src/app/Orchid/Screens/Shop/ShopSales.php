@@ -24,7 +24,7 @@ class ShopSales extends Screen
      */
     public function name(): ?string
     {
-        return 'Sales';
+        return __('sales.screen.title');
     }
 
     public function permission(): ?iterable
@@ -42,7 +42,7 @@ class ShopSales extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make(__('Add'))
+            Link::make(__('sales.screen.button.add'))
                 ->icon('bs.plus-circle')
                 ->href(route('platform.systems.roles.create')),
         ];

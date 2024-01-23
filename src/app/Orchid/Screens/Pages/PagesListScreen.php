@@ -30,12 +30,12 @@ class PagesListScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Pages';
+        return __('screen.title');
     }
 
     public function description(): ?string
     {
-        return "All the active pages.";
+        return __('screen.descriptions');
     }
 
     public function permission(): iterable

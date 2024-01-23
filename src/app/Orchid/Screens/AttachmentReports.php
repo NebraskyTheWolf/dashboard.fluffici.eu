@@ -24,7 +24,7 @@ class AttachmentReports extends Screen
      */
     public function name(): ?string
     {
-        return 'Nahlášený obsah';
+        return __('report.screen.title');
     }
 
     /**

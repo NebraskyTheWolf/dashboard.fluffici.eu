@@ -19,7 +19,8 @@
         "spatie/laravel-ignition": "^2.4",
         "webpatser/laravel-uuid": "^4.0",
         "yajra/laravel-datatables": "^10.1",
-        "yajra/laravel-datatables-oracle": "^10.11"
+        "yajra/laravel-datatables-oracle": "^10.11",
+      "ext-gettext": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

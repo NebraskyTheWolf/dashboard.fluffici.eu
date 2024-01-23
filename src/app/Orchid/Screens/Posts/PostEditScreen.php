@@ -54,7 +54,7 @@ class PostEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return $this->post->exists ? 'Edit post' : 'Creating a new post';
+        return $this->post->exists ? __('posts.screen.edit.title') : __('posts.screen.edit.title.create');
     }
 
     /**
@@ -62,7 +62,7 @@ class PostEditScreen extends Screen
      */
     public function description(): ?string
     {
-        return "News";
+        return __('posts.screen.edit.descriptions');
     }
 
     public function permission(): iterable
@@ -80,17 +80,17 @@ class PostEditScreen extends Screen
     public function commandBar(): array
     {
         return [
-            Button::make('Create post')
+            Button::make(__('posts.screen.edit.button.create'))
                 ->icon('bs.pencil')
                 ->method('createOrUpdate')
                 ->canSee(!$this->post->exists),
 
-            Button::make('Update')
+            Button::make(__('posts.screen.edit.button.update'))
                 ->icon('bs.note')
                 ->method('createOrUpdate')
                 ->canSee($this->post->exists),
 
-            Button::make('Remove')
+            Button::make(__('posts.screen.edit.button.remove'))
                 ->icon('bs.trash')
                 ->method('remove')
                 ->canSee($this->post->exists),
@@ -107,67 +107,67 @@ class PostEditScreen extends Screen
         if ($this->post->exists) {
             return [
                 Layout::tabs([
-                    'Post Information' => [
+                    __('posts.screen.tabs.post_information') => [
                         Layout::rows([
                             Input::make('post.title')
-                                ->title('Title')
-                                ->placeholder('Attractive but mysterious title')
-                                ->help('Specify a short descriptive title for this post.')
+                                ->title(__('posts.screen.input.post_title.title'))
+                                ->placeholder(__('posts.screen.edit.input.post_title.placeholder'))
+                                ->help(__('posts.screen.edit.input.post_title.help'))
                                 ->disabled($this->post->exists),
 
                             TextArea::make('post.description')
-                                ->title('Description')
+                                ->title(__('posts.screen.input.description.title'))
                                 ->rows(3)
                                 ->maxlength(200)
-                                ->placeholder('Brief description for preview')
+                                ->placeholder(__('posts.screen.input.description.placeholder'))
                                 ->disabled($this->post->exists),
 
                             Relation::make('post.author')
-                                ->title('Author')
+                                ->title(__('posts.screen.input.author.title'))
                                 ->fromModel(User::class, 'name')
                                 ->disabled($this->post->exists),
 
                             Quill::make('post.body')
-                                ->title('Main text')
+                                ->title(__('posts.screen.input.body.title'))
                                 ->disabled($this->post->exists),
                         ])
                     ],
-                    'Statistics' => [
-                        ShopProfit::make('likes', 'Overall statistics until now'),
+                    __('posts.screen.tabs.statistics') => [
+                        ShopProfit::make('likes', __('posts.screen.chart.likes.title')),
                     ],
-                    'Comments' => new PostCommentLayout('partials.comments', [
+                    __('posts.screen.tabs.comments') => new PostCommentLayout('partials.comments', [
                         'comments' => PostsComments::where('post_id', $this->post->id)->paginate(),
                         'postId' => $this->post->post_id
                     ])
-                ])->activeTab('Post Information')
+                ])->activeTab( __('posts.screen.tabs.post_information'))
             ];
         } else {
             return [
                 Layout::tabs([
-                    'Post Information' => [
+                    __('screen.tabs.post_information') => [
                         Layout::rows([
                             Input::make('post.title')
-                                ->title('Title')
-                                ->placeholder('Attractive but mysterious title')
-                                ->help('Specify a short descriptive title for this post.'),
+                                ->title(__('posts.screen.input.post_title.title'))
+                                ->placeholder(__('posts.screen.input.post_title.placeholder'))
+                                ->help(__('posts.screen.input.post_title.help')),
 
                             TextArea::make('post.description')
-                                ->title('Description')
+                                ->title(__('posts.screen.input.description.title'))
                                 ->rows(3)
                                 ->maxlength(200)
-                                ->placeholder('Brief description for preview'),
+                                ->placeholder(__('posts.screen.input.description.placeholder')),
 
                             Relation::make('post.author')
-                                ->title('Author')
+                                ->title(__('posts.screen.input.author.title'))
                                 ->fromModel(User::class, 'name'),
 
                             Quill::make('post.body')
-                                ->title('Main text')
+                                ->title(__('posts.screen.input.body.title'))
                         ])
                     ],
-                    'Statistics' => [],
-                    'Comments' => []
-                ])->activeTab('Post Information')
+                    __('posts.screen.tabs.statistics') => [],
+                    __('posts.screen.tabs.comments') => []
+                ])->activeTab(__('posts.screen.tabs.post_information'))
             ];
         }
     }
@@ -181,7 +181,7 @@ class PostEditScreen extends Screen
     {
         $this->post->fill($request->get('post'))->save();
 
-        Toast::info('You have successfully created a post.');
+        Toast::info(__('posts.screen.toast.created'));
 
         event(new UpdateAudit("post", "Updated " . $this->post->title, Auth::user()->name));
 
@@ -195,7 +195,7 @@ class PostEditScreen extends Screen
     {
         $this->post->delete();
 
-        Toast::info('You have successfully deleted the post.');
+        Toast::info(__('posts.screen.toast.removed', ['title' => $this->post->title]));
 
         event(new UpdateAudit("post_removed", "Removed " . $this->post->title, Auth::user()->name));
 

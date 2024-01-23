@@ -29,7 +29,7 @@ class AttachmentLists extends Screen
      */
     public function name(): ?string
     {
-        return 'Přílohy';
+        return __('attachments.screen.title');
     }
 
     /**
@@ -40,7 +40,7 @@ class AttachmentLists extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make(__('New'))
+            Button::make(__('attachments.screen.button.new'))
                 ->icon('bs.plus-circle')
                 ->method('upload'),
         ];

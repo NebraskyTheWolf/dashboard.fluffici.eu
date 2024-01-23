@@ -27,7 +27,7 @@ class ShopCategories extends Screen
      */
     public function name(): ?string
     {
-        return 'Categories';
+        return __('category.screen.title');
     }
 
     public function permission(): ?iterable
@@ -45,7 +45,7 @@ class ShopCategories extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make("New")
+            Link::make(__('category.screen.button.new'))
                 ->icon('bs.plus')
                 //->route('platform.shop.categories.create'),
         ];

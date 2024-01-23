@@ -44,7 +44,7 @@ class RoleEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Edit Role';
+        return __('roles.screen.edit.title');
     }
 
     /**
@@ -52,7 +52,7 @@ class RoleEditScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'Modify the privileges and permissions associated with a specific role.';
+        return __('roles.screen.edit.descriptions');
     }
 
     public function permission(): ?iterable
@@ -70,11 +70,11 @@ class RoleEditScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make(__('Save'))
+            Button::make(__('roles.screen.button.save'))
                 ->icon('bs.check-circle')
                 ->method('save'),
 
-            Button::make(__('Remove'))
+            Button::make(__('roles.screen.button.remove'))
                 ->icon('bs.trash3')
                 ->method('remove')
                 ->canSee($this->role->exists),
@@ -92,14 +92,14 @@ class RoleEditScreen extends Screen
             Layout::block([
                 RoleEditLayout::class,
             ])
-                ->title('Role')
-                ->description('A role is a collection of privileges (of possibly different services like the Users service, Moderator, and so on) that grants users with that role the ability to perform certain tasks or operations.'),
+                ->title(__('roles.screen.layout.role.title'))
+                ->description(__('roles.screen.layout.role.description')),
 
             Layout::block([
                 RolePermissionLayout::class,
             ])
-                ->title('Permission/Privilege')
-                ->description('A privilege is necessary to perform certain tasks and operations in an area.'),
+                ->title(__('roles.screen.layout.permissions.title'))
+                ->description(__('roles.screen.layout.permissions.description')),
         ];
     }
 
@@ -124,7 +124,7 @@ class RoleEditScreen extends Screen
 
         $role->save();
 
-        Toast::info(__('Role was saved'));
+        Toast::info(__('roles.screen.toast.saved'));
 
         event(new UpdateAudit("role_changed", "Updated " . $role->name, Auth::user()->name));
 
@@ -140,7 +140,7 @@ class RoleEditScreen extends Screen
     {
         $role->delete();
 
-        Toast::info(__('Role was removed'));
+        Toast::info(__('roles.screen.toast.removed'));
 
         event(new UpdateAudit("role_removed", "Removed " . $role->name, Auth::user()->name));
 

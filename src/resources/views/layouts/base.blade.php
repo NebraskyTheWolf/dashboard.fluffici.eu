@@ -1,7 +1,7 @@
 @extends('dashboard')
 
-@section('title', (string) __($name))
-@section('description', (string) __($description))
+@section('title', $name)
+@section('description', $description)
 @section('controller', 'base')
 
 @section('navbar')
@@ -43,7 +43,7 @@
         ></form>
     </div>
 
-    
+
 
     @includeWhen(isset($state), 'partials.state')
 @endsection

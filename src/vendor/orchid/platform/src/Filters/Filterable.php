@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Orchid\Filters;
 
+use App\Orchid\Presenters\UserPresenter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Orchid\Screen\Layouts\Selection;
@@ -19,6 +20,8 @@ trait Filterable
             ->map(fn ($filter) => is_object($filter) ? $filter : resolve($filter))
             ->reduce(fn (Builder $query, Filter $filter) => $filter->filter($query), $query);
     }
+
+
 
     /**
      * Apply the filter to the given selection.

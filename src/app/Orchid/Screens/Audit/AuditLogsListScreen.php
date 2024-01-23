@@ -29,7 +29,7 @@ class AuditLogsListScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Audit logs';
+        return __('audit.screen.title');
     }
 
     public function permission(): iterable
@@ -41,7 +41,7 @@ class AuditLogsListScreen extends Screen
 
     public function description(): ?string
     {
-        return "Users logging";
+        return __('audit.screen.description');
     }
 
     /**
@@ -52,7 +52,7 @@ class AuditLogsListScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Refresh')
+            Button::make(__('audit.screen.button.refresh'))
                 ->icon('bs.arrow-clockwise')
                 ->method('refresh')
         ];
@@ -72,7 +72,7 @@ class AuditLogsListScreen extends Screen
 
     public function refresh() {
 
-        Toast::info('The data has been refreshed.');
+        Toast::info(__('audit.screen.toast.refresh'));
 
         return redirect()->route('platform.audit');
     }

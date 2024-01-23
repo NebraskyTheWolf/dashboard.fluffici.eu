@@ -26,7 +26,7 @@ class PostListScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'News post';
+        return __('posts.screen.title');
     }
 
     /**
@@ -34,7 +34,7 @@ class PostListScreen extends Screen
      */
     public function description(): ?string
     {
-        return "All news posts";
+        return __('posts.screen.descriptions');
     }
 
     public function permission(): iterable
@@ -52,7 +52,7 @@ class PostListScreen extends Screen
     public function commandBar(): array
     {
         return [
-            Link::make('Create new')
+            Link::make(__('posts.screen.button.create_new'))
                 ->icon('pencil')
                 ->route('platform.post.edit')
         ];

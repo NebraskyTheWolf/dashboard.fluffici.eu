@@ -24,7 +24,7 @@ class ShopSupport extends Screen
      */
     public function name(): ?string
     {
-        return 'Support';
+        return __('support.screen.title');
     }
 
     public function permission(): ?iterable
@@ -42,7 +42,7 @@ class ShopSupport extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Refresh')
+            Button::make(__('support.screen.button.add'))
                 ->icon('bs.arrow-clockwise')
                 ->method('refresh')
         ];

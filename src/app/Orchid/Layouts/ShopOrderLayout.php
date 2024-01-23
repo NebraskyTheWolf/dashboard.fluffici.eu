@@ -30,57 +30,64 @@ class ShopOrderLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('first_name', 'First name')
+            TD::make('first_name', __('orders.table.first_name'))
                 ->render(function (ShopOrders $shopOrders) {
                     return Link::make($shopOrders->first_name)
                         ->route('platform.shop.orders.edit', $shopOrders);
                 }),
-            TD::make('last_name', 'Last name'),
-            TD::make('email', 'Email'),
-            TD::make('status', 'Status')
+            TD::make('last_name', __('orders.table.last_name')),
+            TD::make('email', __('orders.table.email')),
+            TD::make('status', __('orders.table.status'))
                 ->render(function (ShopOrders $shopOrders) {
                     if ($shopOrders->status == "PROCESSING") {
-                        return '<a class="ui blue label">Zpracováváno</a>';
+                        return '<a class="ui blue label">'.__('orders.table.status.processing').'</a>';
                     } else if ($shopOrders->status == "CANCELLED") {
-                        return '<a class="ui red label">Zrušeno</a>';
+                        return '<a class="ui red label">'.__('orders.table.status.cancelled').'</a>';
                     } else if ($shopOrders->status == "REFUNDED") {
-                        return '<div><a class="ui orange label">Vrácené peníze</a></div>';
+                        return '<div><a class="ui orange label">'.__('orders.table.status.refunded').'</a></div>';
                     } else if ($shopOrders->status == "DISPUTED") {
-                        return '<a class="ui red label">Sporné</a>';
+                        return '<a class="ui red label">'.__('orders.table.status.disputed').'</a>';
                     } else if ($shopOrders->status == "DELIVERED") {
-                        return '<a class="ui green label">Doručeno</a>';
+                        return '<a class="ui green label">'.__('orders.table.status.delivered').'</a>';
                     } else if ($shopOrders->status == "ARCHIVED") {
-                        return '<a class="ui brown label">Archivováno</a>';
+                        return '<a class="ui brown label">'.__('orders.table.status.archived').'</a>';
                     } else if ($shopOrders->status == "COMPLETED") {
-                        return '<div><a class="ui green label">Dokončeno</a></div>';
+                        return '<div><a class="ui green label">'.__('orders.table.status.completed').'</a></div>';
                     }
                     return '<a class="ui purple label">'. $shopOrders->status . '</a>';
                 }),
-            TD::make('price_paid', 'Paid')
+            TD::make('price_paid', __('orders.table.paid'))
                 ->render(function (ShopOrders $shopOrders) {
-                    $payment = OrderPayment::where('order_id', $shopOrders->order_id)->firstOrFail();
+                    $payment = OrderPayment::where('order_id', $shopOrders->order_id);
 
                     if ($payment->exists()) {
-                        return '<div class="ui tag labels"><a class="ui label">' . $payment->price . ' Kc</a></div>';
+                        $price = $payment->first()->price;
+
+                        return '<div class="ui tag labels"><a class="ui label">' . $price . ' Kc</a></div>';
                     } else {
                         return '0 Kc';
                     }
                 }),
-            TD::make('payment_status', 'Payment status')
+            TD::make('payment_status', __('orders.table.payment_status'))
                 ->render(function (ShopOrders $shopOrders) {
-                    $payment = OrderPayment::where('order_id', $shopOrders->order_id)->firstOrFail();
+                    $payment = OrderPayment::where('order_id', $shopOrders->order_id);
+
+                    // if there is no payment record we say that is still in process
+                    // Until the provider confirms the transactions
 
                     if ($payment->exists()) {
-                        if ($payment->status == "CANCELLED") {
-                            return '<a class="ui teal label">Zrušeno</a>';
-                        } else if ($payment->status == "PAID") {
-                            return '<a class="ui green label">Zaplaceno</a>';
-                        } else if ($payment->status == "UNPAID") {
-                            return '<a class="ui red label">Nezaplaceno</a>';
+                        $status = $payment->first()->status;
+
+                        if ($status == "CANCELLED") {
+                            return '<a class="ui teal label">'.__('orders.table.payment_status.cancelled').'</a>';
+                        } else if ($status == "PAID") {
+                            return '<a class="ui green label">'.__('orders.table.payment_status.paid').'</a>';
+                        } else if ($status == "UNPAID") {
+                            return '<a class="ui red label">'.__('orders.table.payment_status.unpaid').'</a>';
                         }
                     }
 
-                    return '<a class="ui blue label">Čekáme na zpracování... <i class="loading cog icon"></i></a>';
+                    return '<a class="ui blue label">'.__('orders.table.payment_status.await').' <i class="loading cog icon"></i></a>';
                 })
         ];
     }

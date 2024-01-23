@@ -46,7 +46,7 @@ class UserProfileScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'My Account';
+        return __('user.screen.profile.title');
     }
 
     /**
@@ -54,7 +54,7 @@ class UserProfileScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'Update your account details such as name, email address and password';
+        return __('user.screen.profile.descriptions');
     }
 
     /**
@@ -65,13 +65,13 @@ class UserProfileScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Back to my account')
+            Button::make(__('user.screen.profile.button.back'))
                 ->novalidate()
                 ->canSee(Impersonation::isSwitch())
                 ->icon('bs.people')
                 ->route('switch.logout'),
 
-            Button::make('Sign out')
+            Button::make(__('user.screen.profile.button.logout'))
                 ->novalidate()
                 ->icon('bs.box-arrow-left')
                 ->route('logout'),
@@ -85,20 +85,20 @@ class UserProfileScreen extends Screen
     {
         return [
             Layout::block(UserEditLayout::class)
-                ->title(__('Profile Information'))
-                ->description(__("Update your account's profile information and email address."))
+                ->title(__('user.screen.profile.layout.information.title'))
+                ->description(__('user.screen.profile.layout.information.descriptions'))
                 ->commands([
-                    Button::make(__('Save'))
+                    Button::make(__('user.screen.profile.button.save'))
                         ->type(Color::PRIMARY)
                         ->icon('bs.check-circle')
                         ->method('save'),
                 ]),
 
             Layout::block(ProfilePasswordLayout::class)
-                ->title(__('Update Password'))
-                ->description(__('Ensure your account is using a long, random password to stay secure.'))
+                ->title(__('user.screen.profile.layout.password.title'))
+                ->description(__('user.screen.profile.layout.password.descriptions'))
                 ->commands(
-                    Button::make(__('Update password'))
+                    Button::make(__('user.screen.profile.layout.password.title'))
                         ->type(Color::BASIC())
                         ->icon('bs.check-circle')
                         ->method('changePassword')
@@ -123,7 +123,7 @@ class UserProfileScreen extends Screen
         event(new UpdateAudit("profile_updated", "Updated their profile."));
 
 
-        Toast::info(__('Profile updated.'));
+        Toast::info(__('user.screen.profile.toast.saved'));
     }
 
     public function changePassword(Request $request): void
@@ -142,6 +142,6 @@ class UserProfileScreen extends Screen
         event(new UpdateAudit("profile_change", "Password changed."));
         event(new UserUpdate($request->user()->id));
 
-        Toast::info(__('Password changed.'));
+        Toast::info(__('user.screen.profile.toast.password_changed'));
     }
 }

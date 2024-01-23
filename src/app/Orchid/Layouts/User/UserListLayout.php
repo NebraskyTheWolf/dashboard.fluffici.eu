@@ -28,13 +28,13 @@ class UserListLayout extends Table
     public function columns(): array
     {
         return [
-            TD::make('name', __('Name'))
+            TD::make('name', __('user.screen.user.name'))
                 ->sort()
                 ->cantHide()
                 ->filter(Input::make())
                 ->render(fn (User $user) => new Persona($user->presenter())),
 
-            TD::make('email', __('Email'))
+            TD::make('email', __('user.screen.user.email'))
                 ->sort()
                 ->cantHide()
                 ->filter(Input::make())
@@ -46,13 +46,13 @@ class UserListLayout extends Table
                         'user' => $user->id,
                     ])),
 
-            TD::make('created_at', __('Created'))
+            TD::make('created_at', __('user.screen.user.created'))
                 ->usingComponent(DateTimeSplit::class)
                 ->align(TD::ALIGN_RIGHT)
                 ->defaultHidden()
                 ->sort(),
 
-            TD::make('updated_at', __('Last edit'))
+            TD::make('updated_at', __('user.screen.user.updated_at'))
                 ->usingComponent(DateTimeSplit::class)
                 ->align(TD::ALIGN_RIGHT)
                 ->sort(),
@@ -64,13 +64,13 @@ class UserListLayout extends Table
                     ->icon('bs.three-dots-vertical')
                     ->list([
 
-                        Link::make(__('Edit'))
+                        Link::make(__('user.screen.user.actions.submenu.edit'))
                             ->route('platform.systems.users.edit', $user->id)
                             ->icon('bs.pencil'),
 
-                        Button::make(__('Delete'))
+                        Button::make(__('user.screen.user.actions.submenu.delete'))
                             ->icon('bs.trash3')
-                            ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
+                            ->confirm(__('user.screen.user.actions.submenu.delete.confirm'))
                             ->method('remove', [
                                 'id' => $user->id,
                             ]),

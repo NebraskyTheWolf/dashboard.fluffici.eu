@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Orchid\Platform\Models;
 
+use App\Orchid\Presenters\AuditPresenter;
 use App\Orchid\Presenters\UserPresenter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -112,5 +113,10 @@ class User extends Authenticatable implements UserInterface
     public function presenter()
     {
         return new UserPresenter($this);
+    }
+
+    public function auditPresenter()
+    {
+        return new AuditPresenter($this);
     }
 }

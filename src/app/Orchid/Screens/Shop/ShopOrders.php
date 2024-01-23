@@ -28,7 +28,7 @@ class ShopOrders extends Screen
      */
     public function name(): ?string
     {
-        return 'Orders';
+        return __('orders.screen.title');
     }
 
     public function permission(): ?iterable
@@ -46,7 +46,7 @@ class ShopOrders extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Refresh')
+            Button::make(__('orders.screen.button.refresh'))
                 ->icon('bs.arrow-clockwise')
                 ->method('refresh')
         ];
@@ -65,7 +65,7 @@ class ShopOrders extends Screen
     }
 
     public function refresh() {
-        Toast::info('The data has been refreshed.');
+        Toast::info(__('orders.screen.toast.refresh'));
         return redirect()->route('platform.shop.orders');
     }
 }

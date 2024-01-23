@@ -24,7 +24,7 @@ class ShopProducts extends Screen
      */
     public function name(): ?string
     {
-        return 'Products';
+        return __('products.screen.title');
     }
 
     public function permission(): ?iterable
@@ -42,7 +42,7 @@ class ShopProducts extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make(__('Add'))
+            Link::make(_('products.screen.button.add'))
                 ->icon('bs.plus-circle')
                 ->href(route('platform.systems.roles.create')),
         ];

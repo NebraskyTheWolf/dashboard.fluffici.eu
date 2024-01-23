@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts;
 
 use App\Models\User;
+use App\Orchid\Presenters\AuditPresenter;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use App\Models\AuditLogs;
@@ -30,33 +31,26 @@ class AuditLogsListLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('name', "User")
+            TD::make('name', __('audit.table.user'))
                 ->sort()
                 ->cantHide()
                 ->filter(Input::make())
                 ->render(function (AuditLogs $auditLogs) {
-                    $user = User::where('name', $auditLogs->name)->firstOrFail();
-                    return new Persona(new UserPresenter($user));
+                    $id = \Orchid\Platform\Models\User::where('name', $auditLogs->name)->firstOrFail()->id;
+                    return new Persona(new AuditPresenter(User::find($id)));
                 }),
 
-            TD::make('slug', "Action")
+            TD::make('slug', __('audit.table.action'))
                 ->render(function (AuditLogs $auditLogs) {
                     return strtoupper($auditLogs->slug);
                 }),
 
-            TD::make('type', 'Operation')
+            TD::make('type', __('audit.table.operation'))
                 ->render(function (AuditLogs $auditLogs) {
-                    if ($auditLogs->type == "DELETE" || $auditLogs->type == "CANCELLED") {
-                        return "<a style=\"color: red;\">" . $auditLogs->type . "</a>";
-                    } else if ($auditLogs->type == "CHANGE") {
-                        return "<a style=\"color: blue;\">" . $auditLogs->type . "</a>";
-                    } else if ($auditLogs->type == "ADDED" || $auditLogs->type == "FINISHED") {
-                        return "<a style=\"color: green;\">" . $auditLogs->type . "</a>";
-                    }
-                    return "<a style=\"color: blue;\">" . $auditLogs->type . "</a>";
+                    return "<a style=\"color: red;\">" . __('audit.type.' . strtolower($auditLogs->type)) . "</a>";
                 }),
 
-            TD::make('created_at', 'Created')
+            TD::make('created_at', __('audit.table.create_at'))
                 ->render(function (AuditLogs $auditLogs) {
                     return $auditLogs->created_at->diffForHumans();
                 }),

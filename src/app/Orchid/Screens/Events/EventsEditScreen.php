@@ -47,7 +47,7 @@ class EventsEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return $this->events->exists ? 'Edit event' : 'Creating a new event';
+        return $this->events->exists ? __('events.screen.edit.title') : __('events.screen.edit.title.create');
     }
 
     public function permission(): iterable
@@ -65,29 +65,29 @@ class EventsEditScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Create event')
+            Button::make(__('events.screen.edit.button.create'))
                 ->icon('bs.pencil')
                 ->method('createOrUpdate')
                 ->canSee(!$this->events->exists),
 
-            Button::make('Update')
+            Button::make(__('events.screen.edit.button.update'))
                 ->icon('bs.note')
                 ->method('createOrUpdate')
                 ->canSee($this->events->exists && $this->events->status == "INCOMING"),
 
-            Button::make('Cancel event')
+            Button::make(__('events.screen.edit.button.cancel'))
                 ->icon('bs.trash')
                 ->method('cancel')
                 ->canSee($this->events->exists && $this->events->status == "INCOMING")
                 ->type(Color::DANGER),
 
-            Button::make('Undo')
+            Button::make(__('events.screen.edit.button.undo'))
                 ->icon('bs.arrow-clockwise')
                 ->method('undo')
                 ->canSee($this->events->exists && $this->events->status == "ENDED")
                 ->type(Color::INFO),
 
-            Button::make('Set as finished.')
+            Button::make(__('events.screen.edit.button.finish'))
                 ->icon('bs.check-lg')
                 ->method('finish')
                 ->canSee($this->events->exists && $this->events->status == "INCOMING")
@@ -110,54 +110,54 @@ class EventsEditScreen extends Screen
             Layout::rows([
                 Group::make([
                     Input::make('events.name')
-                        ->title('Event name')
-                        ->placeholder('Attractive but mysterious name')
-                        ->help('Specify a short descriptive title for this event.')
+                        ->title(__('events.screen.input.event_name.title'))
+                        ->placeholder(__('events.screen.input.event_name.placeholder'))
+                        ->help(__('events.screen.input.event_name.help'))
                         ->disabled($this->events->status == "CANCELLED"),
 
                     Quill::make('events.descriptions')
-                        ->title('Specify a short descriptive content for this event.')
+                        ->title(__('events.screen.input.description.title'))
                         ->canSee(!$this->events->exists || ($this->events->exists && $this->events->status == "INCOMING")),
 
                     Select::make('events.type')
                         ->options([
-                            'PHYSICAL'   => 'Physical',
-                            'ONLINE' => 'Online',
+                            'PHYSICAL'   => __('events.screen.input.type.choice.one'),
+                            'ONLINE' => __('events.screen.input.type.choice.two'),
                         ])
-                        ->title('Event type')
-                        ->help('Select the correct event type')
+                        ->title(__('events.screen.input.type.title'))
+                        ->help(__('events.screen.input.type.help'))
                         ->disabled($this->events->status == "CANCELLED")
                 ]),
 
                 Group::make([
                     DateTimer::make('events.begin')
-                        ->title('The date of the begining.')
+                        ->title(__('events.screen.input.begin.title'))
                         ->disabled($this->events->status == "CANCELLED"),
 
                     DateTimer::make('events.end')
-                        ->title('The date of the ending.')
+                        ->title(__('events.screen.input.end.title'))
                         ->disabled($this->events->status == "CANCELLED"),
                 ]),
 
                 Group::make([
                     Map::make('events.min')
-                        ->title('Select the first enplacement.')
-                        ->help('Enter the coordinates, or use the search'),
+                        ->title(__('events.screen.input.map_min.title'))
+                        ->help(__('events.screen.input.map_min.help')),
                     Map::make('events.max')
-                        ->title('Select the second enplacement.')
-                        ->help('Enter the coordinates, or use the search')
+                        ->title(__('events.screen.input.map_max.title'))
+                        ->help(__('events.screen.input.map_max.help'))
                 ]),
 
                 Group::make([
                     Input::make('events.link')
-                        ->title('Link')
-                        ->placeholder('https://owo.com')
-                        ->help('Specify the link of the event')
+                        ->title(__('events.screen.input.link.title'))
+                        ->placeholder(__('events.screen.input.link.placeholder'))
+                        ->help(__('events.screen.input.link.help'))
                         ->disabled($this->events->status == "CANCELLED"),
                 ]),
 
                 Cropper::make('events.banner')
-                    ->title('Upload a banner or let it blank :3')
+                    ->title(__('events.screen.input.banner.title'))
                     ->actionId($this->events->event_id)
                     ->remoteTag('banners')
                     ->minWidth(750)
@@ -166,7 +166,7 @@ class EventsEditScreen extends Screen
                     ->maxHeight(500)
                     ->maxFileSize(200)
 
-            ])->title('Event informations'),
+            ])->title(__('events.screen.group.title')),
         ];
     }
 
@@ -174,7 +174,7 @@ class EventsEditScreen extends Screen
 
         $this->events->fill($request->get('events'))->save();
 
-        Toast::info('You have successfully created a new event.');
+        Toast::info(__('events.screen.toast.created'));
 
         event(new UpdateAudit("event", $this->events->name . " updated.", Auth::user()->name));
 
@@ -190,7 +190,8 @@ class EventsEditScreen extends Screen
             ]
         );
 
-        Toast::info('You have successfully cancelled ' . $this->events->name);
+        Toast::info(__('events.screen.toast.cancel', ['name' => $this->events->name]));
+
 
         event(new UpdateAudit("event", $this->events->name . " set a cancelled.", Auth::user()->name));
 
@@ -206,7 +207,8 @@ class EventsEditScreen extends Screen
             ]
         );
 
-        Toast::info('You have successfully finished ' . $this->events->name);
+        Toast::info(__('events.screen.toast.finish', ['name' => $this->events->name]));
+
 
         event(new UpdateAudit("event", $this->events->name . " set a finished.", Auth::user()->name));
 
@@ -221,7 +223,7 @@ class EventsEditScreen extends Screen
             ]
         );
 
-        Toast::info('You have successfully undone the last changes on ' . $this->events->name);
+        Toast::info(__('events.screen.toast.undo', ['name' => $this->events->name]));
 
         event(new UpdateAudit("event", "Undone last changes " . $this->events->name, Auth::user()->name));
 

@@ -7,6 +7,7 @@ namespace App\Orchid\Screens;
 use App\Models\EventsInteresteds;
 use App\Orchid\Layouts\ShopProfit;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 
@@ -52,7 +53,7 @@ class PlatformScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Fluffici Admin Panel.';
+        return __('main.screen.title');
     }
 
     /**
@@ -60,7 +61,9 @@ class PlatformScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'Vítejte na dashbordu';
+        return __('main.screen.descriptions', [
+            'name' => Auth::user()->name
+        ]);
     }
 
     /**
@@ -82,12 +85,12 @@ class PlatformScreen extends Screen
     {
         return [
             Layout::metrics([
-                'Nevyřízené objednávky' => 'metrics.orders',
-                'Nevyřízené tikety podpory' => 'metrics.tickets',
-                'Návštěvy' => 'metrics.visitors',
+                __('main.screen.metrics.order') => 'metrics.orders',
+                __('main.screen.metrics.tickets') => 'metrics.tickets',
+                __('main.screen.metrics.visitors') => 'metrics.visitors',
             ]),
-            ShopProfit::make('dataset', 'Celkové dosavadní návštěvy.'),
-            ShopProfit::make('events', 'Celková dosavadní aktivita v rámci akce.')
+            ShopProfit::make('dataset', __('main.screen.chart.visitors')),
+            ShopProfit::make('events', __('main.screen.chart.events'))
         ];
     }
 }

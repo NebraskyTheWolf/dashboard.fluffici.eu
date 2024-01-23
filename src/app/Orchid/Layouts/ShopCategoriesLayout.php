@@ -27,9 +27,9 @@ class ShopCategoriesLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('name', 'Name'),
-            TD::make('order', 'Position'),
-            TD::make('displayed', 'Public')
+            TD::make('name', __('category.table.name')),
+            TD::make('order', __('category.table.position')),
+            TD::make('displayed', _('category.table.public'))
                 ->render(function (ShopCategories $categories) {
                      if ($categories->displayed === 1) {
                          return 'Yes';
