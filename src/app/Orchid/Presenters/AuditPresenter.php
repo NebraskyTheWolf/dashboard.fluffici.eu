@@ -31,6 +31,10 @@ class AuditPresenter extends Presenter implements Personable, Searchable
      * Returns the subtitle for this presenter, which provides additional context about the user.
      */
     public function subTitle(): string {
+
+        if ($this->entity->name === 'Missingno')
+            return '';
+
         $roles = $this->entity->roles->pluck('name')->implode(' / ');
 
         return (string) Str::of($roles)
