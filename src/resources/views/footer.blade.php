@@ -1,6 +1,6 @@
 @guest
     <div class="m-4 text-center text-muted">
-        <p style="color: white;">Crafted with 💚🦊 by Vakea for Fluffici</p>
+        <p>Crafted with 💚🦊 by Vakea for Fluffici</p>
 
         <small style="color: white;" id="version"> Version : <i class="loading cog icon"></i></small>
         <br>
