@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="author" content="Fluffici">
+    <meta name="description" content="Fluffici Admin Panel">
+
     <title>
         @yield('title', config('app.name'))
         @hasSection('title')
@@ -37,6 +40,7 @@
     <script type="text/javascript" src="{{url('/js/presence.js')}}"></script>
 
     <link rel="stylesheet" href="{{ url('/css/app.css')}}">
+    <link rel="stylesheet" href="{{ url('/css/fluffici.css')}}">
     <link rel="stylesheet" href="{{ url('/css/style.min.css')}}">
 
     <link rel="stylesheet" href="{{ url('/css/loader.css')}}">
@@ -63,7 +67,7 @@
 
 
 <body class="antialiased">
-    <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter  selection:bg-red-500 selection:text-white" id="loader" hidden>
+    <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter  selection:bg-red-500 selection:text-white" style="background-color: #2f2b3a;" id="loader" hidden>
         <div class="max-w-7xl mx-auto p-6 lg:p-8">
             <div class="mt-16">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
@@ -83,7 +87,7 @@
     <div class="row justify-content-center d-md-flex h-100">
         @yield('aside')
 
-        <div class="col-xxl col-xl-9 col-12" id="custom">
+        <div class="col-xxl col-xl-9 col-12 dark:bg-dots-lighter" style="background-color: #2f2b3a; " id="custom">
             @yield('body')
         </div>
     </div>

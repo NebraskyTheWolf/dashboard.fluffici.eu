@@ -27,6 +27,14 @@
     left: 0;
 }
 
+.banner {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position: inherit;
+    width: 50%;
+}
+
 .centered-bar {
     position: fixed;
     top: 50%;

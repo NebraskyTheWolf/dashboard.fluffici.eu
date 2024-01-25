@@ -82,6 +82,6 @@ Route::get('/health', function (Request $request) {
 Route::get('/build', function (Request $request) {
     return [
         'version' => file_get_contents('../VERSION'),
-        'rev' => env('GIT_COMMIT', "No revision")
+        'rev' => env('GIT_COMMIT')
     ];
 })->name("build");

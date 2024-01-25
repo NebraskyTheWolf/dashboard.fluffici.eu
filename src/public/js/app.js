@@ -49,6 +49,14 @@ $(document).ready(function($) {
             $('#rev').text('Rev : ' + response.data.rev.substring(0, 8))
         }
     })
+    axios.get('https://autumn.rsiniya.uk').then(function (response) {
+        if (response.status !== 200) {
+            console.log('Cannot update fields for versioning.')
+        } else {
+            console.log(response.data.rev)
+            $('#autumn').text('Autumn : ' + response.data.autumn)
+        }
+    })
 
     if (document.getElementById('isLogged').value == 1) {
         window.Echo.channel('statistics').listen('Statistics', (data) => {

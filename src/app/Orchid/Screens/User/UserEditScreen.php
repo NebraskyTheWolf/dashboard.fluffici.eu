@@ -78,13 +78,13 @@ class UserEditScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make(__('user.screen.edit.remove'))
+            Button::make(__('user.screen.edit.button.remove'))
                 ->icon('bs.trash3')
                 ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
                 ->method('remove')
                 ->canSee($this->user->exists),
 
-            Button::make(__('user.screen.edit.save'))
+            Button::make(__('user.screen.edit.button.save'))
                 ->icon('bs.check-circle')
                 ->method('save'),
         ];
