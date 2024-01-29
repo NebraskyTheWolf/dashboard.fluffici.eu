@@ -63,10 +63,10 @@ class OrderPayment extends Table
                 }),
             TD::make('price')
                 ->render(function (\App\Models\OrderPayment $payment) {
-                    $missing = $this->isMissing($payment);
-                    $over = $this->isOverPaid($payment);
-
                     if ($payment->status == "PAID") {
+                        $missing = $this->isMissing($payment);
+                        $over = $this->isOverPaid($payment);
+
                         if (!$missing > 0.1) {
                             return '<a class="ui yellow label">Missing ' . $missing . ' Kc</a>';
                         } else if (!$over > 0.1) {

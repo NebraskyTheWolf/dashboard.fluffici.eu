@@ -39,7 +39,8 @@ class ShopOrderEdit extends Screen
         return [
             'order' => $order,
 
-            'orderPayment' => OrderPayment::where('order_id', $order->order_id)->paginate(),
+            'orderPayment' => OrderPayment::where('order_id', $order->order_id)->orderBy('created_at', 'desc')->paginate(),
+            'lastHistory' => OrderPayment::where('order_id', $order->order_id)->orderBy('created_at', 'desc')->paginate(),
             'orderProducts' => OrderedProduct::where('order_id', $order->order_id)->first(),
             'orderCarrier' => OrderCarrier::where('order_id', $order->order_id)->first(),
             'orderSales' => OrderSales::where('order_id', $order->order_id)->first(),
@@ -69,16 +70,19 @@ class ShopOrderEdit extends Screen
                 ->icon('bs.check2-square')
                 ->type(Color::SUCCESS)
                 ->confirm(__('common.modal.order.type',  ['type' => 'completed']))
+                ->disabled($this->orderPayment->first()->status == "REFUNDED")
                 ->method('completed'),
             Button::make('Set as delivered')
                 ->icon('bs.envelope-fill')
                 ->type(Color::SUCCESS)
                 ->confirm(__('common.modal.order.type',  ['type' => 'delivered']))
+                ->disabled($this->orderPayment->first()->status == "REFUNDED")
                 ->method('delivered'),
             Button::make('Issue Refund')
                 ->icon('bs.slash-circle')
                 ->type(Color::WARNING)
                 ->confirm(__('common.modal.order.refund'))
+                ->disabled($this->orderPayment->first()->status == "REFUNDED")
                 ->method('issueRefund'),
             Button::make('Set as archived')
                 ->icon('bs.archive')
@@ -224,7 +228,7 @@ class ShopOrderEdit extends Screen
         $refund->status = 'REFUNDED';
         $refund->transaction_id = $payment->transaction_id;
         $refund->provider = $payment->provider;
-        $refund->price = $payment->provider;
+        $refund->price = $payment->price;
         $refund->save();
 
         Toast::success("You refunded " . $this->order->first_name . ' of ' .  $refund->price . ' Kc');

@@ -61,7 +61,7 @@ class ShopOrderLayout extends Table
                 }),
             TD::make('price_paid', __('orders.table.paid'))
                 ->render(function (ShopOrders $shopOrders) {
-                    $payment = OrderPayment::where('order_id', $shopOrders->order_id);
+                    $payment = OrderPayment::where('order_id', $shopOrders->order_id)->orderBy('created_at', 'desc');
 
                     if ($payment->exists()) {
                         $price = $payment->first()->price;
@@ -73,7 +73,7 @@ class ShopOrderLayout extends Table
                 }),
             TD::make('payment_status', __('orders.table.payment_status'))
                 ->render(function (ShopOrders $shopOrders) {
-                    $payment = OrderPayment::where('order_id', $shopOrders->order_id);
+                    $payment = OrderPayment::where('order_id', $shopOrders->order_id)->orderBy('created_at', 'desc');
 
                     // if there is no payment record we say that is still in process
                     // Until the provider confirms the transactions
@@ -83,6 +83,8 @@ class ShopOrderLayout extends Table
 
                         if ($status == "CANCELLED") {
                             return '<a class="ui teal label">'.__('orders.table.payment_status.cancelled').'</a>';
+                        } else if ($status == "REFUNDED") {
+                            return '<a class="ui green label">'.__('orders.table.payment_status.paid').'</a>';
                         } else if ($status == "PAID") {
                             return '<a class="ui green label">'.__('orders.table.payment_status.paid').'</a>';
                         } else if ($status == "UNPAID") {
