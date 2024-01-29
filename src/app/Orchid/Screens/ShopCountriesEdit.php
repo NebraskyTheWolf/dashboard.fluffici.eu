@@ -56,6 +56,7 @@ class ShopCountriesEdit extends Screen
                 ->type(Color::DANGER)
                 ->confirm(__('common.modal.confirm'))
                 ->method('remove')
+                ->canSee($this->country->exists)
         ];
     }
 
@@ -75,7 +76,6 @@ class ShopCountriesEdit extends Screen
                 Input::make('country.country_name')
                     ->title('Country name')
                     ->help('Please enter the country name to display.')
-                    ->canSee($this->country->exists)
             ])
         ];
     }
