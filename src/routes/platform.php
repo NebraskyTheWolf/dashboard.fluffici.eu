@@ -42,7 +42,7 @@ Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
     ->breadcrumbs(fn (Trail $trail) => $trail
         ->parent('index')
-        ->push(__('Profile'), route('platform.profile')));
+        ->push('Profile', route('platform.profile')));
 
 // Platform > System > Users > User
 Route::screen('users/{user}/edit', UserEditScreen::class)
@@ -56,14 +56,14 @@ Route::screen('users/create', UserEditScreen::class)
     ->name('platform.systems.users.create')
     ->breadcrumbs(fn (Trail $trail) => $trail
         ->parent('platform.systems.users')
-        ->push(__('Create'), route('platform.systems.users.create')));
+        ->push('Create', route('platform.systems.users.create')));
 
 // Platform > System > Users
 Route::screen('users', UserListScreen::class)
     ->name('platform.systems.users')
     ->breadcrumbs(fn (Trail $trail) => $trail
         ->parent('index')
-        ->push(__('Users'), route('platform.systems.users')));
+        ->push('Users', route('platform.systems.users')));
 
 // Platform > System > Roles > Role
 Route::screen('roles/{role}/edit', RoleEditScreen::class)
@@ -77,27 +77,39 @@ Route::screen('roles/create', RoleEditScreen::class)
     ->name('platform.systems.roles.create')
     ->breadcrumbs(fn (Trail $trail) => $trail
         ->parent('platform.systems.roles')
-        ->push(__('Create'), route('platform.systems.roles.create')));
+        ->push('Create', route('platform.systems.roles.create')));
 
 // Platform > System > Roles
 Route::screen('roles', RoleListScreen::class)
     ->name('platform.systems.roles')
     ->breadcrumbs(fn (Trail $trail) => $trail
         ->parent('index')
-        ->push(__('Roles'), route('platform.systems.roles')));
+        ->push('Roles', route('platform.systems.roles')));
 
 
 Route::screen('post/{post?}', PostEditScreen::class)
-    ->name('platform.post.edit');
+    ->name('platform.post.edit')
+    ->breadcrumbs(fn (Trail $trail, $post) => $trail
+        ->parent('index')
+        ->push('Edit', route('platform.post.edit', $post)));
 
 Route::screen('posts', PostListScreen::class)
-    ->name('platform.post.list');
+    ->name('platform.post.list')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('index')
+        ->push('Posts', route('platform.post.list')));
 
 Route::screen('event/{events?}', EventsEditScreen::class)
-    ->name('platform.events.edit');
+    ->name('platform.events.edit')
+    ->breadcrumbs(fn (Trail $trail, $event) => $trail
+        ->parent('index')
+        ->push('Edit', route('platform.event.edit', $event)));
 
 Route::screen('events', EventsListScreen::class)
-    ->name('platform.events.list');
+    ->name('platform.events.list')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('index')
+        ->push('Events', route('platform.event.list')));
 
 Route::screen('page/{events?}', PagesEditScreen::class)
     ->name('platform.pages.edit');
@@ -111,6 +123,9 @@ Route::screen('audit', AuditLogsListScreen::class)
 Route::screen('files', \App\Orchid\Screens\AttachmentLists::class)
     ->name('platform.attachments');
 
+Route::screen('files/edit/{attachment}', \App\Orchid\Screens\AttachmentLists::class)
+    ->name('platform.attachments.edit');
+
 Route::screen('reports', \App\Orchid\Screens\AttachmentReports::class)
     ->name('platform.reports');
 
@@ -120,11 +135,17 @@ Route::screen('shop/statistics', \App\Orchid\Screens\Shop\ShopStatistics::class)
 Route::screen('shop/products', \App\Orchid\Screens\Shop\ShopProducts::class)
     ->name('platform.shop.products');
 
+Route::screen('shop/products/edit/{product?}', \App\Orchid\Screens\Shop\ShopProducts::class)
+    ->name('platform.shop.products.edit');
+
 Route::screen('shop/categories', \App\Orchid\Screens\Shop\ShopCategories::class)
     ->name('platform.shop.categories');
 
 Route::screen('shop/sales', \App\Orchid\Screens\Shop\ShopSales::class)
     ->name('platform.shop.sales');
+
+Route::screen('shop/sales/edit/{sales?}', \App\Orchid\Screens\Shop\ShopSalesEdit::class)
+    ->name('platform.shop.sales.edit');
 
 Route::screen('shop/vouchers', \App\Orchid\Screens\Shop\ShopVouchers::class)
     ->name('platform.shop.vouchers');
@@ -140,3 +161,9 @@ Route::screen('shop/support', \App\Orchid\Screens\Shop\ShopSupport::class)
 
 Route::screen('shop/settings', \App\Orchid\Screens\Shop\ShopSettings::class)
     ->name('platform.shop.settings');
+
+Route::screen('shop/carriers', \App\Orchid\Screens\ShopCarrierList::class)
+    ->name('platform.shop.carriers');
+
+Route::screen('shop/carriers/edit/{carrier?}', \App\Orchid\Screens\ShopCarrierEdit::class)
+    ->name('platform.shop.carriers.edit');

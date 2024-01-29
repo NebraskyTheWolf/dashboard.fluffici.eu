@@ -33,23 +33,21 @@ class ShopStatistics extends Screen
                 ],
                 'monthly'   => [
                     'key' => 'monthly',
-                    'value' => number_format(OrderPayment::where('status', 'PAID')->whereBetween('created_at', [
-                            Carbon::now()->subDay(1),
-                            Carbon::now()->subDay(30)
-                    ])->sum('price')) . ' Kc'
+                    'value' => number_format(OrderPayment::where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price')) . ' Kc'
                 ],
             ],
             'pie' => [
-                OrderedProduct::sumByDays('product_name')->toChart('Product'),
+                OrderedProduct::sumByDays('product_id')->toChart('Product'),
             ],
             'dataset' => [
-                ShopOrders::sumByDays('total_price')->toChart('Price'),
+                OrderedProduct::sumByDays('price')->toChart('Price'),
             ],
             'order' => [
-                ShopOrders::where('status', 'COMPLETED')->averageByDays('total_price')->toChart(__('statistics.screen.chart.item.completed')),
-                ShopOrders::where('status', 'REFUNDED')->averageByDays('total_price')->toChart(__('statistics.screen.chart.item.refunded')),
-                ShopOrders::where('status', 'DISPUTED')->averageByDays('total_price')->toChart(__('statistics.screen.chart.item.disputed')),
-                ShopOrders::where('status', 'PROCESSING')->averageByDays('total_price')->toChart(__('statistics.screen.chart.item.processing')),
+                ShopOrders::where('status', 'COMPLETED')->averageByDays('id')->toChart(__('statistics.screen.chart.item.completed')),
+                ShopOrders::where('status', 'REFUNDED')->averageByDays('id')->toChart(__('statistics.screen.chart.item.refunded')),
+                ShopOrders::where('status', 'DISPUTED')->averageByDays('id')->toChart(__('statistics.screen.chart.item.disputed')),
+                ShopOrders::where('status', 'PROCESSING')->averageByDays('id')->toChart(__('statistics.screen.chart.item.processing')),
+                ShopOrders::where('status', 'OUTING')->averageByDays('id')->toChart('Outing'),
             ]
         ];
     }

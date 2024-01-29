@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use App\Orchid\Layouts\ShopSalesList;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
@@ -14,7 +15,9 @@ class ShopSales extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'sales' => \App\Models\ShopSales::paginate()
+        ];
     }
 
     /**
@@ -44,7 +47,7 @@ class ShopSales extends Screen
         return [
             Link::make(__('sales.screen.button.add'))
                 ->icon('bs.plus-circle')
-                ->href(route('platform.systems.roles.create')),
+                ->href(route('platform.shop.sales.edit')),
         ];
     }
 
@@ -55,6 +58,8 @@ class ShopSales extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            ShopSalesList::class
+        ];
     }
 }

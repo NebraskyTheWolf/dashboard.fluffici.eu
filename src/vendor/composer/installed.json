@@ -224,6 +224,67 @@
             "install-path": "../brick/math"
         },
         {
+            "name": "brick/money",
+            "version": "0.8.1",
+            "version_normalized": "0.8.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/brick/money.git",
+                "reference": "25f484a347756b7f3fbe7ad63ed9ad2d87b20004"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/brick/money/zipball/25f484a347756b7f3fbe7ad63ed9ad2d87b20004",
+                "reference": "25f484a347756b7f3fbe7ad63ed9ad2d87b20004",
+                "shasum": ""
+            },
+            "require": {
+                "brick/math": "~0.10.1 || ~0.11.0",
+                "ext-json": "*",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "brick/varexporter": "~0.3.0",
+                "ext-dom": "*",
+                "ext-pdo": "*",
+                "php-coveralls/php-coveralls": "^2.2",
+                "phpunit/phpunit": "^9.4.3",
+                "vimeo/psalm": "5.14.1"
+            },
+            "suggest": {
+                "ext-intl": "Required to format Money objects"
+            },
+            "time": "2023-09-23T21:17:11+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Brick\\Money\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Money and currency library",
+            "keywords": [
+                "brick",
+                "currency",
+                "money"
+            ],
+            "support": {
+                "issues": "https://github.com/brick/money/issues",
+                "source": "https://github.com/brick/money/tree/0.8.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/BenMorel",
+                    "type": "github"
+                }
+            ],
+            "install-path": "../brick/money"
+        },
+        {
             "name": "carbonphp/carbon-doctrine-types",
             "version": "2.1.0",
             "version_normalized": "2.1.0.0",
@@ -11379,6 +11440,60 @@
                 "source": "https://github.com/webpatser/laravel-uuid"
             },
             "install-path": "../webpatser/laravel-uuid"
+        },
+        {
+            "name": "whitecube/php-prices",
+            "version": "v3.0.0",
+            "version_normalized": "3.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/whitecube/php-prices.git",
+                "reference": "a42831807d1a68500b964cdf8211615922a58f1b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/whitecube/php-prices/zipball/a42831807d1a68500b964cdf8211615922a58f1b",
+                "reference": "a42831807d1a68500b964cdf8211615922a58f1b",
+                "shasum": ""
+            },
+            "require": {
+                "brick/money": "0.8.*",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "pestphp/pest": "^1.0"
+            },
+            "time": "2023-03-06T10:41:54+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Tests\\": "tests/",
+                    "Whitecube\\Price\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Toon Van den Bos",
+                    "email": "toon@whitecube.be"
+                }
+            ],
+            "description": "A simple PHP library for complex monetary prices management",
+            "support": {
+                "issues": "https://github.com/whitecube/php-prices/issues",
+                "source": "https://github.com/whitecube/php-prices/tree/v3.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/whitecube",
+                    "type": "github"
+                }
+            ],
+            "install-path": "../whitecube/php-prices"
         },
         {
             "name": "yajra/laravel-datatables",

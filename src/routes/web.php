@@ -54,7 +54,6 @@ Route::post('async/{screen}/{method?}/{template?}', [AsyncController::class, 'lo
 Route::post('listener/{screen}/{layout}', [AsyncController::class, 'listener'])
 ->name('async.listener');
 
-// TODO: Remove group
 Route::prefix('systems')->group(function () {
     Route::post('uploaded', [AttachmentController::class, 'uploaded'])
         ->name('systems.files.uploaded');
@@ -85,3 +84,8 @@ Route::get('/build', function (Request $request) {
         'rev' => env('GIT_COMMIT')
     ];
 })->name("build");
+
+
+Route::get('/checkout/{productId}', [\App\Http\Controllers\ShopController::class, 'index']);
+Route::post('/create-order', [\App\Http\Controllers\ShopController::class, 'createOrder']);
+Route::post('/payment', [\App\Http\Controllers\ShopController::class, 'payment']);

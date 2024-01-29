@@ -2,11 +2,11 @@
     @if(!empty($title) || !empty($description))
     <div class="col p-0 px-3">
         <legend class="text-black px-2 mt-2">
-            {{ __($title ?? '') }}
+            {{ $title ?? '' }}
 
             @if(!empty($description))
             <p class="small text-muted mt-2 mb-0">
-                {!! __($description  ?? '') !!}
+                {!! $description ?? '' !!}
             </p>
             @endif
         </legend>

@@ -14,7 +14,7 @@ class ShopProfit extends Chart
      *
      * @var string
      */
-    protected $type = 'line';
+    protected $type = 'bar';
 
     /**
      * Determines whether to display the export button.

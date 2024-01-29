@@ -116,14 +116,16 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Prodej')
                         ->icon('bs.credit-card-2-front')
                         ->route('platform.shop.sales')
-                        ->permission('platform.systems.eshop.sales')
-                        ->canSee(false),
+                        ->permission('platform.systems.eshop.sales'),
                     Menu::make('Poukázky')
                         ->icon('bs.card-list')
                         ->route('platform.shop.vouchers')
-                        ->permission('platform.systems.eshop.vouchers')
-                        ->title("POUKÁZKY")
-                        ->canSee(false),
+                        ->permission('platform.systems.eshop.vouchers'),
+                    Menu::make('Dopravci')
+                        ->icon('bs.box-seam')
+                        ->route('platform.shop.carriers')
+                        ->permission('platform.systems.eshop.carriers')
+                        ->title("POUKÁZKY"),
                     Menu::make('Objednávky')
                         ->icon('bs.box-seam')
                         ->route('platform.shop.orders')
@@ -187,7 +189,11 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.eshop.orders', 'EShop Orders (read/write)')
                 ->addPermission('platform.systems.eshop.products', 'EShop Products (read/write)')
                 ->addPermission('platform.systems.eshop.vouchers', 'EShop Vouchers (write)')
-                ->addPermission('platform.systems.eshop.sales', 'EShop Sales (read/write)'),
+                ->addPermission('platform.systems.eshop.sales', 'EShop Sales (read/write)')
+
+                ->addPermission('platform.shop.carriers.read', 'EShop Carriers (Read)')
+                ->addPermission('platform.shop.carriers.write', 'EShop Carriers (Write)')
+                ->addPermission('platform.systems.eshop.carriers', 'EShop Carriers (Navbar)'),
 
             ItemPermission::group('Attachments')
                 ->addPermission('platform.systems.attachments.files', 'Files (Read)')

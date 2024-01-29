@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "ext-gettext": "*",
         "barryvdh/laravel-dompdf": "^2.0",
         "beyondcode/laravel-websockets": "^1.14",
         "guzzlehttp/guzzle": "^7.8",
@@ -18,9 +19,9 @@
         "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-ignition": "^2.4",
         "webpatser/laravel-uuid": "^4.0",
+        "whitecube/php-prices": "^3.0",
         "yajra/laravel-datatables": "^10.1",
-        "yajra/laravel-datatables-oracle": "^10.11",
-      "ext-gettext": "*"
+        "yajra/laravel-datatables-oracle": "^10.11"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -17,7 +17,7 @@ class ShopCategoriesLayout extends Table
      */
     protected $title = "Categories";
 
-    public $target = 'shop_categories';
+    public $target = 'categories';
 
     /**
      * Get the fields elements to be displayed.
@@ -29,8 +29,8 @@ class ShopCategoriesLayout extends Table
         return [
             TD::make('name', __('category.table.name')),
             TD::make('order', __('category.table.position')),
-            TD::make('displayed', _('category.table.public'))
-                ->render(function (ShopCategories $categories) {
+            TD::make('displayed', __('category.table.displayed'))
+                ->render(function (\App\Models\ShopCategories $categories) {
                      if ($categories->displayed === 1) {
                          return 'Yes';
                      } else {

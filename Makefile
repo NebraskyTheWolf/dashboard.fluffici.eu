@@ -25,6 +25,9 @@ revision:
 status:
 	docker compose exec dashboard php artisan migrate:status
 
+make-report:
+	docker compose exec dashboard php artisan app:generate-monthly-report
+
 up:
 	docker compose up -d
 stop:

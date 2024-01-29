@@ -32,7 +32,7 @@ class AuditPresenter extends Presenter implements Personable, Searchable
      */
     public function subTitle(): string {
 
-        if ($this->entity->name === 'Missingno')
+        if ($this->entity->name === 'Deleted User')
             return '';
 
         $roles = $this->entity->roles->pluck('name')->implode(' / ');

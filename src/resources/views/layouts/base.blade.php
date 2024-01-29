@@ -43,7 +43,5 @@
         ></form>
     </div>
 
-
-
     @includeWhen(isset($state), 'partials.state')
 @endsection

@@ -11,15 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ordered_product', function (Blueprint $table) {
-            $table->id();
-            $table->string('order_id')->references('order_id')->on('shop_orders');
-            $table->integer('product_id')->references('id')->on('shop_products');
-            $table->integer('product_name')->references('name')->on('shop_products');
-            $table->float('price')->references('price')->on('shop_products');
-            $table->bigInteger('quantity')->default(1);
-            $table->timestamps();
-        });
+
 
         Schema::create('order_carrier', function (Blueprint $table) {
             $table->id();

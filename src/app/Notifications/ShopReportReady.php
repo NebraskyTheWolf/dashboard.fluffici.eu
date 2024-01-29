@@ -59,7 +59,7 @@ class ShopReportReady extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            $this->toDashboard($notifiable)
         ];
     }
 }

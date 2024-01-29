@@ -49,28 +49,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('shop_orders', function (Blueprint $table) {
-            $table->id();
-            $table->string('order_id');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('first_address');
-            $table->string('second_address')->nullable();
-            $table->string('postal_code');
-            $table->string('country');
-            $table->string('email');
-            $table->string('phone_number')->nullable();
-            $table->string('status')->default("PROCESSING");
-            $table->string('tracking_number')->nullable()->default(NULL);
-            $table->bigInteger('price_paid')->default(0);
-            $table->bigInteger('total_price')->default(0);
 
-            $table->string('payment_method');
-            $table->string('payment_id');
-            $table->string('payment_status');
-
-            $table->timestamps();
-        });
     }
 
     /**

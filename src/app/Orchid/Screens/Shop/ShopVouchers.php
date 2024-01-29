@@ -13,7 +13,9 @@ class ShopVouchers extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'vouchers' => \App\Models\ShopVouchers::paginate()
+        ];
     }
 
     /**

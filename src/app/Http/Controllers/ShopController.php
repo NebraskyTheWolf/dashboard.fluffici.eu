@@ -1,0 +1,242 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\OrderCarrier;
+use App\Models\OrderedProduct;
+use App\Models\OrderPayment;
+use App\Models\OrderSales;
+use App\Models\ShopCarriers;
+use App\Models\ShopCountries;
+use App\Models\ShopOrders;
+use App\Models\ShopProducts;
+use App\Models\ShopSales;
+use Illuminate\Http\Request;
+use Ramsey\Uuid\Uuid;
+
+class ShopController extends Controller {
+
+    public function index(Request $request) {
+        $productId = (isset($request->productId)) ? $request->productId : false;
+
+        if (env("APP_ENV") == "production") {
+            return redirect("https://shop.fluffici.eu/checkout/" . $productId);
+        }
+
+        $product = ShopProducts::where('id', $productId);
+        $sale = ShopSales::where('product_id', $productId);
+
+        if ($sale->exists()) {
+            $discount = $sale->firstOrFail()->reduction;
+
+            if ($product->exists()) {
+                $data = $product->firstOrFail();
+                $finalPrice = $data->price * ($discount / 100);
+
+                return view('shop.checkout')
+                    ->with('productId', $data->id)
+                    ->with('productName', $data->name)
+                    ->with('productPrice', $data->price - $finalPrice)
+                    ->with('originalPrice', $data->price)
+                    ->with('discounted', $discount)
+                    ->with('productDescription', $data->description)
+                    ->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $data->image_path)
+                    ->with('countries', ShopCountries::paginate())
+                    ->with('payment', false)
+                    ->with('success', false)
+                    ->with('failed', false)
+                    ->with('carriers', ShopCarriers::paginate());
+            } else {
+                return redirect('https://shop.fluffici.eu');
+            }
+        } else {
+            if ($product->exists()) {
+                $data = $product->firstOrFail();
+                return view('shop.checkout')
+                    ->with('productName', $data->name)
+                    ->with('productPrice', $data->price)
+                    ->with('originalPrice', $data->price)
+                    ->with('productDescription', $data->description)
+                    ->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $data->image_path)
+                    ->with('countries', ShopCountries::paginate())
+                    ->with('payment', false)
+                    ->with('success', false)
+                    ->with('failed', false)
+                    ->with('carriers', ShopCarriers::paginate());
+            } else {
+                return redirect('https://shop.fluffici.eu')
+                    ->with('toast', 'This product is not available.');
+            }
+        }
+    }
+
+    public function createOrder(Request $request) {
+
+        $orderId = Uuid::uuid4();
+
+        $order = new ShopOrders();
+        $order->order_id = $orderId;
+        $order->first_name = $request->input('first-name');
+        $order->last_name = $request->input('last-name');
+        $order->phone_number = $request->input('phone');
+        $order->email = $request->input('email');
+        $order->first_address = $request->input('address-one');
+        $order->second_address = $request->input('address-two');
+        $order->postal_code = $request->input('zip-code');
+        $order->country = $request->input('country');
+        $order->status = 'PROCESSING';
+        $order->save();
+
+        $remoteCarrier = ShopCarriers::where('slug', $request->input('carrier'));
+        $carrierPrice = 0;
+        if ($remoteCarrier->exists()) {
+            $prdCarrier = $remoteCarrier->firstOrFail();
+            $carrierPrice = $prdCarrier->carrierPrice;
+
+            $carrier = new OrderCarrier();
+            $carrier->order_id = $orderId;
+            $carrier->carrier_name = $request->input('carrier');
+            $carrier->price = $carrierPrice;
+            $carrier->save();
+        }
+
+        $remote = ShopProducts::where('id', $request->input('productId'))->firstOrFail();
+        $sale = ShopSales::where('product_id', $request->input('productId'));
+
+        $product = new OrderedProduct();
+        $product->order_id = $orderId;
+        $product->product_id = $request->input('productId');
+        $product->product_name = $request->input('productName');
+
+        $price = 0;
+        if ($sale->exists()) {
+            $salePrd = $sale->firstOrFail()->reduction;
+            $finalPrice = $remote->price * ($salePrd / 100);
+            $price = $salePrd;
+            $product->price = $remote->price - $finalPrice;
+        } else {
+            $product->price = $remote->price;
+        }
+
+        $product->quantity = 1;
+        $product->save();
+
+        if ($request->has('saleId')) {
+            $sale = new OrderSales();
+            $sale->order_id = $orderId;
+            $sale->sale_id = $request->input('saleId');
+            $sale->save();
+        }
+
+        $data = ShopProducts::where('id', $remote->id);
+
+        if ($data->exists()) {
+            $prd = $data->firstOrFail();
+
+            return view('shop.checkout')
+                ->with('productName', $prd->name)
+                ->with('productPrice', $product->price + $carrierPrice)
+                ->with('originalPrice', $prd->price)
+                ->with('discounted', $price)
+                ->with('productDescription', $prd->description)
+                ->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $prd->image_path)
+                ->with('payment', true)
+                ->with('success', false)
+                ->with('failed', false)
+                ->with('orderId', $orderId);
+        } else {
+            return redirect('https://shop.fluffici.eu')
+                ->with('toast', 'This product is not available.');
+        }
+    }
+
+    public function payment(Request $request) {
+        $orderId = $request->input('order-id');
+        $paymentType = $request->input('payment-type');
+
+        $order = ShopOrders::where('order_id', $orderId);
+        if ($order->exists()) {
+            $orderData = $order->firstOrFail();
+            $products = OrderedProduct::where('order_id', $orderData->order_id)->firstOrFail();
+
+            if ($orderData->status !== "PROCESSING") {
+                return redirect('https://shop.fluffici.eu');
+            }
+
+            switch ($paymentType) {
+                case "free": {
+                    if (!$products->price <= 0) {
+                        return redirect('https://shop.fluffici.eu');
+                    }
+
+                    $payment = new OrderPayment();
+                    $payment->order_id = $orderData->order_id;
+                    $payment->status = 'PAID';
+                    $payment->transaction_id = Uuid::uuid4();
+                    $payment->provider = 'Fluffici';
+                    $payment->price = 0;
+                    $payment->save();
+
+                    return $this->renderSuccess('free', $orderData);
+                }
+                case "bank-card": {
+                    $this->processPayment([], $orderData);
+                }
+                break;
+                case "outing": {
+                    ShopOrders::updateOrCreate(
+                        ['order_id' => $orderData->order_id],
+                        [
+                            'status' => 'OUTING'
+                        ]
+                    );
+
+                    return $this->renderSuccess('outing', $orderData);
+                }
+            }
+        }
+
+        return redirect('https://shop.fluffici.eu');
+    }
+
+    private function processPayment($data, ShopOrders $order)
+    {
+        //TODO: Provider logic here
+
+        $this->sendEmail('payment-failed', $order);
+    }
+
+    private function renderSuccess($data, ShopOrders $orders)
+    {
+        $this->sendEmail('payment-success', $orders);
+
+        $prd = OrderedProduct::where('order_id', $orders->order_id)->firstOrFail();
+        $product = ShopProducts::where('id', $prd->product_id)->firstOrFail();
+
+        return view('shop.checkout')
+            ->with('productName', $product->name)
+            ->with('productPrice', $prd->price)
+            ->with('originalPrice', $product->price)
+            ->with('productDescription', $product->description)
+            ->with('discounted', 0)
+            ->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $product->image_path)
+
+            ->with('success', true)
+            ->with('failed', false)
+            ->with('order', $orders)
+            ->with('type', $data);
+    }
+
+    private function sendEmail($slug, ShopOrders $order)
+    {
+        //TODO: Send email
+    }
+
+    private function qrValidate(Request $request){
+        $orderId = ($request->input('orderId') !== null) ? base64_decode($request->input('orderId')) : false;
+
+        if ($orderId === false) {
+            //
+        }
+    }
+}

@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class DmcaRequest extends Model
 {
     use HasFactory;
+
+    public $table = "dmca_request";
 }

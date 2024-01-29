@@ -64,6 +64,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'W' => 
         array (
             'Whoops\\' => 7,
+            'Whitecube\\Price\\' => 16,
             'Webpatser\\Uuid\\' => 15,
             'Webmozart\\Assert\\' => 17,
             'Watson\\Active\\' => 14,
@@ -231,6 +232,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         ),
         'B' => 
         array (
+            'Brick\\Money\\' => 12,
             'Brick\\Math\\' => 11,
             'BeyondCode\\LaravelWebSockets\\' => 29,
             'Barryvdh\\DomPDF\\' => 16,
@@ -263,6 +265,10 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         array (
             0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
         ),
+        'Whitecube\\Price\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/whitecube/php-prices/src',
+        ),
         'Webpatser\\Uuid\\' => 
         array (
             0 => __DIR__ . '/..' . '/webpatser/laravel-uuid/src/Webpatser/Uuid',
@@ -282,6 +288,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'Tests\\' => 
         array (
             0 => __DIR__ . '/../..' . '/tests',
+            1 => __DIR__ . '/..' . '/whitecube/php-prices/tests',
         ),
         'Termwind\\' => 
         array (
@@ -756,6 +763,10 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
+        'Brick\\Money\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brick/money/src',
+        ),
         'Brick\\Math\\' => 
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
@@ -798,6 +809,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\PagesController' => __DIR__ . '/../..' . '/app/Http/Controllers/PagesController.php',
+        'App\\Http\\Controllers\\ShopController' => __DIR__ . '/../..' . '/app/Http/Controllers/ShopController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
@@ -853,10 +865,11 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Orchid\\Layouts\\Role\\RoleEditLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/Role/RoleEditLayout.php',
         'App\\Orchid\\Layouts\\Role\\RoleListLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/Role/RoleListLayout.php',
         'App\\Orchid\\Layouts\\Role\\RolePermissionLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/Role/RolePermissionLayout.php',
-        'App\\Orchid\\Layouts\\Seo\\SeoSelectLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/Seo/SeoSelectLayout.php',
         'App\\Orchid\\Layouts\\ShopCategoriesLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ShopCategoriesLayout.php',
         'App\\Orchid\\Layouts\\ShopOrderLayout' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ShopOrderLayout.php',
+        'App\\Orchid\\Layouts\\ShopProductsList' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ShopProductsList.php',
         'App\\Orchid\\Layouts\\ShopProfit' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ShopProfit.php',
+        'App\\Orchid\\Layouts\\ShopSalesList' => __DIR__ . '/../..' . '/app/Orchid/Layouts/ShopSalesList.php',
         'App\\Orchid\\Layouts\\Shop\\ShopCarriersSettings' => __DIR__ . '/../..' . '/app/Orchid/Layouts/Shop/ShopCarriersSettings.php',
         'App\\Orchid\\Layouts\\Shop\\ShopFeaturesSettings' => __DIR__ . '/../..' . '/app/Orchid/Layouts/Shop/ShopFeaturesSettings.php',
         'App\\Orchid\\Layouts\\Shop\\ShopGeneralSettings' => __DIR__ . '/../..' . '/app/Orchid/Layouts/Shop/ShopGeneralSettings.php',
@@ -883,11 +896,11 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Orchid\\Screens\\Posts\\PostListScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/Posts/PostListScreen.php',
         'App\\Orchid\\Screens\\Role\\RoleEditScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/Role/RoleEditScreen.php',
         'App\\Orchid\\Screens\\Role\\RoleListScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/Role/RoleListScreen.php',
-        'App\\Orchid\\Screens\\Settings\\SeoScreen' => __DIR__ . '/../..' . '/app/Orchid/Screens/Settings/SeoScreen.php',
         'App\\Orchid\\Screens\\Shop\\ShopCategories' => __DIR__ . '/../..' . '/app/Orchid/Screens/Shop/ShopCategories.php',
         'App\\Orchid\\Screens\\Shop\\ShopOrders' => __DIR__ . '/../..' . '/app/Orchid/Screens/Shop/ShopOrders.php',
         'App\\Orchid\\Screens\\Shop\\ShopProducts' => __DIR__ . '/../..' . '/app/Orchid/Screens/Shop/ShopProducts.php',
         'App\\Orchid\\Screens\\Shop\\ShopSales' => __DIR__ . '/../..' . '/app/Orchid/Screens/Shop/ShopSales.php',
+        'App\\Orchid\\Screens\\Shop\\ShopSalesEdit' => __DIR__ . '/../..' . '/app/Orchid/Screens/Shop/ShopSalesEdit.php',
         'App\\Orchid\\Screens\\Shop\\ShopSettings' => __DIR__ . '/../..' . '/app/Orchid/Screens/Shop/ShopSettings.php',
         'App\\Orchid\\Screens\\Shop\\ShopStatistics' => __DIR__ . '/../..' . '/app/Orchid/Screens/Shop/ShopStatistics.php',
         'App\\Orchid\\Screens\\Shop\\ShopSupport' => __DIR__ . '/../..' . '/app/Orchid/Screens/Shop/ShopSupport.php',
@@ -974,6 +987,31 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'Brick\\Math\\Internal\\Calculator\\GmpCalculator' => __DIR__ . '/..' . '/brick/math/src/Internal/Calculator/GmpCalculator.php',
         'Brick\\Math\\Internal\\Calculator\\NativeCalculator' => __DIR__ . '/..' . '/brick/math/src/Internal/Calculator/NativeCalculator.php',
         'Brick\\Math\\RoundingMode' => __DIR__ . '/..' . '/brick/math/src/RoundingMode.php',
+        'Brick\\Money\\AbstractMoney' => __DIR__ . '/..' . '/brick/money/src/AbstractMoney.php',
+        'Brick\\Money\\Context' => __DIR__ . '/..' . '/brick/money/src/Context.php',
+        'Brick\\Money\\Context\\AutoContext' => __DIR__ . '/..' . '/brick/money/src/Context/AutoContext.php',
+        'Brick\\Money\\Context\\CashContext' => __DIR__ . '/..' . '/brick/money/src/Context/CashContext.php',
+        'Brick\\Money\\Context\\CustomContext' => __DIR__ . '/..' . '/brick/money/src/Context/CustomContext.php',
+        'Brick\\Money\\Context\\DefaultContext' => __DIR__ . '/..' . '/brick/money/src/Context/DefaultContext.php',
+        'Brick\\Money\\Currency' => __DIR__ . '/..' . '/brick/money/src/Currency.php',
+        'Brick\\Money\\CurrencyConverter' => __DIR__ . '/..' . '/brick/money/src/CurrencyConverter.php',
+        'Brick\\Money\\Exception\\CurrencyConversionException' => __DIR__ . '/..' . '/brick/money/src/Exception/CurrencyConversionException.php',
+        'Brick\\Money\\Exception\\MoneyException' => __DIR__ . '/..' . '/brick/money/src/Exception/MoneyException.php',
+        'Brick\\Money\\Exception\\MoneyMismatchException' => __DIR__ . '/..' . '/brick/money/src/Exception/MoneyMismatchException.php',
+        'Brick\\Money\\Exception\\UnknownCurrencyException' => __DIR__ . '/..' . '/brick/money/src/Exception/UnknownCurrencyException.php',
+        'Brick\\Money\\ExchangeRateProvider' => __DIR__ . '/..' . '/brick/money/src/ExchangeRateProvider.php',
+        'Brick\\Money\\ExchangeRateProvider\\BaseCurrencyProvider' => __DIR__ . '/..' . '/brick/money/src/ExchangeRateProvider/BaseCurrencyProvider.php',
+        'Brick\\Money\\ExchangeRateProvider\\CachedProvider' => __DIR__ . '/..' . '/brick/money/src/ExchangeRateProvider/CachedProvider.php',
+        'Brick\\Money\\ExchangeRateProvider\\ConfigurableProvider' => __DIR__ . '/..' . '/brick/money/src/ExchangeRateProvider/ConfigurableProvider.php',
+        'Brick\\Money\\ExchangeRateProvider\\PDOProvider' => __DIR__ . '/..' . '/brick/money/src/ExchangeRateProvider/PDOProvider.php',
+        'Brick\\Money\\ExchangeRateProvider\\PDOProviderConfiguration' => __DIR__ . '/..' . '/brick/money/src/ExchangeRateProvider/PDOProviderConfiguration.php',
+        'Brick\\Money\\ExchangeRateProvider\\ProviderChain' => __DIR__ . '/..' . '/brick/money/src/ExchangeRateProvider/ProviderChain.php',
+        'Brick\\Money\\ISOCurrencyProvider' => __DIR__ . '/..' . '/brick/money/src/ISOCurrencyProvider.php',
+        'Brick\\Money\\Money' => __DIR__ . '/..' . '/brick/money/src/Money.php',
+        'Brick\\Money\\MoneyBag' => __DIR__ . '/..' . '/brick/money/src/MoneyBag.php',
+        'Brick\\Money\\MoneyComparator' => __DIR__ . '/..' . '/brick/money/src/MoneyComparator.php',
+        'Brick\\Money\\MoneyContainer' => __DIR__ . '/..' . '/brick/money/src/MoneyContainer.php',
+        'Brick\\Money\\RationalMoney' => __DIR__ . '/..' . '/brick/money/src/RationalMoney.php',
         'Carbon\\AbstractTranslator' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/AbstractTranslator.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonConverterInterface' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonConverterInterface.php',
@@ -9001,6 +9039,11 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'Termwind\\ValueObjects\\Node' => __DIR__ . '/..' . '/nunomaduro/termwind/src/ValueObjects/Node.php',
         'Termwind\\ValueObjects\\Style' => __DIR__ . '/..' . '/nunomaduro/termwind/src/ValueObjects/Style.php',
         'Termwind\\ValueObjects\\Styles' => __DIR__ . '/..' . '/nunomaduro/termwind/src/ValueObjects/Styles.php',
+        'Tests\\Fixtures\\AfterVatAmendableModifier' => __DIR__ . '/..' . '/whitecube/php-prices/tests/Fixtures/AfterVatAmendableModifier.php',
+        'Tests\\Fixtures\\AmendableModifier' => __DIR__ . '/..' . '/whitecube/php-prices/tests/Fixtures/AmendableModifier.php',
+        'Tests\\Fixtures\\CustomAmendableModifier' => __DIR__ . '/..' . '/whitecube/php-prices/tests/Fixtures/CustomAmendableModifier.php',
+        'Tests\\Fixtures\\CustomInvertedFormatter' => __DIR__ . '/..' . '/whitecube/php-prices/tests/Fixtures/CustomInvertedFormatter.php',
+        'Tests\\Fixtures\\NonAmendableModifier' => __DIR__ . '/..' . '/whitecube/php-prices/tests/Fixtures/NonAmendableModifier.php',
         'TheSeer\\Tokenizer\\Exception' => __DIR__ . '/..' . '/theseer/tokenizer/src/Exception.php',
         'TheSeer\\Tokenizer\\NamespaceUri' => __DIR__ . '/..' . '/theseer/tokenizer/src/NamespaceUri.php',
         'TheSeer\\Tokenizer\\NamespaceUriException' => __DIR__ . '/..' . '/theseer/tokenizer/src/NamespaceUriException.php',
@@ -9026,6 +9069,20 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'Webmozart\\Assert\\Mixin' => __DIR__ . '/..' . '/webmozart/assert/src/Mixin.php',
         'Webpatser\\Uuid\\Uuid' => __DIR__ . '/..' . '/webpatser/laravel-uuid/src/Webpatser/Uuid/Uuid.php',
         'Webpatser\\Uuid\\UuidServiceProvider' => __DIR__ . '/..' . '/webpatser/laravel-uuid/src/Webpatser/Uuid/UuidServiceProvider.php',
+        'Whitecube\\Price\\Calculator' => __DIR__ . '/..' . '/whitecube/php-prices/src/Calculator.php',
+        'Whitecube\\Price\\Concerns\\FormatsPrices' => __DIR__ . '/..' . '/whitecube/php-prices/src/Concerns/FormatsPrices.php',
+        'Whitecube\\Price\\Concerns\\HasModifiers' => __DIR__ . '/..' . '/whitecube/php-prices/src/Concerns/HasModifiers.php',
+        'Whitecube\\Price\\Concerns\\HasUnits' => __DIR__ . '/..' . '/whitecube/php-prices/src/Concerns/HasUnits.php',
+        'Whitecube\\Price\\Concerns\\HasVat' => __DIR__ . '/..' . '/whitecube/php-prices/src/Concerns/HasVat.php',
+        'Whitecube\\Price\\Concerns\\OperatesOnBase' => __DIR__ . '/..' . '/whitecube/php-prices/src/Concerns/OperatesOnBase.php',
+        'Whitecube\\Price\\Concerns\\ParsesPrices' => __DIR__ . '/..' . '/whitecube/php-prices/src/Concerns/ParsesPrices.php',
+        'Whitecube\\Price\\Formatting\\CustomFormatter' => __DIR__ . '/..' . '/whitecube/php-prices/src/Formatting/CustomFormatter.php',
+        'Whitecube\\Price\\Formatting\\Formatter' => __DIR__ . '/..' . '/whitecube/php-prices/src/Formatting/Formatter.php',
+        'Whitecube\\Price\\Modifier' => __DIR__ . '/..' . '/whitecube/php-prices/src/Modifier.php',
+        'Whitecube\\Price\\Parser' => __DIR__ . '/..' . '/whitecube/php-prices/src/Parser.php',
+        'Whitecube\\Price\\Price' => __DIR__ . '/..' . '/whitecube/php-prices/src/Price.php',
+        'Whitecube\\Price\\PriceAmendable' => __DIR__ . '/..' . '/whitecube/php-prices/src/PriceAmendable.php',
+        'Whitecube\\Price\\Vat' => __DIR__ . '/..' . '/whitecube/php-prices/src/Vat.php',
         'Whoops\\Exception\\ErrorException' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/ErrorException.php',
         'Whoops\\Exception\\Formatter' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/Formatter.php',
         'Whoops\\Exception\\Frame' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Exception/Frame.php',

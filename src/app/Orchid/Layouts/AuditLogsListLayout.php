@@ -42,7 +42,7 @@ class AuditLogsListLayout extends Table
                         return new Persona(new AuditPresenter(\Orchid\Platform\Models\User::find($user->first()->id)));
                     } else {
                         return new Persona(new AuditPresenter((object)[
-                            'name' => 'Missingno',
+                            'name' => 'Deleted User',
                             'roles' => array([]),
                             'avatar' => 0
                         ]));
@@ -56,7 +56,7 @@ class AuditLogsListLayout extends Table
 
             TD::make('type', __('audit.table.operation'))
                 ->render(function (AuditLogs $auditLogs) {
-                    return "<a style=\"color: red;\">" . __('audit.type.' . strtolower($auditLogs->type)) . "</a>";
+                    return "<a style=\"color: red;\">" . strtolower($auditLogs->type) . "</a>";
                 }),
 
             TD::make('created_at', __('audit.table.create_at'))

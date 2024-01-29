@@ -53,6 +53,8 @@ class ShopOrderLayout extends Table
                         return '<a class="ui brown label">'.__('orders.table.status.archived').'</a>';
                     } else if ($shopOrders->status == "COMPLETED") {
                         return '<div><a class="ui green label">'.__('orders.table.status.completed').'</a></div>';
+                    } else if ($shopOrders->status == "OUTING") {
+                        return '<a class="ui blue label">Outing <i class="loading cog icon"></i></a>';
                     }
                     return '<a class="ui purple label">'. $shopOrders->status . '</a>';
                 }),

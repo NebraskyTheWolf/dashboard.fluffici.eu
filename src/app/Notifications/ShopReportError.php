@@ -44,7 +44,7 @@ class ShopReportError extends Notification
 
     public function toDashboard($notifiable)
     {
-        return (new DashboardMessage())
+        return (new DashboardMessage)
             ->title('Error')
             ->message('Failed to generate the monthly report.')
             ->action(url('/shop/documents'));
@@ -58,7 +58,7 @@ class ShopReportError extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            $this->toDashboard($notifiable)
         ];
     }
 }

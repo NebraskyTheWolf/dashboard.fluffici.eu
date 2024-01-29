@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use App\Orchid\Layouts\ShopProductsList;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
@@ -14,7 +15,9 @@ class ShopProducts extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'products' => \App\Models\ShopProducts::paginate()
+        ];
     }
 
     /**
@@ -42,7 +45,7 @@ class ShopProducts extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make(_('products.screen.button.add'))
+            Link::make(__('products.screen.button.add'))
                 ->icon('bs.plus-circle')
                 ->href(route('platform.systems.roles.create')),
         ];
@@ -56,7 +59,7 @@ class ShopProducts extends Screen
     public function layout(): iterable
     {
         return [
-
+            ShopProductsList::class
         ];
     }
 }

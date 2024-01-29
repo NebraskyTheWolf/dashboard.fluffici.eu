@@ -47,13 +47,16 @@ class GenerateMonthlyReport extends Command
     public function handle() {
         $today = Carbon::today()->format("Y-m-d");
 
+        $start = Carbon::now()->startOfMonth();
+        $end = Carbon::now()->endOfMonth();
+
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
-        $total = OrderedProduct::where('created_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')))->sum('price');
-        $paidPrice = OrderPayment::where('created_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')))->sum('price');
-        $carrierFees = OrderCarrier::where('created_at', '<', date('Y-m-d H:i:s', strtotime('-1 month')))->sum('price');
+        $total = OrderedProduct::whereMonth('created_at', Carbon::now())->sum('price');
+        $paidPrice = OrderPayment::whereMonth('created_at', Carbon::now())->sum('price');
+        $carrierFees = OrderCarrier::whereMonth('created_at', Carbon::now())->sum('price');
 
         // This happens when a discounts has been placed in the order.
-        $loss = $total - $paidPrice;
+        $loss = $total - $paidPrice - $carrierFees;
 
         // Using a function to avoid non-divisible values.
         $percentage = $this->percent($loss, $total); // ($loss/$total) * 100
@@ -62,10 +65,10 @@ class GenerateMonthlyReport extends Command
             'reportId' => $reportId,
             'reportDate' => $today,
             'reportExportDate' => $today,
-            'reportProducts' => OrderedProduct::paginate(),
-            'fees' => $carrierFees,
-            'sales' => number_format($loss),
-            'overallProfit' => number_format($total),
+            'reportProducts' => OrderedProduct::whereMonth('created_at', Carbon::now())->paginate(),
+            'fees' => number_format(abs($carrierFees)),
+            'sales' => number_format(abs($loss)),
+            'overallProfit' => number_format($total - $loss),
             'lossPercentage' => number_format($percentage)
         ]);
         $document->setEncryption($reportId);
@@ -80,7 +83,6 @@ class GenerateMonthlyReport extends Command
         $client = new Client();
         $storage =  Storage::disk('public');
         try {
-
             if ($storage->exists($filename)) {
                 $response = $client->post('https://autumn.rsiniya.uk/attachments', [
                     'headers' => [
@@ -90,7 +92,7 @@ class GenerateMonthlyReport extends Command
                         [
                             'name' => $filename,
                             'filename' => $filename,
-                            'contents' => Storage::disk('public')->get($filename)
+                            'contents' => $storage->get($filename)
                         ]
                     ]
                 ]);
@@ -105,15 +107,15 @@ class GenerateMonthlyReport extends Command
 
                     printf($body->id);
 
-                    \Illuminate\Support\Facades\Notification::send(User::paginate(), new ShopReportReady($reportId));
+                    $this->sendToAll(new ShopReportReady($reportId));
                 } else {
-                    \Illuminate\Support\Facades\Notification::send(User::paginate(), new ShopReportError());
+                    $this->sendToAll(new ShopReportError);
                 }
             } else {
-                \Illuminate\Support\Facades\Notification::send(User::paginate(), new ShopReportError());
+                $this->sendToAll(new ShopReportError);
             }
         } catch (\Exception $exception) {
-            \Illuminate\Support\Facades\Notification::send(User::paginate(), new ShopReportError());
+            $this->sendToAll(new ShopReportError);
         }
     }
 
@@ -121,5 +123,14 @@ class GenerateMonthlyReport extends Command
         if ($first <= 0 || $second <= 0)
             return 0;
         return ($first/$second) * 100;
+    }
+
+    public function sendToAll($notification): void
+    {
+        $users = User::paginate();
+        foreach ($users as $user) {
+            $toNotify = User::find($user->id);
+            $toNotify->notify($notification);
+        }
     }
 }
