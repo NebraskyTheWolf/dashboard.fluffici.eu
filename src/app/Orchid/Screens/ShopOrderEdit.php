@@ -248,4 +248,5 @@ class ShopOrderEdit extends Screen
     {
         return ShopCarriers::where('slug', $this->orderCarrier->carrier_name)->first();
     }
+
 }

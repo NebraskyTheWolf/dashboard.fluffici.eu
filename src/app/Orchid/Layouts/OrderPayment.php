@@ -88,6 +88,7 @@ class OrderPayment extends Table
         return '<a class="ui teal label">Awaiting payment... <i class="loading cog icon"></i></a>';
     }
 
+
     protected function subNotFound(): string
     {
         return 'No payment has been found yet.';

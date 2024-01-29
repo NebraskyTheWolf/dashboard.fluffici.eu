@@ -19,6 +19,7 @@ class ShopOrders extends Screen
         return [
             'shop_orders' => \App\Models\ShopOrders::orderBy('created_at', 'desc')->paginate()
         ];
+
     }
 
     /**
