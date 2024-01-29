@@ -47,7 +47,7 @@ class ShopProducts extends Screen
         return [
             Link::make(__('products.screen.button.add'))
                 ->icon('bs.plus-circle')
-                ->href(route('platform.systems.roles.create')),
+                ->href(route('platform.shop.products.edit')),
         ];
     }
 

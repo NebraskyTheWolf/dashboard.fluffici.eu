@@ -22,6 +22,8 @@ use App\Orchid\Screens\Pages\PagesListScreen;
 
 use App\Orchid\Screens\Audit\AuditLogsListScreen;
 
+use App\Orchid\Screens\ShopProductEdit;
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes
@@ -100,16 +102,19 @@ Route::screen('posts', PostListScreen::class)
         ->push('Posts', route('platform.post.list')));
 
 Route::screen('event/{events?}', EventsEditScreen::class)
-    ->name('platform.events.edit')
-    ->breadcrumbs(fn (Trail $trail, $event) => $trail
-        ->parent('index')
-        ->push('Edit', route('platform.event.edit', $event)));
+    ->name('platform.events.edit');
 
 Route::screen('events', EventsListScreen::class)
     ->name('platform.events.list')
     ->breadcrumbs(fn (Trail $trail) => $trail
         ->parent('index')
-        ->push('Events', route('platform.event.list')));
+        ->push('Events', route('platform.events.list')));
+
+Route::screen('socials', \App\Orchid\Screens\SocialMedia::class)
+    ->name('platform.social.list');
+
+Route::screen('socials/edit/{social?}', \App\Orchid\Screens\SocialMediaEdit::class)
+    ->name('platform.social.edit');
 
 Route::screen('page/{events?}', PagesEditScreen::class)
     ->name('platform.pages.edit');
@@ -123,8 +128,11 @@ Route::screen('audit', AuditLogsListScreen::class)
 Route::screen('files', \App\Orchid\Screens\AttachmentLists::class)
     ->name('platform.attachments');
 
-Route::screen('files/edit/{attachment}', \App\Orchid\Screens\AttachmentLists::class)
-    ->name('platform.attachments.edit');
+Route::screen('files/platform/upload', \App\Orchid\Screens\AttachmentUpload::class)
+    ->name('platform.attachments.upload');
+
+Route::screen('files/lookup/{file}', \App\Orchid\Screens\AttachmentUpload::class)
+    ->name('platform.attachments.lookup');
 
 Route::screen('reports', \App\Orchid\Screens\AttachmentReports::class)
     ->name('platform.reports');
@@ -135,11 +143,14 @@ Route::screen('shop/statistics', \App\Orchid\Screens\Shop\ShopStatistics::class)
 Route::screen('shop/products', \App\Orchid\Screens\Shop\ShopProducts::class)
     ->name('platform.shop.products');
 
-Route::screen('shop/products/edit/{product?}', \App\Orchid\Screens\Shop\ShopProducts::class)
+Route::screen('shop/products/edit/{products?}', ShopProductEdit::class)
     ->name('platform.shop.products.edit');
 
 Route::screen('shop/categories', \App\Orchid\Screens\Shop\ShopCategories::class)
     ->name('platform.shop.categories');
+
+Route::screen('shop/categories/edit/{category?}', \App\Orchid\Screens\ShopCategoryEdit::class)
+    ->name('platform.shop.categories.edit');
 
 Route::screen('shop/sales', \App\Orchid\Screens\Shop\ShopSales::class)
     ->name('platform.shop.sales');
@@ -153,7 +164,7 @@ Route::screen('shop/vouchers', \App\Orchid\Screens\Shop\ShopVouchers::class)
 Route::screen('shop/orders', \App\Orchid\Screens\Shop\ShopOrders::class)
     ->name('platform.shop.orders');
 
-Route::screen('shop/orders/{order?}', \App\Orchid\Screens\Shop\ShopOrders::class)
+Route::screen('shop/orders/{order?}', \App\Orchid\Screens\ShopOrderEdit::class)
     ->name('platform.shop.orders.edit');
 
 Route::screen('shop/support', \App\Orchid\Screens\Shop\ShopSupport::class)

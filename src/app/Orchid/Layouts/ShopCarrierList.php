@@ -4,6 +4,7 @@ namespace App\Orchid\Layouts;
 
 use App\Models\ShopCarriers;
 use Carbon\Carbon;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -27,7 +28,12 @@ class ShopCarrierList extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('slug'),
+            TD::make('slug')
+                ->render(function (ShopCarriers $carriers) {
+                    return Link::make($carriers->slug)
+                        ->icon('bs.pencil')
+                        ->href(route('platform.shop.carriers.edit', $carriers));
+                }),
             TD::make('carrierName'),
             TD::make('created_at')
                 ->render(function (ShopCarriers $carriers) {

@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Orchid\Screens\Shop;
+namespace App\Orchid\Screens;
 
-use App\Orchid\Layouts\ShopCategoriesLayout;
-use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Attach;
+use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
+use Orchid\Support\Facades\Layout;
 
-class ShopCategories extends Screen
+class AttachmentUpload extends Screen
 {
     /**
      * Fetch data to be displayed on the screen.
@@ -15,9 +17,7 @@ class ShopCategories extends Screen
      */
     public function query(): iterable
     {
-        return [
-            'categories' => \App\Models\ShopCategories::paginate()
-        ];
+        return [];
     }
 
     /**
@@ -27,14 +27,7 @@ class ShopCategories extends Screen
      */
     public function name(): ?string
     {
-        return __('category.screen.title');
-    }
-
-    public function permission(): ?iterable
-    {
-        return [
-            'platform.shop.categories.read',
-        ];
+        return 'File upload';
     }
 
     /**
@@ -44,11 +37,7 @@ class ShopCategories extends Screen
      */
     public function commandBar(): iterable
     {
-        return [
-            Link::make(__('category.screen.button.new'))
-                ->icon('bs.plus')
-                ->href(route('platform.shop.categories.edit')),
-        ];
+        return [];
     }
 
     /**
@@ -59,7 +48,11 @@ class ShopCategories extends Screen
     public function layout(): iterable
     {
         return [
-            ShopCategoriesLayout::class
+            Layout::rows([
+                Attach::make('files')
+                    ->title('Select a file from your computer')
+                    ->vertical()
+            ])->title('Attachment')
         ];
     }
 }

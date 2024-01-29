@@ -32,6 +32,7 @@ class PagesListLayout extends Table
             TD::make('title', __('pages.table.title'))
                 ->render(function (Pages $page) {
                     return Link::make($page->title)
+                        ->icon('bs.pencil')
                         ->route('platform.pages.edit', $page);
                 }),
 

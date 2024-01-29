@@ -28,6 +28,7 @@ class PostListLayout extends Table
             TD::make('title', __('posts.table.title'))
                 ->render(function (Post $post) {
                     return Link::make($post->title)
+                        ->icon('bs.pencil')
                         ->route('platform.post.edit', $post);
                 }),
 

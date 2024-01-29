@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shop_carriers', function (Blueprint $table) {
+        Schema::create('social_media', function (Blueprint $table) {
             $table->id();
-            $table->string('slug', 16);
-            $table->string('carrierName', 40);
-            $table->string('carrierDelay', 30);
-            $table->float('carrierPrice');
+            $table->string('slug')->nullable();
+            $table->string('url')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shop_carriers');
+        Schema::dropIfExists('social_media');
     }
 };

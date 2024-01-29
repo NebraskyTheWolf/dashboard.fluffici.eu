@@ -63,6 +63,7 @@ class ShopSalesEdit extends Screen
 
             Button::make(__('sales.screen.button.delete'))
                 ->icon('bs.trash')
+                ->confirm(__('common.modal.confirm'))
                 ->method('remove')
                 ->canSee($this->sale->exists),
         ];
@@ -108,8 +109,8 @@ class ShopSalesEdit extends Screen
         return redirect()->route('platform.shop.sales');
     }
 
-    public function remove(Request $request) {
+    public function remove() {
 
-        $this->sale->remove();
+        $this->sale->delete();
     }
 }

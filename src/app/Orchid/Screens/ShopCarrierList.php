@@ -4,6 +4,7 @@ namespace App\Orchid\Screens;
 
 use App\Models\ShopCarriers;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
 class ShopCarrierList extends Screen
@@ -45,9 +46,9 @@ class ShopCarrierList extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('New')
-                ->icon('bs.pencil')
-                ->route('platform.shop.carriers.edit')
+            Link::make(__('sales.screen.button.add'))
+                ->icon('bs.plus-circle')
+                ->href(route('platform.shop.carriers.edit'))
         ];
     }
 

@@ -22,16 +22,16 @@ class ShopFeaturesSettings extends Rows
     protected function fields(): iterable
     {
         return [
-            CheckBox::make('shop-sales')
+            CheckBox::make('settings.shop-sales')
                 ->title('Do you want the sales module on?'),
             CheckBox::make('shop-vouchers')
                 ->title('Do you want the voucher module on?'),
 
-            CheckBox::make('shop-billing')
+            CheckBox::make('settings.shop-billing')
                 ->title('Do you want the billing module on?'),
-            Input::make('billing-host')
+            Input::make('settings.billing-host')
                 ->title('Please enter the provider host'),
-            Password::make('billing-secret')
+            Password::make('settings.billing-secret')
                 ->title('Please enter your API secret.')
         ];
     }

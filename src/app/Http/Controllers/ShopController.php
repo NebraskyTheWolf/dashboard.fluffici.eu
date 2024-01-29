@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderUpdateEvent;
 use App\Models\OrderCarrier;
 use App\Models\OrderedProduct;
 use App\Models\OrderPayment;
@@ -39,7 +40,7 @@ class ShopController extends Controller {
                     ->with('productPrice', $data->price - $finalPrice)
                     ->with('originalPrice', $data->price)
                     ->with('discounted', $discount)
-                    ->with('productDescription', $data->description)
+                    ->with('productDescription', strip_tags($data->description))
                     ->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $data->image_path)
                     ->with('countries', ShopCountries::paginate())
                     ->with('payment', false)
@@ -53,10 +54,12 @@ class ShopController extends Controller {
             if ($product->exists()) {
                 $data = $product->firstOrFail();
                 return view('shop.checkout')
+                    ->with('productId', $data->id)
                     ->with('productName', $data->name)
                     ->with('productPrice', $data->price)
                     ->with('originalPrice', $data->price)
-                    ->with('productDescription', $data->description)
+                    ->with('discounted', 0)
+                    ->with('productDescription', strip_tags($data->description))
                     ->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $data->image_path)
                     ->with('countries', ShopCountries::paginate())
                     ->with('payment', false)
@@ -138,7 +141,7 @@ class ShopController extends Controller {
                 ->with('productPrice', $product->price + $carrierPrice)
                 ->with('originalPrice', $prd->price)
                 ->with('discounted', $price)
-                ->with('productDescription', $prd->description)
+                ->with('productDescription', strip_tags($prd->description))
                 ->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $prd->image_path)
                 ->with('payment', true)
                 ->with('success', false)
@@ -201,23 +204,25 @@ class ShopController extends Controller {
 
     private function processPayment($data, ShopOrders $order)
     {
-        //TODO: Provider logic here
+        //TODO: Payment SDK logic
 
         $this->sendEmail('payment-failed', $order);
     }
 
     private function renderSuccess($data, ShopOrders $orders)
     {
-        $this->sendEmail('payment-success', $orders);
+        $this->sendEmail('payment-' . $data . '-success', $orders);
 
         $prd = OrderedProduct::where('order_id', $orders->order_id)->firstOrFail();
         $product = ShopProducts::where('id', $prd->product_id)->firstOrFail();
+        $orderCarrier = OrderCarrier::where('order_id', $orders->order_id)->firstOrFail();
+        $carrier = ShopCarriers::where('slug', $orderCarrier->carrier_name)->firstOrFail();
 
         return view('shop.checkout')
             ->with('productName', $product->name)
-            ->with('productPrice', $prd->price)
+            ->with('productPrice', $prd->price + $carrier->price)
             ->with('originalPrice', $product->price)
-            ->with('productDescription', $product->description)
+            ->with('productDescription', strip_tags($product->description))
             ->with('discounted', 0)
             ->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $product->image_path)
 
@@ -227,9 +232,9 @@ class ShopController extends Controller {
             ->with('type', $data);
     }
 
-    private function sendEmail($slug, ShopOrders $order)
+    private function sendEmail($slug, ShopOrders $order): void
     {
-        //TODO: Send email
+        event(new OrderUpdateEvent($order, $slug));
     }
 
     private function qrValidate(Request $request){

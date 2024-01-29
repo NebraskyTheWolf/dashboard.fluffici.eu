@@ -2,21 +2,22 @@
 
 namespace App\Orchid\Screens\Shop;
 
-use App\Models\Pages;
-use App\Models\ShopOrders;
-use App\Models\ShopSupportTickets;
-use App\Orchid\Layouts\Shop\ShopCarriersSettings;
+use App\Events\UpdateAudit;
 use App\Orchid\Layouts\Shop\ShopFeaturesSettings;
 use App\Orchid\Layouts\Shop\ShopGeneralSettings;
 use App\Orchid\Layouts\Shop\ShopMaintenanceSettings;
 use App\Orchid\Layouts\Shop\ShopPaymentSettings;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
+use Symfony\Component\HttpFoundation\Request;
 
 class ShopSettings extends Screen
 {
+    public $settings;
+
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -26,7 +27,7 @@ class ShopSettings extends Screen
     {
 
         return [
-            'settings' => \App\Models\ShopSettings::where('id', 1)
+            'settings' => \App\Models\ShopSettings::where('id', 1)->firstOrFail()
         ];
     }
 
@@ -67,10 +68,18 @@ class ShopSettings extends Screen
             Layout::tabs([
                 'General' => ShopGeneralSettings::class,
                 'Payments Methods' => ShopPaymentSettings::class,
-                'Carrier' => ShopCarriersSettings::class,
                 'Features' => ShopFeaturesSettings::class,
                 'Maintenance' => ShopMaintenanceSettings::class
             ])->activeTab('General')
         ];
+    }
+
+    public function createOrUpdate(Request $request)
+    {
+        $this->settings->fill($request->get('settings'))->save();
+
+        Toast::info('You edited the shop settings');
+
+        event(new UpdateAudit('shop_settings', 'Updated the shop settings', Auth::user()->name));
     }
 }

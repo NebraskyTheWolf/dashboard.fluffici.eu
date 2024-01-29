@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
+use App\Models\ShopSettings;
 use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
 use Orchid\Platform\OrchidServiceProvider;
 use Orchid\Screen\Actions\Menu;
-use Orchid\Support\Color;
-
 use App\Models\Events;
 use App\Models\ShopOrders;
 use App\Models\ShopSupportTickets;
@@ -42,7 +41,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->list([
                     Menu::make('Sociální sítě')
                         ->icon('bs.person-walking')
-                        ->route('platform.systems.users')
+                        ->route('platform.social.list')
                         ->permission('platform.systems.social'),
                     Menu::make("Uživatelé")
                         ->icon('bs.people')
@@ -217,5 +216,15 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.post.read', "Posts (read)")
                 ->addPermission('platform.systems.post.write', "Posts (write)")
         ];
+    }
+
+    private function isSalesEnabled(): bool
+    {
+        return ShopSettings::where('id', 1)->firstOrFail()->shop_sales == 1;
+    }
+
+    private function isVouchersEnabled(): bool
+    {
+        return ShopSettings::where('id', 1)->firstOrFail()->shop_sales == 1;
     }
 }

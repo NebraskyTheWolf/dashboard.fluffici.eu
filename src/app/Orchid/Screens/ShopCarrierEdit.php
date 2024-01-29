@@ -59,6 +59,7 @@ class ShopCarrierEdit extends Screen
 
             Button::make(__('sales.screen.button.delete'))
                 ->icon('bs.trash')
+                ->confirm(__('common.modal.confirm'))
                 ->method('remove')
                 ->canSee($this->carrier->exists),
         ];

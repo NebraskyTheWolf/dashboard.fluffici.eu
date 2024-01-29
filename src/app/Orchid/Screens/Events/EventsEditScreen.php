@@ -77,6 +77,7 @@ class EventsEditScreen extends Screen
 
             Button::make(__('events.screen.edit.button.cancel'))
                 ->icon('bs.trash')
+                ->confirm(__('common.modal.event.cancel'))
                 ->method('cancel')
                 ->canSee($this->events->exists && $this->events->status == "INCOMING")
                 ->type(Color::DANGER),

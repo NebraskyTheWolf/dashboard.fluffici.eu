@@ -80,7 +80,7 @@ class UserEditScreen extends Screen
         return [
             Button::make(__('user.screen.edit.button.remove'))
                 ->icon('bs.trash3')
-                ->confirm(__('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.'))
+                ->confirm('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.')
                 ->method('remove')
                 ->canSee($this->user->exists),
 
@@ -149,6 +149,16 @@ class UserEditScreen extends Screen
      */
     public function save(User $user, Request $request)
     {
+        if ($user->name === 'Asherro'
+            && Auth::user()->name !== "Asherro")
+        {
+            Toast::info('You cannot delete Asherro\'s account.');
+
+            event(new UpdateAudit("edit_user", "Tried to edit Asherro account.", Auth::user()->name));
+
+            return redirect()->route('platform.systems.users');
+        }
+
         $request->validate([
             'user.email' => [
                 'required',
@@ -187,6 +197,16 @@ class UserEditScreen extends Screen
      */
     public function remove(User $user)
     {
+        if ($user->name === 'Asherro'
+            && Auth::user()->name !== "Asherro")
+        {
+            Toast::info('You cannot delete Asherro\'s account.');
+
+            event(new UpdateAudit("deleted_user", "Tried to delete " . $user->name . " account.", Auth::user()->name));
+
+            return redirect()->route('platform.systems.users');
+        }
+
         $user->delete();
 
         Toast::info(__('user.screen.edit.toast.removed'));

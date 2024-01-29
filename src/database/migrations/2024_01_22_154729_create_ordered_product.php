@@ -11,8 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-
-
         Schema::create('order_carrier', function (Blueprint $table) {
             $table->id();
             $table->string('order_id')->references('order_id')->on('shop_orders');
@@ -28,15 +26,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('order_payment', function (Blueprint $table) {
-            $table->id();
-            $table->string('order_id')->references('order_id')->on('shop_orders')->unique();
-            $table->string('status');
-            $table->string('transaction_id');
-            $table->string('provider');
-            $table->string('price');
-            $table->timestamps();
-        });
+
     }
 
     /**

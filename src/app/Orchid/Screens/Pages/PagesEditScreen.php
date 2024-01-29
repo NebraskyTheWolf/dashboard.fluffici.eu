@@ -68,6 +68,7 @@ class PagesEditScreen extends Screen
 
             Button::make(__('pages.screen.edit.button.remove'))
                 ->icon('bs.trash')
+                ->confirm(__('common.modal.confirm'))
                 ->method('remove')
                 ->canSee($this->pages->exists),
         ];

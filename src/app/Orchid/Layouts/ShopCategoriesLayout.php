@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts;
 
 use App\Orchid\Screens\Shop\ShopCategories;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Field;
 use Orchid\Screen\Layouts\Rows;
 use Orchid\Screen\Layouts\Table;
@@ -27,7 +28,12 @@ class ShopCategoriesLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('name', __('category.table.name')),
+            TD::make('name', __('category.table.name'))
+                ->render(function (\App\Models\ShopCategories $categories) {
+                    return Link::make($categories->name)
+                        ->icon('bs.box-arrow-in-right')
+                        ->href(route('platform.shop.categories.edit', $categories));
+                }),
             TD::make('order', __('category.table.position')),
             TD::make('displayed', __('category.table.displayed'))
                 ->render(function (\App\Models\ShopCategories $categories) {

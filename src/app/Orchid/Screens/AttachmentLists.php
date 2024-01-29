@@ -6,6 +6,7 @@ use App\Models\PlatformAttachments;
 use App\Orchid\Layouts\AttachmentsLayout;
 use Illuminate\Support\Facades\Request;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
 class AttachmentLists extends Screen
@@ -40,9 +41,9 @@ class AttachmentLists extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make(__('attachments.screen.button.new'))
-                ->icon('bs.plus-circle')
-                ->method('upload'),
+            Link::make('Upload')
+                ->icon('bs.box-arrow-in-up')
+                ->href(route('platform.attachments.upload')),
         ];
     }
 

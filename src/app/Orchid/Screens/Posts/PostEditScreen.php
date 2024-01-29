@@ -43,8 +43,8 @@ class PostEditScreen extends Screen
             'post' => $post,
             'posts_comments' => PostsComments::where('post_id', $post->id)->paginate(),
             'likes' => [
-                PostsLikes::where('post_id', $post->id)->sumByDays('post_id')->toChart('Likes'),
-                PostsComments::where('post_id', $post->id)->sumByDays('post_id')->toChart('Comments')
+                PostsLikes::sumByDays('post_id')->toChart('Likes'),
+                PostsComments::sumByDays('post_id')->toChart('Comments')
             ]
         ];
     }
@@ -92,6 +92,7 @@ class PostEditScreen extends Screen
 
             Button::make(__('posts.screen.edit.button.remove'))
                 ->icon('bs.trash')
+                ->confirm(__('common.modal.confirm'))
                 ->method('remove')
                 ->canSee($this->post->exists),
         ];

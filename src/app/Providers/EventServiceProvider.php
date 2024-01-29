@@ -2,10 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use App\Events\OrderUpdateEvent;
+use App\Listeners\OrderUpdateListeners;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 use App\Listeners\AuditListener;
 use App\Events\UpdateAudit;
@@ -33,6 +32,9 @@ class EventServiceProvider extends ServiceProvider
         UserUpdated::class => [
             UserUpdateListener::class,
         ],
+        OrderUpdateEvent::class => [
+            OrderUpdateListeners::class
+        ]
     ];
 
     /**

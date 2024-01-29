@@ -33,7 +33,8 @@ class ShopOrderLayout extends Table
             TD::make('first_name', __('orders.table.first_name'))
                 ->render(function (ShopOrders $shopOrders) {
                     return Link::make($shopOrders->first_name)
-                        ->route('platform.shop.orders.edit', $shopOrders);
+                        ->icon('bs.box-arrow-in-right')
+                        ->href(route('platform.shop.orders.edit', $shopOrders));
                 }),
             TD::make('last_name', __('orders.table.last_name')),
             TD::make('email', __('orders.table.email')),
@@ -54,7 +55,7 @@ class ShopOrderLayout extends Table
                     } else if ($shopOrders->status == "COMPLETED") {
                         return '<div><a class="ui green label">'.__('orders.table.status.completed').'</a></div>';
                     } else if ($shopOrders->status == "OUTING") {
-                        return '<a class="ui blue label">Outing <i class="loading cog icon"></i></a>';
+                        return '<a class="ui blue label">Payment at Outing <i class="loading cog icon"></i></a>';
                     }
                     return '<a class="ui purple label">'. $shopOrders->status . '</a>';
                 }),

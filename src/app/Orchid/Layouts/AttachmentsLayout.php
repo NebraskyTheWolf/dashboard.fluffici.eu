@@ -11,6 +11,7 @@ use App\Orchid\Presenters\UserPresenter;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Persona;
 use Orchid\Screen\TD;
 use Orchid\Screen\Layouts\Table;
@@ -48,10 +49,12 @@ class AttachmentsLayout extends Table
                 ->render(function (PlatformAttachments $platformAttachments) {
                     return DropDown::make('Menu')
                         ->list([
-                            Button::make('Edit')
-                                ->route('platform.attachments.edit', $platformAttachments),
+                            Button::make('Lookup')
+                                ->route('platform.attachments.lookup', $platformAttachments),
                             Button::make('Remove')
                                 ->method('remove'),
+                            Link::make('URL')
+                                ->href('https://autumn.fluffici.eu/' . $platformAttachments->bucket . '/' . $platformAttachments->attachment_id)
                         ]);
                 }),
             TD::make('bucket', __('attachments.table.tag'))

@@ -33,6 +33,7 @@ class EventListLayout extends Table
             TD::make('name', __('events.table.name'))
                 ->render(function (Events $event) {
                     return Link::make($event->name)
+                        ->icon('bs.pencil')
                         ->route('platform.events.edit', $event);
                 }),
 

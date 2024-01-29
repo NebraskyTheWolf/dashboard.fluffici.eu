@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Orchid\Screens\Shop;
+namespace App\Orchid\Screens;
 
-use App\Orchid\Layouts\ShopCategoriesLayout;
+use App\Orchid\Layouts\SocialMediaList;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 
-class ShopCategories extends Screen
+class SocialMedia extends Screen
 {
     /**
      * Fetch data to be displayed on the screen.
@@ -16,7 +17,7 @@ class ShopCategories extends Screen
     public function query(): iterable
     {
         return [
-            'categories' => \App\Models\ShopCategories::paginate()
+            'social_media' => \App\Models\SocialMedia::paginate()
         ];
     }
 
@@ -27,14 +28,7 @@ class ShopCategories extends Screen
      */
     public function name(): ?string
     {
-        return __('category.screen.title');
-    }
-
-    public function permission(): ?iterable
-    {
-        return [
-            'platform.shop.categories.read',
-        ];
+        return 'Social Media';
     }
 
     /**
@@ -45,9 +39,10 @@ class ShopCategories extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make(__('category.screen.button.new'))
+            Link::make('New')
                 ->icon('bs.plus')
-                ->href(route('platform.shop.categories.edit')),
+                ->type(Color::SUCCESS)
+                ->href(route('platform.social.edit'))
         ];
     }
 
@@ -59,7 +54,7 @@ class ShopCategories extends Screen
     public function layout(): iterable
     {
         return [
-            ShopCategoriesLayout::class
+            SocialMediaList::class
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Orchid\Layouts;
 
 use App\Models\ShopCategories;
 use App\Models\ShopProducts;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -27,7 +28,12 @@ class ShopProductsList extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('name', __('products.table.name')),
+            TD::make('name', __('products.table.name'))
+                ->render(function (ShopProducts $products) {
+                    return Link::make($products->name)
+                            ->icon('bs.pencil')
+                            ->route('platform.shop.products.edit', $products);
+                }),
             TD::make('category', __('products.table.category'))
                 ->render(function (ShopProducts $product) {
                     $category = ShopCategories::where('id', $product->category_id);
