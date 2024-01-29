@@ -28,6 +28,7 @@ class ShopOrderEdit extends Screen
     public $orderProducts;
     public $orderCarrier;
     public $orderSales;
+    public $lastHistory;
 
     /**
      * Fetch data to be displayed on the screen.
@@ -40,7 +41,7 @@ class ShopOrderEdit extends Screen
             'order' => $order,
 
             'orderPayment' => OrderPayment::where('order_id', $order->order_id)->orderBy('created_at', 'desc')->paginate(),
-            'lastHistory' => OrderPayment::where('order_id', $order->order_id)->orderBy('created_at', 'desc')->paginate(),
+            'lastHistory' => OrderPayment::where('order_id', $order->order_id)->orderBy('created_at', 'desc'),
             'orderProducts' => OrderedProduct::where('order_id', $order->order_id)->first(),
             'orderCarrier' => OrderCarrier::where('order_id', $order->order_id)->first(),
             'orderSales' => OrderSales::where('order_id', $order->order_id)->first(),
@@ -65,31 +66,57 @@ class ShopOrderEdit extends Screen
      */
     public function commandBar(): iterable
     {
-        return [
-            Button::make('Set as completed')
-                ->icon('bs.check2-square')
-                ->type(Color::SUCCESS)
-                ->confirm(__('common.modal.order.type',  ['type' => 'completed']))
-                ->disabled($this->orderPayment->first()->status == "REFUNDED")
-                ->method('completed'),
-            Button::make('Set as delivered')
-                ->icon('bs.envelope-fill')
-                ->type(Color::SUCCESS)
-                ->confirm(__('common.modal.order.type',  ['type' => 'delivered']))
-                ->disabled($this->orderPayment->first()->status == "REFUNDED")
-                ->method('delivered'),
-            Button::make('Issue Refund')
-                ->icon('bs.slash-circle')
-                ->type(Color::WARNING)
-                ->confirm(__('common.modal.order.refund'))
-                ->disabled($this->orderPayment->first()->status == "REFUNDED")
-                ->method('issueRefund'),
-            Button::make('Set as archived')
-                ->icon('bs.archive')
-                ->type(Color::PRIMARY)
-                ->confirm(__('common.modal.order.type',  ['type' => 'archived']))
-                ->method('archived'),
-        ];
+
+        if ($this->lastHistory->exists()) {
+            return [
+                Button::make('Set as completed')
+                    ->icon('bs.check2-square')
+                    ->type(Color::SUCCESS)
+                    ->confirm(__('common.modal.order.type',  ['type' => 'completed']))
+                    ->disabled($this->orderPayment->first()->status == "REFUNDED")
+                    ->method('completed'),
+                Button::make('Set as delivered')
+                    ->icon('bs.envelope-fill')
+                    ->type(Color::SUCCESS)
+                    ->confirm(__('common.modal.order.type',  ['type' => 'delivered']))
+                    ->disabled($this->orderPayment->first()->status == "REFUNDED")
+                    ->method('delivered'),
+                Button::make('Issue Refund')
+                    ->icon('bs.slash-circle')
+                    ->type(Color::WARNING)
+                    ->confirm(__('common.modal.order.refund'))
+                    ->disabled($this->orderPayment->first()->status == "REFUNDED")
+                    ->method('issueRefund'),
+                Button::make('Set as archived')
+                    ->icon('bs.archive')
+                    ->type(Color::PRIMARY)
+                    ->confirm(__('common.modal.order.type',  ['type' => 'archived']))
+                    ->method('archived'),
+            ];
+        } else {
+            return [
+                Button::make('Set as completed')
+                    ->icon('bs.check2-square')
+                    ->type(Color::SUCCESS)
+                    ->confirm(__('common.modal.order.type',  ['type' => 'completed']))
+                    ->method('completed'),
+                Button::make('Set as delivered')
+                    ->icon('bs.envelope-fill')
+                    ->type(Color::SUCCESS)
+                    ->confirm(__('common.modal.order.type',  ['type' => 'delivered']))
+                    ->method('delivered'),
+                Button::make('Issue Refund')
+                    ->icon('bs.slash-circle')
+                    ->type(Color::WARNING)
+                    ->confirm(__('common.modal.order.refund'))
+                    ->method('issueRefund'),
+                Button::make('Set as archived')
+                    ->icon('bs.archive')
+                    ->type(Color::PRIMARY)
+                    ->confirm(__('common.modal.order.type',  ['type' => 'archived']))
+                    ->method('archived'),
+            ];
+        }
     }
 
     /**
