@@ -178,3 +178,9 @@ Route::screen('shop/carriers', \App\Orchid\Screens\ShopCarrierList::class)
 
 Route::screen('shop/carriers/edit/{carrier?}', \App\Orchid\Screens\ShopCarrierEdit::class)
     ->name('platform.shop.carriers.edit');
+
+Route::screen('shop/countries', \App\Orchid\Screens\ShopCountriesList::class)
+    ->name('platform.shop.countries.list');
+
+Route::screen('shop/countries/edit/{country?}', \App\Orchid\Screens\ShopCountriesEdit::class)
+    ->name('platform.shop.countries.edit');

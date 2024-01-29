@@ -125,6 +125,10 @@ class PlatformProvider extends OrchidServiceProvider
                         ->route('platform.shop.carriers')
                         ->permission('platform.systems.eshop.carriers')
                         ->title("POUKÁZKY"),
+                    Menu::make('Země')
+                        ->icon('bs.globe')
+                        ->route('platform.shop.countries.list')
+                        ->permission('platform.eshop.countries'),
                     Menu::make('Objednávky')
                         ->icon('bs.box-seam')
                         ->route('platform.shop.orders')
@@ -192,6 +196,11 @@ class PlatformProvider extends OrchidServiceProvider
 
                 ->addPermission('platform.shop.carriers.read', 'EShop Carriers (Read)')
                 ->addPermission('platform.shop.carriers.write', 'EShop Carriers (Write)')
+
+                ->addPermission('platform.shop.countries.read', 'EShop Country (Read)')
+                ->addPermission('platform.shop.countries.write', 'EShop Country (Write)')
+                ->addPermission('platform.eshop.countries', 'EShop Country (Navbar)')
+
                 ->addPermission('platform.systems.eshop.carriers', 'EShop Carriers (Navbar)'),
 
             ItemPermission::group('Attachments')
