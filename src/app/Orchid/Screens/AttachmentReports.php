@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens;
 
+use App\Models\ReportedAttachments;
 use App\Orchid\Layouts\AttachmentReportLayout;
 use Orchid\Screen\Screen;
 
@@ -14,7 +15,9 @@ class AttachmentReports extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'reports' => ReportedAttachments::paginate()
+        ];
     }
 
     /**

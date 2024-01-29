@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
+use App\Models\DmcaRequest;
 use App\Models\ReportedAttachments;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
@@ -26,14 +27,30 @@ class AttachmentReportLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('username', __('report.reporter')),
-            TD::make('reason', __('report.reason')),
-            TD::make('isLegalPurpose', __('report.dmca'))
+            TD::make('username', __('report.table.reporter'))
                 ->render(function (ReportedAttachments $attachments) {
-                      if ($attachments->isLegalPurpose) {
-                          return '<a class="ui green label">' . __('report.isDMCA.yes') . '</a>';
+                    if ($attachments->username === null) {
+                        return "Anonymous";
+                    } else {
+                        return $attachments->username;
+                    }
+                }),
+            TD::make('reason', __('report.table.reason'))
+                ->render(function (ReportedAttachments $attachments) {
+                    if ($attachments->reason === null) {
+                        return "No reason";
+                    } else {
+                        return $attachments->reason;
+                    }
+                }),
+            TD::make('isLegalPurpose', __('report.table.dmca'))
+                ->render(function (ReportedAttachments $attachments) {
+                    $dmca = DmcaRequest::where('attachment_id', $attachments->attachment_id);
+
+                      if ($dmca->exists()) {
+                          return '<a class="ui red label">' . __('report.table.isDMCA.yes') . '</a>';
                       } else {
-                          return '<a class="ui green label">' . __('report.isDMCA.no') . '</a>';
+                          return '<a class="ui teal label">' . __('report.table.isDMCA.no') . '</a>';
                       }
                 }),
         ];
