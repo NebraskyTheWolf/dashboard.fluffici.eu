@@ -41,7 +41,7 @@ class ShopOrderEdit extends Screen
             'order' => $order,
 
             'orderPayment' => OrderPayment::where('order_id', $order->order_id)->orderBy('created_at', 'desc')->paginate(),
-            'lastHistory' => OrderPayment::where('order_id', $order->order_id)->orderBy('created_at', 'desc'),
+            'lastHistory' => OrderPayment::where('order_id', $order->order_id)->orderBy('created_at', 'desc')->paginate(),
             'orderProducts' => OrderedProduct::where('order_id', $order->order_id)->first(),
             'orderCarrier' => OrderCarrier::where('order_id', $order->order_id)->first(),
             'orderSales' => OrderSales::where('order_id', $order->order_id)->first(),
