@@ -20,10 +20,6 @@ class ShopController extends Controller {
     public function index(Request $request) {
         $productId = (isset($request->productId)) ? $request->productId : false;
 
-        if (env("APP_ENV") == "production") {
-            return redirect("https://shop.fluffici.eu/checkout/" . $productId);
-        }
-
         $product = ShopProducts::where('id', $productId);
         $sale = ShopSales::where('product_id', $productId);
 
