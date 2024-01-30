@@ -13,7 +13,7 @@
                 <div class="card-body h-full p-4">
                     <div class="row d-flex align-items-center">
                         <div class="col-auto">
-                            <h5 class="card-title">
+                            <h5 class="card-title text-white">
                                 @empty(!$color)<i class="text-{{ $color }}">●</i>@endempty
                                 {{ $title ?? '' }}
                             </h5>
