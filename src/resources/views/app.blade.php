@@ -78,11 +78,11 @@
     <input type="number" id="isLogged" value="{{Auth::check()}}" hidden="">
 </body>
 
-<div data-controller="@yield('controller')" @yield('controller-data') id="loading">
+<div data-controller="@yield('controller')" @yield('controller-data') id="loading" class="">
     <div class="row justify-content-center d-md-flex h-100">
         @yield('aside')
 
-        <div class="col-xxl col-xl-9 col-12" id="custom">
+        <div class="col-xxl col-xl-9 col-12 dark:bg-dots-lighter bg-fluffici-dark" id="custom">
             @yield('body')
         </div>
     </div>

@@ -27,13 +27,13 @@
 
             <div class="h-100 w-100 position-relative to-top cursor d-none d-md-flex mt-md-5"
                  data-action="click->html-load#goToTop"
-                 title="{{ __('Scroll to top') }}">
+                 title="Scroll to top">
                 <div class="bottom-left w-100 mb-2 ps-3 overflow-hidden">
                     <small data-controller="viewport-entrance-toggle"
                            class="scroll-to-top"
                            data-viewport-entrance-toggle-class="show">
                         <x-orchid-icon path="bs.chevron-up" class="me-2"/>
-                        {{ __('Scroll to top') }}
+                        Scroll to top
                     </small>
                 </div>
             </div>

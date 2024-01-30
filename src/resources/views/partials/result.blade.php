@@ -30,10 +30,10 @@
             <h3 class="fw-light">
                 <x-orchid-icon path="bs.funnel" class="block mb-3 center"/>
 
-                {{ __('Nothing found.') }}
+                Nothing found.
             </h3>
 
-            {{ __('Try changing the query or type.') }}
+            Try changing the query or type.
         </div>
     @endforelse
 

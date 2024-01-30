@@ -25,7 +25,7 @@
 @empty
 
     <p class="ms-3 me-3 mb-0 text-center">
-        {{ __('There are no records in this view.') }}
+        There are no records in this view.
     </p>
 
 @endforelse
@@ -35,7 +35,7 @@
 
     <a href="{{ route('platform.search', $query) }}" class="block py-2 px-3 dropdown-item border-top pb-1">
         <span class="small ps-1">
-            {{ __('See more results.') }}
+            See more results.
             <span class="text-muted">({{ $total }})</span>
         </span>
     </a>

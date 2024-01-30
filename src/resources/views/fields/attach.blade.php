@@ -17,15 +17,15 @@
                             data-action="change->attach#change"
                             {{ $attributes }}
                         >
-    
+
                         <span class="d-block text-center fw-normal small text-muted p-3 mx-auto">
                         <span class="choose d-flex align-items-center">
                                 <x-orchid-icon path="bs.cloud-arrow-up" class="h3"/>
                                 <small class="text-muted d-block ms-2">{{ __($placeholder) }}</small>
                         </span>
-    
+
                         <span class="spinner-border" role="status">
-                            <span class="visually-hidden">{{ __('Loading...') }}</span>
+                            <span class="visually-hidden">Loading...</span>
                         </span>
                     </span>
                     </label>

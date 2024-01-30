@@ -14,12 +14,7 @@
 @endpush
 
 <div class="h2 d-flex align-items-center">
-    @auth
-        <x-orchid-icon path="bs.house" class="icon-menu"/>
-    @endauth
-
-
     <p class="my-0 {{ auth()->check() ? 'd-none d-xl-block' : '' }}">
-        {{ config('app.name') }}
+        <img src="https://autumn.rsiniya.uk/attachments/p-px4u5NHSs2jydtnxzEq4NFzRDt_em5kILZj3tna9?width=200" alt="fluffici_logo">
     </p>
 </div>

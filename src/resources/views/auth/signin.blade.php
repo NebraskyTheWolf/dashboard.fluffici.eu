@@ -1,6 +1,6 @@
 <div class="mb-3">
 
-    <label class="form-label">
+    <label class="form-label text-white">
         Email address
     </label>
 
@@ -11,12 +11,12 @@
         ->autofocus()
         ->autocomplete('email')
         ->inputmode('email')
-        ->placeholder(__('Enter your email'))
+        ->placeholder('Enter your email')
     !!}
 </div>
 
 <div class="mb-3">
-    <label class="form-label w-100">
+    <label class="form-label w-100 text-white">
         Password
     </label>
 
@@ -24,7 +24,7 @@
         ->required()
         ->autocomplete('current-password')
         ->tabindex(2)
-        ->placeholder(__('Enter your password'))
+        ->placeholder('Enter your password')
     !!}
 </div>
 
@@ -34,13 +34,13 @@
             <input type="hidden" name="remember">
             <input type="checkbox" name="remember" value="true"
                    class="form-check-input" {{ !old('remember') || old('remember') === 'true'  ? 'checked' : '' }}>
-            <span class="form-check-label"> {{__('Remember Me')}}</span>
+            <span class="form-check-label text-white"> Remember Me</span>
         </label>
     </div>
     <div class="col-md-6 col-xs-12">
-        <button id="button-login primary" type="submit" class="btn btn-default btn-block" tabindex="3">
+        <button id="button-login" type="submit" class="btn btn-primary btn-block" tabindex="3">
             <x-orchid-icon path="bs.box-arrow-in-right" class="small me-2"/>
-            {{__('Login')}}
+            Login
         </button>
     </div>
 </div>

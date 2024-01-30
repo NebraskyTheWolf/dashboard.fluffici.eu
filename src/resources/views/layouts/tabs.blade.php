@@ -12,7 +12,7 @@
                             active
                         @elseif($loop->first && is_null($activeTab))
                             active
-                        @endif"
+                        @endif text-white"
                        data-action="tabs#setActiveTab"
                        data-bs-target="#tab-{{\Illuminate\Support\Str::slug($name)}}"
                        id="button-tab-{{\Illuminate\Support\Str::slug($name)}}"

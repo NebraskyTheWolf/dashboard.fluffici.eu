@@ -3,11 +3,11 @@
 
 @section('body')
 
-    <div class="container-md dark:bg-dots-lighter bg-dark">
+    <div class="container-md ">
         <div class="form-signin h-full min-vh-100 d-flex flex-column justify-content-center ">
 
             <a class="d-flex justify-content-center mb-4 p-0 px-sm-5" href="{{Dashboard::prefix()}}">
-                <img src="https://autumn.rsiniya.uk/attachments/HCnIXi2Qg4QkxylKY_5cjJ9J5LuhRPwv6C-ePizB3F?width=300" alt="fluffici_banner" class="banner">
+                <img src="https://autumn.rsiniya.uk/attachments/p-px4u5NHSs2jydtnxzEq4NFzRDt_em5kILZj3tna9" alt="fluffici_banner"  class="banner" style="width: auto; bottom: 5px;align-items: flex-end;">
             </a>
 
             <div class="row justify-content-center">
