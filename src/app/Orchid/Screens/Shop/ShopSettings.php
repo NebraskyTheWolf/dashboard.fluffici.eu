@@ -44,7 +44,7 @@ class ShopSettings extends Screen
     public function permission(): ?iterable
     {
         return [
-            'platform.shop.categories.write',
+            'platform.shop.settings.write',
         ];
     }
 

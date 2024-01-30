@@ -78,7 +78,7 @@ class ShopOrderEdit extends Screen
                 ->method('delivered'),
             Button::make('Issue Refund')
                 ->icon('bs.slash-circle')
-                ->type(Color::WARNING)
+                ->type(Color::PRIMARY)
                 ->confirm(__('common.modal.order.refund'))
                 ->method('issueRefund'),
             Button::make('Set as archived')
