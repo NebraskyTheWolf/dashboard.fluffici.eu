@@ -2,8 +2,8 @@
 
 namespace App\Orchid\Screens\Posts;
 
-use App\Orchid\Layouts\PostListLayout;
 use App\Models\Post;
+use App\Orchid\Layouts\Posts\PostListLayout;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 

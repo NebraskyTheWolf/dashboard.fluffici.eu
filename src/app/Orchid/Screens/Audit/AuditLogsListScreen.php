@@ -3,9 +3,9 @@
 namespace App\Orchid\Screens\Audit;
 
 use App\Models\AuditLogs;
-use Orchid\Screen\Screen;
-use App\Orchid\Layouts\AuditLogsListLayout;
+use App\Orchid\Layouts\Audit\AuditLogsListLayout;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;
 
 class AuditLogsListScreen extends Screen

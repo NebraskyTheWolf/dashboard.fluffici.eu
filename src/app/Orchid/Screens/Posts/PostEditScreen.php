@@ -3,23 +3,23 @@
 namespace App\Orchid\Screens\Posts;
 
 
+use App\Events\UpdateAudit;
 use App\Models\Post;
 use App\Models\PostsComments;
 use App\Models\PostsLikes;
-use App\Orchid\Layouts\PostCommentLayout;
 use App\Models\User;
-use App\Orchid\Layouts\ShopProfit;
+use App\Orchid\Layouts\Posts\PostCommentLayout;
+use App\Orchid\Layouts\Shop\ShopProfit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\TextArea;
-use Orchid\Support\Facades\Layout;
-use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
-use Illuminate\Support\Facades\Auth;
-use App\Events\UpdateAudit;
 
 class PostEditScreen extends Screen
 {

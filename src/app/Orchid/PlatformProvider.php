@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
+use App\Models\Events;
+use App\Models\ShopOrders;
 use App\Models\ShopSettings;
+use App\Models\ShopSupportTickets;
 use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
 use Orchid\Platform\OrchidServiceProvider;
 use Orchid\Screen\Actions\Menu;
-use App\Models\Events;
-use App\Models\ShopOrders;
-use App\Models\ShopSupportTickets;
 
 class PlatformProvider extends OrchidServiceProvider
 {

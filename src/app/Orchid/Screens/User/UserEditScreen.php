@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
+use App\Events\UpdateAudit;
+use App\Events\UserUpdated;
 use App\Orchid\Layouts\Role\RolePermissionLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserPasswordLayout;
 use App\Orchid\Layouts\User\UserRoleLayout;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Orchid\Access\Impersonation;
@@ -20,10 +23,6 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
-use Illuminate\Support\Facades\Auth;
-
-use App\Events\UpdateAudit;
-use App\Events\UserUpdated;
 
 class UserEditScreen extends Screen
 {

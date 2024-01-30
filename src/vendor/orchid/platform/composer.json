@@ -1,6 +1,6 @@
 {
     "name": "orchid/platform",
-    "description": "Platform for back-office applications, admin panel or CMS your Laravel app.",
+    "description": "Platform for back-office applications",
     "keywords": [
         "framework",
         "laravel",
@@ -13,28 +13,6 @@
         "extranet"
     ],
     "type": "library",
-    "license": "MIT",
-    "homepage": "https://orchid.software",
-    "support": {
-        "issues": "https://github.com/orchidsoftware/platform/issues",
-        "source": "https://github.com/orchidsoftware/platform",
-        "docs": "https://orchid.software/en/docs",
-        "email": "bliz48rus@gmail.com"
-    },
-    "authors": [
-        {
-            "name": "Alexandr Chernyaev",
-            "email": "bliz48rus@gmail.com",
-            "homepage": "https://tabuna.github.io",
-            "role": "Developer"
-        }
-    ],
-    "funding": [
-        {
-            "type": "opencollective",
-            "url": "https://opencollective.com/orchid"
-        }
-    ],
     "require": {
         "ext-json": "*",
         "orchid/blade-icons": "^4.0",

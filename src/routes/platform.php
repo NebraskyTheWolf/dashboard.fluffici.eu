@@ -2,27 +2,22 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\Audit\AuditLogsListScreen;
+use App\Orchid\Screens\Events\EventsEditScreen;
+use App\Orchid\Screens\Events\EventsListScreen;
+use App\Orchid\Screens\Pages\PagesEditScreen;
+use App\Orchid\Screens\Pages\PagesListScreen;
 use App\Orchid\Screens\PlatformScreen;
+use App\Orchid\Screens\Posts\PostEditScreen;
+use App\Orchid\Screens\Posts\PostListScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\Shop\ShopProductEdit;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
-
-use App\Orchid\Screens\Posts\PostEditScreen;
-use App\Orchid\Screens\Posts\PostListScreen;
-
-use App\Orchid\Screens\Events\EventsEditScreen;
-use App\Orchid\Screens\Events\EventsListScreen;
-
-use App\Orchid\Screens\Pages\PagesEditScreen;
-use App\Orchid\Screens\Pages\PagesListScreen;
-
-use App\Orchid\Screens\Audit\AuditLogsListScreen;
-
-use App\Orchid\Screens\ShopProductEdit;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,10 +105,10 @@ Route::screen('events', EventsListScreen::class)
         ->parent('index')
         ->push('Events', route('platform.events.list')));
 
-Route::screen('socials', \App\Orchid\Screens\SocialMedia::class)
+Route::screen('socials', \App\Orchid\Screens\Social\SocialMedia::class)
     ->name('platform.social.list');
 
-Route::screen('socials/edit/{social?}', \App\Orchid\Screens\SocialMediaEdit::class)
+Route::screen('socials/edit/{social?}', \App\Orchid\Screens\Social\SocialMediaEdit::class)
     ->name('platform.social.edit');
 
 Route::screen('page/{events?}', PagesEditScreen::class)
@@ -125,16 +120,16 @@ Route::screen('pages', PagesListScreen::class)
 Route::screen('audit', AuditLogsListScreen::class)
     ->name('platform.audit');
 
-Route::screen('files', \App\Orchid\Screens\AttachmentLists::class)
+Route::screen('files', \App\Orchid\Screens\Attachments\AttachmentLists::class)
     ->name('platform.attachments');
 
-Route::screen('files/platform/upload', \App\Orchid\Screens\AttachmentUpload::class)
+Route::screen('files/platform/upload', \App\Orchid\Screens\Attachments\AttachmentUpload::class)
     ->name('platform.attachments.upload');
 
-Route::screen('files/lookup/{file}', \App\Orchid\Screens\AttachmentUpload::class)
+Route::screen('files/lookup/{file}', \App\Orchid\Screens\Attachments\AttachmentUpload::class)
     ->name('platform.attachments.lookup');
 
-Route::screen('reports', \App\Orchid\Screens\AttachmentReports::class)
+Route::screen('reports', \App\Orchid\Screens\Attachments\AttachmentReports::class)
     ->name('platform.reports');
 
 Route::screen('shop/statistics', \App\Orchid\Screens\Shop\ShopStatistics::class)
@@ -149,7 +144,7 @@ Route::screen('shop/products/edit/{products?}', ShopProductEdit::class)
 Route::screen('shop/categories', \App\Orchid\Screens\Shop\ShopCategories::class)
     ->name('platform.shop.categories');
 
-Route::screen('shop/categories/edit/{category?}', \App\Orchid\Screens\ShopCategoryEdit::class)
+Route::screen('shop/categories/edit/{category?}', \App\Orchid\Screens\Shop\ShopCategoryEdit::class)
     ->name('platform.shop.categories.edit');
 
 Route::screen('shop/sales', \App\Orchid\Screens\Shop\ShopSales::class)
@@ -164,7 +159,7 @@ Route::screen('shop/vouchers', \App\Orchid\Screens\Shop\ShopVouchers::class)
 Route::screen('shop/orders', \App\Orchid\Screens\Shop\ShopOrders::class)
     ->name('platform.shop.orders');
 
-Route::screen('shop/orders/{order?}', \App\Orchid\Screens\ShopOrderEdit::class)
+Route::screen('shop/orders/{order?}', \App\Orchid\Screens\Shop\ShopOrderEdit::class)
     ->name('platform.shop.orders.edit');
 
 Route::screen('shop/support', \App\Orchid\Screens\Shop\ShopSupport::class)
@@ -173,14 +168,14 @@ Route::screen('shop/support', \App\Orchid\Screens\Shop\ShopSupport::class)
 Route::screen('shop/settings', \App\Orchid\Screens\Shop\ShopSettings::class)
     ->name('platform.shop.settings');
 
-Route::screen('shop/carriers', \App\Orchid\Screens\ShopCarrierList::class)
+Route::screen('shop/carriers', \App\Orchid\Screens\Shop\ShopCarrierList::class)
     ->name('platform.shop.carriers');
 
-Route::screen('shop/carriers/edit/{carrier?}', \App\Orchid\Screens\ShopCarrierEdit::class)
+Route::screen('shop/carriers/edit/{carrier?}', \App\Orchid\Screens\Shop\ShopCarrierEdit::class)
     ->name('platform.shop.carriers.edit');
 
-Route::screen('shop/countries', \App\Orchid\Screens\ShopCountriesList::class)
+Route::screen('shop/countries', \App\Orchid\Screens\Shop\ShopCountriesList::class)
     ->name('platform.shop.countries.list');
 
-Route::screen('shop/countries/edit/{country?}', \App\Orchid\Screens\ShopCountriesEdit::class)
+Route::screen('shop/countries/edit/{country?}', \App\Orchid\Screens\Shop\ShopCountriesEdit::class)
     ->name('platform.shop.countries.edit');

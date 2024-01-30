@@ -2,26 +2,24 @@
 
 namespace App\Orchid\Screens\Events;
 
-use Orchid\Screen\Screen;
-use App\Models\Events;
-use Illuminate\Http\Request;
-use Orchid\Screen\Fields\DateTimer;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Quill;
-use Orchid\Screen\Fields\Cropper;
-use Orchid\Support\Facades\Layout;
-use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Fields\Group;
-use Orchid\Screen\Fields\Select;
-use Orchid\Screen\Fields\Map;
-use Ramsey\Uuid\Uuid;
-use Orchid\Support\Color;
-use Orchid\Support\Facades\Toast;
-use Illuminate\Support\Facades\Auth;
-
 use App\Events\UpdateAudit;
-
+use App\Models\Events;
 use App\Models\PlatformAttachments;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\Cropper;
+use Orchid\Screen\Fields\DateTimer;
+use Orchid\Screen\Fields\Group;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Map;
+use Orchid\Screen\Fields\Quill;
+use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Screen;
+use Orchid\Support\Color;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
+use Ramsey\Uuid\Uuid;
 
 class EventsEditScreen extends Screen
 {

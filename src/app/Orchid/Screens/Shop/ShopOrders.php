@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Shop;
 
-use App\Orchid\Layouts\ShopOrderLayout;
+use App\Orchid\Layouts\Shop\ShopOrderLayout;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;

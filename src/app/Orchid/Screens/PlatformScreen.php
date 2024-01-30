@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace App\Orchid\Screens;
 
 use App\Models\EventsInteresteds;
-use App\Orchid\Layouts\ShopProfit;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Orchid\Screen\Screen;
-use Orchid\Support\Facades\Layout;
-
 use App\Models\Pages;
 use App\Models\ShopOrders;
 use App\Models\ShopSupportTickets;
+use App\Orchid\Layouts\Shop\ShopProfit;
+use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 
 class PlatformScreen extends Screen
 {

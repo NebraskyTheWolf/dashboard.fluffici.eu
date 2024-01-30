@@ -2,10 +2,10 @@
 
 namespace App\Orchid\Screens\Events;
 
-use Orchid\Screen\Screen;
 use App\Models\Events;
+use App\Orchid\Layouts\Event\EventListLayout;
 use Orchid\Screen\Actions\Link;
-use App\Orchid\Layouts\EventListLayout;
+use Orchid\Screen\Screen;
 
 
 class EventsListScreen extends Screen

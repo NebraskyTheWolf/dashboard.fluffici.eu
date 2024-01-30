@@ -1,7 +1,7 @@
 <div class="mb-3">
 
     <label class="form-label">
-        {{__('Email address')}}
+        Email address
     </label>
 
     {!!  \Orchid\Screen\Fields\Input::make('email')
@@ -17,7 +17,7 @@
 
 <div class="mb-3">
     <label class="form-label w-100">
-        {{__('Password')}}
+        Password
     </label>
 
     {!!  \Orchid\Screen\Fields\Password::make('password')
@@ -38,7 +38,7 @@
         </label>
     </div>
     <div class="col-md-6 col-xs-12">
-        <button id="button-login" type="submit" class="btn btn-default btn-block" tabindex="3">
+        <button id="button-login primary" type="submit" class="btn btn-default btn-block" tabindex="3">
             <x-orchid-icon path="bs.box-arrow-in-right" class="small me-2"/>
             {{__('Login')}}
         </button>

@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Orchid\Layouts\User;
 
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Field;
+use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Rows;
-use Illuminate\Support\Facades\Auth;
-use Orchid\Screen\Fields\Attach ;
-use Orchid\Screen\Fields\Cropper ;
-
 
 
 class UserEditLayout extends Rows

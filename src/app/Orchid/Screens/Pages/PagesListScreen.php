@@ -2,11 +2,10 @@
 
 namespace App\Orchid\Screens\Pages;
 
-use Orchid\Screen\Screen;
-use App\Orchid\Layouts\PagesListLayout;
-use Orchid\Screen\Actions\Link;
-
 use App\Models\Pages;
+use App\Orchid\Layouts\Pages\PagesListLayout;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Screen;
 
 
 class PagesListScreen extends Screen

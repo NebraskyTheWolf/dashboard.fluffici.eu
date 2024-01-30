@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Shop;
 
-use App\Orchid\Layouts\ShopSalesList;
+use App\Orchid\Layouts\Shop\ShopSalesList;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 

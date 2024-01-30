@@ -2,12 +2,11 @@
 
 namespace App\Orchid\Screens\Shop;
 
-use App\Models\OrderPayment;
 use App\Models\OrderedProduct;
-use App\Models\Pages;
+use App\Models\OrderPayment;
 use App\Models\ShopOrders;
 use App\Orchid\Layouts\Pie;
-use App\Orchid\Layouts\ShopProfit;
+use App\Orchid\Layouts\Shop\ShopProfit;
 use Carbon\Carbon;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;

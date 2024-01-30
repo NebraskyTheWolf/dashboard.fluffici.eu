@@ -15,25 +15,20 @@
     </title>
     <meta name="csrf_token" content="{{  csrf_token() }}" id="csrf_token">
     <meta name="auth" content="{{  Auth::check() }}" id="auth">
-    @if(\Orchid\Support\Locale::currentDir(app()->getLocale()) == "rtl")
-        <link rel="stylesheet" type="text/css" href="{{  mix('/css/orchid.rtl.css','vendor/orchid') }}">
-    @else
-        <link rel="stylesheet" type="text/css" href="{{  mix('/css/orchid.css','vendor/orchid') }}">
-    @endif
+    <link rel="stylesheet" type="text/css" href="{{  mix('/css/dashy.css','vendor/fluffici') }}">
 
     @stack('head')
 
     <meta name="turbo-root" content="{{  Dashboard::prefix() }}">
     <meta name="dashboard-prefix" content="{{  Dashboard::prefix() }}">
-
     <meta name="turbo-cache-control" content="no-cache">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-    <script src="{{ mix('/js/manifest.js','vendor/orchid') }}" type="text/javascript"></script>
-    <script src="{{ mix('/js/vendor.js','vendor/orchid') }}" type="text/javascript"></script>
-    <script src="{{ mix('/js/orchid.js','vendor/orchid') }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/manifest.js','vendor/fluffici') }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/vendor.js','vendor/fluffici') }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/dashy.js','vendor/fluffici') }}" type="text/javascript"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="{{url('/js/app.js')}}"></script>

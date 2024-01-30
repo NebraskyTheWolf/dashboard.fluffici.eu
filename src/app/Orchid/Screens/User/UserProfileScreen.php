@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
+use App\Events\UpdateAudit;
 use App\Orchid\Layouts\User\ProfilePasswordLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use Illuminate\Http\Request;
@@ -17,13 +18,6 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
-use Illuminate\Support\Facades\Auth;
-use Orchid\Screen\Actions\Attach ;
-use Orchid\Screen\Actions\Picture ;
-use App\Models\User as AUser;
-
-use App\Events\UpdateAudit;
-use App\Events\UserUpdate;
 
 class UserProfileScreen extends Screen
 {
