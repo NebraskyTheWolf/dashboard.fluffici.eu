@@ -53,7 +53,7 @@
             </div>
             <div class="footer">
                 <p>
-                    <span>Powered by <b>PROVIDER?</b></span>
+                    <span>Powered by <b>Fluffici</b></span>
                     <img
                         src="https://img.icons8.com/external-dreamstale-lineal-dreamstale/32/000000/external-warning-ui-dreamstale-lineal-dreamstale.png"
                         alt="Warning-icon" height="15px" width="15px"/>

@@ -165,7 +165,7 @@ Route::screen('shop/orders/{order?}', \App\Orchid\Screens\Shop\ShopOrderEdit::cl
 Route::screen('shop/support', \App\Orchid\Screens\Shop\ShopSupport::class)
     ->name('platform.shop.support');
 
-Route::screen('shop/settings', \App\Orchid\Screens\Shop\ShopSettings::class)
+Route::screen('shop/edit/settings', \App\Orchid\Screens\Shop\ShopSettings::class)
     ->name('platform.shop.settings');
 
 Route::screen('shop/carriers', \App\Orchid\Screens\Shop\ShopCarrierList::class)
@@ -179,3 +179,6 @@ Route::screen('shop/countries', \App\Orchid\Screens\Shop\ShopCountriesList::clas
 
 Route::screen('shop/countries/edit/{country?}', \App\Orchid\Screens\Shop\ShopCountriesEdit::class)
     ->name('platform.shop.countries.edit');
+
+Route::screen('shop/report/list', \App\Orchid\Screens\Shop\ShopReportList::class)
+    ->name('platform.shop.reports');

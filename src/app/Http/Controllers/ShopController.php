@@ -12,6 +12,7 @@ use App\Models\ShopCountries;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
 use App\Models\ShopSales;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
 
@@ -24,44 +25,62 @@ class ShopController extends Controller {
         $sale = ShopSales::where('product_id', $productId);
 
         if ($sale->exists()) {
-            $discount = $sale->firstOrFail()->reduction;
+            $discount = $sale->firstOrFail();
 
             if ($product->exists()) {
                 $data = $product->firstOrFail();
-                $finalPrice = $data->price * ($discount / 100);
+                $finalPrice = 0;
 
-                return view('shop.checkout')
+                if (!Carbon::parse($discount->deleted_at)->isPast()) {
+                    $finalPrice = $data->price * ($discount->reduction / 100);
+                }
+
+                $view = view('shop.checkout')
                     ->with('productId', $data->id)
                     ->with('productName', $data->name)
                     ->with('productPrice', $data->price - $finalPrice)
                     ->with('originalPrice', $data->price)
-                    ->with('discounted', $discount)
+                    ->with('discounted', $discount->reduction)
                     ->with('productDescription', strip_tags($data->description))
-                    ->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $data->image_path)
                     ->with('countries', ShopCountries::paginate())
                     ->with('payment', false)
                     ->with('success', false)
                     ->with('failed', false)
                     ->with('carriers', ShopCarriers::paginate());
+
+                if ($data->image_path !== null) {
+                    $view->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $data->image_path);
+                } else {
+                    $view->with('productURL', 'https://autumn.rsiniya.uk/attachments/E1dC5nCVCCSnYwTmUTS7JMYAZiwOeb1xa8XCFPmu4j');
+                }
+
+                return $view;
             } else {
                 return redirect('https://shop.fluffici.eu');
             }
         } else {
             if ($product->exists()) {
                 $data = $product->firstOrFail();
-                return view('shop.checkout')
+                $view = view('shop.checkout')
                     ->with('productId', $data->id)
                     ->with('productName', $data->name)
                     ->with('productPrice', $data->price)
                     ->with('originalPrice', $data->price)
                     ->with('discounted', 0)
                     ->with('productDescription', strip_tags($data->description))
-                    ->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $data->image_path)
                     ->with('countries', ShopCountries::paginate())
                     ->with('payment', false)
                     ->with('success', false)
                     ->with('failed', false)
                     ->with('carriers', ShopCarriers::paginate());
+
+                if ($data->image_path !== null) {
+                    $view->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $data->image_path);
+                } else {
+                    $view->with('productURL', 'https://autumn.rsiniya.uk/attachments/E1dC5nCVCCSnYwTmUTS7JMYAZiwOeb1xa8XCFPmu4j');
+                }
+
+                return $view;
             } else {
                 return redirect('https://shop.fluffici.eu')
                     ->with('toast', 'This product is not available.');
@@ -109,10 +128,14 @@ class ShopController extends Controller {
 
         $price = 0;
         if ($sale->exists()) {
-            $salePrd = $sale->firstOrFail()->reduction;
-            $finalPrice = $remote->price * ($salePrd / 100);
-            $price = $salePrd;
-            $product->price = $remote->price - $finalPrice;
+            $salePrd = $sale->firstOrFail();
+            if (!Carbon::parse($salePrd->deleted_at)->isPast()) {
+                $finalPrice = $remote->price * ($salePrd->reduction / 100);
+                $price = $salePrd->reduction;
+                $product->price = $remote->price - $finalPrice;
+            } else {
+                $product->price = $remote->price;
+            }
         } else {
             $product->price = $remote->price;
         }
@@ -132,17 +155,24 @@ class ShopController extends Controller {
         if ($data->exists()) {
             $prd = $data->firstOrFail();
 
-            return view('shop.checkout')
+            $view = view('shop.checkout')
                 ->with('productName', $prd->name)
                 ->with('productPrice', $product->price + $carrierPrice)
                 ->with('originalPrice', $prd->price)
                 ->with('discounted', $price)
                 ->with('productDescription', strip_tags($prd->description))
-                ->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $prd->image_path)
                 ->with('payment', true)
                 ->with('success', false)
                 ->with('failed', false)
                 ->with('orderId', $orderId);
+
+            if ($prd->image_path !== null) {
+                $view->with('productURL', 'https://autumn.rsiniya.uk/attachments/' . $prd->image_path);
+            } else {
+                $view->with('productURL', 'https://autumn.rsiniya.uk/attachments/E1dC5nCVCCSnYwTmUTS7JMYAZiwOeb1xa8XCFPmu4j');
+            }
+
+            return $view;
         } else {
             return redirect('https://shop.fluffici.eu')
                 ->with('toast', 'This product is not available.');

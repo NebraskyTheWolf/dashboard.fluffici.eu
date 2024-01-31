@@ -28,6 +28,9 @@ status:
 make-report:
 	docker compose exec dashboard php artisan app:generate-monthly-report
 
+finish-old-event:
+	docker compose exec dashboard php artisan app:finish-old-event
+
 up:
 	docker compose up -d
 stop:

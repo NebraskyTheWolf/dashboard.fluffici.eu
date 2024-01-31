@@ -2,17 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Shop Monthly Report</title>
     <link href="https://dashboard.rsiniya.uk/css/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <div class="tm_container">
         <div class="tm_invoice_wrap">
-            <div class="tm_invoice tm_style1" id="tm_download_section">
+            <div class="tm_invoice tm_style1">
                 <div class="tm_invoice_in">
                     <div class="tm_invoice_head tm_mb20">
                         <div class="tm_invoice_left">
@@ -21,7 +20,7 @@
                             </div>
                         </div>
                         <div class="tm_invoice_right tm_text_right">
-                            <b class="tm_f20 tm_medium tm_primary_color">Shop Report</b>
+                            <b class="tm_f20 tm_medium tm_primary_color">Shop Monthly Report</b>
                             <p class="tm_m0 tm_f12"></p>
                         </div>
                     </div>
@@ -31,7 +30,7 @@
                         <p class="tm_m0">Invoice Date: <br><b class="tm_primary_color">{{ $reportDate }}</b></p>
                         <p class="tm_m0">Date of Export: <br><b class="tm_primary_color">{{ $reportExportDate }}</b></p>
 
-                        <p class="tm_m0">Loss: <br><b class="tm_primary_color"></b>{{ $lossPercentage }}% of the profit has been lost because of sales.</p>
+                        <p class="tm_m0">Loss: <br><b class="tm_primary_color" style="color: indianred;">{{ $lossPercentage }}% of the profit has been lost because of sales.</b></p>
                     </div>
                     <hr class="tm_mb20">
                     <div class="tm_table tm_style1">
@@ -39,12 +38,12 @@
                             <div class="tm_table_responsive">
                                 <table>
                                     <thead>
-                                    <tr>
-                                        <th class="tm_width_6 tm_semi_bold tm_primary_color tm_gray_bg">Product</th>
-                                        <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg">Price</th>
-                                        <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg">Qty</th>
-                                        <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg tm_text_right">Total</th>
-                                    </tr>
+                                        <tr>
+                                            <th class="tm_width_6 tm_semi_bold tm_primary_color tm_gray_bg">Product</th>
+                                            <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg">Price</th>
+                                            <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg">Qty</th>
+                                            <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg tm_text_right">Total</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         @if(empty($reportProducts))
@@ -73,18 +72,18 @@
                                 <br>
                                 <table>
                                     <tbody>
-                                    <tr>
-                                        <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Fees <span class="tm_ternary_color">(5%)</span></td>
-                                        <td class="tm_width_3 tm_success_color tm_text_right tm_border_none tm_pt0" style="color: lime;">+ {{ $fees }} Kc</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Sales</td>
-                                        <td class="tm_width_3 tm_danger_color tm_text_right tm_border_none tm_pt0">- {{ $sales }} ({{ $lossPercentage  }}%) Kc</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Overall Profit</td>
-                                        <td class="tm_width_3 tm_success_color tm_text_right tm_border_none tm_bold" style="color: lime;">+ {{ $overallProfit }} Kc</td>
-                                    </tr>
+                                        <tr>
+                                            <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Fees <span class="tm_ternary_color">(5%)</span></td>
+                                            <td class="tm_width_3 tm_success_color tm_text_right tm_border_none tm_pt0" style="color: lime;">+ {{ $fees }} Kc</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Sales Loss</td>
+                                            <td class="tm_width_3 tm_danger_color tm_text_right tm_border_none tm_pt0" style="color: orangered;">- {{ $sales }} (-{{ $lossPercentage  }}%) Kc</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Overall Monthly Profit</td>
+                                            <td class="tm_width_3 tm_success_color tm_text_right tm_border_none tm_bold" style="color: lime;">+ {{ $overallProfit }} Kc</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -95,4 +94,11 @@
         </div>
     </div>
 </body>
+
+<style>
+    .page-break {
+        page-break-after: always;
+    }
+</style>
+
 </html>

@@ -103,6 +103,9 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.graph-up')
                         ->route('platform.shop.statistics')
                         ->title("GROWTH"),
+                    Menu::make('Měsíční výkaz')
+                        ->icon('bs.bank')
+                        ->route('platform.shop.reports'),
                     Menu::make('Produkty')
                         ->icon('bs.window-sidebar')
                         ->route('platform.shop.products')

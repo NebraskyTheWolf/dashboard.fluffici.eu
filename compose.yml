@@ -15,6 +15,8 @@ services:
       - type: bind
         source: ./src
         target: /workspace
+    networks:
+      - net-db
 
   dashboard-ws:
     build:
@@ -29,6 +31,8 @@ services:
         target: /workspace
     ports:
       - '6001:6001'
+    networks:
+      - net-db
 
   nginx:
       build:
@@ -48,7 +52,8 @@ services:
         - type: bind
           source: ./src
           target: /workspace
-
+      networks:
+        - net-db
   db:
     build:
       context: .
@@ -70,3 +75,9 @@ services:
       - MYSQL_USER=${DB_USERNAME:-phper}
       - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
+    networks:
+      - net-db
+
+networks:
+  net-db:
+    name: db-net

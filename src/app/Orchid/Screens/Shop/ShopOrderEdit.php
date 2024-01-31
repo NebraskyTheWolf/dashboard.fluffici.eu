@@ -81,11 +81,6 @@ class ShopOrderEdit extends Screen
                 ->type(Color::PRIMARY)
                 ->confirm(__('common.modal.order.refund'))
                 ->method('issueRefund'),
-            Button::make('Set as archived')
-                ->icon('bs.archive')
-                ->type(Color::PRIMARY)
-                ->confirm(__('common.modal.order.type',  ['type' => 'archived']))
-                ->method('archived'),
         ];
     }
 
@@ -134,7 +129,11 @@ class ShopOrderEdit extends Screen
                             ->render(fn() => $this->orderProducts->price),
                     ])->title('Products')
                 ]
-            ])->activeTab('Order Information')
+            ])->activeTab('Order Information'),
+
+            Layout::rows([
+
+            ])->title('Management')
         ];
     }
 
