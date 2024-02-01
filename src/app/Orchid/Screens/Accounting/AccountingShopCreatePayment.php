@@ -10,6 +10,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Layout;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;
 use Ramsey\Uuid\Uuid;
@@ -63,19 +64,21 @@ class AccountingShopCreatePayment extends Screen
     public function layout(): iterable
     {
         return [
-            Select::make('payment.status')
-                ->title('Payment Status')
-                ->options([
-                    'PAID' => 'Paid',
-                    'UNPAID' => 'Unpaid',
-                    'REFUNDED' => 'Refunded',
-                    'CANCELLED' => 'Cancelled'
-                ]),
-            Relation::make('payment.order_id')
-                ->title('Select the order.')
-                ->fromModel(ShopOrders::class, 'first_name', 'order_id'),
-            Input::make('payment.price')
-                ->title('Price')
+           \Orchid\Support\Facades\Layout::rows([
+               Select::make('payment.status')
+                   ->title('Payment Status')
+                   ->options([
+                       'PAID' => 'Paid',
+                       'UNPAID' => 'Unpaid',
+                       'REFUNDED' => 'Refunded',
+                       'CANCELLED' => 'Cancelled'
+                   ]),
+               Relation::make('payment.order_id')
+                   ->title('Select the order.')
+                   ->fromModel(ShopOrders::class, 'first_name', 'order_id'),
+               Input::make('payment.price')
+                   ->title('Price')
+           ])
         ];
     }
 
