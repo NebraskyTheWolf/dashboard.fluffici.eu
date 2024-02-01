@@ -11,9 +11,9 @@ class ShopMaintenanceSettings extends Rows
     protected function fields(): iterable
     {
         return [
-            CheckBox::make('settings.shop-maintenance')
+            CheckBox::make('shop-maintenance')
                 ->title('Are you sure to take down the shop?'),
-            Quill::make('settings.shop-maintenance-text')
+            Quill::make('shop-maintenance-text')
                 ->title('Please enter a description.')
         ];
     }

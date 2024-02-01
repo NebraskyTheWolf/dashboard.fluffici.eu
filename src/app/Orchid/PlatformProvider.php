@@ -96,6 +96,24 @@ class PlatformProvider extends OrchidServiceProvider
                 ->divider()
                 ->permission('platform.systems.posts'),
 
+            Menu::make('Accounting')
+                ->icon('bs.calculator')
+                ->list([
+                    Menu::make('Home')
+                        ->icon('bs.house'),
+
+                    Menu::make('Měsíční výkaz')
+                        ->icon('bs.briefcase'),
+
+                    Menu::make('Transactions')
+                        ->icon('bs.arrow-left-right'),
+
+                    Menu::make('Invoices')
+                        ->icon('bs.card-checklist'),
+                ])
+                ->divider()
+                ->permission('platform.accounting.navbar'),
+
             Menu::make('E-Shop')
                 ->icon('bs.cart2')
                 ->list([
@@ -103,9 +121,6 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.graph-up')
                         ->route('platform.shop.statistics')
                         ->title("GROWTH"),
-                    Menu::make('Měsíční výkaz')
-                        ->icon('bs.bank')
-                        ->route('platform.shop.reports'),
                     Menu::make('Produkty')
                         ->icon('bs.window-sidebar')
                         ->route('platform.shop.products')
@@ -212,6 +227,13 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.attachments.reports', 'Reports (Read)')
                 ->addPermission('platform.systems.attachments.reports.write', 'Reports (Write)')
                 ->addPermission('platform.systems.attachments', 'Attachments (Navbar)'),
+
+            ItemPermission::group('Accounting')
+                ->addPermission('platform.accounting.monthly_report', 'Monthly Reports (Read / Write)')
+                ->addPermission('platform.accounting', 'Main (Read)')
+                ->addPermission('platform.accounting.navbar', 'Access (Navbar)')
+                ->addPermission('platform.accounting.invoices', 'Invoices (Read / Write)')
+                ->addPermission('platform.accounting.transactions', 'Transactions (Read / Write)'),
 
             ItemPermission::group("Pages & Event management")
                 ->addPermission('platform.systems.posts', "Posts (Navbar)")

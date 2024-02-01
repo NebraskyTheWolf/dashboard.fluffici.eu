@@ -85,12 +85,6 @@ Route::get('/build', function (Request $request) {
     ];
 })->name("build");
 
-
-Route::get('/checkout/{productId}', [\App\Http\Controllers\ShopController::class, 'index']);
-Route::post('/create-order', [\App\Http\Controllers\ShopController::class, 'createOrder']);
-Route::post('/payment', [\App\Http\Controllers\ShopController::class, 'payment']);
-
-
 Route::get('/report', function (\Illuminate\Http\Request $request) {
     $reportId = $request->query('reportId');
 

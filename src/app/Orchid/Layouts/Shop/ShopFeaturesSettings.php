@@ -21,7 +21,7 @@ class ShopFeaturesSettings extends Rows
                 ->title('Do you want the billing module on?'),
             Input::make('settings.billing-host')
                 ->title('Please enter the provider host'),
-            Password::make('settings.billing-secret')
+            Password::make('billing-secret')
                 ->title('Please enter your API secret.')
         ];
     }
