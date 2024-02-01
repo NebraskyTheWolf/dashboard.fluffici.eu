@@ -23,7 +23,7 @@ class AccountingMain extends Screen
             'metrics' => [
                 'outstanding_amount' => [
                     'key' => 'outstanding_amount',
-                    'value' => '+ ' . number_format(OrderPayment::where('status', 'PAID')->sum('price') + Accounting::where('type', 'INCOME')->sum('amount')) . ' Kc'
+                    'value' => number_format(OrderPayment::where('status', 'PAID')->sum('price') + Accounting::where('type', 'INCOME')->sum('amount') - Accounting::where('type', 'EXPENSE')->sum('amount')) . ' Kc'
                 ],
                 'overdue_amount'   => [
                     'key' => 'overdue_amount',
@@ -31,7 +31,7 @@ class AccountingMain extends Screen
                 ],
                 'expenses' => [
                     'key' => 'expensed',
-                    'value' => '- ' . number_format(Accounting::where('type', 'EXPENSE')->sum('amount')) . ' Kc'
+                    'value' => number_format(Accounting::where('type', 'EXPENSE')->sum('amount')) . ' Kc'
                 ]
             ],
 
@@ -85,7 +85,7 @@ class AccountingMain extends Screen
     {
         return [
             Layout::metrics([
-                'Outstanding Amount' => 'metrics.outstanding_amount',
+                'Standing Balance' => 'metrics.outstanding_amount',
                 'Overdue' => 'metrics.overdue_amount'
             ]),
 
