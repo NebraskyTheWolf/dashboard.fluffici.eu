@@ -17,7 +17,7 @@ class AccountingTransactionsList extends Screen
     public function query(): iterable
     {
         return [
-            'transactions' => OrderPayment::filters(FilterByDate::class)->simplePaginate()
+            'transactions' => OrderPayment::paginate()
         ];
     }
 

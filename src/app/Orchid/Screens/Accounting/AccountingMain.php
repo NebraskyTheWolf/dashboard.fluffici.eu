@@ -37,10 +37,10 @@ class AccountingMain extends Screen
 
             'income_ratio' => [
                 OrderPayment::where('status', 'PAID')->sumByDays('price')->toChart('Shop Income'),
-                Accounting::where('type', 'INCOME')->sumByDays('amount')->toChart(fn(Accounting $accounting) => $accounting->source ?: 'No source')
+                Accounting::where('type', 'INCOME')->sumByDays('amount')->toChart('External Income')
             ],
             'external_expense' => [
-                Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart(fn(Accounting $accounting) => $accounting->source ?: 'No source')
+                Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart("External Expense")
             ]
         ];
     }

@@ -4,6 +4,7 @@ namespace app\Orchid\Layouts\Shop;
 
 use App\Models\ShopVouchers;
 use Carbon\Carbon;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Password;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
@@ -31,8 +32,8 @@ class ShopVoucherLayout extends Table
             TD::make('code', 'Code')
                 ->render(function (ShopVouchers $vouchers) {
                     return Password::make('voucher')
-                            ->value($vouchers->code)
-                            ->title('Click to reveal.');
+                            ->title('Click to reveal.')
+                            ->value($vouchers->code);
                 }),
             TD::make('money', 'Amount')
                 ->render(function (ShopVouchers $vouchers) {
