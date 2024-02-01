@@ -14,6 +14,14 @@ class OrderPayment extends Model
 
     protected $table = "order_payment";
 
+    protected $fillable = [
+        'order_id',
+        'status',
+        'transaction_id',
+        'provider',
+        'price'
+    ];
+
     protected $allowedFilters = [
         'created_at'
     ];
