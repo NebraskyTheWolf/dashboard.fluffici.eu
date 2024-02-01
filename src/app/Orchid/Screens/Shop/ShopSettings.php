@@ -102,7 +102,7 @@ class ShopSettings extends Screen
             Layout::rows([
                 CheckBox::make('settings.shop_maintenance')
                     ->title('Are you sure to take down the shop?'),
-                Quill::make('settings.shop_maintenance-text')
+                Input::make('settings.shop_maintenance-text')
                     ->title('Please enter a description.')
             ])->title('Maintenance Settings')
         ];
