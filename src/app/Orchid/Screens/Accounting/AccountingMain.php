@@ -5,8 +5,10 @@ namespace app\Orchid\Screens\Accounting;
 use App\Models\Accounting;
 use App\Orchid\Filters\FilterByDate;
 use App\Models\OrderPayment;
+use App\Orchid\Layouts\AccountingTracks;
 use App\Orchid\Layouts\Shop\ShopProfit;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 
@@ -41,7 +43,8 @@ class AccountingMain extends Screen
             ],
             'external_expense' => [
                 Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart("External Expense")
-            ]
+            ],
+            'accounting' => Accounting::paginate()
         ];
     }
 
@@ -89,11 +92,15 @@ class AccountingMain extends Screen
                 'Overdue' => 'metrics.overdue_amount'
             ]),
 
-            ShopProfit::make('income_ratio' ,'Net Income Ratio')
-                ->export(),
+            Group::make([
+                ShopProfit::make('income_ratio' ,'Net Income Ratio')
+                    ->export(),
 
-            ShopProfit::make('external_expense' ,'Expenses')
-                ->export(),
+                ShopProfit::make('external_expense' ,'Expenses')
+                    ->export(),
+            ]),
+
+            AccountingTracks::class
         ];
     }
 }
