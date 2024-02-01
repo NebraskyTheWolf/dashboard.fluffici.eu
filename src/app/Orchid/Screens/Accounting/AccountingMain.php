@@ -23,24 +23,24 @@ class AccountingMain extends Screen
             'metrics' => [
                 'outstanding_amount' => [
                     'key' => 'outstanding_amount',
-                    'value' => '+ ' . number_format(OrderPayment::filters(FilterByDate::class)->where('status', 'PAID')->sum('price') + Accounting::filters(FilterByDate::class)->where('type', 'INCOME')->sum('amount')) . ' Kc'
+                    'value' => '+ ' . number_format(OrderPayment::where('status', 'PAID')->sum('price') + Accounting::where('type', 'INCOME')->sum('amount')) . ' Kc'
                 ],
                 'overdue_amount'   => [
                     'key' => 'overdue_amount',
-                    'value' => number_format(OrderPayment::filters(FilterByDate::class)->where('status', 'UNPAID')->sum('price')) . ' Kc'
+                    'value' => number_format(OrderPayment::where('status', 'UNPAID')->sum('price')) . ' Kc'
                 ],
                 'expenses' => [
                     'key' => 'expensed',
-                    'value' => '- ' . number_format(Accounting::filters(FilterByDate::class)->where('type', 'EXPENSE')->sum('amount')) . ' Kc'
+                    'value' => '- ' . number_format(Accounting::where('type', 'EXPENSE')->sum('amount')) . ' Kc'
                 ]
             ],
 
             'income_ratio' => [
-                OrderPayment::filters(FilterByDate::class)->where('status', 'PAID')->sumByDays('price')->toChart('Shop Income'),
-                Accounting::filters(FilterByDate::class)->where('type', 'INCOME')->sumByDays('amount')->toChart(fn(Accounting $accounting) => $accounting->source)
+                OrderPayment::where('status', 'PAID')->sumByDays('price')->toChart('Shop Income'),
+                Accounting::where('type', 'INCOME')->sumByDays('amount')->toChart(fn(Accounting $accounting) => $accounting->source)
             ],
             'external_expense' => [
-                Accounting::filters(FilterByDate::class)->where('type', 'EXPENSE')->sumByDays('amount')->toChart(fn(Accounting $accounting) => $accounting->source)
+                Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart(fn(Accounting $accounting) => $accounting->source)
             ]
         ];
     }
