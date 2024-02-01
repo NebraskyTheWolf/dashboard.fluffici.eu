@@ -47,6 +47,10 @@ class GenerateMonthlyReport extends Command
 
         // This happens when a discounts has been placed in the order.
         $loss = $total - $paidPrice ;
+        // False positive fix
+        if ($loss <= 0) {
+            $loss = 0;
+        }
 
         // Using a function to avoid non-divisible values.
         $percentage = $this->percent($loss, $total); // ($loss/$total) * 100

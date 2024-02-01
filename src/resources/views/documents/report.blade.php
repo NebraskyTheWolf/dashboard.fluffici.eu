@@ -74,7 +74,7 @@
                                 <table>
                                     <tbody>
                                         <tr>
-                                            <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Fees <span class="tm_ternary_color">(5%)</span></td>
+                                            <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Carrier fees</td>
                                             <td class="tm_width_3 tm_success_color tm_text_right tm_border_none tm_pt0" style="color: lime;">+ {{ $fees }} Kc</td>
                                         </tr>
                                         <tr>
