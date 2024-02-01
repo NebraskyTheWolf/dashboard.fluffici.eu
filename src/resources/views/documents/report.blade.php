@@ -37,7 +37,7 @@
                     <div class="tm_table tm_style1">
                         <div class="tm_border">
                             <div class="tm_table_responsive">
-                                <table>
+                                <table class="invoice-articles-table">
                                     <thead>
                                         <tr>
                                             <th class="tm_width_6 tm_semi_bold tm_primary_color tm_gray_bg">Product</th>
@@ -104,9 +104,6 @@
 
     .invoice-articles-table {
         padding-bottom: 50px; //height of your footer
-    }
-    table {
-        page-break-inside: avoid !important;
     }
 </style>
 
