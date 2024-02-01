@@ -12,7 +12,7 @@
 
                     @if($metric['value'] <= 0)
                         <p class="h3 text-red-50 fw-light mt-auto" id="{{  $metric['key'] }}">
-                            - {{ $metric['value'] }}
+                            {{ $metric['value'] }}
                         </p>
                     @else
                         <p class="h3 text-green-700 fw-light mt-auto" id="{{  $metric['key'] }}">
