@@ -86,7 +86,7 @@ class AccountingShopCreatePayment extends Screen
     {
         $this->payment->transaction_id = Uuid::uuid4();
         $this->payment->provider = 'Fluffici';
-        $this->payment->
+
 
         $this->payment->fill($request->get('payment'))->save();
 
