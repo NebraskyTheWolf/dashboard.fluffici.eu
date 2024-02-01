@@ -97,7 +97,15 @@
 
 <style>
     .page-break {
-        page-break-after: always;
+        page-break-before: always;
+    }
+
+    .invoice-articles-table {
+        padding-bottom: 50px; //height of your footer
+    }
+
+    table {
+        page-break-inside: avoid !important;
     }
 </style>
 
