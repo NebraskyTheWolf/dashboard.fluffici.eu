@@ -3,8 +3,8 @@
 namespace app\Orchid\Screens\Accounting;
 
 use App\Models\OrderPayment;
-use App\Orchid\Filters\FilterByDate;
-use Orchid\Screen\Actions\Button;
+use App\Orchid\Layouts\AccountingShopTransactions;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
 class AccountingTransactionsList extends Screen
@@ -17,7 +17,7 @@ class AccountingTransactionsList extends Screen
     public function query(): iterable
     {
         return [
-            'transactions' => OrderPayment::paginate()
+            'transactions' => OrderPayment::orderBy('created_at', 'desc')->paginate()
         ];
     }
 
@@ -46,8 +46,9 @@ class AccountingTransactionsList extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('New Transaction')
+            Link::make('New Transaction')
                 ->icon('bs.plus')
+                ->href(route('platform.accounting.transactions.new'))
         ];
     }
 
@@ -59,6 +60,8 @@ class AccountingTransactionsList extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            AccountingShopTransactions::class
+        ];
     }
 }

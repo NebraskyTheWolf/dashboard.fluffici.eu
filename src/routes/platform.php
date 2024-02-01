@@ -197,3 +197,7 @@ Route::screen('accounting/invoices', \App\Orchid\Screens\Accounting\AccountingIn
 
 Route::screen('accounting/transactions', \App\Orchid\Screens\Accounting\AccountingTransactionsList::class)
     ->name('platform.accounting.transactions');
+
+
+Route::screen('accounting/transactions/edit/{payment?}', \App\Orchid\Screens\Accounting\AccountingShopCreatePayment::class)
+    ->name('platform.accounting.transactions.new');

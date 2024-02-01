@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             // General
-            $table->boolean('enabled')->default(0);
+            $table->string('enabled')->default("OFF");
             $table->string('favicon')->nullable();
             $table->string('banner')->nullable();
 
@@ -23,16 +23,16 @@ return new class extends Migration
             $table->string('return_policy')->nullable();
 
             // Features
-            $table->boolean('shop_vouchers')->default(0);
-            $table->boolean('shop_sales')->default(0);
+            $table->string('shop_vouchers')->default("OFF");
+            $table->string('shop_sales')->default("OFF");
 
-            $table->string('shop_billing')->default(0);
+            $table->string('shop_billing')->default("OFF");
             $table->string('billing_host')->nullable();
             $table->string('billing_secret')->nullable();
 
             // Maintenance
             $table->boolean('shop_maintenance')->default(0);
-            $table->boolean('shop_maintenance-text')->default(0);
+            $table->string('shop_maintenance-text')->default(0);
 
             // Payment
             $table->string('gateway_secret')->nullable();

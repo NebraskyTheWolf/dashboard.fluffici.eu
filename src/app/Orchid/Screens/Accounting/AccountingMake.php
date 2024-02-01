@@ -2,7 +2,9 @@
 
 namespace app\Orchid\Screens\Accounting;
 
+use App\Events\UpdateAudit;
 use App\Models\Accounting;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
@@ -96,6 +98,8 @@ class AccountingMake extends Screen
         $this->accounting->fill($request->get('accounting'))->save();
 
         Toast::info('You created a new ' . $this->accounting->type);
+
+        event(new UpdateAudit('accounting', 'Recorded a new ' . $this->accounting->type, Auth::user()->name));
 
         return redirect()->route('platform.accounting.main');
     }

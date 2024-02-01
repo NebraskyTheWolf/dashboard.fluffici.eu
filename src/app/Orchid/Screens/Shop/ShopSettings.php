@@ -112,30 +112,6 @@ class ShopSettings extends Screen
     {
         $this->settings['shop_maintenance-text'] = strip_tags($this->settings['shop_maintenance-text']);
 
-        if ($this->settings->shop_sales === "ON") {
-            $this->settings->shop_sales = true;
-        } else {
-            $this->settings->shop_sales = false;
-        }
-
-        if ($this->settings->shop_billing === "ON") {
-            $this->settings->shop_billing = true;
-        } else {
-            $this->settings->shop_billing = false;
-        }
-
-        if ($this->settings->enabled === "ON") {
-            $this->settings->enabled = true;
-        } else {
-            $this->settings->enabled = false;
-        }
-
-        if ($this->settings->shop_maintenance === "ON") {
-            $this->settings->shop_maintenance = true;
-        } else {
-            $this->settings->shop_maintenance = false;
-        }
-
         $this->settings->fill($request->get('settings'))->save();
 
         Toast::info('You edited the shop settings');
