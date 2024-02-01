@@ -86,12 +86,12 @@ class ShopSettings extends Screen
             ])->title('General Settings'),
 
             Layout::rows([
-                CheckBox::make('settings.shop-sales')
+                CheckBox::make('settings.shop_sales')
                     ->title('Do you want the sales module on?'),
                 CheckBox::make('shop-vouchers')
                     ->title('Do you want the voucher module on?'),
 
-                CheckBox::make('settings.shop-billing')
+                CheckBox::make('settings.shop_billing')
                     ->title('Do you want the billing module on?'),
                 Input::make('settings.billing-host')
                     ->title('Please enter the provider host'),
@@ -100,9 +100,9 @@ class ShopSettings extends Screen
             ])->title('Features Settings'),
 
             Layout::rows([
-                CheckBox::make('settings.shop-maintenance')
+                CheckBox::make('settings.shop_maintenance')
                     ->title('Are you sure to take down the shop?'),
-                Quill::make('settings.shop-maintenance-text')
+                Quill::make('settings.shop_maintenance-text')
                     ->title('Please enter a description.')
             ])->title('Maintenance Settings')
         ];
