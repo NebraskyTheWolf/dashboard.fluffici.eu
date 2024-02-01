@@ -92,13 +92,11 @@ class AccountingMain extends Screen
                 'Overdue' => 'metrics.overdue_amount'
             ]),
 
-            Group::make([
-                ShopProfit::make('income_ratio' ,'Net Income Ratio')
-                    ->export(),
+            ShopProfit::make('income_ratio' ,'Net Income Ratio')
+                ->export(),
 
-                ShopProfit::make('external_expense' ,'Expenses')
-                    ->export(),
-            ]),
+            ShopProfit::make('external_expense' ,'Expenses')
+                ->export(),
 
             AccountingTracks::class
         ];
