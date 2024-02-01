@@ -156,6 +156,9 @@ Route::screen('shop/sales/edit/{sales?}', \App\Orchid\Screens\Shop\ShopSalesEdit
 Route::screen('shop/vouchers', \App\Orchid\Screens\Shop\ShopVouchers::class)
     ->name('platform.shop.vouchers');
 
+Route::screen('shop/vouchers/edit/{voucher?}', \App\Orchid\Screens\Shop\ShopVoucherEdit::class)
+    ->name('platform.shop.vouchers.edit');
+
 Route::screen('shop/orders', \App\Orchid\Screens\Shop\ShopOrders::class)
     ->name('platform.shop.orders');
 
@@ -182,3 +185,15 @@ Route::screen('shop/countries/edit/{country?}', \App\Orchid\Screens\Shop\ShopCou
 
 Route::screen('shop/report/list', \App\Orchid\Screens\Shop\ShopReportList::class)
     ->name('platform.shop.reports');
+
+Route::screen('accounting/main', \App\Orchid\Screens\Accounting\AccountingMain::class)
+    ->name('platform.accounting.main');
+
+Route::screen('accounting/new/{accounting?}', \App\Orchid\Screens\Accounting\AccountingMake::class)
+    ->name('platform.accounting.new');
+
+Route::screen('accounting/invoices', \App\Orchid\Screens\Accounting\AccountingInvoiceList::class)
+    ->name('platform.accounting.invoices');
+
+Route::screen('accounting/transactions', \App\Orchid\Screens\Accounting\AccountingTransactionsList::class)
+    ->name('platform.accounting.transactions');

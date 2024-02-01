@@ -31,7 +31,7 @@ class DeleteOldSales extends Command
         foreach ($sales as $sale) {
             if ($sale->deleted_at !== null) {
                 if (Carbon::parse($sale->deleted_at)->isPast()) {
-                    $sale::update(
+                    $sale->update(
                         [
                             'reduction' => 0
                         ]

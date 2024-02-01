@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Drivers\Gd\Modifiers;
 
 use Intervention\Image\Drivers\AbstractTextModifier;
@@ -36,7 +38,7 @@ class TextModifier extends AbstractTextModifier
                         $line->position()->y(),
                         $color,
                         $this->font->filename(),
-                        $line
+                        (string) $line
                     );
                 }
             } else {
@@ -46,7 +48,7 @@ class TextModifier extends AbstractTextModifier
                         $this->getGdFont(),
                         $line->position()->x(),
                         $line->position()->y(),
-                        $line,
+                        (string) $line,
                         $color
                     );
                 }

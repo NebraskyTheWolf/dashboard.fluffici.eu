@@ -32,7 +32,7 @@ class DeleteOldProducts extends Command
         foreach ($products as $product) {
             if ($product->deleted_at !== null) {
                 if (Carbon::parse($product->deleted_at)->isPast()) {
-                    $product::update(
+                    $product->update(
                         [
                             'displayed' => false,
                             'deleted_at' => null

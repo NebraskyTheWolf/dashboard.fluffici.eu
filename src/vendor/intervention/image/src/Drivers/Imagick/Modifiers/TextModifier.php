@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Drivers\Imagick\Modifiers;
 
 use Imagick;
@@ -37,7 +39,7 @@ class TextModifier extends AbstractTextModifier
                     $line->position()->x(),
                     $line->position()->y(),
                     $this->font->angle(),
-                    $line
+                    (string) $line
                 );
             }
         }

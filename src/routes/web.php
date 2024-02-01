@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PagesController;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 use Orchid\Platform\Http\Controllers\LoginController;
 
 use Orchid\Platform\Http\Controllers\AsyncController;
@@ -10,6 +12,7 @@ use Orchid\Platform\Http\Controllers\AttachmentController;
 use Orchid\Platform\Http\Controllers\IndexController;
 use Orchid\Platform\Http\Screens\NotificationScreen;
 use Orchid\Platform\Http\Screens\SearchScreen;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Tabuna\Breadcrumbs\Trail;
 
 /*
@@ -113,3 +116,62 @@ Route::get('/report', function (\Illuminate\Http\Request $request) {
         ]);
     }
 })->middleware('auth')->name('api.shop.report');
+
+Route::get('/voucher', function (\Illuminate\Http\Request $request) {
+    $voucherCode = $request->query('voucherCode');
+    $storage = \Illuminate\Support\Facades\Storage::disk('public');
+
+    if ($voucherCode != null) {
+        $voucher = \App\Models\ShopVouchers::where('code', $voucherCode);
+
+        if ($voucher->exists()) {
+            $voucherData = $voucher->first();
+
+            if ($storage->exists('default_voucher_card.png')) {
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($storage->get('default_voucher_card.png'));
+
+                $image->text($voucherData->code, 692,486, function ($font) {
+                    $font->filename(public_path('fonts/source.ttf'));
+                    $font->color('#FFFFFF');
+                    $font->size(30);
+                    $font->align('center');
+                    $font->valign('middle');
+                    $font->lineHeight(1.6);
+                    $font->angle(10);
+                });
+
+                $qrCodes = QrCode::size(120)
+                    ->merge(public_path('img/fluffici.png'), .4)
+                    ->color(255, 0, 46)
+                    ->style('square')
+                    ->generate('https://dashboard.fluffici.eu/check/voucher/' . $voucherData->code);
+
+                $image->place(
+                    $qrCodes,
+                    'bottom-right',
+                    780,
+                    965,
+                    90
+                );
+
+                $path = storage_path('/app/public/voucher-' . $voucherCode . '.png');
+                $image->save($path)->toPng();
+
+                return response()->download($path);
+            } else {
+                return response()->json([
+                    'error' => 'No default voucher card.'
+                ]);
+            }
+        } else {
+            return response()->json([
+                'error' => 'This voucher code is invalid.'
+            ]);
+        }
+    } else {
+        return response()->json([
+            'error' => 'This voucher code is invalid.'
+        ]);
+    }
+})->middleware('auth')->name('api.shop.voucher');

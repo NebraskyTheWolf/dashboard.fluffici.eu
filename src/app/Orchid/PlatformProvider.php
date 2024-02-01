@@ -100,16 +100,20 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('bs.calculator')
                 ->list([
                     Menu::make('Home')
-                        ->icon('bs.house'),
+                        ->icon('bs.house')
+                        ->route('platform.accounting.main'),
 
                     Menu::make('Měsíční výkaz')
-                        ->icon('bs.briefcase'),
+                        ->icon('bs.briefcase')
+                        ->route('platform.shop.reports'),
 
-                    Menu::make('Transactions')
-                        ->icon('bs.arrow-left-right'),
+                    Menu::make('Transakce')
+                        ->icon('bs.arrow-left-right')
+                        ->route('platform.accounting.transactions'),
 
-                    Menu::make('Invoices')
-                        ->icon('bs.card-checklist'),
+                    Menu::make('Faktury')
+                        ->icon('bs.card-checklist')
+                        ->route('platform.accounting.invoices'),
                 ])
                 ->divider()
                 ->permission('platform.accounting.navbar'),

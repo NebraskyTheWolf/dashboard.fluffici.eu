@@ -2,6 +2,8 @@
 
 namespace App\Orchid\Screens\Shop;
 
+use App\Orchid\Layouts\Shop\ShopVoucherLayout;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
 class ShopVouchers extends Screen
@@ -42,7 +44,11 @@ class ShopVouchers extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('New Voucher')
+                ->icon('bs.coin')
+                ->href(route('platform.shop.vouchers.edit'))
+        ];
     }
 
     /**
@@ -52,6 +58,8 @@ class ShopVouchers extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            ShopVoucherLayout::class
+        ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Intervention\Image\Drivers;
 
 use Exception;
@@ -11,7 +13,7 @@ use Intervention\Image\Interfaces\DecoderInterface;
 use Intervention\Image\Interfaces\ImageInterface;
 use Intervention\Image\Traits\CanBuildFilePointer;
 
-abstract class AbstractDecoder implements DecoderInterface
+abstract class AbstractDecoder extends DriverSpecialized implements DecoderInterface
 {
     use CanBuildFilePointer;
 
@@ -59,28 +61,36 @@ abstract class AbstractDecoder implements DecoderInterface
      */
     protected function isGifFormat(string $input): bool
     {
-        return preg_match(
+        return 1 === preg_match(
             "/^47494638(37|39)61/",
             strtoupper(substr(bin2hex($input), 0, 32))
         );
     }
 
     /**
-     * Extract and return EXIF data from given image data string
+     * Extract and return EXIF data from given input which can be binary image
+     * data or a file path.
      *
-     * @param string $image_data
+     * @param string $path_or_data
      * @return CollectionInterface
      */
-    protected function extractExifData(string $image_data): CollectionInterface
+    protected function extractExifData(string $path_or_data): CollectionInterface
     {
         if (!function_exists('exif_read_data')) {
             return new Collection();
         }
 
         try {
-            $pointer = $this->buildFilePointer($image_data);
-            $data = @exif_read_data($pointer, null, true);
-            fclose($pointer);
+            $source = match (true) {
+                (strlen($path_or_data) <= PHP_MAXPATHLEN && is_file($path_or_data)) => $path_or_data, // path
+                default => $this->buildFilePointer($path_or_data), // data
+            };
+
+            // extract exif data
+            $data = @exif_read_data($source, null, true);
+            if (is_resource($source)) {
+                fclose($source);
+            }
         } catch (Exception) {
             $data = [];
         }
@@ -106,15 +116,15 @@ abstract class AbstractDecoder implements DecoderInterface
     /**
      * Parse data uri
      *
-     * @param mixed $value
+     * @param mixed $input
      * @return object
      */
-    protected function parseDataUri($value): object
+    protected function parseDataUri(mixed $input): object
     {
         $pattern = "/^data:(?P<mediatype>\w+\/[-+.\w]+)?" .
             "(?P<parameters>(;[-\w]+=[-\w]+)*)(?P<base64>;base64)?,(?P<data>.*)/";
 
-        $result = preg_match($pattern, $value, $matches);
+        $result = preg_match($pattern, $input, $matches);
 
         return new class ($matches, $result)
         {
@@ -144,15 +154,6 @@ abstract class AbstractDecoder implements DecoderInterface
             public function hasMediaType(): bool
             {
                 return !empty($this->mediaType());
-            }
-
-            public function parameters(): array
-            {
-                if (isset($this->matches['parameters']) && !empty($this->matches['parameters'])) {
-                    return explode(';', trim($this->matches['parameters'], ';'));
-                }
-
-                return [];
             }
 
             public function isBase64Encoded(): bool
