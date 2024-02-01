@@ -94,6 +94,7 @@
             </div>
         </div>
     </div>
+    </div>
 </body>
 
 <style>
@@ -103,6 +104,9 @@
 
     .invoice-articles-table {
         padding-bottom: 50px; //height of your footer
+    }
+    table {
+        page-break-inside: avoid !important;
     }
 </style>
 
