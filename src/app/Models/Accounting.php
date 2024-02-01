@@ -12,6 +12,8 @@ class Accounting extends Model
 {
     use AsSource, Filterable, Chartable;
 
+    public $table = 'accounting';
+
     protected $allowedFilters = [
         'created_at'
     ];
