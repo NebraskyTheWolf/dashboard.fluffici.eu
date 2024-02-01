@@ -50,6 +50,7 @@ class Password extends Field
     protected $attributes = [
         'type'  => 'password',
         'class' => 'form-control',
+        'value' => ''
     ];
 
     /**
