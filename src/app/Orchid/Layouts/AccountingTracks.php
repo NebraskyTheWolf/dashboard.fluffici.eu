@@ -42,7 +42,7 @@ class AccountingTracks extends Table
             TD::make('source', 'Source'),
             TD::make('amount', 'Amount')
                 ->render(function (Accounting $accounting) {
-                    return number_format($accounting->amount);
+                    return number_format($accounting->amount) . ' Kč';
                 }),
             TD::make('created_at')
                 ->render(function (Accounting $accounting) {

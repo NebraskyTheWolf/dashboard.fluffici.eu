@@ -47,8 +47,8 @@ class AccountingMake extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make('Create')
-                ->icon('bs.plus')
+            Button::make('Save')
+                ->icon('bs.pencil')
                 ->method('createOrUpdate')
                 ->type(Color::PRIMARY)
         ];

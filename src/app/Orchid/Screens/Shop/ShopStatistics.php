@@ -28,11 +28,11 @@ class ShopStatistics extends Screen
                 ],
                 'overall'   => [
                     'key' => 'overall',
-                    'value' => number_format(OrderPayment::where('status', 'PAID')->sum('price')) . ' Kc'
+                    'value' => number_format(OrderPayment::where('status', 'PAID')->sum('price')) . ' Kč'
                 ],
                 'monthly'   => [
                     'key' => 'monthly',
-                    'value' => number_format(OrderPayment::where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price')) . ' Kc'
+                    'value' => number_format(OrderPayment::where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price')) . ' Kč'
                 ],
             ],
             'pie' => [

@@ -9,6 +9,11 @@ use App\Orchid\Layouts\Shop\ShopMaintenanceSettings;
 use App\Orchid\Layouts\Shop\ShopPaymentSettings;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Fields\Cropper;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Password;
+use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
@@ -65,12 +70,41 @@ class ShopSettings extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::tabs([
-                'General' => ShopGeneralSettings::class,
-                'Payments Methods' => ShopPaymentSettings::class,
-                'Features' => ShopFeaturesSettings::class,
-                'Maintenance' => ShopMaintenanceSettings::class
-            ])->activeTab('General')
+            Layout::block([
+                CheckBox::make('settings.enabled')
+                    ->title("Is the shop active?"),
+
+                Cropper::make('settings.favicon')
+                    ->title('Upload the shop favicon.'),
+                Cropper::make('settings.banner')
+                    ->title('Upload the front-banner.'),
+
+                Input::make('settings.email')
+                    ->title('The public contact address.'),
+                Quill::make('settings.return_policy')
+                    ->title('Please write the Return Policy'),
+            ])->title('General Settings'),
+
+            Layout::block([
+                CheckBox::make('settings.shop-sales')
+                    ->title('Do you want the sales module on?'),
+                CheckBox::make('shop-vouchers')
+                    ->title('Do you want the voucher module on?'),
+
+                CheckBox::make('settings.shop-billing')
+                    ->title('Do you want the billing module on?'),
+                Input::make('settings.billing-host')
+                    ->title('Please enter the provider host'),
+                Password::make('settings.billing-secret')
+                    ->title('Please enter your API secret.')
+            ])->title('Features Settings'),
+
+            Layout::block([
+                CheckBox::make('settings.shop-maintenance')
+                    ->title('Are you sure to take down the shop?'),
+                Quill::make('settings.shop-maintenance-text')
+                    ->title('Please enter a description.')
+            ])->title('Maintenance Settings')
         ];
     }
 
