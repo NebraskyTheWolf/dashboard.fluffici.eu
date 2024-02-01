@@ -14,6 +14,12 @@ class Accounting extends Model
 
     public $table = 'accounting';
 
+    protected $fillable = [
+        'type',
+        'source',
+        'amount'
+    ];
+
     protected $allowedFilters = [
         'created_at'
     ];
