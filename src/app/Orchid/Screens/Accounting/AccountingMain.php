@@ -44,7 +44,7 @@ class AccountingMain extends Screen
             'external_expense' => [
                 Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart("External Expense")
             ],
-            'accounting' => Accounting::paginate()
+            'accounting' => Accounting::orderBy('created_at', 'desc')->paginate()
         ];
     }
 
