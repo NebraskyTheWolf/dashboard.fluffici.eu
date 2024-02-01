@@ -70,7 +70,7 @@ class ShopSettings extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::block([
+            Layout::rows([
                 CheckBox::make('settings.enabled')
                     ->title("Is the shop active?"),
 
@@ -85,7 +85,7 @@ class ShopSettings extends Screen
                     ->title('Please write the Return Policy'),
             ])->title('General Settings'),
 
-            Layout::block([
+            Layout::rows([
                 CheckBox::make('settings.shop-sales')
                     ->title('Do you want the sales module on?'),
                 CheckBox::make('shop-vouchers')
@@ -99,7 +99,7 @@ class ShopSettings extends Screen
                     ->title('Please enter your API secret.')
             ])->title('Features Settings'),
 
-            Layout::block([
+            Layout::rows([
                 CheckBox::make('settings.shop-maintenance')
                     ->title('Are you sure to take down the shop?'),
                 Quill::make('settings.shop-maintenance-text')
