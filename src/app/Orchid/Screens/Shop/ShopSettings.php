@@ -88,7 +88,7 @@ class ShopSettings extends Screen
             Layout::rows([
                 CheckBox::make('settings.shop_sales')
                     ->title('Do you want the sales module on?'),
-                CheckBox::make('shop-vouchers')
+                CheckBox::make('settings.shop_vouchers')
                     ->title('Do you want the voucher module on?'),
 
                 CheckBox::make('settings.shop_billing')
@@ -111,6 +111,30 @@ class ShopSettings extends Screen
     public function createOrUpdate(Request $request)
     {
         $this->settings['shop_maintenance-text'] = strip_tags($this->settings['shop_maintenance-text']);
+
+        if ($this->settings->shop_sales === "ON") {
+            $this->settings->shop_sales = true;
+        } else {
+            $this->settings->shop_sales = false;
+        }
+
+        if ($this->settings->shop_billing === "ON") {
+            $this->settings->shop_billing = true;
+        } else {
+            $this->settings->shop_billing = false;
+        }
+
+        if ($this->settings->enabled === "ON") {
+            $this->settings->enabled = true;
+        } else {
+            $this->settings->enabled = false;
+        }
+
+        if ($this->settings->shop_maintenance === "ON") {
+            $this->settings->shop_maintenance = true;
+        } else {
+            $this->settings->shop_maintenance = false;
+        }
 
         $this->settings->fill($request->get('settings'))->save();
 
