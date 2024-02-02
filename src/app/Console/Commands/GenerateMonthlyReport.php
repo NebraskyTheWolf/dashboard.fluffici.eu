@@ -41,9 +41,9 @@ class GenerateMonthlyReport extends Command
         $today = Carbon::today()->format("Y-m-d");
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
-        $total = OrderedProduct::whereDate('created_at', date('Y-m-d', strtotime('-1 month')))->sum('price');
-        $paidPrice = OrderPayment::whereDate('created_at', date('Y-m-d', strtotime('-1 month')))->sum('price');
-        $carrierFees = OrderCarrier::whereDate('created_at', date('Y-m-d', strtotime('-1 month')))->sum('price');
+        $total = OrderedProduct::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->sum('price');
+        $paidPrice = OrderPayment::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->sum('price');
+        $carrierFees = OrderCarrier::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->sum('price');
 
         // This happens when a discounts has been placed in the order.
         $loss = $total - $paidPrice ;
@@ -59,7 +59,7 @@ class GenerateMonthlyReport extends Command
             'reportId' => $reportId,
             'reportDate' => $today,
             'reportExportDate' => $today,
-            'reportProducts' => OrderedProduct::whereDate('created_at', date('Y-m-d', strtotime('-1 month')))->paginate(),
+            'reportProducts' => OrderedProduct::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->paginate(),
             'fees' => number_format(abs($carrierFees)),
             'sales' => number_format(abs($loss)),
             'overallProfit' => number_format(abs($total - $loss)),
