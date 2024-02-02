@@ -42,11 +42,11 @@ class GenerateMonthlyReport extends Command
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
         $total = OrderedProduct::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->sum('price');
-        $paidPrice = OrderPayment::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->sum('price');
+        $paidPrice = OrderPayment::orderBy('created_at', 'desc')->where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price');
         $carrierFees = OrderCarrier::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->sum('price');
 
         // This happens when a discounts has been placed in the order.
-        $loss = $total - $paidPrice ;
+        $loss = $total - $paidPrice;
         // False positive fix
         if ($loss <= 0) {
             $loss = 0;
