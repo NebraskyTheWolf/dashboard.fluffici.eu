@@ -66,6 +66,7 @@
                                         @endif
                                     </tbody>
                                 </table>
+                                <a href="#" class="tm_primary_color">{{count($reportProducts)}} rows found.</a>
                             </div>
                         </div>
                         <div class="tm_invoice_footer tm_mb30 tm_m0_md">
