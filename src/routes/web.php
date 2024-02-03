@@ -267,7 +267,7 @@ Route::get('/api/order/payment', function (\Illuminate\Http\Request $request) {
                 $voucherData = $voucher->first();
                 if (!($voucherData->money < $product->price)) {
                     $voucherData->update([
-                        'money' => $voucher->money - $product->price
+                        'money' => $voucherData->money - $product->price
                     ]);
 
                     $payment = new \App\Models\OrderPayment();
