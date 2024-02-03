@@ -176,16 +176,15 @@ Route::get('/voucher', function (\Illuminate\Http\Request $request) {
     }
 })->middleware('auth')->name('api.shop.voucher');
 
-Route::get('/api/order/{id}', function (\Illuminate\Http\Request $request) {
-    if (!$request->has('id')) {
+Route::get('/api/order', function (\Illuminate\Http\Request $request) {
+    $orderId = $request->query('orderId');
+    if ($orderId == null) {
         return response()->json([
             'status' => false,
             'error' => 'MISSING_ID',
             'message' => 'No order ID was found.'
         ]);
     }
-
-    $orderId = $request->input('id');
 
     $order = \App\Models\ShopOrders::where('order_id', $orderId);
     $payment = \App\Models\OrderPayment::where('order_id', $orderId);
