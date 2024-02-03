@@ -215,6 +215,7 @@ Route::get('/api/order', function (\Illuminate\Http\Request $request) {
 
         if ($products->exists()) {
             $data['product'] = $products->first();
+            $data['productURL'] = env('AUTUMN_HOST', 'https://autumn.rsiniya.uk/attachments/') . \App\Models\ShopProducts::where('id', $data['product']->product_id)->first()->image_path;
         } else {
             $data['product'] = false;
         }
