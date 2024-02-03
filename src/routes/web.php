@@ -322,4 +322,4 @@ Route::post('/api/order/payment', function (\Illuminate\Http\Request $request) {
             ]);
         }
     }
-})->middleware(['auth', 'throttle']);
+})->middleware('throttle');
