@@ -175,3 +175,61 @@ Route::get('/voucher', function (\Illuminate\Http\Request $request) {
         ]);
     }
 })->middleware('auth')->name('api.shop.voucher');
+
+Route::get('/api/order/{id}', function (\Illuminate\Http\Request $request) {
+    if (!$request->has('id')) {
+        return response()->json([
+            'status' => false,
+            'error' => 'MISSING_ID',
+            'message' => 'No order ID was found.'
+        ]);
+    }
+
+    $orderId = $request->input('id');
+
+    $order = \App\Models\ShopOrders::where('order_id', $orderId);
+    $payment = \App\Models\OrderPayment::where('order_id', $orderId);
+    $products = \App\Models\OrderedProduct::where('order_id', $orderId);
+
+
+    if ($order->exists()) {
+        $orderData = $order->first();
+
+        if ($orderData->status == "COMPLETED"
+            || $orderData->status == "DELIVERED"
+            || $orderData->status == "ARCHIVED") {
+            return response()->json([
+                'status' => false,
+                'error' => 'ORDER_ALREADY_PROCESSED',
+                'message' => 'This order has been already processed since ' . \Carbon\Carbon::parse($orderData->updated_at)->diffForHumans() . '.'
+            ]);
+        }
+
+        $data = [];
+        $data['order'] = $order->first();
+
+        if ($payment->exists()) {
+            $data['payment'] = $payment->first();
+        } else {
+            $data['payment'] = false;
+        }
+
+        if ($products->exists()) {
+            $data['product'] = $products->first();
+        } else {
+            $data['product'] = false;
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ]);
+    } else {
+        return response()->json([
+            'status' => false,
+            'error' => 'ORDER_NOT_FOUND',
+            'message' => 'This order does not exists in our records.'
+        ]);
+    }
+
+});

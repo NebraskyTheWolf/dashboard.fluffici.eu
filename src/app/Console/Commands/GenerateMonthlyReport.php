@@ -83,8 +83,6 @@ class GenerateMonthlyReport extends Command
         $report->save();
 
         $this->sendToAll(new ShopReportReady($reportId));
-
-
     }
 
     public function percent($first, $second): float|int {
