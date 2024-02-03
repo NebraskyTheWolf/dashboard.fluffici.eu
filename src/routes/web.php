@@ -195,12 +195,11 @@ Route::get('/api/order', function (\Illuminate\Http\Request $request) {
         $orderData = $order->first();
 
         if ($orderData->status == "COMPLETED"
-            || $orderData->status == "DELIVERED"
-            || $orderData->status == "ARCHIVED") {
+            || $orderData->status == "DELIVERED") {
             return response()->json([
                 'status' => false,
                 'error' => 'ORDER_ALREADY_PROCESSED',
-                'message' => 'This order has been already processed since ' . \Carbon\Carbon::parse($orderData->updated_at)->diffForHumans() . '.'
+                'message' => 'This order has been already ' . strtolower($orderData->status) .' since ' . \Carbon\Carbon::parse($orderData->updated_at)->diffForHumans() . '.'
             ]);
         }
 
