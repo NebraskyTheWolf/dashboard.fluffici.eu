@@ -264,8 +264,9 @@ Route::get('/api/order/payment', function (\Illuminate\Http\Request $request) {
 
             $voucher = \App\Models\ShopVouchers::where('code', $voucherCode);
             if ($voucher->exists()) {
-                if (!($voucher->money < $product->price)) {
-                    $voucher->update([
+                $voucherData = $voucher->first();
+                if (!($voucherData->money < $product->price)) {
+                    $voucherData->update([
                         'money' => $voucher->money - $product->price
                     ]);
 
@@ -273,7 +274,7 @@ Route::get('/api/order/payment', function (\Illuminate\Http\Request $request) {
                     $payment->order_id = $order->order_id;
                     $payment->status = 'PAID';
                     $payment->transaction_id = \Ramsey\Uuid\Uuid::uuid4();
-                    $payment->provider = 'Voucher #' . $voucher->id;
+                    $payment->provider = 'Voucher #' . $voucherData->id;
                     $payment->price = $product->price;
                     $payment->save();
 
@@ -284,7 +285,7 @@ Route::get('/api/order/payment', function (\Illuminate\Http\Request $request) {
                     return response()->json([
                         'status' => true,
                         'data' => [
-                            'remainingBalance' =>  $voucher->money
+                            'remainingBalance' =>  $voucherData->money
                         ]
                     ]);
                 } else {
