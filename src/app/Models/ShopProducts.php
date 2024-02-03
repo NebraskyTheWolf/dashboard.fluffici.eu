@@ -20,4 +20,13 @@ class ShopProducts extends Model
         'image_path',
         'deleted_at'
     ];
+
+    public function getImage(): string
+    {
+        if ($this->image_path !== null) {
+            return env('AUTUMN_HOST', 'https://autumn.rsiniya.uk/attachments/') . $this->image_path;
+        } else {
+            return env('AUTUMN_HOST', 'https://autumn.rsiniya.uk/attachments/') . 'E1dC5nCVCCSnYwTmUTS7JMYAZiwOeb1xa8XCFPmu4j';
+        }
+    }
 }

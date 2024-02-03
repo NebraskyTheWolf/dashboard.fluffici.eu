@@ -214,8 +214,10 @@ Route::get('/api/order', function (\Illuminate\Http\Request $request) {
         }
 
         if ($products->exists()) {
-            $data['product'] = $products->first();
-            $data['productURL'] = env('AUTUMN_HOST', 'https://autumn.rsiniya.uk/attachments/') . \App\Models\ShopProducts::where('id', $data['product']->product_id)->first()->image_path;
+            $data1 = $products->first();
+            $data['product'] = $data1;
+            $prd = \App\Models\ShopProducts::where('id', $data1->product_id)->first();
+            $data['productURL'] = $prd->getImage();
         } else {
             $data['product'] = false;
         }
