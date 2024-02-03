@@ -199,7 +199,7 @@ Route::get('/api/order', function (\Illuminate\Http\Request $request) {
             return response()->json([
                 'status' => false,
                 'error' => 'ORDER_ALREADY_PROCESSED',
-                'message' => 'This order has been already ' . strtolower($orderData->status) .' since ' . \Carbon\Carbon::parse($orderData->updated_at)->diffForHumans() . '.'
+                'message' => 'This order has been already ' . strtolower($orderData->status) .' ' . \Carbon\Carbon::parse($orderData->updated_at)->diffForHumans() . '.'
             ]);
         }
 
@@ -234,3 +234,92 @@ Route::get('/api/order', function (\Illuminate\Http\Request $request) {
     }
 
 });
+
+Route::post('/api/order/payment', function (\Illuminate\Http\Request $request) {
+    if (!$request->has('orderId')
+        && !$request->has('paymentType')) {
+        return response()->json([
+            'status' => false,
+            'error' => 'ARGUMENTS_REJECTION',
+            'message' => 'This order id or paymentType was rejected.'
+        ]);
+    }
+
+    $orderId = $request->input('orderId');
+    $order = \App\Models\ShopOrders::where('order_id', $orderId)->first();
+    $product = \App\Models\OrderedProduct::where('order_id', $orderId)->first();
+
+    $paymentType = $request->input('paymentType');
+
+    switch ($paymentType) {
+        case 'VOUCHER': {
+            if (!$request->has('voucherCode')) {
+                return response()->json([
+                    'status' => false,
+                    'error' => 'VOUCHER_REJECTION',
+                    'message' => 'The voucher code is missing.'
+                ]);
+            }
+
+            $voucher = \App\Models\ShopVouchers::where('code', $request->input('voucherCode'));
+            if ($voucher->exists()) {
+
+                if (!($voucher->money < $product->price)) {
+                    $voucher->update([
+                        'money' => $voucher->money - $product->price
+                    ]);
+
+                    $payment = new \App\Models\OrderPayment();
+                    $payment->order_id = $order->order_id;
+                    $payment->status = 'PAID';
+                    $payment->transaction_id = \Ramsey\Uuid\Uuid::uuid4();
+                    $payment->provider = 'Voucher #' . $voucher->id;
+                    $payment->price = $product->price;
+                    $payment->save();
+
+                    return response()->json([
+                        'status' => true,
+                        'data' => [
+                            'remainingBalance' =>  $voucher->money
+                        ]
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'error' => 'VOUCHER_REJECTION',
+                        'message' => 'The voucher code does not have enough money.'
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'error' => 'VOUCHER_REJECTION',
+                    'message' => 'The voucher code is invalid.'
+                ]);
+            }
+        }
+        case 'CASH': {
+            $payment = new \App\Models\OrderPayment();
+            $payment->order_id = $order->order_id;
+            $payment->status = 'PAID';
+            $payment->transaction_id = \Ramsey\Uuid\Uuid::uuid4();
+            $payment->provider = 'Cash';
+            $payment->price = $product->price;
+            $payment->save();
+
+            return  response()->json([
+                'status' => true,
+                'data' => [
+                    'message' => 'The order was set as PAID.'
+                ]
+            ]);
+        }
+        default: {
+            return response()->json([
+                'status' => false,
+                'error' => 'BAD_REQUEST',
+                'message' => 'The payment request is denied.'
+            ]);
+        }
+    }
+})->middleware(['auth', 'throttle']);
