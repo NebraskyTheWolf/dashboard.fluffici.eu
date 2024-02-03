@@ -277,6 +277,10 @@ Route::get('/api/order/payment', function (\Illuminate\Http\Request $request) {
                     $payment->price = $product->price;
                     $payment->save();
 
+                    $order->update([
+                        'status' => 'DELIVERED'
+                    ]);
+
                     return response()->json([
                         'status' => true,
                         'data' => [
@@ -306,6 +310,10 @@ Route::get('/api/order/payment', function (\Illuminate\Http\Request $request) {
             $payment->provider = 'Cash';
             $payment->price = $product->price;
             $payment->save();
+
+            $order->update([
+                'status' => 'DELIVERED'
+            ]);
 
             return  response()->json([
                 'status' => true,
