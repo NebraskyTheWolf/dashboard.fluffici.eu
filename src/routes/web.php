@@ -235,17 +235,17 @@ Route::get('/api/order', function (\Illuminate\Http\Request $request) {
 
 });
 
-Route::post('/api/order/payment', function (\Illuminate\Http\Request $request) {
-    if (!$request->has('orderId')
-        && !$request->has('paymentType')) {
+Route::get('/api/order/payment', function (\Illuminate\Http\Request $request) {
+    $orderId = $request->query('orderId');
+    $paymentType = $request->query('paymentType');
+    if ($orderId == null && $paymentType == null) {
         return response()->json([
             'status' => false,
-            'error' => 'ARGUMENTS_REJECTION',
-            'message' => 'This order id or paymentType was rejected.'
+            'error' => 'MISSING_ID',
+            'message' => 'No order ID was found.'
         ]);
     }
 
-    $orderId = $request->input('orderId');
     $order = \App\Models\ShopOrders::where('order_id', $orderId)->first();
     $product = \App\Models\OrderedProduct::where('order_id', $orderId)->first();
 
@@ -253,7 +253,8 @@ Route::post('/api/order/payment', function (\Illuminate\Http\Request $request) {
 
     switch ($paymentType) {
         case 'VOUCHER': {
-            if (!$request->has('voucherCode')) {
+            $voucherCode = $request->query('voucherCode');
+            if ($voucherCode == null) {
                 return response()->json([
                     'status' => false,
                     'error' => 'VOUCHER_REJECTION',
@@ -261,9 +262,8 @@ Route::post('/api/order/payment', function (\Illuminate\Http\Request $request) {
                 ]);
             }
 
-            $voucher = \App\Models\ShopVouchers::where('code', $request->input('voucherCode'));
+            $voucher = \App\Models\ShopVouchers::where('code', $voucherCode);
             if ($voucher->exists()) {
-
                 if (!($voucher->money < $product->price)) {
                     $voucher->update([
                         'money' => $voucher->money - $product->price
