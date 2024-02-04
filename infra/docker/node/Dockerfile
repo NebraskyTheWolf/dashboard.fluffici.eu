@@ -13,10 +13,10 @@ RUN apt-get update  \
    && rm -rf /var/cache/apt/*
 
 RUN cd /workspace \
-    && npm install express \
-    && npm install bwip-js \
-    && npm install canvas \
-    && npm install http \
-    && npm install nodejs-base64-converter
+    && npm install express -g \
+    && npm install bwip-js -g \
+    && npm install canvas -g \
+    && npm install http -g \
+    && npm install nodejs-base64-converter -g
 
 CMD ["node", "index.js"]
