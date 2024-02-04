@@ -132,7 +132,7 @@ Route::get('/voucher', function (\Illuminate\Http\Request $request) {
             $client = new Client();
             $response = $client->get(env("IMAGER_HOST", "85.215.202.21:3900/voucher/"). $voucherData->code . "/" . $voucherData->money);
             if ($response->getStatusCode()) {
-                return response()->download($storage->get($voucherData->code . '-code.png'));
+                return response()->download(storage_path('app/public/' . $voucherData->code . '-code.png'));
             } else {
                 return response()->json([
                     'error' => 'The server was not responding correctly.'
