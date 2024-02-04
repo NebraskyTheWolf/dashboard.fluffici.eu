@@ -33,11 +33,7 @@ class Driver extends AbstractDriver
      */
     public function checkHealth(): void
     {
-        if (!extension_loaded('gd') || !function_exists('gd_info')) {
-            throw new RuntimeException(
-                'GD PHP extension must be installed to use this driver.'
-            );
-        }
+
     }
 
     /**
