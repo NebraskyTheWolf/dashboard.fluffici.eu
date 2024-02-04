@@ -1,5 +1,5 @@
 # specify the node base image with your desired version node:<version>
-FROM node:bookworm
+FROM node:16-alpine
 USER root
 
 RUN mkdir /workspace
