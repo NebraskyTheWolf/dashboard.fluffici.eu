@@ -8,8 +8,8 @@ WORKDIR /workspace
 
 COPY ./node /workspace
 
-RUN apk add --update python make g++\
-   && rm -rf /var/cache/apk/*
+RUN apt install python make g++ build-essential \
+   && rm -rf /var/cache/apt/*
 
 RUN cd /workspace  \
     && npm install --save
