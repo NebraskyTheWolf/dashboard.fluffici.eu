@@ -23,7 +23,7 @@ app.get('/voucher/:id/:price', async function (req, res) {
     const canvas = createCanvas(806, 988),
         ctx = canvas.getContext("2d");
 
-    await loadImage(path.join(__dirname, 'public', 'default_voucher_card.png')).then(async img => {
+    await loadImage(path.join(__dirname, 'public', 'default_voucher_cards.png')).then(async img => {
         ctx.drawImage(img, 0, 0);
 
         ctx.font = '26px "Arial Bold"';
