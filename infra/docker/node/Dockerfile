@@ -1,5 +1,5 @@
 # specify the node base image with your desired version node:<version>
-FROM node:16-bookworm
+FROM node:16
 USER root
 
 RUN mkdir /workspace
@@ -8,7 +8,8 @@ WORKDIR /workspace
 
 COPY ./node /workspace
 
-RUN apt install python make g++ \
+RUN apt-get update  \
+   && apt install -y python make g++ \
    && rm -rf /var/cache/apt/*
 
 RUN cd /workspace  \
