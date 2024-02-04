@@ -84,6 +84,6 @@ RUN apt-get update && \
         zlib1g-dev
 
 RUN apt-get install -y openssl zip unzip git libonig-dev  libxml2-dev libpng-dev libjpeg-dev libfreetype6-dev libonig-dev curl mcrypt gnupg build-essential software-properties-common wget vim libwebp-dev
-RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql tokenizer xml bcmath opcache pcntl intl soap exif gd
+RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql xml bcmath opcache pcntl intl soap exif gd
 
 CMD ["php", "artisan", "websockets:serve"]
