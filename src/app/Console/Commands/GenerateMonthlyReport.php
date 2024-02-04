@@ -59,7 +59,7 @@ class GenerateMonthlyReport extends Command
             'reportId' => $reportId,
             'reportDate' => $today,
             'reportExportDate' => $today,
-            'reportProducts' => OrderedProduct::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->paginate(),
+            'reportProducts' => OrderedProduct::whereMonth('created_at', Carbon::now())->get(),
             'fees' => number_format(abs($carrierFees)),
             'sales' => number_format(abs($loss)),
             'overallProfit' => number_format(abs($total - $loss)),
