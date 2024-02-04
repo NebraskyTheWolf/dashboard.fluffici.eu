@@ -28,7 +28,7 @@ app.get('/voucher/:id/:price', async function (req, res) {
 
         ctx.font = '26px "Arial Bold"';
         ctx.fillStyle = "rgb(255,255,255)";
-        ctx.fillText(req.params.id, 150,470);
+        ctx.fillText(req.params.id, 130,470);
         ctx.fillText(req.params.price + ' Kc', 368,580);
 
         bwipJs.toBuffer({
