@@ -12,7 +12,7 @@
         <div style="page-break-after:auto;">
             <div class="">
                 <div class="">
-                    <div class="tm_invoice tm_style1 tm_dark_invoice">
+                    <div class="tm_invoice tm_style1 ">
                         <div class="">
                             <div class="tm_invoice_head tm_align_center tm_mb20">
                                 <div class="tm_invoice_left">
