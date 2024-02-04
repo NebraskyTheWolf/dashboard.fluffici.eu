@@ -7,6 +7,7 @@ use App\Console\Commands\DeleteOldSales;
 use App\Console\Commands\DeleteUsedVouchers;
 use App\Console\Commands\FinishOldEvent;
 use App\Console\Commands\GenerateMonthlyReport;
+use App\Console\Commands\GenerateTransactionsReport;
 use App\Console\Commands\Refresh;
 use App\Console\Commands\StartNewEvent;
 use Illuminate\Console\Scheduling\Schedule;
@@ -19,6 +20,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void{
         $schedule->command(GenerateMonthlyReport::class)->monthly();
+        $schedule->command(GenerateTransactionsReport::class)->monthly();
         $schedule->command(Refresh::class)->daily();
 
         $schedule->command(DeleteOldProducts::class)->everyTenSeconds();

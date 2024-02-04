@@ -91,27 +91,51 @@ Route::get('/build', function (Request $request) {
 })->name("build");
 
 Route::get('/report', function (\Illuminate\Http\Request $request) {
+    $type = $request->query('type');
     $reportId = $request->query('reportId');
 
     if ($reportId != null) {
        $storage = \Illuminate\Support\Facades\Storage::disk('public');
 
-       $report = \App\Models\ShopReports::where('report_id', $reportId);
+       switch ($type) {
+           case 'shop': {
+               $report = \App\Models\ShopReports::where('report_id', $reportId);
 
-       if ($report->exists()) {
-           $data = $report->firstOrFail();
-           if ($storage->exists($data->attachment_id)) {
-               return response()->download(storage_path('app/public/' . $data->attachment_id));
-           } else {
-               return response()->json([
-                   'error' => 'Not found in the storage.'
-               ]);
+               if ($report->exists()) {
+                   $data = $report->firstOrFail();
+                   if ($storage->exists($data->attachment_id)) {
+                       return response()->download(storage_path('app/public/' . $data->attachment_id));
+                   } else {
+                       return response()->json([
+                           'error' => 'Not found in the storage.'
+                       ]);
+                   }
+               } else {
+                   return response()->json([
+                       'error' => 'No records in database for ' .  $reportId
+                   ]);
+               }
            }
-       } else {
-           return response()->json([
-               'error' => 'No records in database for ' .  $reportId
-           ]);
+           case 'transactions': {
+               $report = \App\Models\TransactionsReport::where('report_id', $reportId);
+
+               if ($report->exists()) {
+                   $data = $report->firstOrFail();
+                   if ($storage->exists($data->attachment_id)) {
+                       return response()->download(storage_path('app/public/' . $data->attachment_id));
+                   } else {
+                       return response()->json([
+                           'error' => 'Not found in the storage.'
+                       ]);
+                   }
+               } else {
+                   return response()->json([
+                       'error' => 'No records in database for ' .  $reportId
+                   ]);
+               }
+           }
        }
+
     } else {
         return response()->json([
             'error' => 'The reportId cannot be null.'

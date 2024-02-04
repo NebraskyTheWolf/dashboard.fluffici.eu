@@ -19,6 +19,9 @@ routes:
 make-user:
 	docker compose exec dashboard php artisan orchid:admin
 
+make-tr-report:
+	docker compose exec dashboard php artisan app:generate-transactions-report
+
 revision:
 	@echo $(GIT_SHA_FETCH)
 

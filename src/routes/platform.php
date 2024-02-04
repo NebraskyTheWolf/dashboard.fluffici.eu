@@ -201,3 +201,6 @@ Route::screen('accounting/transactions', \App\Orchid\Screens\Accounting\Accounti
 
 Route::screen('accounting/transactions/edit/{payment?}', \App\Orchid\Screens\Accounting\AccountingShopCreatePayment::class)
     ->name('platform.accounting.transactions.new');
+
+Route::screen('accounting/transactions/reports', \App\Orchid\Screens\Accounting\AccountingTRSReport::class)
+    ->name('platform.accounting.transactions.reports');

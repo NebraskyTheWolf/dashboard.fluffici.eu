@@ -107,6 +107,10 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.briefcase')
                         ->route('platform.shop.reports'),
 
+                    Menu::make('Zprávy o transakcích')
+                        ->icon('bs.graph-up')
+                        ->route('platform.accounting.transactions.reports'),
+
                     Menu::make('Transakce')
                         ->icon('bs.arrow-left-right')
                         ->route('platform.accounting.transactions'),
