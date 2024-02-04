@@ -52,6 +52,7 @@
                                                     <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg">Provider</th>
                                                     <th class="tm_width_1 tm_semi_bold tm_primary_color tm_gray_bg">Status</th>
                                                     <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg tm_text_right">Total</th>
+                                                    <th class="tm_width_2 tm_semi_bold tm_primary_color tm_gray_bg tm_text_right">Date</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -62,6 +63,7 @@
                                                         <td class="tm_width_2">{{ $transaction->provider }}</td>
                                                         <td class="tm_width_1">{{ $transaction->status }}</td>
                                                         <td class="tm_width_2 tm_text_right">{{ $transaction->price }} Kc</td>
+                                                        <td class="tm_width_2 tm_text_right">{{ $transaction->created_at->diffForHumans() }}</td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
