@@ -34,6 +34,19 @@ services:
     networks:
       - net-db
 
+  imager:
+    build:
+      context: .
+      dockerfile: ./infra/docker/node/Dockerfile
+    restart: always
+    container_name: imager
+    volumes:
+      - type: bind
+        source: ./node
+        target: /
+    ports:
+      - '3900:3900'
+
   nginx:
       build:
         context: .

@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'b18e94599f8c9e33102778d281db8c1df5d49671',
+        'reference' => 'dc1231f59cc3a176262d1002f021125bed79fa26',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -481,6 +481,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'jucksearm/php-barcode' => array(
+            'pretty_version' => '1.0.2',
+            'version' => '1.0.2.0',
+            'reference' => '8b67dbe7cebfe0228a56911a33985bf79a67998d',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../jucksearm/php-barcode',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'kodova/hamcrest-php' => array(
             'dev_requirement' => true,
             'replaced' => array(
@@ -499,7 +508,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'b18e94599f8c9e33102778d281db8c1df5d49671',
+            'reference' => 'dc1231f59cc3a176262d1002f021125bed79fa26',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -906,6 +915,15 @@
             'install_path' => __DIR__ . '/../phpunit/phpunit',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'picqer/php-barcode-generator' => array(
+            'pretty_version' => 'v2.4.0',
+            'version' => '2.4.0.0',
+            'reference' => '4cec18909dffd86e14beb69b1040f2520c2e1bb1',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../picqer/php-barcode-generator',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'psr/clock' => array(
             'pretty_version' => '1.0.0',

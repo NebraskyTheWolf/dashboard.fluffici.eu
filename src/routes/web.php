@@ -1,10 +1,12 @@
 <?php
 
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PagesController;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+use jucksearm\barcode\Datamatrix;
 use Orchid\Platform\Http\Controllers\LoginController;
 
 use Orchid\Platform\Http\Controllers\AsyncController;
@@ -127,41 +129,13 @@ Route::get('/voucher', function (\Illuminate\Http\Request $request) {
         if ($voucher->exists()) {
             $voucherData = $voucher->first();
 
-            if ($storage->exists('default_voucher_card.png')) {
-                $manager = new ImageManager(new Driver());
-                $image = $manager->read($storage->get('default_voucher_card.png'));
-
-                $image->text($voucherData->code, 692,486, function ($font) {
-                    $font->filename(public_path('fonts/source.ttf'));
-                    $font->color('#FFFFFF');
-                    $font->size(30);
-                    $font->align('center');
-                    $font->valign('middle');
-                    $font->lineHeight(1.6);
-                    $font->angle(10);
-                });
-
-                $qrCodes = QrCode::size(120)
-                    ->merge(public_path('img/fluffici.png'), .4)
-                    ->color(255, 0, 46)
-                    ->style('square')
-                    ->generate('https://dashboard.fluffici.eu/check/voucher/' . $voucherData->code);
-
-                $image->place(
-                    $qrCodes,
-                    'bottom-right',
-                    780,
-                    965,
-                    90
-                );
-
-                $path = storage_path('/app/public/voucher-' . $voucherCode . '.png');
-                $image->save($path)->toPng();
-
-                return response()->download($path);
+            $client = new Client();
+            $response = $client->get(env("IMAGER_HOST", "https://imager.rsiniya.uk/voucher/"). $voucherData->code . "/" . $voucherData->money);
+            if ($response->getStatusCode()) {
+                return response()->download($storage->get($voucherData->code . '-code.png'));
             } else {
                 return response()->json([
-                    'error' => 'No default voucher card.'
+                    'error' => 'The server was not responding correctly.'
                 ]);
             }
         } else {
