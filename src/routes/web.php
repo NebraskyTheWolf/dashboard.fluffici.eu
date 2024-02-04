@@ -130,7 +130,7 @@ Route::get('/voucher', function (\Illuminate\Http\Request $request) {
             $voucherData = $voucher->first();
 
             $client = new Client();
-            $response = $client->get(env("IMAGER_HOST", "https://imager.rsiniya.uk/voucher/"). $voucherData->code . "/" . $voucherData->money);
+            $response = $client->get(env("IMAGER_HOST", "85.215.202.21:3900/voucher/"). $voucherData->code . "/" . $voucherData->money);
             if ($response->getStatusCode()) {
                 return response()->download($storage->get($voucherData->code . '-code.png'));
             } else {

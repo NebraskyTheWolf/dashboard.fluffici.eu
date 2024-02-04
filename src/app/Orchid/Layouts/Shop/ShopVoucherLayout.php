@@ -4,10 +4,10 @@ namespace app\Orchid\Layouts\Shop;
 
 use App\Models\ShopVouchers;
 use Carbon\Carbon;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Password;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
+use Orchid\Support\Color;
 
 class ShopVoucherLayout extends Table
 {
@@ -30,10 +30,12 @@ class ShopVoucherLayout extends Table
     {
         return [
             TD::make('code', 'Code')
-                ->render(function (ShopVouchers $vouchers) {
-                    return Password::make('voucher')
-                            ->title('Click to reveal.')
-                            ->value($vouchers->code);
+                ->render(function (ShopVouchers $reports) {
+                    return Link::make('Download')
+                        ->icon('bs.caret-down-square')
+                        ->type(Color::SUCCESS)
+                        ->download()
+                        ->href(route('api.shop.voucher') . '?voucherCode=' . $reports->code);
                 }),
             TD::make('money', 'Amount')
                 ->render(function (ShopVouchers $vouchers) {
