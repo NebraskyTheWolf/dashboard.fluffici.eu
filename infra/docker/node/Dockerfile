@@ -12,7 +12,11 @@ RUN apt-get update  \
    && apt install -y python make g++ \
    && rm -rf /var/cache/apt/*
 
-RUN cd /workspace  \
-    && npm install --save
+RUN cd /workspace \
+    && npm install express \
+    && npm install bwip-js \
+    && npm install canvas \
+    && npm install http \
+    && npm install nodejs-base64-converter
 
 CMD ["node", "index.js"]
