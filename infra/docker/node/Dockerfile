@@ -1,12 +1,16 @@
 # specify the node base image with your desired version node:<version>
 FROM node:bookworm
+USER root
 
-RUN mkdir workspace
+RUN mkdir /workspace
 
 WORKDIR /workspace
 
 COPY ./node /workspace
 
-RUN npm install --save
+
+
+RUN cd /workspace  \
+    && npm install --save
 
 CMD ["node", "index.js"]
