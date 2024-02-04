@@ -10,8 +10,8 @@
     </head>
     <body>
         <div style="page-break-after:auto;">
-            <div class="tm_container">
-                <div class="tm_invoice_wrap">
+            <div class="">
+                <div class="">
                     <div class="tm_invoice tm_style1 tm_dark_invoice">
                         <div class="">
                             <div class="tm_invoice_head tm_align_center tm_mb20">
