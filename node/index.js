@@ -43,7 +43,7 @@ app.get('/voucher/:id/:price', async function (req, res) {
 
         setTimeout(async () => {
             await loadImage(path.join(__dirname, 'cache', req.params.id + '-datamatrix.png')).then(img => {
-                ctx.drawImage(img, 604,803, 160, 160)
+                ctx.drawImage(img, 612,803, 160, 160)
             })
 
             const out = fs.createWriteStream(path.join(__dirname, '../src/storage/app/public', req.params.id + '-code.png')),
