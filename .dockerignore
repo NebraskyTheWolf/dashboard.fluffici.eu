@@ -28,3 +28,5 @@
 **.md
 
 /src/dashboard/vendor/orchid/platform/node_modules
+
+/node/node_modules/
