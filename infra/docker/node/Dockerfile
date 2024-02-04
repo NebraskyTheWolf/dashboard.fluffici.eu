@@ -8,7 +8,7 @@ WORKDIR /workspace
 
 COPY ./node /workspace
 
-RUN apt install python make g++ build-essential \
+RUN apt install python make g++ \
    && rm -rf /var/cache/apt/*
 
 RUN cd /workspace  \
