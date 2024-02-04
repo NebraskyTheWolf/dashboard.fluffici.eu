@@ -9,7 +9,7 @@ const http = require('http')
 
 const app = express()
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '../public')))
 
 app.get('/voucher/:id/:price', async function (req, res) {
     if (req.params.id === undefined) {

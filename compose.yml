@@ -43,7 +43,7 @@ services:
     volumes:
       - type: bind
         source: ./node
-        target: /
+        target: /workspace
     ports:
       - '3900:3900'
 
