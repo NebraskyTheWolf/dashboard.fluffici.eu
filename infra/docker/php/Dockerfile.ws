@@ -77,13 +77,6 @@ EOF
 ARG GIT_COMMIT
 ENV GIT_COMMIT=$GIT_COMMIT
 
-RUN apt-get update -y && apt-get install -y sendmail libpng-dev
-
-RUN apt-get update && \
-    apt-get install -y \
-        zlib1g-dev
-
-RUN apt-get install -y openssl zip unzip git libonig-dev  libxml2-dev libpng-dev libjpeg-dev libfreetype6-dev libonig-dev curl mcrypt gnupg build-essential software-properties-common wget vim libwebp-dev
-RUN docker-php-ext-install mysqli mbstring pdo pdo_mysql xml bcmath opcache pcntl intl soap exif gd
+RUN docker-php-ext-install pdo pdo_mysql
 
 CMD ["php", "artisan", "websockets:serve"]
