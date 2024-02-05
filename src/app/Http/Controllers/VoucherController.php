@@ -39,11 +39,11 @@ class VoucherController extends Controller
                     ]);
                 }
 
-                $response = \Httpful\Request::post(env("IMAGER_HOST", "85.215.202.21:3900/voucher/") . $voucherData->money, [
-                    'properties' => json_encode([
+                $response = \Httpful\Request::post(env("IMAGER_HOST", "http://85.215.202.21:3900/voucher/") . $voucherData->money, [
+                    'properties' => stripslashes(json_encode([
                         'signature' => $signature,
                         'data' => base64_encode($voucherData->code)
-                    ], JSON_INVALID_UTF8_IGNORE)
+                    ], JSON_INVALID_UTF8_IGNORE))
                 ], "application/json")->expectsJson()->send();
 
                 if ($response->code == 200) {
