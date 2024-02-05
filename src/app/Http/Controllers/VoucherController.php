@@ -45,10 +45,10 @@ class VoucherController extends Controller
 
                 $response = $client->post(env("IMAGER_HOST", "85.215.202.21:3900/voucher/") . $voucherData->money, [
                     'body' => [
-                        'properties' => base64_encode(json_encode([
+                        'properties' => json_encode([
                             'signature' => $signature,
                             'data' => base64_encode($voucherData->code)
-                        ], JSON_INVALID_UTF8_IGNORE))
+                        ], JSON_INVALID_UTF8_IGNORE)
                     ]
                 ]);
                 if ($response->getStatusCode()) {
