@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Orchid\Screens\Shop;
+namespace App\Orchid\Screens\Shop;
 
 use App\Models\ShopReports;
 use App\Orchid\Layouts\Shop\ShopReportLayout;
