@@ -14,7 +14,7 @@ class PaymentController extends Controller
         $paymentType = $request->query('paymentType');
         $encodedData = $request->query('encodedData');
 
-        if ($orderId == null && $paymentType == null && $encodedData != null) {
+        if ($orderId == null && $paymentType == null) {
             return response()->json([
                 'status' => false,
                 'error' => 'MISSING_ID',
@@ -26,8 +26,17 @@ class PaymentController extends Controller
         $product = \App\Models\OrderedProduct::where('order_id', $orderId)->first();
 
         switch ($paymentType) {
+            case "VOUCHER_DEBUG":
             case 'VOUCHER':
             {
+                if ($encodedData == null) {
+                    return response()->json([
+                        'status' => false,
+                        'error' => 'MISSING_VOUCHER',
+                        'message' => 'No voucher body was found.'
+                    ]);
+                }
+
                 $storage = Storage::disk('public');
                 if (!$storage->exists('security.cert')) {
                     return response()->json([
@@ -39,6 +48,15 @@ class PaymentController extends Controller
 
                 $key = openssl_pkey_get_public($storage->get('security.cert'));
                 $data = json_decode(base64_decode($encodedData), true);
+
+                if ($paymentType === "VOUCHER_DEBUG") {
+                    return response()->json([
+                        'status' => false,
+                        'error' => 'SIGNATURE_REJECTION',
+                        'message' => $data
+                    ]);
+                }
+
                 $voucherCode = base64_decode($data['data']);
 
                 $result = openssl_verify($voucherCode, base64_decode(strtr($data['signature'], '-_', '+/')), $key, OPENSSL_ALGO_SHA256);
