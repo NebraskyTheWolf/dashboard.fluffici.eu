@@ -39,8 +39,8 @@ class PaymentController extends Controller
 
                 $key = openssl_pkey_get_public($storage->get('security.cert'));
                 $data = json_decode(base64_decode($encodedData), true);
-                $voucherCode = base64_decode($data['properties']['data']);
-                $result = openssl_verify($voucherCode, base64_decode(strtr($data['properties']['signature'], '-_', '+/')), $key, OPENSSL_ALGO_SHA256);
+                $voucherCode = base64_decode($data['data']);
+                $result = openssl_verify($voucherCode, base64_decode(strtr($data['signature'], '-_', '+/')), $key, OPENSSL_ALGO_SHA256);
 
                 if ($result == 1) {
                     $voucher = \App\Models\ShopVouchers::where('code', $voucherCode);
