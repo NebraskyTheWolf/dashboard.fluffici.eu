@@ -52,7 +52,7 @@ class PaymentController extends Controller
                 if ($paymentType === "VOUCHER_DEBUG") {
                     return response()->json([
                         'status' => false,
-                        'error' => 'SIGNATURE_REJECTION',
+                        'error' => base64_decode($encodedData),
                         'message' => $data
                     ]);
                 }
