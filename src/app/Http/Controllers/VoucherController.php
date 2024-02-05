@@ -33,6 +33,11 @@ class VoucherController extends Controller
 
 
                 $signedData = openssl_sign($voucherData->code, $signature, $key, OPENSSL_ALGO_SHA256);
+                if ($signedData == 0) {
+                    return response()->json([
+                        'error' => 'Cannot sign data.'
+                    ]);
+                }
 
                 $client = new Client([
                     'headers' => [ 'Content-Type' => 'application/json' ]
@@ -40,10 +45,10 @@ class VoucherController extends Controller
 
                 $response = $client->post(env("IMAGER_HOST", "85.215.202.21:3900/voucher/") . $voucherData->money, [
                     'body' => [
-                        'properties' => base64_encode(stripslashes(json_encode([
+                        'properties' => base64_encode(json_encode([
                             'signature' => $signature,
-                            'data' => base64_encode($signedData)
-                        ], JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE)))
+                            'data' => base64_encode($voucherData->code)
+                        ], JSON_INVALID_UTF8_IGNORE))
                     ]
                 ]);
                 if ($response->getStatusCode()) {

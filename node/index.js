@@ -6,10 +6,12 @@ const fs = require("fs"),
     { createCanvas, loadImage, PNGStream} = require("canvas");
 
 const http = require('http')
+const bodyParser = require("body-parser");
 
 const app = express()
 
 app.use(express.static(path.join(__dirname, '../public')))
+app.use(bodyParser())
 
 app.post('/voucher/:price', async function (req, res) {
     console.log(req.body)
@@ -18,9 +20,9 @@ app.post('/voucher/:price', async function (req, res) {
     console.log(decoded)
 
     const id = nodeBase64.decode(decoded.data);
-    console.log(id)
+    console.log(nodeBase64.decode(decoded.signature))
 
-    if (decoded.signature === undefined || decoded.data) {
+    if (decoded.signature === undefined || decoded.data === undefined) {
         return res.status(404).json({
             'status': false,
             'error': 'VOUCHER_ID_MISSING',
@@ -36,12 +38,12 @@ app.post('/voucher/:price', async function (req, res) {
 
         ctx.font = '26px "Arial Bold"';
         ctx.fillStyle = "rgb(255,255,255)";
-        ctx.fillText(req.params.id, 130,470);
+        ctx.fillText(id, 130,470);
         ctx.fillText(req.params.price + ' Kc', 368,580);
 
         bwipJs.toBuffer({
             bcid: 'datamatrix',
-            text: req.body,
+            text: JSON.stringify(req.body),
             barcolor: '#FFF'
         }).then(png => {
             const dout = fs.createWriteStream(path.join(__dirname, 'cache', id + '-datamatrix.png')),
@@ -50,7 +52,7 @@ app.post('/voucher/:price', async function (req, res) {
         })
 
         setTimeout(async () => {
-            await loadImage(path.join(__dirname, 'cache', req.params.id + '-datamatrix.png')).then(img => {
+            await loadImage(path.join(__dirname, 'cache', id + '-datamatrix.png')).then(img => {
                 ctx.drawImage(img, 612,803, 160, 160)
             })
 
@@ -64,7 +66,7 @@ app.post('/voucher/:price', async function (req, res) {
     res.status(200).json({
         'status': true,
         'message': 'The was was created.',
-        'path': path.join(__dirname, '../src/storage/app/public', req.params.id + '-code.png')
+        'path': path.join(__dirname, '../src/storage/app/public', id + '-code.png')
     })
 });
 
