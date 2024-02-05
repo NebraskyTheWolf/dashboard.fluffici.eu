@@ -33,7 +33,7 @@ app.get('/voucher/:id/:price', async function (req, res) {
 
         bwipJs.toBuffer({
             bcid: 'datamatrix',
-            text: nodeBase64.encode(req.params.id),
+            text: req.params.id,
             barcolor: '#FFF'
         }).then(png => {
             const dout = fs.createWriteStream(path.join(__dirname, 'cache', req.params.id + '-datamatrix.png')),
