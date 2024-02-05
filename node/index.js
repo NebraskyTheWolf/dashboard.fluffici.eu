@@ -40,7 +40,7 @@ app.post('/voucher/:price', async function (req, res) {
 
         bwipJs.toBuffer({
             bcid: 'datamatrix',
-            text: JSON.stringify(req.body),
+            text: req.body.properties,
             barcolor: '#FFF'
         }).then(png => {
             const dout = fs.createWriteStream(path.join(__dirname, 'cache', id + '-datamatrix.png')),
