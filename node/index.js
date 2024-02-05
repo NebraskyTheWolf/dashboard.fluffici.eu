@@ -53,6 +53,7 @@ app.post('/voucher/:price', async function (req, res) {
                 stream = canvas.createPNGStream();
             stream.pipe(out);
         }, 3000)
+
     })
 
     res.status(200).json({

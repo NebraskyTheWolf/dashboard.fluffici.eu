@@ -26,6 +26,7 @@ class VoucherController extends Controller
                         'error' => 'SIGNATURE',
                         'message' => 'Unable to check the request signature.'
                     ]);
+
                 }
 
                 $key = openssl_pkey_get_private($storage->get('security.key'));
