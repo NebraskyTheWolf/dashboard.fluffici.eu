@@ -90,7 +90,7 @@ Route::get('/build', function ($request) {
     ];
 })->name("build");
 
-Route::get('/report', [\app\Http\Controllers\ReportController::class, 'index'])->middleware('auth')->name('api.shop.report');
-Route::get('/voucher', [\app\Http\Controllers\VoucherController::class, 'index'])->middleware('auth')->name('api.shop.voucher');
-Route::get('/api/order', [\app\Http\Controllers\PaymentController::class, 'fetchOrder']);
-Route::get('/api/order/payment', [\app\Http\Controllers\PaymentController::class, 'index'])->middleware('throttle');
+Route::get('/report', [\App\Http\Controllers\ReportController::class, 'index'])->middleware('auth')->name('api.shop.report');
+Route::get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->middleware('auth')->name('api.shop.voucher');
+Route::get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder']);
+Route::get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index'])->middleware('throttle');
