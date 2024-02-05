@@ -39,19 +39,14 @@ class VoucherController extends Controller
                     ]);
                 }
 
-                $client = new Client([
-                    'headers' => [ 'Content-Type' => 'application/json' ]
-                ]);
+                $response = \Httpful\Request::post(env("IMAGER_HOST", "85.215.202.21:3900/voucher/") . $voucherData->money, [
+                    'properties' => json_encode([
+                        'signature' => $signature,
+                        'data' => base64_encode($voucherData->code)
+                    ], JSON_INVALID_UTF8_IGNORE)
+                ], "application/json")->expectsJson()->send();
 
-                $response = $client->post(env("IMAGER_HOST", "85.215.202.21:3900/voucher/") . $voucherData->money, [
-                    'body' => [
-                        'properties' => json_encode([
-                            'signature' => $signature,
-                            'data' => base64_encode($voucherData->code)
-                        ], JSON_INVALID_UTF8_IGNORE)
-                    ]
-                ]);
-                if ($response->getStatusCode()) {
+                if ($response->code == 200) {
                     return response()->download(storage_path('app/public/' . $voucherData->code . '-code.png'));
                 } else {
                     return response()->json([
