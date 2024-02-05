@@ -26,7 +26,6 @@ class PaymentController extends Controller
         $product = \App\Models\OrderedProduct::where('order_id', $orderId)->first();
 
         switch ($paymentType) {
-            case "VOUCHER_DEBUG":
             case 'VOUCHER':
             {
                 if ($encodedData == null) {
@@ -48,14 +47,6 @@ class PaymentController extends Controller
 
                 $key = openssl_pkey_get_public($storage->get('security.cert'));
                 $data = json_decode(base64_decode($encodedData), true);
-
-                if ($paymentType === "VOUCHER_DEBUG") {
-                    return response()->json([
-                        'status' => false,
-                        'error' => base64_decode(($encodedData)),
-                        'message' => $data
-                    ]);
-                }
 
                 $voucherCode = base64_decode($data['data']);
                 $result = openssl_verify($voucherCode, base64_decode(strtr($data['signature'], '-_', '+/')), $key, OPENSSL_ALGO_SHA256);
@@ -129,9 +120,7 @@ class PaymentController extends Controller
 
                 return response()->json([
                     'status' => true,
-                    'data' => [
-                        'message' => 'The payment was successful'
-                    ]
+                    'message' => 'The payment was successful'
                 ]);
             }
             default:
