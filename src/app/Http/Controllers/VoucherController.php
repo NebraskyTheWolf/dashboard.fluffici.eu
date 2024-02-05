@@ -33,11 +33,10 @@ class VoucherController extends Controller
 
                 $signedData = openssl_sign($voucherData->code, $signature, $key, OPENSSL_ALGO_SHA256);
 
-
                 $encoded =  base64_encode(stripslashes(json_encode([
                     'signature' => $signature,
                     'data' => base64_encode($signedData)
-                ], true)));
+                ], JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE)));
 
                 if ($encoded == null) {
                     return response()->json([
