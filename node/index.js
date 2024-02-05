@@ -50,7 +50,7 @@ app.post('/voucher/:price', async function (req, res) {
 
         setTimeout(async () => {
             await loadImage(path.join(__dirname, 'cache', id + '-datamatrix.png')).then(img => {
-                ctx.drawImage(img, 612,803, 160, 160)
+                ctx.drawImage(img, 536,728, 247, 247)
             })
 
             const out = fs.createWriteStream(path.join(__dirname, '../src/storage/app/public', id + '-code.png')),
