@@ -33,21 +33,16 @@ class VoucherController extends Controller
 
                 $signedData = openssl_sign($voucherData->code, $signature, $key, OPENSSL_ALGO_SHA256);
 
-                $encoded =  base64_encode(stripslashes(json_encode([
-                    'signature' => $signature,
-                    'data' => base64_encode($signedData)
-                ], JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE)));
+                $client = new Client([
+                    'headers' => [ 'Content-Type' => 'application/json' ]
+                ]);
 
-                if ($encoded == null) {
-                    return response()->json([
-                        'error' => 'Malformed data.',
+                $response = $client->post(env("IMAGER_HOST", "85.215.202.21:3900/voucher/") . $voucherData->money, [
+                    'body' => base64_encode(stripslashes(json_encode([
                         'signature' => $signature,
-                        'code', base64_encode($voucherData->code)
-                    ]);
-                }
-
-                $client = new Client();
-                $response = $client->get(env("IMAGER_HOST", "85.215.202.21:3900/voucher/"). $encoded . "/" . $voucherData->money);
+                        'data' => base64_encode($signedData)
+                    ], JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE)))
+                ]);
                 if ($response->getStatusCode()) {
                     return response()->download(storage_path('app/public/' . $voucherData->code . '-code.png'));
                 } else {

@@ -11,8 +11,11 @@ const app = express()
 
 app.use(express.static(path.join(__dirname, '../public')))
 
-app.get('/voucher/:id/:price', async function (req, res) {
-    if (req.params.id === undefined) {
+app.post('/voucher/:price', async function (req, res) {
+    const decoded = JSON.parse(nodeBase64.decode(req.body))
+    const id = nodeBase64.decode(decoded.data);
+
+    if (decoded.signature === undefined || decoded.data) {
         return res.status(404).json({
             'status': false,
             'error': 'VOUCHER_ID_MISSING',
@@ -33,10 +36,10 @@ app.get('/voucher/:id/:price', async function (req, res) {
 
         bwipJs.toBuffer({
             bcid: 'datamatrix',
-            text: req.params.id,
+            text: req.body,
             barcolor: '#FFF'
         }).then(png => {
-            const dout = fs.createWriteStream(path.join(__dirname, 'cache', req.params.id + '-datamatrix.png')),
+            const dout = fs.createWriteStream(path.join(__dirname, 'cache', id + '-datamatrix.png')),
                 dstream = new PNGStream.from(png);
             dstream.pipe(dout);
         })
@@ -46,7 +49,7 @@ app.get('/voucher/:id/:price', async function (req, res) {
                 ctx.drawImage(img, 612,803, 160, 160)
             })
 
-            const out = fs.createWriteStream(path.join(__dirname, '../src/storage/app/public', req.params.id + '-code.png')),
+            const out = fs.createWriteStream(path.join(__dirname, '../src/storage/app/public', id + '-code.png')),
                 stream = canvas.createPNGStream();
             stream.pipe(out);
         }, 3000)
