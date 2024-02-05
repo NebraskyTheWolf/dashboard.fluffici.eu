@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, '../public')))
 app.use(bodyParser())
 
 app.post('/voucher/:price', async function (req, res) {
-    const decoded = JSON.parse(JSON.stringify(nodeBase64.decode(req.body)))
+    const decoded = JSON.parse(nodeBase64.decode(req.body.properties))
     const id = nodeBase64.decode(decoded.data);
 
     console.log(id)
