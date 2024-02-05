@@ -52,13 +52,12 @@ class PaymentController extends Controller
                 if ($paymentType === "VOUCHER_DEBUG") {
                     return response()->json([
                         'status' => false,
-                        'error' => base64_decode($encodedData),
+                        'error' => base64_decode(($encodedData)),
                         'message' => $data
                     ]);
                 }
 
                 $voucherCode = base64_decode($data['data']);
-
                 $result = openssl_verify($voucherCode, base64_decode(strtr($data['signature'], '-_', '+/')), $key, OPENSSL_ALGO_SHA256);
 
                 if ($result == 1) {
@@ -84,9 +83,7 @@ class PaymentController extends Controller
 
                             return response()->json([
                                 'status' => true,
-                                'data' => [
-                                    'remainingBalance' => $voucherData->money
-                                ]
+                                'message' => "Remaining balance " . number_format(($voucherData->money - $product->price)) . " Kc"
                             ]);
                         } else {
                             return response()->json([
