@@ -14,7 +14,7 @@ class PaymentController extends Controller
         $paymentType = $request->query('paymentType');
         $encodedData = $request->query('encodedData');
 
-        if ($orderId == null && $paymentType == null) {
+        if ($orderId == null && $paymentType == null && $encodedData != null) {
             return response()->json([
                 'status' => false,
                 'error' => 'MISSING_ID',
