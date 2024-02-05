@@ -1,8 +1,5 @@
 version: '3.8'
 
-volumes:
-  db-store:
-
 services:
   dashboard:
     build:
@@ -67,10 +64,9 @@ services:
           target: /workspace
       networks:
         - net-db
+
   db:
-    build:
-      context: .
-      dockerfile: ./infra/docker/mysql/Dockerfile
+    image: mysql/mysql-server:${MYSQL_VERSION:-8.0}
     container_name: db
     ports:
       - target: 3306
@@ -94,3 +90,6 @@ services:
 networks:
   net-db:
     name: db-net
+
+volumes:
+  db-store:

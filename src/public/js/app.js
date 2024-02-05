@@ -49,7 +49,7 @@ $(document).ready(function($) {
             $('#rev').text('Rev : ' + response.data.rev.substring(0, 8))
         }
     })
-    axios.get('https://autumn.rsiniya.uk').then(function (response) {
+    axios.get('https://autumn.fluffici.eu').then(function (response) {
         if (response.status !== 200) {
             console.log('Cannot update fields for versioning.')
         } else {
