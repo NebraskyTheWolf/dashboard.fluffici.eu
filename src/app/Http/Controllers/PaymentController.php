@@ -38,7 +38,7 @@ class PaymentController extends Controller
                 }
 
                 $key = openssl_pkey_get_public($storage->get('security.cert'));
-                $data = json_decode(base64_decode($encodedData));
+                $data = json_decode(base64_decode($encodedData), true);
                 $result = openssl_verify($data['data'], base64_decode(strtr($data['signature'], '-_', '+/')), $key, OPENSSL_ALGO_SHA256);
 
                 if ($result == 1) {
