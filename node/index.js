@@ -12,8 +12,13 @@ const app = express()
 app.use(express.static(path.join(__dirname, '../public')))
 
 app.post('/voucher/:price', async function (req, res) {
-    const decoded = JSON.parse(nodeBase64.decode(req.body))
+    console.log(req.body)
+    const decoded = JSON.parse(nodeBase64.decode(req.body.properties))
+
+    console.log(decoded)
+
     const id = nodeBase64.decode(decoded.data);
+    console.log(id)
 
     if (decoded.signature === undefined || decoded.data) {
         return res.status(404).json({

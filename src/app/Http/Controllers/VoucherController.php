@@ -39,10 +39,12 @@ class VoucherController extends Controller
                 ]);
 
                 $response = $client->post(env("IMAGER_HOST", "85.215.202.21:3900/voucher/") . $voucherData->money, [
-                    'body' => base64_encode(stripslashes(json_encode([
-                        'signature' => $signature,
-                        'data' => base64_encode($signedData)
-                    ], JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE)))
+                    'body' => [
+                        'properties' => base64_encode(stripslashes(json_encode([
+                            'signature' => $signature,
+                            'data' => base64_encode($signedData)
+                        ], JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE)))
+                    ]
                 ]);
                 if ($response->getStatusCode()) {
                     return response()->download(storage_path('app/public/' . $voucherData->code . '-code.png'));
