@@ -36,7 +36,5 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      - name: Build the docker-compose stack  
-        run: docker-compose -f compose.yml build
-      - name: Push images
-        run: docker-compose -f compose.yml push --ignore-push-failures
+      - name: Build the docker-compose and push stack  
+        run: docker-compose -f compose.yml build && docker-compose -f compose.yml push
