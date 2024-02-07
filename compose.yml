@@ -4,7 +4,7 @@ services:
   dashboard:
     build:
       context: .
-      dockerfile: /infra/docker/php/Dockerfile.dashboard
+      dockerfile: ./infra/docker/php/Dockerfile.dashboard
     hostname: dashboard
     volumes:
       - type: volume
@@ -41,7 +41,7 @@ services:
   dashboard-ws:
     build:
       context: .
-      dockerfile: /infra/docker/php/Dockerfile.ws
+      dockerfile: ./infra/docker/php/Dockerfile.ws
     hostname: dashboard-ws
     env_file: stub.env
     environment:
@@ -63,7 +63,7 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: /infra/docker/nginx/Dockerfile
+      dockerfile: ./infra/docker/nginx/Dockerfile
     hostname: nginx-dashboard
     volumes:
       - type: bind
