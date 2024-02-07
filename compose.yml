@@ -4,12 +4,15 @@ services:
   dashboard:
     build:
       context: .
-      dockerfile: ./infra/docker/php/Dockerfile.dashboard
+      dockerfile: /infra/docker/php/Dockerfile.dashboard
     hostname: dashboard
     volumes:
-      - type: bind
-        source: ./src
-        target: /workspace
+      - type: volume
+        source: dashboard-storage
+        target: /workspace/storage
+        volume:
+          nocopy: true
+    env_file: stub.env
     environment:
       APP_BUILD_TARGET: ${APP_BUILD_TARGET}
       APP_NAME: ${APP_NAME}
@@ -33,65 +36,64 @@ services:
       PUSHER_APP_CLUSTER: ${PUSHER_APP_CLUSTER}
       FLARE_KEY: ${FLARE_KEY}
     networks:
-      - net-db
+      - proxy
 
   dashboard-ws:
     build:
       context: .
-      dockerfile: ./infra/docker/php/Dockerfile.ws
+      dockerfile: /infra/docker/php/Dockerfile.ws
     hostname: dashboard-ws
+    env_file: stub.env
+    environment:
+      APP_NAME: ${APP_NAME}
+      APP_DEBUG: ${APP_DEBUG}
+      APP_ENV: ${APP_ENV}
+      APP_KEY: ${APP_KEY}
+      BROADCAST_DRIVER: ${BROADCAST_DRIVER}
+      PUSHER_HOST: ${PUSHER_HOST}
+      PUSHER_APP_ID: ${PUSHER_APP_ID}
+      PUSHER_APP_KEY: ${PUSHER_APP_KEY}
+      PUSHER_APP_SECRET: ${PUSHER_APP_SECRET}
+      PUSHER_SCHEME: ${PUSHER_SCHEME}
+      PUSHER_APP_CLUSTER: ${PUSHER_APP_CLUSTER}
+      FLARE_KEY: ${FLARE_KEY}
+    networks:
+      - proxy
+
+  nginx:
+    build:
+      context: .
+      dockerfile: /infra/docker/nginx/Dockerfile
+    hostname: nginx-dashboard
     volumes:
       - type: bind
         source: ./src
         target: /workspace
-    environment:
-        APP_NAME: ${APP_NAME}
-        APP_DEBUG: ${APP_DEBUG}
-        APP_ENV: ${APP_ENV}
-        APP_KEY: ${APP_KEY}
-        BROADCAST_DRIVER: ${BROADCAST_DRIVER}
-        PUSHER_HOST: ${PUSHER_HOST}
-        PUSHER_APP_ID: ${PUSHER_APP_ID}
-        PUSHER_APP_KEY: ${PUSHER_APP_KEY}
-        PUSHER_APP_SECRET: ${PUSHER_APP_SECRET}
-        PUSHER_SCHEME: ${PUSHER_SCHEME}
-        PUSHER_APP_CLUSTER: ${PUSHER_APP_CLUSTER}
-        FLARE_KEY: ${FLARE_KEY}
     networks:
-      - net-db
+      - proxy
 
-  nginx:
-      build:
-        context: .
-        dockerfile: ./infra/docker/nginx/Dockerfile
-      hostname: nginx-dashboard
-      volumes:
-        - type: bind
-          source: ./src
-          target: /workspace
-      networks:
-        - net-db
-
-  db:
+  dashboard-db:
     image: mysql/mysql-server:${MYSQL_VERSION:-8.0}
-    hostname: db
+    hostname: dashboard-db
     volumes:
       - type: volume
-        source: db-store
+        source: dashboard-db-store
         target: /var/lib/mysql
         volume:
           nocopy: true
+    env_file: stub.env
     environment:
-        MYSQL_DATABASE: ${DB_DATABASE:-fluffici_test}
-        MYSQL_USER: ${DB_USERNAME:-phper}
-        MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
-        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     networks:
-      - net-db
+      - proxy
 
 networks:
-  net-db:
-    name: db-net
+  proxy:
+    external: true
 
 volumes:
-  db-store:
+  dashboard-db-store:
+  dashboard-storage:
