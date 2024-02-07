@@ -9,12 +9,6 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use App\Listeners\AuditListener;
 use App\Events\UpdateAudit;
 
-use App\Events\Statistics;
-use App\Listeners\StatisticsListener;
-
-use App\Events\UserUpdated;
-use App\Listeners\UserUpdateListener;
-
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -25,12 +19,6 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         UpdateAudit::class => [
             AuditListener::class,
-        ],
-        Statistics::class => [
-            StatisticsListener::class,
-        ],
-        UserUpdated::class => [
-            UserUpdateListener::class,
         ],
         OrderUpdateEvent::class => [
             OrderUpdateListeners::class

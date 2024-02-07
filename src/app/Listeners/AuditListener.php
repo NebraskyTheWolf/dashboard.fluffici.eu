@@ -17,7 +17,5 @@ class AuditListener
         $audit->slug = $event->slug;
         $audit->type = $event->type;
         $audit->save();
-
-        event(new Statistics());
     }
 }

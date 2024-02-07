@@ -35,30 +35,6 @@ services:
       PUSHER_SCHEME: ${PUSHER_SCHEME}
       PUSHER_APP_CLUSTER: ${PUSHER_APP_CLUSTER}
       FLARE_KEY: ${FLARE_KEY}
-    networks:
-      - proxy
-
-  dashboard-ws:
-    build:
-      context: .
-      dockerfile: ./infra/docker/php/Dockerfile.ws
-    hostname: dashboard-ws
-    env_file: stub.env
-    environment:
-      APP_NAME: ${APP_NAME}
-      APP_DEBUG: ${APP_DEBUG}
-      APP_ENV: ${APP_ENV}
-      APP_KEY: ${APP_KEY}
-      BROADCAST_DRIVER: ${BROADCAST_DRIVER}
-      PUSHER_HOST: ${PUSHER_HOST}
-      PUSHER_APP_ID: ${PUSHER_APP_ID}
-      PUSHER_APP_KEY: ${PUSHER_APP_KEY}
-      PUSHER_APP_SECRET: ${PUSHER_APP_SECRET}
-      PUSHER_SCHEME: ${PUSHER_SCHEME}
-      PUSHER_APP_CLUSTER: ${PUSHER_APP_CLUSTER}
-      FLARE_KEY: ${FLARE_KEY}
-    networks:
-      - proxy
 
   nginx:
     build:
@@ -69,30 +45,6 @@ services:
       - type: bind
         source: ./src
         target: /workspace
-    networks:
-      - proxy
-
-  dashboard-db:
-    image: mysql/mysql-server:${MYSQL_VERSION:-8.0}
-    hostname: dashboard-db
-    volumes:
-      - type: volume
-        source: dashboard-db-store
-        target: /var/lib/mysql
-        volume:
-          nocopy: true
-    env_file: stub.env
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-    networks:
-      - proxy
-
-networks:
-  proxy:
-    external: true
 
 volumes:
   dashboard-db-store:

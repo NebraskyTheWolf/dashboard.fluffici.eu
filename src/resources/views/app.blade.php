@@ -32,7 +32,6 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="{{url('/js/app.js')}}"></script>
-    <script type="text/javascript" src="{{url('/js/presence.js')}}"></script>
 
     <link rel="stylesheet" href="{{ url('/css/app.css')}}">
     <link rel="stylesheet" href="{{ url('/css/fluffici.css')}}">
@@ -42,10 +41,6 @@
 
     <link rel="stylesheet" href="{{ url('/semantic/semantic.min.css')}}">
     <script type="text/javascript" src="{{url('/semantic/semantic.min.js')}}"></script>
-
-    @if (Auth::check())
-        <input type="number" value="{{Auth::id()}}" id="userId" hidden>
-    @endif
 
     @foreach(Dashboard::getResource('stylesheets') as $stylesheet)
         <link rel="stylesheet" href="{{  $stylesheet }}">
@@ -73,9 +68,6 @@
             </div>
         </div>
     </div>
-
-    <input type="number" id="user_id" value="{{Auth::id()}}" hidden="">
-    <input type="number" id="isLogged" value="{{Auth::check()}}" hidden="">
 </body>
 
 <div data-controller="@yield('controller')" @yield('controller-data') id="loading" class="">
