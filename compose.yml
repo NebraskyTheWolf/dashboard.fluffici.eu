@@ -5,13 +5,33 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/php/Dockerfile.dashboard
-    restart: always
-    env_file: .env
-    container_name: dashboard
+    hostname: dashboard
     volumes:
       - type: bind
         source: ./src
         target: /workspace
+    environment:
+      APP_BUILD_TARGET: ${APP_BUILD_TARGET}
+      APP_NAME: ${APP_NAME}
+      APP_DEBUG: ${APP_DEBUG}
+      APP_ENV: ${APP_ENV}
+      APP_KEY: ${APP_KEY}
+      APP_URL: ${APP_URL}
+      ASSET_URL: ${ASSET_URL}
+      DB_CONNECTION: ${DB_CONNECTION}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      BROADCAST_DRIVER: ${BROADCAST_DRIVER}
+      PUSHER_HOST: ${PUSHER_HOST}
+      PUSHER_APP_ID: ${PUSHER_APP_ID}
+      PUSHER_APP_KEY: ${PUSHER_APP_KEY}
+      PUSHER_APP_SECRET: ${PUSHER_APP_SECRET}
+      PUSHER_SCHEME: ${PUSHER_SCHEME}
+      PUSHER_APP_CLUSTER: ${PUSHER_APP_CLUSTER}
+      FLARE_KEY: ${FLARE_KEY}
     networks:
       - net-db
 
@@ -19,45 +39,32 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/php/Dockerfile.ws
-    restart: always
-    env_file: .env
-    container_name: dashboard-ws
+    hostname: dashboard-ws
     volumes:
       - type: bind
         source: ./src
         target: /workspace
-    ports:
-      - '6001:6001'
+    environment:
+        APP_NAME: ${APP_NAME}
+        APP_DEBUG: ${APP_DEBUG}
+        APP_ENV: ${APP_ENV}
+        APP_KEY: ${APP_KEY}
+        BROADCAST_DRIVER: ${BROADCAST_DRIVER}
+        PUSHER_HOST: ${PUSHER_HOST}
+        PUSHER_APP_ID: ${PUSHER_APP_ID}
+        PUSHER_APP_KEY: ${PUSHER_APP_KEY}
+        PUSHER_APP_SECRET: ${PUSHER_APP_SECRET}
+        PUSHER_SCHEME: ${PUSHER_SCHEME}
+        PUSHER_APP_CLUSTER: ${PUSHER_APP_CLUSTER}
+        FLARE_KEY: ${FLARE_KEY}
     networks:
       - net-db
-
-  imager:
-    build:
-      context: .
-      dockerfile: ./infra/docker/node/Dockerfile
-    restart: always
-    container_name: imager
-    volumes:
-      - type: bind
-        source: ./node
-        target: /workspace
-    ports:
-      - '3900:3900'
 
   nginx:
       build:
         context: .
         dockerfile: ./infra/docker/nginx/Dockerfile
-      env_file: .env
-      ports:
-        - target: 80
-          published: ${NGINX_PORT:-3909}
-          protocol: tcp
-          mode: host
-        - target: 443
-          published: ${NGINX_SSL_PORT:-8443}
-          protocol: tcp
-          mode: host
+      hostname: nginx-dashboard
       volumes:
         - type: bind
           source: ./src
@@ -67,12 +74,7 @@ services:
 
   db:
     image: mysql/mysql-server:${MYSQL_VERSION:-8.0}
-    container_name: db
-    ports:
-      - target: 3306
-        published: 3306
-        protocol: tcp
-        mode: host
+    hostname: db
     volumes:
       - type: volume
         source: db-store
@@ -80,10 +82,10 @@ services:
         volume:
           nocopy: true
     environment:
-      - MYSQL_DATABASE=${DB_DATABASE:-fluffici_test}
-      - MYSQL_USER=${DB_USERNAME:-phper}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
+        MYSQL_DATABASE: ${DB_DATABASE:-fluffici_test}
+        MYSQL_USER: ${DB_USERNAME:-phper}
+        MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
     networks:
       - net-db
 
