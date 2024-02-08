@@ -12,7 +12,6 @@ return array(
     |
     */
     'show_warnings' => false,   // Throw an Exception on warnings from dompdf
-
     'public_path' => public_path(),  // Override the public path if needed
 
     /*
@@ -279,6 +278,4 @@ return array(
          */
         "enable_html5_parser" => true,
     ),
-
-
 );
