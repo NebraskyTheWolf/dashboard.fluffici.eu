@@ -35,13 +35,16 @@ jobs:
 
       - name: Push images to registry
         run: docker push ghcr.io/fluffici/dashboard
+    outputs:
+      GITHUB_SHA_SHORT: ${{ env.GITHUB_SHA_SHORT }}
 
   deploy-image:
     runs-on: registry.gitlab.com/technikcz/portainer-service-updater:4
+    needs: [ build-and-push-image ]
     env:
       HOST: https://portainer.cernohorsky.dev
-      API_KEY:  "${{ secrets.PORTAINER_TOKEN }}"
-      DOCKER_VERSION: "${{ env.GITHUB_SHA_SHORT }}"
+      API_KEY: "${PORTAINER_API_KEY}"
+      DOCKER_VERSION: ${{ needs.build-and-push-image.outputs.GITHUB_SHA_SHORT }}
       ENDPOINT_ID: 1
       STACK_ID: 9
       STACK_VARIABLE_NAME: DASHBOARD_VERSION
