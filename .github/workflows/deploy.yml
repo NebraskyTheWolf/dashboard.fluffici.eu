@@ -1,13 +1,8 @@
-#
-name: Create and publish a Docker image
+name: Create and publish
 
 on:
   push:
     branches: ['master']
-
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-and-push-image:
@@ -19,7 +14,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      # Uses the `docker/login-action` action to log in to the Container registry registry using the account and password that will publish the packages. Once published, the packages are scoped to the account defined here.
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -27,14 +22,29 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Get git short hash
+        run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
 
-      - name: Login to ghcr
-        run: docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the Dashboard
+        run: docker build ./infra/docker/php/Dockerfile.dashboard -t dashboard
 
-      - name: Build the Dashboard and push
-        run: docker build . -t ghcr.io/fluffici/dashboard:latest && docker push ghcr.io/fluffici/dashboard:latest
+      - name: Set Tags to Dashboard image
+        run: |
+          docker tag dashboard ghcr.io/fluffici/dashboard:latest
+          docker tag dashboard ghcr.io/fluffici/dashboard:${{ env.GITHUB_SHA_SHORT }}
+
+      - name: Push images to registry
+        run: docker push ghcr.io/fluffici/dashboard
+
+  deploy-image:
+    runs-on: registry.gitlab.com/technikcz/portainer-service-updater:4
+    env:
+      HOST: https://portainer.cernohorsky.dev
+      API_KEY: "${PORTAINER_API_KEY}"
+      DOCKER_VERSION: ${{ env.GITHUB_SHA_SHORT }}
+      ENDPOINT_ID: 1
+      STACK_ID: 9
+      STACK_VARIABLE_NAME: DASHBOARD_VERSION
+    steps:
+      - name: Deploy new image
+        run: ./script
