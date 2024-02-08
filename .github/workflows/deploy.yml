@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      # Uses the `docker/login-action` action to log in to the Container registry registry using the account and password that will publish the packages. Once published, the packages are scoped to the account defined here.
+          # Uses the `docker/login-action` action to log in to the Container registry registry using the account and password that will publish the packages. Once published, the packages are scoped to the account defined here.
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -35,22 +35,16 @@ jobs:
         run: |
           docker tag dashboard ghcr.io/fluffici/dashboard:latest
           docker tag dashboard ghcr.io/fluffici/dashboard:${{ env.GITHUB_SHA_SHORT }}
-
       - name: Push images to registry
         run: docker push ghcr.io/fluffici/dashboard
-    outputs:
-      GITHUB_SHA_SHORT: ${{ env.GITHUB_SHA_SHORT }}
 
-  deploy-image:
-    runs-on: registry.gitlab.com/technikcz/portainer-service-updater:4
-    needs: [ build-and-push-image ]
-    env:
-      HOST: https://portainer.cernohorsky.dev
-      API_KEY: "${PORTAINER_API_KEY}"
-      DOCKER_VERSION: ${{ needs.build-and-push-image.outputs.GITHUB_SHA_SHORT }}
-      ENDPOINT_ID: 1
-      STACK_ID: 9
-      STACK_VARIABLE_NAME: DASHBOARD_VERSION
-    steps:
       - name: Deploy new image
-        run: ./script
+        run: |
+          docker run --rm \
+            -e HOST="https://portainer.fluffici.eu" \
+            -e API_KEY="${{ secrets.PORTAINER_API_KEY }}" \
+            -e DOCKER_VERSION="${{ env.GITHUB_SHA_SHORT }}" \
+            -e ENDPOINT_ID="1" \
+            -e STACK_ID="9" \
+            -e STACK_VARIABLE_NAME="DASHBOARD_VERSION" \
+            registry.gitlab.com/technikcz/portainer-service-updater:4
