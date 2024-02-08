@@ -34,4 +34,4 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build the Dashboard and push
-        run: docker build ./infra/docker/php/Dockerfile -t ghcr.io/fluffici/dashboard:latest && docker push ghcr.io/fluffici/dashboard:latest
+        run: docker build . -t ghcr.io/fluffici/dashboard:latest && docker push ghcr.io/fluffici/dashboard:latest
