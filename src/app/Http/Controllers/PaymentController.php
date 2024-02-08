@@ -80,21 +80,21 @@ class PaymentController extends Controller
                             return response()->json([
                                 'status' => false,
                                 'error' => 'VOUCHER_REJECTION',
-                                'message' => 'The voucher code does not have enough money.'
+                                'message' => 'The voucher does not have enough money.'
                             ]);
                         }
                     } else {
                         return response()->json([
                             'status' => false,
                             'error' => 'VOUCHER_REJECTION',
-                            'message' => 'The voucher code is invalid.'
+                            'message' => 'The voucher is invalid.'
                         ]);
                     }
                 } else if ($result == 0) {
                     return response()->json([
                         'status' => false,
                         'error' => 'VOUCHER_REJECTION',
-                        'message' => 'The voucher code is tampered, DO NOT USE!'
+                        'message' => 'The voucher is tampered, DO NOT USE!'
                     ]);
                 } else {
                     return response()->json([

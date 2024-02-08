@@ -4,9 +4,6 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PagesController;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager;
-use jucksearm\barcode\Datamatrix;
 use Orchid\Platform\Http\Controllers\LoginController;
 
 use Orchid\Platform\Http\Controllers\AsyncController;
@@ -14,7 +11,6 @@ use Orchid\Platform\Http\Controllers\AttachmentController;
 use Orchid\Platform\Http\Controllers\IndexController;
 use Orchid\Platform\Http\Screens\NotificationScreen;
 use Orchid\Platform\Http\Screens\SearchScreen;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Tabuna\Breadcrumbs\Trail;
 
 /*

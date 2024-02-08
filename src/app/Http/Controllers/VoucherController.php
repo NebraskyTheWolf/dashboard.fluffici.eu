@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,12 +25,9 @@ class VoucherController extends Controller
                         'error' => 'SIGNATURE',
                         'message' => 'Unable to check the request signature.'
                     ]);
-
                 }
 
                 $key = openssl_pkey_get_private($storage->get('security.key'));
-
-
                 $signedData = openssl_sign($voucherData->code, $signature, $key, OPENSSL_ALGO_SHA256);
                 if ($signedData == 0) {
                     return response()->json([
