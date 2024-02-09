@@ -55,21 +55,6 @@
 
 <body class="{{ \Orchid\Support\Names::getPageNameClass() }} styled-text" data-controller="pull-to-refresh">
 
-
-<body class="antialiased">
-    <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter  selection:bg-red-500 selection:text-white" style="background-color: #2f2b3a;" id="loader" hidden>
-        <div class="max-w-7xl mx-auto p-6 lg:p-8">
-            <div class="mt-16">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-                    <img class="centered-bar error-mask" id="error-mark" src="{{url('/img/info.png')}}" alt="error">
-                    <div class="centered-bar" id="loader-bar"></div>
-                </div>
-                <p class="styled centered-bar" id="loading-text"></p>
-            </div>
-        </div>
-    </div>
-</body>
-
 <div data-controller="@yield('controller')" @yield('controller-data') id="loading" class="">
     <div class="row justify-content-center d-md-flex h-100">
         @yield('aside')

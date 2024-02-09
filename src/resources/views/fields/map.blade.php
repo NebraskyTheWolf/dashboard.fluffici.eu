@@ -8,7 +8,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-md">
-                <label for="{{$name}}[lat]">{{ __('Latitude') }}</label>
+                <label for="{{$name}}[lat]">Latitude</label>
                 <input class="form-control"
                        id="marker__latitude"
                        data-map-target="lat"
@@ -17,7 +17,7 @@
                        value="{{ $value['lat'] ?? '' }}"/>
             </div>
             <div class="col-md">
-                <label for="{{$name}}[lng]">{{ __('Longitude') }}</label>
+                <label for="{{$name}}[lng]">Longitude</label>
                 <input class="form-control"
                        id="marker__longitude"
 
