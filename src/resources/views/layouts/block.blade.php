@@ -1,11 +1,11 @@
 <fieldset class="row g-0 mb-3">
     @if(!empty($title) || !empty($description))
     <div class="col p-0 px-3">
-        <legend class="text-black px-2 mt-2">
+        <legend class="text-secondary px-2 mt-2">
             {{ $title ?? '' }}
 
             @if(!empty($description))
-            <p class="small text-muted mt-2 mb-0">
+            <p class="small text-white mt-2 mb-0">
                 {!! $description ?? '' !!}
             </p>
             @endif

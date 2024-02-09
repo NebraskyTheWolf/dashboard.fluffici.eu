@@ -63,5 +63,18 @@ class AccountingTRSReportLayout extends Table
         ];
     }
 
+    protected function iconNotFound(): string
+    {
+        return 'bs.clipboard-data';
+    }
 
+    protected function textNotFound(): string
+    {
+        return 'No monthly report yet.';
+    }
+
+    protected function subNotFound(): string
+    {
+        return 'The next report will be automatically generated.';
+    }
 }

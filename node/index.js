@@ -13,7 +13,8 @@ const app = express()
 app.use(express.static(path.join(__dirname, '../public')))
 app.use(bodyParser())
 
-app.post('/voucher/:price', async function (req, res) {
+app.post('/voucher', async function (req, res) {
+    const price = req.body.price
     const decoded = JSON.parse(nodeBase64.decode(req.body.properties))
     const id = nodeBase64.decode(decoded.data);
 
@@ -36,7 +37,7 @@ app.post('/voucher/:price', async function (req, res) {
         ctx.font = '26px "Arial Bold"';
         ctx.fillStyle = "rgb(255,255,255)";
         ctx.fillText(id, 130,470);
-        ctx.fillText(req.params.price + ' Kc', 368,580);
+        ctx.fillText(price + ' Kc', 368,580);
 
         bwipJs.toBuffer({
             bcid: 'datamatrix',
@@ -53,17 +54,19 @@ app.post('/voucher/:price', async function (req, res) {
                 ctx.drawImage(img, 536,728, 247, 247)
             })
 
-            const out = fs.createWriteStream(path.join(__dirname, '../src/storage/app/public', id + '-code.png')),
+            const out = fs.createWriteStream('/workspace/storage/app/public/' + id + '-code.png'),
                 stream = canvas.createPNGStream();
             stream.pipe(out);
         }, 3000)
 
     })
 
+    console.log(__dirname)
+
     res.status(200).json({
         'status': true,
         'message': 'The was was created.',
-        'path': path.join(__dirname, '../src/storage/app/public', id + '-code.png')
+        'path': '/workspace/storage/app/public' + id + '-code.png'
     })
 });
 

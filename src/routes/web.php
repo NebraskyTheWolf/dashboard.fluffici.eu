@@ -82,11 +82,11 @@ Route::get('/health', function ($request) {
 Route::get('/build', function ($request) {
     return [
         'version' => file_get_contents('../VERSION'),
-        'rev' => env('GIT_COMMIT')
+        'rev' => env('GIT_COMMIT', "No rev")
     ];
 })->name("build");
 
 Route::get('/report', [\App\Http\Controllers\ReportController::class, 'index'])->middleware('auth')->name('api.shop.report');
-Route::get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->name('api.shop.voucher');
+Route::get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->middleware('auth')->name('api.shop.voucher');
 Route::get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder']);
 Route::get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index'])->middleware('throttle');

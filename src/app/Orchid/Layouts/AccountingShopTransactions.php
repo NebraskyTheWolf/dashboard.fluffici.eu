@@ -109,4 +109,19 @@ class AccountingShopTransactions extends Table
 
         return 0;
     }
+
+    protected function iconNotFound(): string
+    {
+        return 'bs.cart-dash';
+    }
+
+    protected function textNotFound(): string
+    {
+        return 'No transaction yet.';
+    }
+
+    protected function subNotFound(): string
+    {
+        return 'No transaction have been recorded yet.';
+    }
 }

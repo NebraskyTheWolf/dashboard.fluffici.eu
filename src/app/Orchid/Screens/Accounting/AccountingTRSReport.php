@@ -28,7 +28,7 @@ class AccountingTRSReport extends Screen
      */
     public function name(): ?string
     {
-        return 'Monthly Report';
+        return 'Transaction Monthly Report';
     }
 
     /**

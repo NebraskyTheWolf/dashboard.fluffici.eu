@@ -45,4 +45,14 @@ class ShopCarrierList extends Table
                 }),
         ];
     }
+
+    protected function iconNotFound(): string
+    {
+        return 'bs.truck';
+    }
+
+    protected function textNotFound(): string
+    {
+        return 'No carriers available.';
+    }
 }

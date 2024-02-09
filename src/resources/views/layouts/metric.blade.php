@@ -15,9 +15,15 @@
                             {{ $metric['value'] }}
                         </a>
                     @else
-                        <a class="h3 fw-light mt-auto text-green" id="{{  $metric['key'] }}">
+                        <a class="h3 fw-light mt-auto text-success" id="{{  $metric['key'] }}">
                             + {{ $metric['value'] }}
                         </a>
+                    @endif
+
+                    @if(isset($metric['diff']) && (float)$metric['diff'] !== 0.0)
+                        <small class="small {{ (float)$metric['diff'] < 0 ? 'text-primary': 'text-success' }}">
+                            {{ round($metric['diff'], 2) }} %
+                        </small>
                     @endif
 
                 </div>

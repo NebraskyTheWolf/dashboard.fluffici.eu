@@ -54,7 +54,7 @@ class ShopVoucherLayout extends Table
 
     protected function iconNotFound(): string
     {
-        return 'bs.cash-coin';
+        return 'bs.qr-code-scan';
     }
 
     protected function textNotFound(): string

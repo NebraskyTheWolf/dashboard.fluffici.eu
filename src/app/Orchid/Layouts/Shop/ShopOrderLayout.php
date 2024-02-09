@@ -95,4 +95,13 @@ class ShopOrderLayout extends Table
         ];
     }
 
+    protected function iconNotFound(): string
+    {
+        return 'bs.postcard';
+    }
+
+    protected function textNotFound(): string
+    {
+        return 'No order available.';
+    }
 }

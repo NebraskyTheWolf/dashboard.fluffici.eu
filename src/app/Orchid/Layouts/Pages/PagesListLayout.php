@@ -56,4 +56,14 @@ class PagesListLayout extends Table
                 }),
         ];
     }
+
+    protected function iconNotFound(): string
+    {
+        return 'bs.cloud-drizzle';
+    }
+
+    protected function textNotFound(): string
+    {
+        return 'No active pages yet';
+    }
 }

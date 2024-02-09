@@ -64,4 +64,14 @@ class ShopSalesList extends Table
                 })
         ];
     }
+
+    protected function iconNotFound(): string
+    {
+        return 'bs.plus-slash-minus';
+    }
+
+    protected function textNotFound(): string
+    {
+        return 'No sale available.';
+    }
 }

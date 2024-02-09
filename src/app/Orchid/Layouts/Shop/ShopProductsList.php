@@ -50,4 +50,14 @@ class ShopProductsList extends Table
                 })
         ];
     }
+
+    protected function iconNotFound(): string
+    {
+        return 'bs.question-square';
+    }
+
+    protected function textNotFound(): string
+    {
+        return 'No products available.';
+    }
 }

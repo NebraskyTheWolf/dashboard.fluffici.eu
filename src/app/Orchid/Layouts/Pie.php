@@ -21,4 +21,5 @@ class Pie extends Chart
      * @var bool
      */
     protected $export = true;
+
 }

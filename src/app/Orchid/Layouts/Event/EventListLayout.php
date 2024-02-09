@@ -62,4 +62,14 @@ class EventListLayout extends Table
                 }),
         ];
     }
+
+    protected function iconNotFound(): string
+    {
+        return 'bs.clipboard2-minus';
+    }
+
+    protected function textNotFound(): string
+    {
+        return 'No event planned';
+    }
 }

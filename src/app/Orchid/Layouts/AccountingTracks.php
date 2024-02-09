@@ -50,4 +50,19 @@ class AccountingTracks extends Table
                 })
         ];
     }
+
+    protected function iconNotFound(): string
+    {
+        return 'bs.paperclip';
+    }
+
+    protected function textNotFound(): string
+    {
+        return 'No activity yet.';
+    }
+
+    protected function subNotFound(): string
+    {
+        return 'You can create a new operation.';
+    }
 }

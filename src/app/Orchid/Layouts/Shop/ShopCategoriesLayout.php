@@ -43,4 +43,14 @@ class ShopCategoriesLayout extends Table
                 })
         ];
     }
+
+    protected function iconNotFound(): string
+    {
+        return 'bs.bounding-box';
+    }
+
+    protected function textNotFound(): string
+    {
+        return 'No categories available.';
+    }
 }

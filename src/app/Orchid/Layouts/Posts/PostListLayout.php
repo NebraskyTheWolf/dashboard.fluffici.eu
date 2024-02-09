@@ -58,4 +58,19 @@ class PostListLayout extends Table
                 }),
         ];
     }
+
+    protected function iconNotFound(): string
+    {
+        return 'bs.paperclip';
+    }
+
+    protected function textNotFound(): string
+    {
+        return 'No post yet.';
+    }
+
+    protected function subNotFound(): string
+    {
+        return 'You can publish a new post on the website.';
+    }
 }
