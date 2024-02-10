@@ -66,9 +66,9 @@ class OrderPayment extends Table
                         $missing = $this->isMissing($payment);
                         $over = $this->isOverPaid($payment);
 
-                        if (!$missing > 0.1) {
+                        if ($missing > 0.1) {
                             return '<a class="ui yellow label">Missing ' . $missing . ' Kc</a>';
-                        } else if (!$over > 0.1) {
+                        } else if ($over > 0.1) {
                             return '<a class="ui yellow label">Over paid of ' . $over . ' Kc</a>';
                         }
                     }
@@ -95,8 +95,8 @@ class OrderPayment extends Table
 
     protected function calculate(\App\Models\OrderPayment $payment): float
     {
-        $orderPrd = OrderedProduct::where('order_id', $payment->order_id)->firstOrFail();
-        $product = ShopProducts::where('id', $orderPrd->product_id)->firstOrFail();
+        $orderPrd = OrderedProduct::where('order_id', $payment->order_id)->first();
+        $product = ShopProducts::where('id', $orderPrd->product_id)->first();
         $sale = ShopSales::where('product_id', $product->id);
         $carrier = OrderCarrier::where('order_id', $payment->order_id);
 
@@ -107,7 +107,7 @@ class OrderPayment extends Table
         }
 
         if ($carrier->exists()) {
-            return $product->price - $salePrice + $carrier->firstOrFail()->price;
+            return $product->price - $salePrice + $carrier->first()->price;
         } else {
             return $product->price - $salePrice;
         }

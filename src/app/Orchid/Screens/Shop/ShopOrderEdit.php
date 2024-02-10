@@ -11,6 +11,7 @@ use App\Models\OrderSales;
 use App\Models\ShopCarriers;
 use App\Models\ShopCountries;
 use App\Models\ShopOrders;
+use App\Models\ShopSupportTickets;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -28,6 +29,7 @@ class ShopOrderEdit extends Screen
     public $orderCarrier;
     public $orderSales;
     public $lastHistory;
+    public $supportTicket;
 
     /**
      * Fetch data to be displayed on the screen.
@@ -44,6 +46,7 @@ class ShopOrderEdit extends Screen
             'orderProducts' => OrderedProduct::where('order_id', $order->order_id)->first(),
             'orderCarrier' => OrderCarrier::where('order_id', $order->order_id)->first(),
             'orderSales' => OrderSales::where('order_id', $order->order_id)->first(),
+            'supportTicket' => ShopSupportTickets::where('order_id', $order->order_id)->first()
         ];
     }
 
@@ -70,17 +73,21 @@ class ShopOrderEdit extends Screen
                 ->icon('bs.check2-square')
                 ->type(Color::SUCCESS)
                 ->confirm(__('common.modal.order.type',  ['type' => 'completed']))
-                ->method('completed'),
+                ->method('completed')
+                ->disabled($this->order->status === "COMPLETED" || $this->order->status === "REFUNDED"),
             Button::make('Set as delivered')
                 ->icon('bs.envelope-fill')
                 ->type(Color::SUCCESS)
                 ->confirm(__('common.modal.order.type',  ['type' => 'delivered']))
-                ->method('delivered'),
+                ->method('delivered')
+                ->disabled($this->order->status === "DELIVERED" || $this->order->status === "REFUNDED"),
+
             Button::make('Issue Refund')
                 ->icon('bs.slash-circle')
                 ->type(Color::PRIMARY)
                 ->confirm(__('common.modal.order.refund'))
-                ->method('issueRefund'),
+                ->method('issueRefund')
+                ->disabled($this->order->status === "REFUNDED" ),
         ];
     }
 
@@ -132,6 +139,21 @@ class ShopOrderEdit extends Screen
             ])->activeTab('Order Information'),
 
             Layout::rows([
+                Button::make('Create new ticket')
+                    ->icon('bs.chat-left')
+                    ->type(Color::SUCCESS)
+                    ->method('createTicket')
+                    ->canSee($this->supportTicket == null),
+                Button::make('Close Ticket')
+                    ->icon('bs.dash-circle-dotted')
+                    ->type(Color::PRIMARY)
+                    ->method('closeTicket')
+                    ->canSee($this->supportTicket != null),
+                Button::make('Transcript')
+                    ->icon('bs.chat-left-text')
+                    ->type(Color::SECONDARY)
+                    ->method('transcript')
+                    ->canSee($this->supportTicket != null && $this->supportTicket->status == "CLOSED")
 
             ])->title('Management')
         ];
@@ -161,7 +183,11 @@ class ShopOrderEdit extends Screen
 
     private function getCountry(): string
     {
-        return ShopCountries::where('iso_code', $this->order->country)->firstOrFail()->country_name;
+        $country = ShopCountries::where('iso_code', $this->order->country);
+        if (!$country->exists()) {
+            return $this->order->country;
+        }
+        return $country->get()->country_name;
     }
 
     public function completed()

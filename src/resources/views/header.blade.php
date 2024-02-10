@@ -9,8 +9,24 @@
           rel="icon"
     >
 
-    <!-- For Safari on iOS -->
-    <meta name="theme-color" content="#21252a">
+    <meta property="og:image" content="https://autumn.fluffici.eu/attachments/eI0QemKZhF6W9EYnDl5JcBGYGvPiIxjPzvrDY_9Klk" />
+    <meta property="og:image:secure_url" content="https://autumn.fluffici.eu/attachments/eI0QemKZhF6W9EYnDl5JcBGYGvPiIxjPzvrDY_9Klk" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="128" />
+
+    <meta name="og:title" content="@yield('title') • Fluffici"/>
+    <meta name="og:type" content="website"/>
+
+    <meta name="copyright" content="Fluffici">
+    <meta name="webmaster" content="Vakea, vakea@fluffici.eu">
+
+    <meta name="contact" content="administrace@fluffici.eu">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="red">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="theme-color" content="#FF002E">
 @endpush
 
 <div class="h2 d-flex align-items-center">
