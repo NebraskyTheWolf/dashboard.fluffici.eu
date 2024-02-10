@@ -3,7 +3,7 @@
     <div data-controller="password"
          class="input-icon"
     >
-        <input {{ $attributes }} value="{{ $value }}" data-password-target="password">
+        <input {{ $attributes }}" data-password-target="password">
         <div class="input-icon-addon cursor" data-action="click->password#change">
 
             <span data-password-target="iconShow">
