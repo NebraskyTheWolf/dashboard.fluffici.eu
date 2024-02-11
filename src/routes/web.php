@@ -4,7 +4,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PagesController;
-use Orchid\Platform\Http\Controllers\LoginController;
+use App\Http\Controllers\LoginController;
 
 use Orchid\Platform\Http\Controllers\AsyncController;
 use Orchid\Platform\Http\Controllers\AttachmentController;
@@ -29,6 +29,10 @@ Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
 Route::middleware('throttle:60,1')
     ->post('login', [LoginController::class, 'login'])
     ->name('login.auth');
+
+Route::middleware('throttle:60,1')
+    ->post('otp', [LoginController::class, 'otp'])
+    ->name('login.otp');
 
 Route::get('lock', [LoginController::class, 'resetCookieLockMe'])->name('login.lock');
 Route::get('switch-logout', [LoginController::class, 'switchLogout']);
