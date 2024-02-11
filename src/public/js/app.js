@@ -16,6 +16,11 @@ $(document).ready(function($) {
             $('#autumn').text('Autumn : ' + response.data.autumn)
         }
     })
+
+    const fiveMinutes = 60 * 30;
+    const display = document.getElementById('otp-expiration');
+
+    startTimer(fiveMinutes, display);
 });
 
 
@@ -34,7 +39,7 @@ function startTimer(duration, display) {
         minutes = (diff / 60) | 0;
         seconds = (diff % 60) | 0;
 
-        minutes = minutes < 10 ? "0" + minutes : minutes;
+        minutes = minutes < 60 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
         display.innerHTML = minutes + ":" + seconds;
@@ -49,9 +54,3 @@ function startTimer(duration, display) {
     timer();
     setInterval(timer, 1000);
 }
-
-window.onload = function () {
-    const fiveMinutes = 60 * 30,
-        display = document.getElementById('otp-expiration');
-    startTimer(fiveMinutes, display);
-};

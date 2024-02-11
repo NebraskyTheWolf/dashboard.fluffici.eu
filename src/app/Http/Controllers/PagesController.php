@@ -15,10 +15,6 @@ class PagesController extends Controller {
     public function index(Request $request) {
         $pageSlug = (isset($request->slug)) ? $request->slug : false;
 
-        if (env("APP_ENV") == "production") {
-            return redirect("https://fluffici.eu/pages/" .  $pageSlug);
-        }
-
         $page = Pages::where('page_slug', $pageSlug)->firstOrFail();
 
         if ($page->exists()) {
