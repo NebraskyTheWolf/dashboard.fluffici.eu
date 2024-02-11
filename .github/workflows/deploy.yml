@@ -43,7 +43,7 @@ jobs:
           docker run --rm \
             -e HOST="https://portainer.fluffici.eu" \
             -e API_KEY="${{ secrets.PORTAINER_API_KEY }}" \
-            -e DOCKER_VERSION="latest" \
+            -e DOCKER_VERSION="${{ env.GITHUB_SHA_SHORT }}" \
             -e ENDPOINT_ID="1" \
             -e STACK_ID="9" \
             -e STACK_VARIABLE_NAME="DASHBOARD_VERSION" \
