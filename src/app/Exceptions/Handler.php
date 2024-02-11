@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Mail\ApplicationError;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -35,6 +37,16 @@ class Handler extends ExceptionHandler
                 return response()->view('errors.404', [], 404);
             }
             if ($e->getStatusCode() == 500) {
+
+                Mail::to([
+                    'vakea@fluffici.eu'
+                ])->send(new ApplicationError(
+                        $e->getFile(),
+                        $e->getMessage(),
+                        $e->getLine(),
+                        $e->getTraceAsString())
+                );
+
                 return response()->view('errors.500', [], 500);
             }
             if ($e->getStatusCode() == 403) {
