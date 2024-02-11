@@ -52,6 +52,10 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         array (
             'voku\\' => 5,
         ),
+        'm' => 
+        array (
+            'malcanek\\iDoklad\\' => 17,
+        ),
         'j' => 
         array (
             'jucksearm\\barcode\\' => 18,
@@ -256,6 +260,10 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'voku\\' => 
         array (
             0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
+        ),
+        'malcanek\\iDoklad\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/malcanek/idoklad-v2/src',
         ),
         'jucksearm\\barcode\\' => 
         array (
@@ -865,6 +873,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Console\\Commands\\Refresh' => __DIR__ . '/../..' . '/app/Console/Commands/Refresh.php',
         'App\\Console\\Commands\\StartNewEvent' => __DIR__ . '/../..' . '/app/Console/Commands/StartNewEvent.php',
         'App\\Console\\Commands\\StatisticsMail' => __DIR__ . '/../..' . '/app/Console/Commands/StatisticsMail.php',
+        'App\\Console\\Commands\\TestCrash' => __DIR__ . '/../..' . '/app/Console/Commands/TestCrash.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Events\\GenerateReport' => __DIR__ . '/../..' . '/app/Events/GenerateReport.php',
         'App\\Events\\OrderUpdateEvent' => __DIR__ . '/../..' . '/app/Events/OrderUpdateEvent.php',
@@ -873,6 +882,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Events\\UserUpdated' => __DIR__ . '/../..' . '/app/Events/UserUpdated.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\IntegrationsController' => __DIR__ . '/../..' . '/app/Http/Controllers/IntegrationsController.php',
         'App\\Http\\Controllers\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/LoginController.php',
         'App\\Http\\Controllers\\PagesController' => __DIR__ . '/../..' . '/app/Http/Controllers/PagesController.php',
         'App\\Http\\Controllers\\PaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/PaymentController.php',
@@ -892,6 +902,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Listeners\\AuditListener' => __DIR__ . '/../..' . '/app/Listeners/AuditListener.php',
         'App\\Listeners\\OrderUpdateListeners' => __DIR__ . '/../..' . '/app/Listeners/OrderUpdateListeners.php',
         'App\\Listeners\\StatisticsListener' => __DIR__ . '/../..' . '/app/Listeners/StatisticsListener.php',
+        'App\\Mail\\ApplicationError' => __DIR__ . '/../..' . '/app/Mail/ApplicationError.php',
         'App\\Mail\\OrderShipped' => __DIR__ . '/../..' . '/app/Mail/OrderShipped.php',
         'App\\Mail\\OrderStatus' => __DIR__ . '/../..' . '/app/Mail/OrderStatus.php',
         'App\\Mail\\PasswordRecovery' => __DIR__ . '/../..' . '/app/Mail/PasswordRecovery.php',
@@ -9527,6 +9538,14 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'jucksearm\\barcode\\lib\\PDF417Factory' => __DIR__ . '/..' . '/jucksearm/php-barcode/lib/PDF417Factory.php',
         'jucksearm\\barcode\\lib\\QRcode' => __DIR__ . '/..' . '/jucksearm/php-barcode/lib/QRcode.php',
         'jucksearm\\barcode\\lib\\QRcodeFactory' => __DIR__ . '/..' . '/jucksearm/php-barcode/lib/QRcodeFactory.php',
+        'malcanek\\iDoklad\\auth\\iDokladAuth' => __DIR__ . '/..' . '/malcanek/idoklad-v2/src/auth/iDokladAuth.php',
+        'malcanek\\iDoklad\\auth\\iDokladCredentials' => __DIR__ . '/..' . '/malcanek/idoklad-v2/src/auth/iDokladCredentials.php',
+        'malcanek\\iDoklad\\iDoklad' => __DIR__ . '/..' . '/malcanek/idoklad-v2/src/iDoklad.php',
+        'malcanek\\iDoklad\\iDokladException' => __DIR__ . '/..' . '/malcanek/idoklad-v2/src/iDokladException.php',
+        'malcanek\\iDoklad\\request\\iDokladFilter' => __DIR__ . '/..' . '/malcanek/idoklad-v2/src/request/iDokladFilter.php',
+        'malcanek\\iDoklad\\request\\iDokladRequest' => __DIR__ . '/..' . '/malcanek/idoklad-v2/src/request/iDokladRequest.php',
+        'malcanek\\iDoklad\\request\\iDokladResponse' => __DIR__ . '/..' . '/malcanek/idoklad-v2/src/request/iDokladResponse.php',
+        'malcanek\\iDoklad\\request\\iDokladSort' => __DIR__ . '/..' . '/malcanek/idoklad-v2/src/request/iDokladSort.php',
         'voku\\helper\\ASCII' => __DIR__ . '/..' . '/voku/portable-ascii/src/voku/helper/ASCII.php',
     );
 

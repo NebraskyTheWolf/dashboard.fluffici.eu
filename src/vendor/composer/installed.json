@@ -3626,6 +3626,57 @@
             "install-path": "../maennchen/zipstream-php"
         },
         {
+            "name": "malcanek/idoklad-v2",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/malcanek/iDoklad-v2.git",
+                "reference": "0e9126ca22a4360417ba86465575fe5acebc9121"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/malcanek/iDoklad-v2/zipball/0e9126ca22a4360417ba86465575fe5acebc9121",
+                "reference": "0e9126ca22a4360417ba86465575fe5acebc9121",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "time": "2022-04-22T14:46:41+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "malcanek\\iDoklad\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Malcánek",
+                    "email": "jan@malcanek.cz",
+                    "homepage": "http://www.malcanek.cz",
+                    "role": "Author"
+                }
+            ],
+            "description": "PHP třída pro ulehčení požadavků na iDoklad api v2.",
+            "homepage": "https://github.com/malcanek/iDoklad-v2",
+            "keywords": [
+                "fakturace",
+                "idoklad"
+            ],
+            "support": {
+                "issues": "https://github.com/malcanek/iDoklad-v2/issues",
+                "source": "https://github.com/malcanek/iDoklad-v2/tree/master"
+            },
+            "install-path": "../malcanek/idoklad-v2"
+        },
+        {
             "name": "markbaker/complex",
             "version": "3.0.2",
             "version_normalized": "3.0.2.0",

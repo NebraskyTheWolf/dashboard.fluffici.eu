@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\SocialMedia;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -13,8 +14,8 @@ class ApplicationError extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $class;
-    public $message;
+    public $className;
+    public $contents;
     public $line;
     public $code;
 
@@ -22,10 +23,10 @@ class ApplicationError extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(string $class, string $message, int $line, string $code)
+    public function __construct($class, $contents, $line, $code)
     {
-        $this->class = $class;
-        $this->message = $message;
+        $this->className = $class;
+        $this->contents = $contents;
         $this->line = $line;
         $this->code = $code;
     }
@@ -49,10 +50,11 @@ class ApplicationError extends Mailable
             view: 'emails.developer.crash',
             with: [
                 'currentDate' => Carbon::now()->diffForHumans(),
-                'class' => $this->class,
-                'message' => $this->message,
+                'className' => $this->className,
+                'contents' => $this->contents,
                 'line' => $this->line,
-                'code' => $this->code
+                'code' => $this->code,
+                'socials' => SocialMedia::all()
             ]
         );
     }

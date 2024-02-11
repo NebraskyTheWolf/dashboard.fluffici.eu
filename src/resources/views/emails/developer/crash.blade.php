@@ -10,7 +10,7 @@
                             <table class="icon-lg" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td valign="middle" align="center">
-                                        <img src="{{ url('icons/alert-triangle.png') }}" class=" va-middle" width="40" height="40" alt="alert-triangle" />
+                                        <img src="{{ url('/icons/alert-triangle.png') }}" class=" va-middle" width="40" height="40" alt="alert-triangle" />
                                     </td>
                                 </tr>
                             </table>
@@ -21,8 +21,8 @@
                         <td class="content">
                             <h4>New alert from https://dashboard.fluffici.eu</h4>
                             <p class="text-muted">{{ $currentDate }}</p>
-                            <h4 class="mt-lg">{{ $class }}</h4>
-                            <pre>{{ $message }}</pre>
+                            <h4 class="mt-lg">{{ $className }}</h4>
+                            <pre>{{ $contents }}</pre>
                             <h4 class="mt-lg">Stack trace</h4>
                             <table class="table-pre" cellspacing="0" cellpadding="0">
                                 <tr class="table-pre-line-highlight table-pre-line-highlight-red">

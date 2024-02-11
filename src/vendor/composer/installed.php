@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '2a4c6618c31a524d3c6ab16f493b70df62292f72',
+        'reference' => 'e2b998fe1695e3632e626d3786e9179eb9a35664',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -526,7 +526,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '2a4c6618c31a524d3c6ab16f493b70df62292f72',
+            'reference' => 'e2b998fe1695e3632e626d3786e9179eb9a35664',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -665,6 +665,17 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../maennchen/zipstream-php',
             'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'malcanek/idoklad-v2' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '0e9126ca22a4360417ba86465575fe5acebc9121',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../malcanek/idoklad-v2',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
             'dev_requirement' => false,
         ),
         'markbaker/complex' => array(

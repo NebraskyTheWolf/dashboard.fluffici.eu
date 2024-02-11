@@ -38,14 +38,11 @@ class Handler extends ExceptionHandler
             }
             if ($e->getStatusCode() == 500) {
 
-                Mail::to([
-                    'vakea@fluffici.eu'
-                ])->send(new ApplicationError(
+                Mail::to('vakea@fluffici.eu')->send(new ApplicationError(
                         $e->getFile(),
                         $e->getMessage(),
                         $e->getLine(),
-                        $e->getTraceAsString())
-                );
+                        $e->getTraceAsString()));
 
                 return response()->view('errors.500', [], 500);
             }
