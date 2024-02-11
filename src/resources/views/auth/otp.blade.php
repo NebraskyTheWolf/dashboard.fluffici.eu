@@ -2,7 +2,7 @@
 @section('title', 'Sign in to your account')
 
 @section('content')
-    <h1 class="h4 text-white mb-4">OTP Authentication</h1>
+    <h1 class="h4 text-white mb-4">Please check your email.</h1>
 
     <form class="m-t-md"
           role="form"
@@ -32,7 +32,7 @@
         <div class="row align-items-center">
             <div class="col-md-6 col-xs-12">
                 <a class="small">
-                    The code will expire in : <div id="otp-expiration"></div>
+                    The code will expire in : <div id="otp-expiration">30:00</div>
                 </a>
             </div>
             <div class="col-md-6 col-xs-12">

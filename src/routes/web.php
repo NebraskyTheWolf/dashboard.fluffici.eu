@@ -34,6 +34,19 @@ Route::middleware('throttle:60,1')
     ->post('otp', [LoginController::class, 'otp'])
     ->name('login.otp');
 
+Route::get('otp-challenge', [LoginController::class, 'challenge'])
+    ->name('login.challenge');
+
+Route::middleware('throttle:60,1')
+    ->post('recovery', [LoginController::class, 'recovery'])
+    ->name('login.recovery');
+
+Route::get('password-recovery/{token}', [LoginController::class, 'password'])
+    ->name('api.login.recovery');
+
+Route::get('password-new', [LoginController::class, 'password'])
+    ->name('login.new-password');
+
 Route::get('lock', [LoginController::class, 'resetCookieLockMe'])->name('login.lock');
 Route::get('switch-logout', [LoginController::class, 'switchLogout']);
 Route::post('switch-logout', [LoginController::class, 'switchLogout'])->name('switch.logout');
@@ -94,3 +107,5 @@ Route::get('/report', [\App\Http\Controllers\ReportController::class, 'index'])-
 Route::get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->middleware('auth')->name('api.shop.voucher');
 Route::get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder']);
 Route::get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index'])->middleware('throttle');
+
+Route::get('/webhook/kofi', [\app\Http\Controllers\IntegrationsController::class, "kofiCallback"])->middleware('koficors');

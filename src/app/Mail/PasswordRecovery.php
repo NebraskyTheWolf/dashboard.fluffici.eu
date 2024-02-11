@@ -2,29 +2,25 @@
 
 namespace App\Mail;
 
-use App\Models\SocialMedia;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Orchid\Platform\Models\User;
 
-class UserOtpMail extends Mailable
+class PasswordRecovery extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
-    public $otp;
+    public $token;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(User $user, $otp)
+    public function __construct(string $token)
     {
-        $this->user = $user;
-        $this->otp = $otp;
+        $this->token = $token;
     }
 
     /**
@@ -33,10 +29,7 @@ class UserOtpMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your authentication code',
-            tags: [
-                "fluffici"
-            ]
+            subject: 'Password Recovery',
         );
     }
 
@@ -46,11 +39,9 @@ class UserOtpMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.admin.mfa',
+            view: 'emails.admin.password-recovery',
             with: [
-                'user' => $this->user,
-                'otpToken' => $this->otp,
-                'socials' => SocialMedia::all()
+                'token' => $this->token
             ]
         );
     }

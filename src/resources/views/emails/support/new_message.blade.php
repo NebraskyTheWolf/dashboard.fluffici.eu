@@ -7,10 +7,10 @@
                 <table cellpadding="0" cellspacing="0">
                     <tr>
                         <td class="content pb-0" align="center">
-                            <table class="icon icon-lg bg-blue" cellspacing="0" cellpadding="0">
+                            <table class="icon-lg" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td valign="middle" align="center">
-                                        <img src="{{ url('icons/message.png') }}" class=" va-middle" width="40" height="40" alt="message" />
+                                        <img src="{{ url('/icons/message.png') }}" class=" va-middle" width="40" height="40" alt="message" />
                                     </td>
                                 </tr>
                             </table>
@@ -62,7 +62,7 @@
                                                         <tr>
                                                             <td align="center" valign="top" class="lh-1">
                                                                 <a href="https://shop.fluffici.eu/support/ticket/{{ $ticket->id }}/close" class="btn bg-secondary border-secondary">
-                                                                    <span class="btn-span">Close this ticket.</span>
+                                                                    <span class="btn-span">Close my ticket.</span>
                                                                 </a>
                                                             </td>
                                                         </tr>

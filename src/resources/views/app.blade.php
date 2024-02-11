@@ -31,7 +31,7 @@
     <script src="{{ mix('/js/dashy.js','vendor/fluffici') }}" type="text/javascript"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="{{url('/js/app.js')}}"></script>
+    <script type="text/javascript" src="{{ url('/js/app.js') }}"></script>
 
     <link rel="stylesheet" href="{{ url('/css/app.css')}}">
     <link rel="stylesheet" href="{{ url('/css/fluffici.css')}}">

@@ -6,6 +6,18 @@
             <td>
                 <table cellpadding="0" cellspacing="0">
                     <tr>
+                        <td class="content pb-0" align="center">
+                            <table class="icon-lg" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td valign="middle" align="center">
+                                        <img src="{{ url('/icons/lock.png') }}" class=" va-middle" width="40" height="40" alt="lock-open" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <h1 class="text-center m-0 mt-md">OTP Instruction</h1>
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="content">
                             <p>Hi, <strong>{{ $user->name }}</strong>!</p>
                             <p>It looks like you are trying to log in to {{ env('APP_NAME') }} using your username and password. As an additional security measure you are requested to enter the OTP code (one-time password) provided in this email.</p>

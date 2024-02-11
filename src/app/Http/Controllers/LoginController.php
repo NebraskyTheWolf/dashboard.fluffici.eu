@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Mail\PasswordRecovery;
 use App\Mail\UserOtpMail;
 use App\Models\UserOtp;
 use Carbon\Carbon;
@@ -15,6 +16,7 @@ use Illuminate\Cookie\CookieJar;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -53,14 +55,6 @@ class LoginController extends Controller
         ]);
     }
 
-    /**
-     * Handle a login request to the application.
-     *
-     *
-     * @throws ValidationException
-     *
-     * @return JsonResponse|RedirectResponse
-     */
     public function login(Request $request)
     {
         $request->validate([
@@ -68,36 +62,47 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
-        $auth = $this->guard->attempt(
-            $request->only(['email', 'password']),
-            $request->filled('remember')
-        );
+        if (env('APP_OTP', false)) {
+            $user = User::where('email', $request->input('email'));
+            if ($user->exists()) {
+                $data = $user->first();
 
-        if ($auth) {
-            if (env('APP_OTP', false)) {
-                $otp = new UserOtp();
-                $otp->user_id = $auth->id;
-                $otp->token = $this->generateNumericToken(8);
-                $otp->expiry = Carbon::now()->addMinutes(30);
-                $otp->save();
+                if (Hash::check($request->input('password'), $data->password)) {
 
-                Mail::to($request->input('email'))->send(new UserOtpMail(User::where('id', $auth->id)->first(), $otp->token));
+                    $otp = new UserOtp();
+                    $otp->user_id = $data->id;
+                    $otp->token = $this->generateNumericToken(8);
+                    $otp->expiry = Carbon::now()->addMinutes(30);
+                    $otp->save();
 
-                return view('auth.otp');
-            } else {
-                $this->sendLoginResponse($auth);
+                    Mail::to($data->email)->send(new UserOtpMail($data, $otp->token));
+
+                    return redirect()->route('login.challenge');
+                }
             }
+        } else {
+            $auth = $this->guard->attempt(
+                $request->only(['email', 'password']),
+                $request->filled('remember')
+            );
+
+            $this->sendLoginResponse($auth);
         }
 
         throw ValidationException::withMessages([
-            'email' => __('The details you entered did not match our records. Please double-check and try again.'),
+            'email' => 'The details you entered did not match our records. Please double-check and try again.',
         ]);
+    }
+
+    public function challenge(Request $request)
+    {
+        return view('auth.otp');
     }
 
     public function otp(Request $request)
     {
         $request->validate([
-            'otp'    => 'required|integer'
+            'otp'    => 'required'
         ]);
 
         $otp = UserOtp::where('token', $request->input('otp'));
@@ -106,14 +111,14 @@ class LoginController extends Controller
             $data = $otp->first();
             $user = User::where('id', $data->user_id)->first();
 
-            $auth = $this->guard->attempt([
-                'email' => $user->email,
-                'password' => $user->password
-            ], true);
+            \Illuminate\Support\Facades\Auth::guard('web')->login($user, true);
 
             $otp->delete();
+            $request->session()->regenerate();
 
-            $this->sendLoginResponse($auth);
+            return $request->wantsJson()
+                ? new JsonResponse([], 204)
+                : redirect()->intended("main");
         }
 
         throw ValidationException::withMessages([
@@ -193,6 +198,36 @@ class LoginController extends Controller
         return $request->wantsJson()
             ? new JsonResponse([], 204)
             : redirect('/');
+    }
+
+    public function password(Request $request)
+    {
+        return view('auth.recovery', [
+            'token' => $request->token
+        ]);
+    }
+
+    public function recovery(Request $request)
+    {
+        $request->validate([
+            'new_password'    => 'required|string',
+            'token' => 'required|string'
+        ]);
+
+        $token = PasswordRecovery::where('token', $request->input('token'));
+        if ($token->exists()) {
+            $data = $token->first();
+            User::where('id', $data->user_id)->update([
+                'password' => Hash::make($request->input('new_password'))
+            ]);
+            $data->delete();
+
+            return redirect()->route('login');
+        }
+
+        throw ValidationException::withMessages([
+            'new_password' => "Your password recovery token is invalid.",
+        ]);
     }
 
     private function generateNumericToken(int $length = 4): string

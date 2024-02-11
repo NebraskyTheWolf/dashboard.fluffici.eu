@@ -7,10 +7,10 @@
                 <table cellpadding="0" cellspacing="0">
                     <tr>
                         <td class="content pb-0" align="center">
-                            <table class="icon icon-lg bg-blue" cellspacing="0" cellpadding="0">
+                            <table class="icon-lg" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td valign="middle" align="center">
-                                        <img src="{{ url('icons/lock-open.png') }}" class=" va-middle" width="40" height="40" alt="lock-open" />
+                                        <img src="{{ url('/icons/lock-open.png') }}" class=" va-middle" width="40" height="40" alt="lock-open" />
                                     </td>
                                 </tr>
                             </table>
@@ -19,7 +19,7 @@
                     </tr>
                     <tr>
                         <td class="content text-center">
-                            <p>You recently requested to reset a password for your {{ env('APP_NAME') }} account. Use the button below to reset it. This message will expire in 24 hours.</p>
+                            <p>You recently requested to reset a password for your on your {{ env('APP_NAME') }} account. Use the button below to reset it. This message will expire in 24 hours.</p>
                         </td>
                     </tr>
                     <tr>

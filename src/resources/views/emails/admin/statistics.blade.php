@@ -31,7 +31,7 @@
                                                             <td width="80" height="80" style="background-image: url({{ url('chart-donuts/blue/' . $percentage . '.png') }}); background-size: 100%;" valign="center" class="text-default text-center">
                                                                 <div class="h4 m-0 text-blue lh-1">
                                                                     {{ $vists }}
-                                                                    <div class="text-muted font-normal font-sm mt-xs">of {{ $vistsPrevious }} last week</div>
+                                                                    <div class="text-muted font-normal font-sm mt-xs">of {{ $vistsPrevious }}</div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -40,7 +40,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="pt-sm text-center">
-                                                    Visits over a week
+                                                    Visits over a month
                                                 </td>
                                             </tr>
                                         </table>
@@ -55,6 +55,7 @@
                                                             <td width="80" height="80" style="background-image: url({{ url('chart-donuts/green/' . $percentageOrder . '.png') }}); background-size: 100%;" valign="center" class="text-default text-center">
                                                                 <div class="h4 m-0 text-green lh-1">
                                                                     {{ $orderCount }}
+                                                                    <div class="text-muted font-normal font-sm mt-xs">of 1000</div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -77,8 +78,8 @@
                                                         <tr>
                                                             <td width="80" height="80" style="background-image: url({{ url('chart-donuts/red/' . $percentageOverdue . '.png') }}); background-size: 100%;" valign="center" class="text-default text-center">
                                                                 <div class="h4 m-0 text-red lh-1">
-                                                                    {{ $percentageOverdue }}
-                                                                    <div class="text-muted font-normal font-sm mt-xs">of 400</div>
+                                                                    {{ $percentageOverdue }}%
+                                                                    <div class="text-muted font-normal font-sm mt-xs">of 100%</div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -108,7 +109,12 @@
                                                     <table class="chart" cellpadding="0" cellspacing="0">
                                                         <tr>
                                                             <td width="{{ $delivered }}%" class="chart-percentage font-sm bg-green" style="height: 8px"></td>
-                                                            <td width="{{ $delivered - 100 }}%" class="chart-percentage font-sm bg-green-lightest" style="height: 8px"></td>
+
+                                                            @if($delivered <= 0)
+                                                                <td width="100%" class="chart-percentage font-sm bg-green-lightest" style="height: 8px"></td>
+                                                            @else
+                                                                <td width="{{ $delivered - 100 }}%" class="chart-percentage font-sm bg-green-lightest" style="height: 8px"></td>
+                                                            @endif
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -127,7 +133,13 @@
                                                     <table class="chart" cellpadding="0" cellspacing="0">
                                                         <tr>
                                                             <td width="{{ $shipping }}%" class="chart-percentage font-sm bg-yellow" style="height: 8px"></td>
-                                                            <td width="{{ $shipping - 100 }}%" class="chart-percentage font-sm bg-yellow-lightest" style="height: 8px"></td>
+
+                                                            @if($shipping <= 0)
+                                                                <td width="100%" class="chart-percentage font-sm bg-yellow-lightest" style="height: 8px"></td>
+                                                            @else
+                                                                <td width="{{ $shipping - 100 }}%" class="chart-percentage font-sm bg-yellow-lightest" style="height: 8px"></td>
+                                                            @endif
+
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -146,7 +158,13 @@
                                                     <table class="chart" cellpadding="0" cellspacing="0">
                                                         <tr>
                                                             <td width="{{ $cancelled }}%" class="chart-percentage font-sm bg-red" style="height: 8px"></td>
-                                                            <td width="{{ $cancelled - 100 }}%" class="chart-percentage font-sm bg-red-lightest" style="height: 8px"></td>
+
+                                                            @if($cancelled <= 0)
+                                                                <td width="100%" class="chart-percentage font-sm bg-red-lightest" style="height: 8px"></td>
+                                                            @else
+                                                                <td width="{{ $cancelled - 100 }}%" class="chart-percentage font-sm bg-red-lightest" style="height: 8px"></td>
+                                                            @endif
+
                                                         </tr>
                                                     </table>
                                                 </td>

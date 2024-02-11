@@ -7,10 +7,10 @@
                 <table cellpadding="0" cellspacing="0">
                     <tr>
                         <td class="content pb-0" align="center">
-                            <table class="icon icon-lg bg-blue" cellspacing="0" cellpadding="0">
+                            <table class="icon-lg" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td valign="middle" align="center">
-                                        <img src="{{ url('icons/gift.png') }}" class=" va-middle" width="40" height="40" alt="gift" />
+                                        <img src="{{ url('/icons/gift.png') }}" class=" va-middle" width="40" height="40" alt="gift" />
                                     </td>
                                 </tr>
                             </table>
