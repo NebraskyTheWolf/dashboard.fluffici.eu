@@ -36,7 +36,7 @@ jobs:
           docker tag dashboard ghcr.io/fluffici/dashboard:latest
           docker tag dashboard ghcr.io/fluffici/dashboard:${{ env.GITHUB_SHA_SHORT }}
       - name: Push images to registry
-        run: docker push ghcr.io/fluffici/dashboard
+        run: docker push --all-tags ghcr.io/fluffici/dashboard
 
       - name: Deploy new image
         run: |
