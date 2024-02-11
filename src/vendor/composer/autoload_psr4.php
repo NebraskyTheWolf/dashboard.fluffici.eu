@@ -143,4 +143,6 @@ return array(
     'Barryvdh\\DomPDF\\' => array($vendorDir . '/barryvdh/laravel-dompdf/src'),
     'BaconQrCode\\' => array($vendorDir . '/bacon/bacon-qr-code/src'),
     'App\\' => array($baseDir . '/app', $vendorDir . '/laravel/pint/app'),
+    'AmrShawky\\LaravelCurrency\\' => array($vendorDir . '/amrshawky/laravel-currency/src'),
+    'AmrShawky\\' => array($vendorDir . '/amrshawky/currency/src'),
 );

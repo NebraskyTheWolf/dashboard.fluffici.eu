@@ -30,9 +30,15 @@ class StatisticsMail extends Command
      */
     public function handle()
     {
-        $users = User::paginate();
-        foreach ($users as $user) {
-            Mail::to($user->email)->send(new WeeklyStatistic());
+        if (env('APP_TEST_MAIL', false)) {
+            Mail::to("vakea@fluffici.eu")->send(new WeeklyStatistic());
+            printf('Sending as debug to "vakea@fluffici.eu"');
+        } else {
+            $users = User::paginate();
+            foreach ($users as $user) {
+                Mail::to($user->email)->send(new WeeklyStatistic());
+            }
+            printf('Sending as email globally.');
         }
     }
 }

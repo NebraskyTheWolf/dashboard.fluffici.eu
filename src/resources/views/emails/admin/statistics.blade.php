@@ -28,7 +28,7 @@
                                                 <td>
                                                     <table class="w-auto" width="80" cellspacing="0" cellpadding="0" align="center">
                                                         <tr>
-                                                            <td width="80" height="80" style="background-image: url({{ url('chart-donuts/blue/' . $percentage . '.png') }}); background-size: 100%;" valign="center" class="text-default text-center">
+                                                            <td width="80" height="80" style="background-image: url('https://dashboard.fluffici.eu/chart-donuts/blue/{{$percentage}}.png'); background-size: 100%;" valign="center" class="text-default text-center">
                                                                 <div class="h4 m-0 text-blue lh-1">
                                                                     {{ $vists }}
                                                                     <div class="text-muted font-normal font-sm mt-xs">of {{ $vistsPrevious }}</div>
@@ -52,7 +52,7 @@
                                                 <td>
                                                     <table class="w-auto" width="80" cellspacing="0" cellpadding="0" align="center">
                                                         <tr>
-                                                            <td width="80" height="80" style="background-image: url({{ url('chart-donuts/green/' . $percentageOrder . '.png') }}); background-size: 100%;" valign="center" class="text-default text-center">
+                                                            <td width="80" height="80" style="background-image: url('https://dashboard.fluffici.eu/chart-donuts/green/{{ $percentageOrder }}.png'); background-size: 100%;" valign="center" class="text-default text-center">
                                                                 <div class="h4 m-0 text-green lh-1">
                                                                     {{ $orderCount }}
                                                                     <div class="text-muted font-normal font-sm mt-xs">of 1000</div>
@@ -76,7 +76,7 @@
                                                 <td>
                                                     <table class="w-auto" width="80" cellspacing="0" cellpadding="0" align="center">
                                                         <tr>
-                                                            <td width="80" height="80" style="background-image: url({{ url('chart-donuts/red/' . $percentageOverdue . '.png') }}); background-size: 100%;" valign="center" class="text-default text-center">
+                                                            <td width="80" height="80" style="background-image: url('https://dashboard.fluffici.eu/chart-donuts/red/{{$percentageOverdue}}.png'); background-size: 100%;" valign="center" class="text-default text-center">
                                                                 <div class="h4 m-0 text-red lh-1">
                                                                     {{ $percentageOverdue }}%
                                                                     <div class="text-muted font-normal font-sm mt-xs">of 100%</div>
@@ -95,7 +95,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <h4 class="mt-xl">Newsletter stats</h4>
+                            <h4 class="mt-xl">Shop orders stats</h4>
                             <table class="row" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td class="col text-center va-top">

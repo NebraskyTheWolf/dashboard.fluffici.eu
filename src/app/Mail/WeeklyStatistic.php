@@ -4,9 +4,9 @@ namespace App\Mail;
 
 use App\Models\Pages;
 use App\Models\ShopOrders;
+use App\Models\SocialMedia;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -46,13 +46,14 @@ class WeeklyStatistic extends Mailable
                 'percentage' => $this->getPercent(Pages::whereMonth('created_at', Carbon::now())->sum('visits')),
                 'vists' => Pages::whereMonth('created_at', Carbon::now())->sum('visits'),
                 'vistsPrevious' => Pages::all()->sum('visits'),
-                'percentageOrder' => $this->getPercent(ShopOrders::where('status', 'COMPLETED')->where('status', 'DELIVERED')->count()),
-                'orderCount' => ShopOrders::where('status', 'COMPLETED')->where('status', 'DELIVERED')->count(),
-                'percentageOverdue' => $this->getPercent(ShopOrders::where('status', 'UNPAID')->count()),
+                'percentageOrder' => $this->getPercent(count(ShopOrders::paginate())),
+                'orderCount' => count(ShopOrders::all()),
+                'percentageOverdue' => $this->getPercent(count(ShopOrders::where('status', 'UNPAID')->paginate())),
 
-                'delivered' => $this->getPercent(ShopOrders::where('status', 'DELIVERED')->count()),
-                'shipping' => $this->getPercent(ShopOrders::where('status', 'SHIPPED')->count()),
-                'cancelled' => $this->getPercent(ShopOrders::where('status', 'CANCELLED')->count()),
+                'delivered' => $this->getPercent(count(ShopOrders::where('status', 'DELIVERED')->paginate())),
+                'shipping' => $this->getPercent(count(ShopOrders::where('status', 'SHIPPED')->paginate())),
+                'cancelled' => $this->getPercent(count(ShopOrders::where('status', 'CANCELLED')->paginate())),
+                'socials' => SocialMedia::all()
             ]
         );
     }
@@ -67,12 +68,18 @@ class WeeklyStatistic extends Mailable
         return [];
     }
 
-    public function getPercent($value)
+    public function getPercent($value): int
     {
-        if ($value >= 100) {
+        $val = intval($value);
+
+        if ($val >= 100) {
             return 100;
         }
 
-        return $value;
+        if ($val <= 0 || $val == null) {
+            return 0;
+        }
+
+        return intval($val);
     }
 }

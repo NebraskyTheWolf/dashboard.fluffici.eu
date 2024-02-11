@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\SocialMedia;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -41,7 +42,8 @@ class PasswordRecovery extends Mailable
         return new Content(
             view: 'emails.admin.password-recovery',
             with: [
-                'token' => $this->token
+                'token' => $this->token,
+                'socials' => SocialMedia::all()
             ]
         );
     }

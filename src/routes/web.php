@@ -108,4 +108,4 @@ Route::get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index']
 Route::get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder']);
 Route::get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index'])->middleware('throttle');
 
-Route::get('/webhook/kofi', [\app\Http\Controllers\IntegrationsController::class, "kofiCallback"])->middleware('koficors');
+Route::post('/webhook/kofi', [\App\Http\Controllers\IntegrationsController::class, "kofiCallback"]);
