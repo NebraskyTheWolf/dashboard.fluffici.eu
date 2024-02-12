@@ -44,6 +44,7 @@
                             <p class="tm_mb2"><b class="tm_primary_color">Accountant:</b></p>
                             <p>
                                 Vojstřík <br>
+                                vojst@fluffici.eu
                             </p>
                         </div>
                     </div>
@@ -66,7 +67,6 @@
                                                 <td class="tm_width_4">{{ $transaction->source }}</td>
                                                 <td class="tm_width_2">{{ $transaction->amount }}</td>
                                                 <td class="tm_width_1">{{ $transaction->created_at->diffForHumans() }}</td>
-                                                <td class="tm_width_2 tm_text_right">{{ $transaction->price }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -74,17 +74,16 @@
                             </div>
                         </div>
                         <div class="tm_invoice_footer">
-                            <div class="tm_left_footer">
-                                <p class="tm_mb2"><b class="tm_primary_color">Info:</b></p>
-                                <p class="tm_m0">Expenses <br>Amount: {{ $expenses }}</p>
-                                <p class="tm_m0">Incomes <br>Amount: {{ $incomes }}</p>
-                            </div>
                             <div class="tm_right_footer">
                                 <table>
                                     <tbody>
                                     <tr>
-                                        <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Subtoal</td>
-                                        <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_bold">{{ $subTotal }}</td>
+                                        <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Incomes</td>
+                                        <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_bold">{{ $incomes }} Kc</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Expenses</td>
+                                        <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_bold">{{ $expenses }} Kc</td>
                                     </tr>
                                     <tr class="tm_border_top tm_border_bottom">
                                         <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color">Grand Total	</td>

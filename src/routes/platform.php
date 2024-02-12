@@ -198,9 +198,17 @@ Route::screen('accounting/invoices', \App\Orchid\Screens\Accounting\AccountingIn
 Route::screen('accounting/transactions', \App\Orchid\Screens\Accounting\AccountingTransactionsList::class)
     ->name('platform.accounting.transactions');
 
+Route::screen('accounting/report/list', \App\Orchid\Screens\Accounting\AccountingReportList::class)
+    ->name('platform.accounting.reports');
 
 Route::screen('accounting/transactions/edit/{payment?}', \App\Orchid\Screens\Accounting\AccountingShopCreatePayment::class)
     ->name('platform.accounting.transactions.new');
 
 Route::screen('accounting/transactions/reports', \App\Orchid\Screens\Accounting\AccountingTRSReport::class)
     ->name('platform.accounting.transactions.reports');
+
+Route::screen('shop/tax/edit/{group?}', \App\Orchid\Screens\Shop\TaxGroupEdit::class)
+    ->name('tax.edit.group');
+
+Route::screen('shop/taxes', \App\Orchid\Screens\Shop\TaxGroupList::class)
+    ->name('tax.group.list');

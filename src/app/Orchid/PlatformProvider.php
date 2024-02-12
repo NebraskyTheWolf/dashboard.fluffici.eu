@@ -28,9 +28,7 @@ class PlatformProvider extends OrchidServiceProvider
     }
 
     /**
-     * Register the application menu.
-     *
-     * @return Menu[]
+     * @return array|Menu[]
      */
     public function menu(): array
     {
@@ -111,6 +109,10 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.graph-up')
                         ->route('platform.accounting.transactions.reports'),
 
+                    Menu::make('Účetní výkaz')
+                        ->icon('bs.buildings')
+                        ->route('platform.accounting.reports'),
+
                     Menu::make('Transakce')
                         ->icon('bs.arrow-left-right')
                         ->route('platform.accounting.transactions'),
@@ -129,6 +131,10 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.graph-up')
                         ->route('platform.shop.statistics')
                         ->title("GROWTH"),
+                    Menu::make('Taxes')
+                        ->icon('bs.exposure')
+                        ->route('tax.group.list')
+                        ->permission('platform.shop.taxes.navbar'),
                     Menu::make('Produkty')
                         ->icon('bs.window-sidebar')
                         ->route('platform.shop.products')
@@ -212,6 +218,10 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.shop.support.write', 'Support (Write)')
                 ->addPermission('platform.shop.vouchers.read', 'Vouchers (Read)')
                 ->addPermission('platform.shop.vouchers.write', 'Vouchers (Write)')
+
+                ->addPermission('platform.shop.taxes.navbar', 'Tax (Navbar)')
+                ->addPermission('platform.shop.taxes.write', 'Tax (Write)')
+                ->addPermission('platform.shop.taxes.read', 'Tax (Read)')
 
                 ->addPermission('platform.systems.eshop.settings', 'EShop Settings (read/write)')
                 ->addPermission('platform.systems.eshop.support', 'EShop Support (read/write)')

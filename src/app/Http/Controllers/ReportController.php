@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccountingDocument;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
+
     public function index(Request $request)
     {
         $type = $request->query('type');
@@ -25,8 +27,12 @@ class ReportController extends Controller
 
                     return $this->extracted($report, $storage, $reportId);
                 }
-            }
+                case "accounting": {
+                    $report = AccountingDocument::where('report_id', $reportId);
 
+                    return $this->extracted($report, $storage, $reportId);
+                }
+            }
         }
 
         return response()->json([
@@ -38,10 +44,12 @@ class ReportController extends Controller
     // Dummy fox again owo
 
     /**
-     * @param $report
-     * @param \Illuminate\Contracts\Filesystem\Filesystem $storage
-     * @param array|string $reportId
-     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     * Extracts a report based on the provided data.
+     *
+     * @param $report The report object.
+     * @param \Illuminate\Contracts\Filesystem\Filesystem $storage The filesystem instance used for storage.
+     * @param array|string $reportId The ID of the report.
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse The response containing the extracted report or an error message.
      */
     public function extracted($report, \Illuminate\Contracts\Filesystem\Filesystem $storage, array|string $reportId): \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
     {

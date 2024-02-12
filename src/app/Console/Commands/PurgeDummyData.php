@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\OrderedProduct;
+use App\Models\OrderIdentifiers;
 use App\Models\ShopCategories;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
@@ -29,10 +30,15 @@ class PurgeDummyData extends Command
      */
     public function handle()
     {
+        $identifiers = OrderIdentifiers::paginate();
         $orders = ShopOrders::paginate();
         $products = ShopProducts::paginate();
         $orderProducts = OrderedProduct::paginate();
         $categories = ShopCategories::paginate();
+
+        foreach ($identifiers as $identifier) {
+            $identifier->delete();
+        }
 
         foreach ($orders as $order) {
             $order->delete();

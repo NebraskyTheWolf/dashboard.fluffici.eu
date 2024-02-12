@@ -2,19 +2,16 @@
 
 namespace App\Orchid\Layouts;
 
-use App\Models\ShopReports;
+use App\Models\AccountingDocument;
 use App\Models\TransactionsReport;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
-use Symfony\Component\HttpFoundation\Request;
 
-class AccountingTRSReportLayout extends Table
+class AccountingReportLayout extends Table
 {
     /**
      * Data source.
@@ -24,7 +21,7 @@ class AccountingTRSReportLayout extends Table
      *
      * @var string
      */
-    protected $target = 'transactions';
+    protected $target = 'sources';
 
     /**
      * Get the table cells to be displayed.
@@ -35,23 +32,23 @@ class AccountingTRSReportLayout extends Table
     {
         return [
             TD::make('download', 'Action')
-                ->render(function (TransactionsReport $reports) {
+                ->render(function (AccountingDocument $reports) {
                     return Link::make('Download')
                         ->icon('bs.caret-down-square')
                         ->type(Color::SUCCESS)
                         ->download()
-                        ->href(route('api.shop.report') . '?reportId=' . $reports->report_id . '&type=transactions');
+                        ->href(route('api.shop.report') . '?reportId=' . $reports->report_id . '&type=accounting');
                 }),
             TD::make('report_id', 'Report ID')
-                ->render(function (TransactionsReport $reports) {
+                ->render(function (AccountingDocument $reports) {
                     return $reports->report_id;
                 }),
             TD::make('created_at', 'Created At')
-                ->render(function (TransactionsReport $reports) {
+                ->render(function (AccountingDocument $reports) {
                     return Carbon::parse($reports->created_at)->diffForHumans();
                 }),
             TD::make('delete', 'Delete')
-                ->render(function (TransactionsReport $reports) {
+                ->render(function (AccountingDocument $reports) {
                     return Button::make('Delete')
                         ->confirm(__('common.modal.confirm'))
                         ->method('delete', [
@@ -70,7 +67,7 @@ class AccountingTRSReportLayout extends Table
 
     protected function textNotFound(): string
     {
-        return 'No monthly report yet.';
+        return 'No monthly accounting report yet.';
     }
 
     protected function subNotFound(): string
