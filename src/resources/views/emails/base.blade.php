@@ -2372,22 +2372,22 @@
 
         .theme-dark.bg-body,
         .theme-dark .bg-body {
-            background: #212936;
+            background-color: #212936!important;
         }
         .theme-dark .box {
-            background: #2B3648;
-            border-color: #2B3648;
-            color: #dddddd;
+            background: #2B3648!important;
+            border-color: #2B3648!important;
+            color: #dddddd!important;
         }
         .theme-dark .text-default,
         .theme-dark .chart-bar-label,
         .theme-dark h1, .theme-dark .h1, .theme-dark h2, .theme-dark .h2, .theme-dark h3, .theme-dark .h3, .theme-dark h4, .theme-dark .h4, .theme-dark h5, .theme-dark .h5, .theme-dark h6, .theme-dark .h6 {
-            color: #dddddd;
+            color: #dddddd!important;
         }
         .theme-dark .col-hr,
         .theme-dark .col-mobile-hr {
-            border-color: #2B3648;
-            background-color: #212936;
+            border-color: #2B3648!important;
+            background-color: #212936!important;
         }
         .theme-dark .border-top,
         .theme-dark .border-right,
@@ -2395,12 +2395,12 @@
         .theme-dark .border-left,
         .theme-dark .list-item,
         .theme-dark .border {
-            border-color: #3E495B;
+            border-color: #3E495B!important;
         }
         .theme-dark .bg-light,
         .theme-dark .quote,
         .theme-dark .calendar-day {
-            background-color: #354258;
+            background-color: #354258!important;
         }
         .theme-dark .bg-secondary {
             background: transparent;
@@ -2409,7 +2409,7 @@
             background-color: #354258 !important;
         }
         .theme-dark .border-secondary {
-            border-color: #3E495B;
+            border-color: #3E495B!important;
         }
         .theme-dark .btn.bg-bordered:hover {
             background-color: #206bc4 !important;
@@ -2419,144 +2419,144 @@
             color: #fff !important;
         }
         .theme-dark .bg-blue-lightest {
-            background-color: #2a3b54;
+            background-color: #2a3b54!important;
         }
         .theme-dark .bg-blue-lighter {
-            background-color: #28466d;
+            background-color: #28466d!important;
         }
         .theme-dark .bg-blue-light {
-            background-color: #235b9f;
+            background-color: #235b9f!important;
         }
         .theme-dark .bg-blue-dark {
-            background-color: #4d89d0;
+            background-color: #4d89d0!important;
         }
         .theme-dark .bg-blue-darker {
-            background-color: #a6c4e7;
-            color: #212936;
+            background-color: #a6c4e7!important;
+            color: #212936!important;
         }
         .theme-dark .bg-blue-darkest {
-            background-color: #bcd3ed;
-            color: #212936;
+            background-color: #bcd3ed!important;
+            color: #212936!important;
         }
         .theme-dark .bg-blue-lt {
             color: #206bc4 !important;
             background: #d2e1f3 !important;
         }
         .theme-dark .bg-azure-lightest {
-            background-color: #2d4057;
+            background-color: #2d4057!important;
         }
         .theme-dark .bg-azure-lighter {
-            background-color: #325476;
+            background-color: #325476!important;
         }
         .theme-dark .bg-azure-light {
-            background-color: #3b7bb3;
+            background-color: #3b7bb3!important;
         }
         .theme-dark .bg-azure-dark {
-            background-color: #68ade7;
+            background-color: #68ade7!important;
         }
         .theme-dark .bg-azure-darker {
-            background-color: #b3d6f3;
+            background-color: #b3d6f3!important;
             color: #212936;
         }
         .theme-dark .bg-azure-darkest {
-            background-color: #c6e0f6;
-            color: #212936;
+            background-color: #c6e0f6!important;
+            color: #212936!important;
         }
         .theme-dark .bg-azure-lt {
             color: #4299e1 !important;
             background: #d9ebf9 !important;
         }
         .theme-dark .bg-indigo-lightest {
-            background-color: #2d3b58;
+            background-color: #2d3b58!important;
         }
         .theme-dark .bg-indigo-lighter {
-            background-color: #324479;
+            background-color: #324479!important;
         }
         .theme-dark .bg-indigo-light {
-            background-color: #3b56ba;
+            background-color: #3b56ba!important;
         }
         .theme-dark .bg-indigo-dark {
-            background-color: #6882ef;
+            background-color: #6882ef!important;
         }
         .theme-dark .bg-indigo-darker {
-            background-color: #b3c1f7;
-            color: #212936;
+            background-color: #b3c1f7!important;
+            color: #212936!important;
         }
         .theme-dark .bg-indigo-darkest {
-            background-color: #c6d0f9;
-            color: #212936;
+            background-color: #c6d0f9!important;
+            color: #212936!important;
         }
         .theme-dark .bg-indigo-lt {
             color: #4263eb !important;
             background: #d9e0fb !important;
         }
         .theme-dark .bg-purple-lightest {
-            background-color: #383755;
+            background-color: #383755!important;
         }
         .theme-dark .bg-purple-lighter {
-            background-color: #52386f;
+            background-color: #52386f!important;
         }
         .theme-dark .bg-purple-light {
-            background-color: #873ca2;
+            background-color: #873ca2!important;
         }
         .theme-dark .bg-purple-dark {
-            background-color: #be65d4;
+            background-color: #be65d4!important;
         }
         .theme-dark .bg-purple-darker {
-            background-color: #dfb2e9;
-            color: #212936;
+            background-color: #dfb2e9!important;
+            color: #212936!important;
         }
         .theme-dark .bg-purple-darkest {
-            background-color: #e7c5ef;
-            color: #212936;
+            background-color: #e7c5ef!important;
+            color: #212936!important;
         }
         .theme-dark .bg-purple-lt {
             color: #ae3ec9 !important;
             background: #efd8f4 !important;
         }
         .theme-dark .bg-pink-lightest {
-            background-color: #3c364c;
+            background-color: #3c364c!important;
         }
         .theme-dark .bg-pink-lighter {
-            background-color: #5e3553;
+            background-color: #5e3553!important;
         }
         .theme-dark .bg-pink-light {
-            background-color: #a33461;
+            background-color: #a33461!important;
         }
         .theme-dark .bg-pink-dark {
-            background-color: #de5c89;
+            background-color: #de5c89!important;
         }
         .theme-dark .bg-pink-darker {
-            background-color: #efadc4;
-            color: #212936;
+            background-color: #efadc4!important;
+            color: #212936!important;
         }
         .theme-dark .bg-pink-darkest {
-            background-color: #f3c2d3;
-            color: #212936;
+            background-color: #f3c2d3!important;
+            color: #212936!important;
         }
         .theme-dark .bg-pink-lt {
             color: #d6336c !important;
             background: #f7d6e2 !important;
         }
         .theme-dark .bg-red-lightest {
-            background-color: #3c3647;
+            background-color: #3c3647!important;
         }
         .theme-dark .bg-red-lighter {
-            background-color: #5e3744;
+            background-color: #5e3744!important;
         }
         .theme-dark .bg-red-light {
-            background-color: #a3383e;
+            background-color: #a3383e!important;
         }
         .theme-dark .bg-red-dark {
-            background-color: #de6161;
+            background-color: #de6161!important;
         }
         .theme-dark .bg-red-darker {
-            background-color: #efb0b0;
-            color: #212936;
+            background-color: #efb0b0!important;
+            color: #212936!important;
         }
         .theme-dark .bg-red-darkest {
-            background-color: #f3c4c4;
-            color: #212936;
+            background-color: #f3c4c4!important;
+            color: #212936!important;
         }
         .theme-dark .bg-red-lt {
             color: #d63939 !important;
@@ -2814,7 +2814,7 @@
         @import url(https://rsms.me/inter/inter.css);
     </style>
     <!--<![endif]-->
-
+    @yield('head')
 </head>
 
 <body class="bg-body theme-dark">

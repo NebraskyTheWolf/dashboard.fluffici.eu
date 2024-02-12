@@ -111,5 +111,7 @@ class ShopSalesEdit extends Screen
     public function remove() {
 
         $this->sale->delete();
+
+        return redirect()->route('platform.shop.sales');
     }
 }

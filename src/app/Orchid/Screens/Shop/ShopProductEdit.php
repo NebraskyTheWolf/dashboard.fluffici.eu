@@ -173,5 +173,7 @@ class ShopProductEdit extends Screen
 
     public function remove() {
         $this->products->delete();
+
+        return redirect()->route('platform.shop.products');
     }
 }

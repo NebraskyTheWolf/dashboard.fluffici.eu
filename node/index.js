@@ -13,6 +13,24 @@ const app = express()
 app.use(express.static(path.join(__dirname, '../public')))
 app.use(bodyParser())
 
+app.post('/order', async function (req, res) {
+    bwipJs.toBuffer({
+        bcid: 'datamatrix',
+        text: nodeBase64.encode(req.body.orderId),
+        barcolor: '#000',
+
+    }).then(png => {
+        const dout = fs.createWriteStream('/workspace/storage/app/public/' + req.body.orderId + '-order.png'),
+            dstream = new PNGStream.from(png);
+        dstream.pipe(dout);
+
+        return res.status(200).json({
+            'status': true,
+            'result': 'success'
+        })
+    })
+})
+
 app.post('/voucher', async function (req, res) {
     const price = req.body.price
     const decoded = JSON.parse(nodeBase64.decode(req.body.properties))

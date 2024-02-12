@@ -105,6 +105,8 @@ class ShopCarrierEdit extends Screen
 
     public function remove(Request $request) {
 
-        $this->carrier->remove();
+        $this->carrier->delete();
+
+        return redirect()->route('platform.shop.carriers');
     }
 }

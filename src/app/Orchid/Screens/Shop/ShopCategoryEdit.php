@@ -119,5 +119,7 @@ class ShopCategoryEdit extends Screen
     public function remove()
     {
         $this->category->delete();
+
+        return redirect()->route('platform.shop.categories');
     }
 }

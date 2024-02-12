@@ -97,15 +97,14 @@ Route::get('/health', function ($request) {
 })->name("health");
 
 Route::get('/build', function ($request) {
-    return [
-        'version' => file_get_contents('../VERSION'),
-        'rev' => env('GIT_COMMIT', "No rev")
-    ];
+    return [];
 })->name("build");
 
 Route::get('/report', [\App\Http\Controllers\ReportController::class, 'index'])->middleware('auth')->name('api.shop.report');
 Route::get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->middleware('auth')->name('api.shop.voucher');
 Route::get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder']);
 Route::get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index'])->middleware('throttle');
+
+Route::get('/api/generate/order/{order_id}', [\App\Http\Controllers\VoucherController::class, 'datamatrix'])->middleware('throttle');
 
 Route::post('/webhook/kofi', [\App\Http\Controllers\IntegrationsController::class, "kofiCallback"]);

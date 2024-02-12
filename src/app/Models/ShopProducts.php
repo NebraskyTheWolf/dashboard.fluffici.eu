@@ -24,9 +24,9 @@ class ShopProducts extends Model
     public function getImage(): string
     {
         if ($this->image_path !== null) {
-            return env('AUTUMN_HOST', 'https://autumn.rsiniya.uk/attachments/') . $this->image_path;
+            return env('AUTUMN_HOST', 'https://autumn.fluffici.eu/attachments/') . $this->image_path;
         } else {
-            return env('AUTUMN_HOST', 'https://autumn.rsiniya.uk/attachments/') . 'E1dC5nCVCCSnYwTmUTS7JMYAZiwOeb1xa8XCFPmu4j';
+            return env('AUTUMN_HOST', 'https://autumn.fluffici.eu/attachments/') . '90don8HDCYvvsg0vamKGeTMJReNCGXKsGDE5PJXfOR';
         }
     }
 }
