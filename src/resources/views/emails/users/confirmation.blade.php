@@ -34,6 +34,48 @@
             <meta itemprop="name" content="{{ $order->first_name }} {{ $order->last_name }}"/>
         </div>
     </div>
+
+    <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "Order",
+          "merchant": {
+            "@type": "Organization",
+            "name": "Fluffici z.s"
+          },
+          "orderNumber": "{{ $publicData->public_identifier }}",
+          "orderStatus": "http://schema.org/OrderProcessing",
+          "priceCurrency": "CZK",
+          "price": "{{ $product->getNormalizedPrice() }}",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "validFrom": "2037-12-07T23:30:00-08:00"
+          },
+          "acceptedOffer": {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "{{ $product->name }}",
+              "sku": "{{ $product->id }}",
+              "url": "https://shop.fluffici.eu/checkout/{{ $product->id }}",
+              "image": "{{ $product->getImage() }}"
+            },
+            "price": "{{ $product->getNormalizedPrice() }}",
+            "priceCurrency": "CZK",
+            "eligibleQuantity": {
+              "@type": "QuantitativeValue",
+              "value": "1"
+            }
+          },
+          "url": "https://www.amazon.ca/gp/css/summary/edit.html/orderID=123-4567890-1234567",
+          "potentialAction": {
+            "@type": "ViewAction",
+            "url": "https://shop.fluffici.eu/"
+          }
+        }
+    </script>
+
+
     <!-- Support google header end -->
 @endsection
 

@@ -32,7 +32,6 @@ class Kernel extends ConsoleKernel
         $schedule->command(FinishOldEvent::class)->everyTenSeconds();
         $schedule->command(StartNewEvent::class)->everyTenSeconds();
         $schedule->command(DeleteUsedVouchers::class)->everyTenSeconds();
-        $schedule->command(DeleteInvalidatedTokens::class)->everyTenSeconds();
     }
 
     /**

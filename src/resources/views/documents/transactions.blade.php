@@ -63,7 +63,7 @@
                                                         <td class="tm_width_2">{{ $transaction->provider }}</td>
                                                         <td class="tm_width_1">{{ $transaction->status }}</td>
                                                         <td class="tm_width_2 tm_text_right">{{ $transaction->price }} Kc</td>
-                                                        <td class="tm_width_2 tm_text_right">{{ $transaction->created_at->diffForHumans() }}</td>
+                                                        <td class="tm_width_2 tm_text_right">{{ $transaction->created_at }}</td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>

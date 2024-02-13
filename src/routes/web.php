@@ -91,19 +91,22 @@ Route::post('api/notifications', [NotificationScreen::class, 'unreadNotification
 ->name('api.notifications');
 
 Route::get('/health', function ($request) {
-    return [
+    return response()->json([
         'status' => "ok"
-    ];
+    ]);
 })->name("health");
 
 Route::get('/build', function ($request) {
-    return [];
+    return response()->json();
 })->name("build");
 
 Route::get('/report', [\App\Http\Controllers\ReportController::class, 'index'])->middleware('auth')->name('api.shop.report');
 Route::get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->middleware('auth')->name('api.shop.voucher');
-Route::get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder']);
-Route::get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index'])->middleware('throttle');
+
+Route::post('/api/login', [\App\Http\Controllers\ApiController::class, 'index']);
+
+Route::get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder'])->middleware('api');
+Route::get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index'])->middleware('api');
 
 Route::get('/api/generate/order/{order_id}', [\App\Http\Controllers\VoucherController::class, 'datamatrix'])->middleware('throttle');
 

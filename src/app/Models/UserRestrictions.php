@@ -4,11 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Orchid\Screen\AsSource;
 
-class AccountingDocument extends Model
+class UserRestrictions extends Model
 {
-    use AsSource;
-
-    public $table = 'accounting_document';
+    use HasFactory;
 }

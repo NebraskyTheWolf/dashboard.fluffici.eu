@@ -19,7 +19,7 @@
                     </tr>
                     <tr>
                         <td class="content">
-                            <h4>New alert from https://dashboard.fluffici.eu</h4>
+                            <h4>New alert from {{ $currentService }}</h4>
                             <p class="text-muted">{{ $currentDate }}</p>
                             <h4 class="mt-lg">{{ $className }}</h4>
                             <pre>{{ $contents }}</pre>

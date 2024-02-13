@@ -68,7 +68,7 @@ class AccountingTRSReport extends Screen
         \Orchid\Support\Facades\Toast::success('You refreshed the page.')
             ->autoHide();
 
-        return redirect()->route('platform.shop.reports');
+        return redirect()->route('platform.accounting.transactions.reports');
     }
 
     public function force()
@@ -78,7 +78,7 @@ class AccountingTRSReport extends Screen
         \Orchid\Support\Facades\Toast::success('You generated a new monthly report.')
             ->autoHide();
 
-        return redirect()->route('platform.shop.reports');
+        return redirect()->route('platform.accounting.transactions.reports');
     }
 
     public function delete(Request $request)
@@ -96,6 +96,6 @@ class AccountingTRSReport extends Screen
             \Orchid\Support\Facades\Toast::error('This reportId does not exists.')
                 ->autoHide();
         }
-        return redirect()->route('platform.shop.reports');
+        return redirect()->route('platform.accounting.transactions.reports');
     }
 }

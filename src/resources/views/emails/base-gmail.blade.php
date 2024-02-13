@@ -317,7 +317,7 @@
     </style></head><body style="font-size: 14px; line-height: 171.4285714286%; mso-line-height-rule: exactly; color: #3A4859; width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-font-feature-settings: &quot;cv02&quot;, &quot;cv03&quot;, &quot;cv04&quot;, &quot;cv11&quot;; font-feature-settings: &quot;cv02&quot;, &quot;cv03&quot;, &quot;cv04&quot;, &quot;cv11&quot;; font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; margin: 0; padding: 0;" bgcolor="#f6f7f9"><p style="margin: 0 0 1em;">
     @yield('head')
 
-
+    @yield('script')
 </p>
 <center>
     <table class="main bg-body" width="100%" cellspacing="0" cellpadding="0" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; border-collapse: collapse; width: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;" bgcolor="#f6f7f9">

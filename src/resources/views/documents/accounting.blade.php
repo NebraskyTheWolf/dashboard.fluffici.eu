@@ -10,10 +10,10 @@
 </head>
 <body>
 <div style="page-break-after:auto;">
-    <div class="tm_container">
-        <div class="tm_invoice_wrap">
-            <div class="tm_invoice tm_style1 tm_dark_invoice" id="tm_download_section">
-                <div class="tm_invoice_in">
+    <div class="">
+        <div class="">
+            <div class="tm_invoice tm_style1 " id="tm_download_section">
+                <div class="">
                     <div class="tm_invoice_head tm_align_center tm_mb20">
                         <div class="tm_invoice_left">
                             <div class="tm_logo">
@@ -66,7 +66,7 @@
                                                 <td class="tm_width_3">{{ $transaction->type }}</td>
                                                 <td class="tm_width_4">{{ $transaction->source }}</td>
                                                 <td class="tm_width_2">{{ $transaction->amount }}</td>
-                                                <td class="tm_width_1">{{ $transaction->created_at->diffForHumans() }}</td>
+                                                <td class="tm_width_1">{{ $transaction->created_at }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -87,7 +87,7 @@
                                     </tr>
                                     <tr class="tm_border_top tm_border_bottom">
                                         <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color">Grand Total	</td>
-                                        <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color tm_text_right">{{ $grandTotal }}</td>
+                                        <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color tm_text_right">{{ $grandTotal }} Kc</td>
                                     </tr>
                                     </tbody>
                                 </table>

@@ -1,10 +1,8 @@
 <?php
 
-namespace app\Orchid\Screens\Accounting;
+namespace App\Orchid\Screens\Accounting;
 
-use App\Models\Accounting;
 use App\Models\AccountingDocument;
-use App\Models\TransactionsReport;
 use App\Orchid\Layouts\AccountingReportLayout;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
@@ -23,7 +21,7 @@ class AccountingReportList extends Screen
     public function query(): iterable
     {
         return [
-            'sources' => Accounting::paginate()
+            'sources' => AccountingDocument::paginate()
         ];
     }
 
@@ -73,7 +71,7 @@ class AccountingReportList extends Screen
         \Orchid\Support\Facades\Toast::success('You refreshed the page.')
             ->autoHide();
 
-        return redirect()->route('platform.shop.reports');
+        return redirect()->route('platform.accounting.reports');
     }
 
     public function force()
@@ -83,7 +81,7 @@ class AccountingReportList extends Screen
         \Orchid\Support\Facades\Toast::success('You generated a new monthly report.')
             ->autoHide();
 
-        return redirect()->route('platform.shop.reports');
+        return redirect()->route('platform.accounting.reports');
     }
 
     public function delete(Request $request)
@@ -101,7 +99,7 @@ class AccountingReportList extends Screen
             \Orchid\Support\Facades\Toast::error('This reportId does not exists.')
                 ->autoHide();
         }
-        return redirect()->route('platform.shop.reports');
+        return redirect()->route('platform.accounting.reports');
     }
 
 }

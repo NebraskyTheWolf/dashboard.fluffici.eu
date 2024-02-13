@@ -1,0 +1,40 @@
+FROM php:8.3-fpm-bullseye
+
+WORKDIR /workspace
+
+COPY ./src /workspace
+
+WORKDIR /workspace
+
+# timezone environment
+ENV TZ=UTC \
+  # locale
+  LANG=en_US.UTF-8 \
+  LANGUAGE=en_US:en \
+  LC_ALL=en_US.UTF-8 \
+  # composer environment
+  COMPOSER_ALLOW_SUPERUSER=1 \
+  COMPOSER_HOME=/composer
+
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+
+RUN <<EOF
+  apt-get update
+  apt-get -y install --no-install-recommends \
+    locales \
+    git \
+    unzip \
+    libzip-dev \
+    libicu-dev \
+    libonig-dev
+  locale-gen en_US.UTF-8
+  localedef -f UTF-8 -i en_US en_US.UTF-8
+
+  composer config -g process-timeout 3600
+  composer config -g repos.packagist composer https://packagist.org
+EOF
+
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+
+COPY ./entrypoint.sh /workspace/entrypoint.sh
+ENTRYPOINT /workspace/entrypoint.sh

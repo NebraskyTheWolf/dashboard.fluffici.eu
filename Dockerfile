@@ -77,4 +77,7 @@ EOF
 ARG GIT_COMMIT
 ENV GIT_COMMIT=$GIT_COMMIT
 
+
 RUN docker-php-ext-install mysqli pdo pdo_mysql
+
+

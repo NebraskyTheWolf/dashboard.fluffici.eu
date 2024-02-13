@@ -62,8 +62,17 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
+        $user = User::where('email', $request->input('email'));
+        if ($user->exists()) {
+            $data = $user->first();
+            if ($data->isTerminated()) {
+                throw ValidationException::withMessages([
+                    'email' => 'Your account was terminated.',
+                ]);
+            }
+        }
+
         if (env('APP_OTP', false)) {
-            $user = User::where('email', $request->input('email'));
             if ($user->exists()) {
                 $data = $user->first();
 
@@ -176,8 +185,6 @@ class LoginController extends Controller
      */
     public function switchLogout()
     {
-        Impersonation::logout();
-
         return redirect()->route("index");
     }
 

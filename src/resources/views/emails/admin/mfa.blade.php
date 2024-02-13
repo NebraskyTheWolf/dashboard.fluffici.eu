@@ -1,4 +1,4 @@
-@extends('emails.base')
+@extends('emails.base' )
 
 @section('content')
     <table class="box" cellpadding="0" cellspacing="0">
@@ -10,7 +10,7 @@
                             <table class="icon-lg" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td valign="middle" align="center">
-                                        <img src="{{ url('/icons/lock.png') }}" class=" va-middle" width="40" height="40" alt="lock-open" />
+                                        <img src="{{ url('/icons/2fa.png') }}" class=" va-middle" width="40" height="40" alt="lock-open" />
                                     </td>
                                 </tr>
                             </table>

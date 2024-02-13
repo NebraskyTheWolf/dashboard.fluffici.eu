@@ -29,17 +29,10 @@ class DeleteInvalidatedTokens extends Command
     public function handle()
     {
         $otp = UserOtp::paginate();
-        $recovery = PasswordRecovery::paginate();
 
         foreach ($otp as $auth) {
             if (Carbon::parse($auth->created_at)->addMinutes(30)->isPast()) {
                 $auth->delete();
-            }
-        }
-
-        foreach ($recovery as $value) {
-            if (Carbon::parse($value->created_at)->addMinutes(30)->isPast()) {
-                $value->delete();
             }
         }
     }

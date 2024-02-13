@@ -38,7 +38,7 @@ class GenerateAccountingReport extends Command
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
         $income = Accounting::orderBy('created_at', 'desc')->where('type', 'INCOME')->whereMonth('created_at', Carbon::now())->sum('amount');
-        $expense = OrderPayment::orderBy('created_at', 'desc')->where('type', 'EXPENSE')->whereMonth('created_at', Carbon::now())->sum('amount');
+        $expense = Accounting::orderBy('created_at', 'desc')->where('type', 'EXPENSE')->whereMonth('created_at', Carbon::now())->sum('amount');
 
         $document = Pdf::loadView('documents.accounting', [
             'reportId' => $reportId,

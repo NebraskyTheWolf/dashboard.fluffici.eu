@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Orchid\Platform\Models;
 
+use App\Models\UserRestrictions;
 use App\Orchid\Presenters\AuditPresenter;
 use App\Orchid\Presenters\UserPresenter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -119,4 +120,28 @@ class User extends Authenticatable implements UserInterface
     {
         return new AuditPresenter($this);
     }
+
+    /**
+     * Check if the user is terminated.
+     *
+     * @return bool True if the user is terminated, false otherwise.
+     */
+    public function isTerminated(): bool
+    {
+        return UserRestrictions::where('user_id', $this->id)->exists();
+    }
+
+    public function terminate($actor)
+    {
+        if ($this->isTerminated()) {
+            UserRestrictions::where('user_id', $this->id)->delete();
+        } else {
+            $termination = new UserRestrictions();
+            $termination->user_id = $this->id;
+            $termination->actor_id = $actor;
+            $termination->save();
+        }
+    }
+
+
 }

@@ -6,6 +6,7 @@ namespace App\Orchid\Screens\User;
 
 use App\Events\UpdateAudit;
 use App\Events\UserUpdated;
+use App\Mail\UserTermination;
 use App\Orchid\Layouts\Role\RolePermissionLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserPasswordLayout;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Orchid\Access\Impersonation;
 use Orchid\Platform\Models\User;
@@ -77,10 +79,10 @@ class UserEditScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Button::make(__('user.screen.edit.button.remove'))
-                ->icon('bs.trash3')
-                ->confirm('Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.')
-                ->method('remove')
+            Button::make($this->user->isTerminated() ? 'Reinstate' : 'Terminate')
+                ->icon('bs.slash-circle')
+                ->confirm('Are you sure to continue?')
+                ->method('terminate')
                 ->canSee($this->user->exists),
 
             Button::make(__('user.screen.edit.button.save'))
@@ -190,42 +192,45 @@ class UserEditScreen extends Screen
     }
 
     /**
-     * @throws \Exception
+     * Terminate a user account.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param User $user The user account to terminate.
+     *
+     * @return \Illuminate\Http\RedirectResponse The redirect response to the systems users page.
      */
-    public function remove(User $user)
+    public function terminate(User $user)
     {
         if ($user->name === 'Asherro'
             && Auth::user()->name !== "Asherro")
         {
             Toast::info('You cannot delete Asherro\'s account.');
 
-            event(new UpdateAudit("deleted_user", "Tried to delete " . $user->name . " account.", Auth::user()->name));
+            event(new UpdateAudit("deleted_user", "Tried to terminate " . $user->name . " account.", Auth::user()->name));
 
             return redirect()->route('platform.systems.users');
         }
 
-        $user->delete();
+        $user->terminate(Auth::id());
 
-        Toast::info(__('user.screen.edit.toast.removed'));
+        if ($user->isTerminated()) {
+            $user->replaceRoles([]);
 
-        event(new UpdateAudit("deleted_user", "Deleted " . $user->name . " profile.", Auth::user()->name));
+            Toast::info("You terminated " . $user->name . " account.");
+
+            Mail::to($user)->send(new UserTermination($user->email));
+
+            // Laravel trick to logout a distant user..
+            $user->update([
+                'logout' => true
+            ]);
+
+            event(new UpdateAudit("terminated_user", "Terminated " . $user->name . " account.", Auth::user()->name));
+        } else {
+            Toast::info("You reinstated " . $user->name . " account.");
+
+            event(new UpdateAudit("terminated_user", "Reinstated " . $user->name . " account.", Auth::user()->name));
+        }
 
         return redirect()->route('platform.systems.users');
-    }
-
-    /**
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function loginAs(User $user)
-    {
-        Impersonation::loginAs($user);
-
-        Toast::info(__('You are now impersonating this user'));
-
-        event(new UpdateAudit("impersonate", "Impersonating " . $user->name . " profile.", Auth::user()->name));
-
-        return redirect()->route(config('platform.index'));
     }
 }
