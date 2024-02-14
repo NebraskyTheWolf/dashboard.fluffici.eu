@@ -15,13 +15,10 @@ use Orchid\Support\Facades\Layout;
 
 class AccountingMain extends Screen
 {
-    /**
-     * Fetch data to be displayed on the screen.
-     *
-     * @return array
-     */
     public function query(): iterable
     {
+        $lastMonth = Carbon::now()->subMonth();
+
         return [
             'metrics' => [
                 'outstanding_amount' => [
@@ -29,9 +26,14 @@ class AccountingMain extends Screen
                     'value' => number_format(OrderPayment::where('status', 'PAID')->sum('price') + Accounting::where('type', 'INCOME')->sum('amount') - Accounting::where('type', 'EXPENSE')->sum('amount')) . ' Kč',
                     'diff' => $this->diff(
                         OrderPayment::where('status', 'PAID')
-                        ->whereMonth('created_at', Carbon::now())->sum('price') +
-                        Accounting::where('type', 'INCOME')->whereMonth('created_at', Carbon::now())->sum('amount') -
-                        Accounting::where('type', 'EXPENSE')->whereMonth('created_at', Carbon::now())->sum('amount'),
+                            ->whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])
+                            ->sum('price') +
+                        Accounting::where('type', 'INCOME')
+                            ->whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])
+                            ->sum('amount') -
+                        Accounting::where('type', 'EXPENSE')
+                            ->whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])
+                            ->sum('amount'),
                         OrderPayment::where('status', 'PAID')->sum('price') +
                         Accounting::where('type', 'INCOME')->sum('amount') -
                         Accounting::where('type', 'EXPENSE')->sum('amount'))
@@ -39,12 +41,20 @@ class AccountingMain extends Screen
                 'overdue_amount'   => [
                     'key' => 'overdue_amount',
                     'value' => number_format(OrderPayment::where('status', 'UNPAID')->sum('price')) . ' Kč',
-                    'diff' => $this->diff(OrderPayment::where('status', 'UNPAID')->whereMonth('created_at', Carbon::now())->sum('price'), OrderPayment::where('status', 'UNPAID')->sum('price'))
+                    'diff' => $this->diff(
+                        OrderPayment::where('status', 'UNPAID')
+                            ->whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])
+                            ->sum('price'),
+                        OrderPayment::where('status', 'UNPAID')->sum('price'))
                 ],
                 'expenses' => [
                     'key' => 'expensed',
                     'value' => number_format(Accounting::where('type', 'EXPENSE')->sum('amount')) . ' Kč',
-                    'diff' => $this->diff(Accounting::where('type', 'EXPENSE')->whereMonth('created_at', Carbon::now())->sum('amount'), Accounting::where('type', 'EXPENSE')->sum('amount'))
+                    'diff' => $this->diff(
+                        Accounting::where('type', 'EXPENSE')
+                            ->whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])
+                            ->sum('amount'),
+                        Accounting::where('type', 'EXPENSE')->sum('amount'))
                 ]
             ],
 
@@ -59,11 +69,6 @@ class AccountingMain extends Screen
         ];
     }
 
-    /**
-     * The name of the screen displayed in the header.
-     *
-     * @return string|null
-     */
     public function name(): ?string
     {
         return 'Accounting';
@@ -76,11 +81,6 @@ class AccountingMain extends Screen
         ];
     }
 
-    /**
-     * The screen's action buttons.
-     *
-     * @return \Orchid\Screen\Action[]
-     */
     public function commandBar(): iterable
     {
         return [
@@ -90,11 +90,6 @@ class AccountingMain extends Screen
         ];
     }
 
-    /**
-     * The screen's layout elements.
-     *
-     * @return \Orchid\Screen\Layout[]|string[]
-     */
     public function layout(): iterable
     {
         return [

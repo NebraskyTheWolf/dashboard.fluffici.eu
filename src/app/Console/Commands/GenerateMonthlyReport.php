@@ -17,52 +17,56 @@ use Ramsey\Uuid\Uuid;
 
 class GenerateMonthlyReport extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'app:generate-monthly-report';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Generate the monthly report card.';
-
     public $products = array();
 
-    /**
-     * Handle the generation and sending of a shop report.
-     */
     public function handle() {
         $today = Carbon::today()->format("Y-m-d");
+        $currentYear = Carbon::now()->year;
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
-        $total = OrderedProduct::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->sum('price');
-        $paidPrice = OrderPayment::orderBy('created_at', 'desc')->where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price');
-        $refunded = OrderPayment::orderBy('created_at', 'desc')->where('status', 'REFUNDED')->whereMonth('created_at', Carbon::now())->sum('price');
-        $carrierFees = OrderCarrier::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->sum('price');
 
-        // This happens when a discounts has been placed in the order.
-        $loss = $total - $paidPrice - $refunded;
-        // False positive fix
+        $total = OrderedProduct::orderBy('created_at', 'desc')
+            ->whereYear('created_at', $currentYear)
+            ->whereMonth('created_at', Carbon::now())
+            ->sum('price');
+
+        $paidPrice = OrderPayment::orderBy('created_at', 'desc')
+            ->whereYear('created_at', $currentYear)
+            ->whereMonth('created_at', Carbon::now())
+            ->where('status', 'PAID')
+            ->sum('price');
+
+        $refunded = OrderPayment::orderBy('created_at', 'desc')
+            ->whereYear('created_at', $currentYear)
+            ->whereMonth('created_at', Carbon::now())
+            ->where('status', 'REFUNDED')
+            ->sum('price');
+
+        $carrierFees = OrderCarrier::orderBy('created_at', 'desc')
+            ->whereYear('created_at', $currentYear)
+            ->whereMonth('created_at', Carbon::now())
+            ->sum('price');
+
+        $loss = $total - $paidPrice + $refunded + $carrierFees;
+
         if ($loss <= 0) {
             $loss = 0;
         }
 
-        // Using a function to avoid non-divisible values.
-        $percentage = $this->percent($loss, $total); // ($loss/$total) * 100
+        $percentage = $this->percent($loss, $total);
 
         $document = Pdf::loadView('documents.report', [
             'reportId' => $reportId,
             'reportDate' => $today,
             'reportExportDate' => $today,
-            'reportProducts' => OrderedProduct::whereMonth('created_at', Carbon::now())->get(),
+            'reportProducts' => OrderedProduct::whereMonth('created_at', Carbon::now())
+                ->whereYear('created_at', $currentYear)
+                ->get(),
             'fees' => number_format(abs($carrierFees)),
             'sales' => number_format(abs($loss)),
-            'overallProfit' => number_format(abs($total - $loss)),
+            'overallProfit' => number_format(abs($total - $loss - $carrierFees)),
             'lossPercentage' => number_format($percentage),
             'pagination' => 0
         ]);
@@ -86,14 +90,14 @@ class GenerateMonthlyReport extends Command
     }
 
     public function percent($first, $second): float|int {
-        if ($first <= 0 || $second <= 0)
+        if ($second == 0)
             return 0;
         return ($first/$second) * 100;
     }
 
     public function sendToAll($notification): void
     {
-        $users = User::paginate();
+        $users = User::all();
         foreach ($users as $user) {
             if ($user->hasAccess('platform.accounting.monthly_report')) {
                 Mail::to($user->email)->send(new \App\Mail\ShopReportReady());

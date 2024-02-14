@@ -18,7 +18,10 @@ class WeeklyStatistic extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * Create a new message instance.
+     *
+     * Constructs a new instance of the class.
+     *
+     * @return void
      */
     public function __construct()
     {
@@ -26,7 +29,9 @@ class WeeklyStatistic extends Mailable
     }
 
     /**
-     * Get the message envelope.
+     * Create an envelope for a message.
+     *
+     * @return Envelope The created envelope object.
      */
     public function envelope(): Envelope
     {
@@ -112,6 +117,12 @@ class WeeklyStatistic extends Mailable
         return [];
     }
 
+    /**
+     * Get the percentage value of the given number.
+     *
+     * @param int|float $value The value to calculate the percentage for.
+     * @return int  The percentage value as an integer between 0 and 100 (inclusive).
+     */
     public function getPercent($value): int
     {
         $val = intval($value);

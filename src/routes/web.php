@@ -106,7 +106,6 @@ Route::get('/build/{variable?}', function ($request) {
 
 })->name("build");
 
-
 Route::middleware('auth.session')->get('/report', [\App\Http\Controllers\ReportController::class, 'index'])->name('api.shop.report');
 Route::middleware('auth.session')->get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->name('api.shop.voucher');
 

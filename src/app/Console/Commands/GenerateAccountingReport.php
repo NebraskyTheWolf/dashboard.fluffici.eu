@@ -4,10 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Accounting;
 use App\Models\AccountingDocument;
-use App\Models\OrderCarrier;
-use App\Models\OrderedProduct;
-use App\Models\OrderPayment;
-use App\Models\TransactionsReport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -35,10 +31,22 @@ class GenerateAccountingReport extends Command
     public function handle()
     {
         $today = Carbon::today()->format("Y-m-d");
+        $currentYear = Carbon::now()->year;
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
-        $income = Accounting::orderBy('created_at', 'desc')->where('type', 'INCOME')->whereMonth('created_at', Carbon::now())->sum('amount');
-        $expense = Accounting::orderBy('created_at', 'desc')->where('type', 'EXPENSE')->whereMonth('created_at', Carbon::now())->sum('amount');
+        $income = Accounting::orderBy('created_at', 'desc')
+            ->where('type', 'INCOME')
+            ->whereYear('created_at', $currentYear)
+            ->whereMonth('created_at', Carbon::now())
+            ->sum('amount');
+
+        $expense = Accounting::orderBy('created_at', 'desc')
+            ->where('type', 'EXPENSE')
+            ->whereYear('created_at', $currentYear)
+            ->whereMonth('created_at', Carbon::now())
+            ->sum('amount');
+
+        $grandTotal = $income - $expense;
 
         $document = Pdf::loadView('documents.accounting', [
             'reportId' => $reportId,
@@ -47,8 +55,7 @@ class GenerateAccountingReport extends Command
 
             'incomes' => number_format($income),
             'expenses' => number_format($expense),
-
-            'grandTotal' => number_format(abs($income - $expense)),
+            'grandTotal' => number_format($grandTotal),
         ]);
 
         $document->getOptions()->setIsRemoteEnabled(true);

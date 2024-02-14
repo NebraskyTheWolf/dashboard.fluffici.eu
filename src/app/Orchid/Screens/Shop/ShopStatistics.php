@@ -20,6 +20,8 @@ class ShopStatistics extends Screen
      */
     public function query(): iterable
     {
+        $previousMonth = Carbon::now()->subMonth();
+
         return [
             'metrics' => [
                 'products' => [
@@ -29,12 +31,12 @@ class ShopStatistics extends Screen
                 'overall'   => [
                     'key' => 'overall',
                     'value' => number_format(OrderPayment::where('status', 'PAID')->sum('price')) . ' Kč',
-                    'diff' => $this->diff(OrderPayment::where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price'), OrderPayment::where('status', 'PAID')->sum('price'))
+                    'diff' => $this->diff(OrderPayment::where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price'), OrderPayment::where('status', 'PAID')->whereMonth('created_at',$previousMonth)->sum('price'))
                 ],
                 'monthly'   => [
                     'key' => 'monthly',
                     'value' => number_format(OrderPayment::where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price')) . ' Kč',
-                    'diff' => $this->diff(OrderPayment::where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price'), OrderPayment::where('status', 'PAID')->sum('price'))
+                    'diff' => $this->diff(OrderPayment::where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price'), OrderPayment::where('status', 'PAID')->whereMonth('created_at',$previousMonth)->sum('price'))
                 ],
             ],
             'pie' => [
@@ -100,11 +102,15 @@ class ShopStatistics extends Screen
         ];
     }
 
+    /**
+     * Calculate the difference between two values as a percentage.
+     *
+     * @param float $recent The more recent value.
+     * @param float $previous The previous value.
+     * @return float The difference as a percentage.
+     */
     public function diff($recent, $previous): float
     {
-        if ($recent <= 0 || $previous <= 0)
-            return 0.0;
-
-        return (($recent-$previous)/$previous) * 100;
+        return (($recent-$previous)/abs($previous)) * 100;
     }
 }
