@@ -41,20 +41,15 @@ class GenerateTransactionsReport extends Command
         $refunded = OrderPayment::orderBy('created_at', 'desc')->where('status', 'REFUNDED')->whereMonth('created_at', Carbon::now())->sum('price');
         $carrierFees = OrderCarrier::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->sum('price');
 
-        // This happens when a discounts has been placed in the order.
         $loss = $total - $paidPrice - $refunded;
-        // False positive fix
-        if ($loss <= 0) {
-            $loss = 0;
-        }
 
         $document = Pdf::loadView('documents.transactions', [
             'reportId' => $reportId,
             'reportDate' => $today,
             'transactions' => OrderPayment::whereMonth('created_at', Carbon::now())->get(),
-            'overdueAmount' => OrderPayment::where('status', 'UNPAID')->whereMonth('created_at', Carbon::now())->sum('price'),
+            'overdueAmount' => OrderPayment::where('status', 'UNPAID')->where('status', 'DISPUTED')->whereMonth('created_at', Carbon::now())->sum('price'),
             'fees' => number_format(abs($carrierFees)),
-            'overallProfit' => number_format(abs($total - $loss)),
+            'overallProfit' => number_format(abs( $loss )),
         ]);
 
         $document->getOptions()->setIsRemoteEnabled(true);

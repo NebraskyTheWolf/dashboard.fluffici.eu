@@ -7,7 +7,7 @@
                 <table cellpadding="0" cellspacing="0">
                     <tr>
                         <td class="content pb-0" align="center">
-                            <table class="icon icon-lg bg-green" cellspacing="0" cellpadding="0">
+                            <table class=" icon-lg " cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td valign="middle" align="center">
                                         <img src="{{ url('/icons/download.png') }}" class=" va-middle" width="40" height="40" alt="download" />
@@ -46,7 +46,7 @@
                                         <table cellpadding="0" cellspacing="0" border="0" class="bg-blue rounded w-auto">
                                             <tr>
                                                 <td align="center" valign="top" class="lh-1">
-                                                    <a href="https://tabler.io/emails?utm_source=demo" class="btn bg-blue border-blue">
+                                                    <a href="{{ url(route('platform.shop.reports')) }}" class="btn bg-blue border-blue">
                                                         <span class="btn-span">Go to the dashboard</span>
                                                     </a>
                                                 </td>
