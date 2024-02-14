@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Events;
-use app\Platform\Presenters\UserPresenter;
+use App\Orchid\Presenters\UserPresenters;
 use Illuminate\Queue\SerializesModels;
 use Orchid\Platform\Models\User;
 
@@ -25,6 +25,6 @@ class UserUpdated
 
         $user = User::where('id', $userId)->firstOrFail();
 
-        $this->persona = new UserPresenter($user);
+        $this->persona = new UserPresenters($user);
     }
 }
