@@ -84,7 +84,8 @@ class UserEditScreen extends Screen
                 ->confirm('Are you sure to continue?')
                 ->method('terminate')
                 ->canSee($this->user->exists)
-                ->canSee($this->user->hasUserBiggerPower(Auth::user())),
+                ->canSee(!$this->user->hasUserBiggerPower(Auth::user()))
+                ->canSee(!$this->user->inRole('admin')),
 
             Button::make(__('user.screen.edit.button.save'))
                 ->icon('bs.check-circle')
@@ -151,12 +152,8 @@ class UserEditScreen extends Screen
      */
     public function save(User $user, Request $request)
     {
-        if ($user->name === 'Asherro'
-            && Auth::user()->name !== "Asherro")
-        {
-            Toast::info('You cannot delete Asherro\'s account.');
-
-            event(new UpdateAudit("edit_user", "Tried to edit Asherro account.", Auth::user()->name));
+        if ($user->inRole('admin')) {
+            Toast::info("You cannot change a administrator");
 
             return redirect()->route('platform.systems.users');
         }
@@ -201,12 +198,8 @@ class UserEditScreen extends Screen
      */
     public function terminate(User $user)
     {
-        if ($user->name === 'Asherro'
-            && Auth::user()->name !== "Asherro")
-        {
-            Toast::info('You cannot delete Asherro\'s account.');
-
-            event(new UpdateAudit("deleted_user", "Tried to terminate " . $user->name . " account.", Auth::user()->name));
+        if ($user->inRole('admin')) {
+            Toast::info("You cannot terminate a administrator");
 
             return redirect()->route('platform.systems.users');
         }
