@@ -96,13 +96,14 @@ Route::get('/health', function ($request) {
     ]);
 })->name("health");
 
-Route::get('/build', function ($request) {
+Route::get('/build/{variable?}', function ($variable = "null") {
     $version = LastVersion::latest()->first();
 
     return response()->json([
         'version' => $version->getCurrentVersion(),
         'rev' => $version->getShortCommitId()
     ]);
+
 })->name("build");
 
 

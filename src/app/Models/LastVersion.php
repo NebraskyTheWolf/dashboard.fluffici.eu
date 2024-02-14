@@ -9,6 +9,8 @@ class LastVersion extends Model
 {
     use HasFactory;
 
+    public $table = 'last_version';
+
     /**
      * Returns the current version.
      *
