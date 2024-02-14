@@ -4,6 +4,7 @@ namespace App\Orchid\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Orchid\Filters\Filter;
+use Orchid\Platform\Models\User;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Select;
 
@@ -16,6 +17,7 @@ class FilterByDate extends Filter
      */
     public function name(): string
     {
+
         return 'Date range';
     }
 

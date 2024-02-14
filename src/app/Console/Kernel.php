@@ -18,7 +18,10 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     /**
-     * Define the application's command schedule.
+     * Schedule the commands for the application.
+     *
+     * @param Schedule $schedule The schedule instance.
+     * @return void
      */
     protected function schedule(Schedule $schedule): void{
         $schedule->command(GenerateMonthlyReport::class)->monthly();

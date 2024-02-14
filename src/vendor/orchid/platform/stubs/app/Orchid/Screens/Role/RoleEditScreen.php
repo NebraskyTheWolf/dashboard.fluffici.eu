@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\Role;
 
-use App\Orchid\Layouts\Role\RoleEditLayout;
-use App\Orchid\Layouts\Role\RolePermissionLayout;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Orchid\Platform\Models\Role;
@@ -87,13 +85,13 @@ class RoleEditScreen extends Screen
     {
         return [
             Layout::block([
-                RoleEditLayout::class,
+                \app\Platform\Layouts\Role\RoleEditLayout::class,
             ])
                 ->title('Role')
                 ->description('A role is a collection of privileges (of possibly different services like the Users service, Moderator, and so on) that grants users with that role the ability to perform certain tasks or operations.'),
 
             Layout::block([
-                RolePermissionLayout::class,
+                \app\Platform\Layouts\Role\RolePermissionLayout::class,
             ])
                 ->title('Permission/Privilege')
                 ->description('A privilege is necessary to perform certain tasks and operations in an area.'),

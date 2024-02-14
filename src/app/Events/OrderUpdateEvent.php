@@ -6,6 +6,11 @@ namespace App\Events;
 
 use App\Models\ShopOrders;
 
+/**
+ * Class OrderUpdateEvent
+ *
+ * Represents an event when an order is updated with a new status.
+ */
 class OrderUpdateEvent
 {
 

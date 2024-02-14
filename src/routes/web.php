@@ -1,6 +1,6 @@
 <?php
 
-use GuzzleHttp\Client;
+use App\Models\LastVersion;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PagesController;
@@ -97,17 +97,25 @@ Route::get('/health', function ($request) {
 })->name("health");
 
 Route::get('/build', function ($request) {
-    return response()->json();
+    $version = LastVersion::latest()->first();
+
+    return response()->json([
+        'version' => $version->getCurrentVersion(),
+        'rev' => $version->getShortCommitId()
+    ]);
 })->name("build");
 
-Route::get('/report', [\App\Http\Controllers\ReportController::class, 'index'])->middleware('auth')->name('api.shop.report');
-Route::get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->middleware('auth')->name('api.shop.voucher');
+
+Route::middleware('auth.session')->get('/report', [\App\Http\Controllers\ReportController::class, 'index'])->name('api.shop.report');
+Route::middleware('auth.session')->get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->middleware('auth.session')->name('api.shop.voucher');
 
 Route::post('/api/login', [\App\Http\Controllers\ApiController::class, 'index']);
 
-Route::get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder'])->middleware('api');
-Route::get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index'])->middleware('api');
+Route::middleware('api')->get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder']);
+Route::middleware('api')->get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index']);
 
 Route::get('/api/generate/order/{order_id}', [\App\Http\Controllers\VoucherController::class, 'datamatrix'])->middleware('throttle');
 
 Route::post('/webhook/kofi', [\App\Http\Controllers\IntegrationsController::class, "kofiCallback"]);
+
+Route::post('/api/webhook/github', [\App\Http\Controllers\Versioning::class, 'index']);

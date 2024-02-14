@@ -1,6 +1,13 @@
 /*
   AJAX FORM SYSTEM
 */
+
+/**
+ * Initializes the ajax forms.
+ * Binds the submit event to forms with data-ajax attribute,
+ * preventing default form submission and handling the ajax request.
+ * Displays success or error messages based on the response.
+ */
 function initAjaxForms() {
   $('form[data-ajax]').unbind('submit')
   $('form[data-ajax]').on('submit', function (e) {

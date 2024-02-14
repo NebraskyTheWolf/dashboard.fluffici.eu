@@ -24,7 +24,13 @@ class DeleteOldProducts extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
+     * Handle the method.
+     *
+     * This method checks if any products in ShopProducts model have a non-null deleted_at property.
+     * If the deleted_at date is in the past, it updates the product by setting the displayed property to false
+     * and setting the deleted_at property to null.
+     *
+     * @return void
      */
     public function handle()
     {

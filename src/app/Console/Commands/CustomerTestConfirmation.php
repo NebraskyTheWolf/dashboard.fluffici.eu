@@ -28,7 +28,9 @@ class CustomerTestConfirmation extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
+     * Save a new order in the database, generate identifiers and send confirmation email to the customer.
+     *
+     * @return void
      */
     public function handle()
     {

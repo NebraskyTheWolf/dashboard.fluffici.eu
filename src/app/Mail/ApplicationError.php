@@ -49,11 +49,12 @@ class ApplicationError extends Mailable
         return new Content(
             view: 'emails.developer.crash',
             with: [
-                'currentDate' => Carbon::now()->diffForHumans(),
+                'currentDate' => Carbon::now(),
                 'className' => $this->className,
                 'contents' => $this->contents,
                 'line' => $this->line,
                 'code' => $this->code,
+                'currentService' => env('PUBLIC_URL'),
                 'socials' => SocialMedia::all()
             ]
         );

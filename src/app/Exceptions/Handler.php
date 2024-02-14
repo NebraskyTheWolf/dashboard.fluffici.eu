@@ -21,7 +21,9 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Register the exception handling callbacks for the application.
+     * Registers an error handler for the application.
+     *
+     * @return void
      */
     public function register(): void
     {
@@ -30,6 +32,13 @@ class Handler extends ExceptionHandler
         });
     }
 
+    /**
+     * Report the given exception.
+     *
+     * @param Throwable $e The exception to be reported.
+     *
+     * @return void
+     */
     public function report(Throwable $e)
     {
         if ($this->shouldntReport($e)) {
@@ -39,6 +48,18 @@ class Handler extends ExceptionHandler
         parent::report($e);
     }
 
+    /**
+     * Render the given exception.
+     *
+     * This method is responsible for rendering the exception into an appropriate
+     * response. If the exception is an instance of HttpException, it will return a
+     * view response based on the status code of the exception. Otherwise, it will
+     * call the parent's render method to handle the exception.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Throwable $e
+     * @return \Illuminate\Http\Response
+     */
     public function render($request, Throwable $e)
     {
         if ($this->isHttpException($e)) {

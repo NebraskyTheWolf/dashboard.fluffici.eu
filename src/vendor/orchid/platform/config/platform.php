@@ -316,6 +316,6 @@ return [
      |
      */
 
-    'provider' => \App\Orchid\PlatformProvider::class,
+    'provider' => \app\Platform\PlatformProvider::class,
 
 ];

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
-use App\Orchid\Layouts\User\ProfilePasswordLayout;
-use App\Orchid\Layouts\User\UserEditLayout;
+use app\Platform\Layouts\User\ProfilePasswordLayout;
+use app\Platform\Layouts\User\UserEditLayout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Orchid\Platform\Models;
 
+use App\Models\UserApiToken;
 use App\Models\UserRestrictions;
 use App\Orchid\Presenters\AuditPresenter;
-use App\Orchid\Presenters\UserPresenter;
+use App\Orchid\Presenters\UserPresenters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,6 +21,7 @@ use Orchid\Filters\Types\WhereDateStartEnd;
 use Orchid\Metrics\Chartable;
 use Orchid\Screen\AsSource;
 use Orchid\Support\Facades\Dashboard;
+use Ramsey\Uuid\Uuid;
 
 class User extends Authenticatable implements UserInterface
 {
@@ -109,11 +111,11 @@ class User extends Authenticatable implements UserInterface
     }
 
     /**
-     * @return UserPresenter
+     * @return UserPresenters
      */
     public function presenter()
     {
-        return new UserPresenter($this);
+        return new UserPresenters($this);
     }
 
     public function auditPresenter()
@@ -143,5 +145,22 @@ class User extends Authenticatable implements UserInterface
         }
     }
 
+    /**
+     * Create a user token.
+     *
+     * This method generates a unique token for the user and saves it in the database.
+     * The generated token is returned as a string.
+     *
+     * @return string The generated user token.
+     */
+    public function createUserToken(): string
+    {
+        $token = new UserApiToken();
+        $token->user_id = $this->id;
+        $token->token = base64_encode(Uuid::uuid4()->toString());
+        $token->save();
+
+        return $token->token;
+    }
 
 }

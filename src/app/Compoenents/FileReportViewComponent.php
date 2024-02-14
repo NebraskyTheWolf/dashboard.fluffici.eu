@@ -4,6 +4,12 @@ namespace App\Compoenents;
 
 use Illuminate\View\Component;
 
+/**
+ * Class FileReportViewComponent
+ *
+ * This class represents a view component for displaying file reports.
+ * It extends the Component class.
+ */
 class FileReportViewComponent extends Component
 {
 

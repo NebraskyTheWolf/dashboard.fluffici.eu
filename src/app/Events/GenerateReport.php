@@ -4,6 +4,11 @@ namespace App\Events;
 
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Class GenerateReport
+ *
+ * The GenerateReport class is responsible for generating reports.
+ */
 class GenerateReport
 {
     use SerializesModels;

@@ -10,6 +10,11 @@ use Orchid\Platform\Notifications\DashboardChannel;
 use Orchid\Platform\Notifications\DashboardMessage;
 use Orchid\Support\Color;
 
+/**
+ * Class ShopReportReady
+ *
+ * Represents a notification that a shop report is ready.
+ */
 class ShopReportReady extends Notification
 {
     use Queueable;

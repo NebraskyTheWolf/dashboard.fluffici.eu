@@ -12,9 +12,28 @@ use App\Events\UpdateAudit;
 class EventServiceProvider extends ServiceProvider
 {
     /**
-     * The event to listener mappings for the application.
+     * @var array $listen An associative array that maps event classes to an array of listener classes.
      *
-     * @var array<class-string, array<int, class-string>>
+     * The key in the array represents the event class, and the value represents an array of listener classes
+     * that are interested in handling that event.
+     *
+     * Example usage:
+     * $listen = [
+     *     UpdateAudit::class => [
+     *         AuditListener::class,
+     *     ],
+     *     OrderUpdateEvent::class => [
+     *         OrderUpdateListeners::class
+     *     ]
+     * ];
+     *
+     * In the example above, the event class UpdateAudit is mapped to a single listener class AuditListener.
+     * Similarly, the event class OrderUpdateEvent is mapped to a single listener class OrderUpdateListeners.
+     *
+     * @see UpdateAudit       The event class that triggers the AuditListener.
+     * @see AuditListener     The listener class that handles the AuditEvent.
+     * @see OrderUpdateEvent  The event class that triggers the OrderUpdateListeners.
+     * @see OrderUpdateListeners The listener class that handles the OrderUpdateEvent.
      */
     protected $listen = [
         UpdateAudit::class => [

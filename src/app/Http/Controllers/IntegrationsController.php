@@ -9,6 +9,13 @@ use Illuminate\Http\Request;
 class IntegrationsController extends Controller
 {
 
+    /**
+     * Processes the Ko-fi callback request.
+     *
+     * @param \Illuminate\Http\Request $request The HTTP request object.
+     *
+     * @return \Illuminate\Http\JsonResponse The JSON response.
+     */
     public function kofiCallback(Request $request)
     {
         if (!$request->has('data')) {

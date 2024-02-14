@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
-use App\Orchid\Layouts\Role\RolePermissionLayout;
-use App\Orchid\Layouts\User\UserEditLayout;
-use App\Orchid\Layouts\User\UserPasswordLayout;
-use App\Orchid\Layouts\User\UserRoleLayout;
+use app\Platform\Layouts\Role\RolePermissionLayout;
+use app\Platform\Layouts\User\UserEditLayout;
+use app\Platform\Layouts\User\UserRoleLayout;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -110,7 +109,7 @@ class UserEditScreen extends Screen
                         ->method('save')
                 ),
 
-            Layout::block(UserPasswordLayout::class)
+            Layout::block(\app\Platform\Layouts\User\UserPasswordLayout::class)
                 ->title(__('Password'))
                 ->description(__('Ensure your account is using a long, random password to stay secure.'))
                 ->commands(

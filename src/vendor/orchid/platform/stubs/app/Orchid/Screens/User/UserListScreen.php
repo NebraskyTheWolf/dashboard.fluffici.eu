@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\User;
 
-use App\Orchid\Layouts\User\UserEditLayout;
-use App\Orchid\Layouts\User\UserFiltersLayout;
-use App\Orchid\Layouts\User\UserListLayout;
+use app\Platform\Layouts\User\UserFiltersLayout;
+use app\Platform\Layouts\User\UserListLayout;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Orchid\Platform\Models\User;
@@ -80,7 +79,7 @@ class UserListScreen extends Screen
             UserFiltersLayout::class,
             UserListLayout::class,
 
-            Layout::modal('asyncEditUserModal', UserEditLayout::class)
+            Layout::modal('asyncEditUserModal', \app\Platform\Layouts\User\UserEditLayout::class)
                 ->async('asyncGetUser'),
         ];
     }

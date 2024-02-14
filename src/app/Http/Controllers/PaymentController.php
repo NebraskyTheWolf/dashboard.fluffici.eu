@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Storage;
 class PaymentController extends Controller
 {
 
+    /**
+     * Process the payment for an order.
+     *
+     * @param \Illuminate\Http\Request $request The HTTP request object.
+     * @return \Illuminate\Http\JsonResponse
+     *   The JSON response indicating the payment status.
+     */
     public function index(Request $request)
     {
         $orderId =  $request->query('orderId');
@@ -135,6 +142,12 @@ class PaymentController extends Controller
     }
 
 
+    /**
+     * Fetches an order from the database based on the given order ID.
+     *
+     * @param Request $request The HTTP request object.
+     * @return \Illuminate\Http\JsonResponse The JSON response containing the order details.
+     */
     public function fetchOrder(Request $request)
     {
         $orderId = $request->query('orderId');

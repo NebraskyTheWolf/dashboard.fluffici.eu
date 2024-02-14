@@ -21,6 +21,14 @@ class RouteServiceProvider extends ServiceProvider
     public const string HOME = '/main';
 
 
+    /**
+     * The boot method sets up the application before it is ready to handle requests.
+     *
+     * This method is called once when the application boots up. It is typically used for initialization and
+     * registration of various components, such as routes, service providers, configurations, etc.
+     *
+     * @return void
+     */
     public function boot(): void
     {
         $this->routes(function () {

@@ -11,6 +11,11 @@ function playConfetti () {
     confettiTl.play(0);
 }
 
+/**
+ * Creates confetti animation by adding confetti clones to a container element and animating them using GSAP.
+ *
+ * @returns {void}
+ */
 function createConfetti () {
     var i = 160, clone, tl, rot, duration, paperDuration;
     while(--i > -1) {

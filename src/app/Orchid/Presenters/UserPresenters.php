@@ -10,7 +10,7 @@ use Orchid\Screen\Contracts\Personable;
 use Orchid\Screen\Contracts\Searchable;
 use Orchid\Support\Presenter;
 
-class UserPresenter extends Presenter implements Personable, Searchable
+class UserPresenters extends Presenter implements Personable, Searchable
 {
     /**
      * Returns the label for this presenter, which is used in the UI to identify it.

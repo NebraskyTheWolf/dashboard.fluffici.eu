@@ -7,6 +7,13 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use Orchid\Platform\Models\User;
 
+/**
+ * Class StatisticsMail
+ *
+ * An artisan console command class for sending statistics emails.
+ *
+ * @package App\Console\Commands
+ */
 class StatisticsMail extends Command
 {
     /**

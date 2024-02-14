@@ -7,10 +7,17 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Events\Statistics;
 
-class StatisticsListener 
+class StatisticsListener
 {
     use InteractsWithQueue;
 
+    /**
+     * Handle the given statistics event.
+     *
+     * @param Statistics $event The statistics event instance.
+     *
+     * @return void
+     */
     public function handle(Statistics $event) {
         broadcast(new Channel('statistics'));
     }

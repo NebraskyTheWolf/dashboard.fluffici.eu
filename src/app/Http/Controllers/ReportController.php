@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 class ReportController extends Controller
 {
 
+    /**
+     * Retrieves and extracts a specific report based on the provided report ID.
+     *
+     * @param \Illuminate\Http\Request $request The request object containing query parameters.
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse The response containing the extracted report or an error message.
+     */
     public function index(Request $request)
     {
         $type = $request->query('type');

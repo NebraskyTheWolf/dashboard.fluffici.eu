@@ -55,6 +55,17 @@ class LoginController extends Controller
         ]);
     }
 
+    /**
+     * Login user and redirect to appropriate route
+     *
+     * @param Request $request
+     * The incoming request
+     *
+     * @return RedirectResponse|void
+     * A redirect response or void
+     * @throws ValidationException
+     * If validation fails
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -103,11 +114,27 @@ class LoginController extends Controller
         ]);
     }
 
+    /**
+     * Generate and show one-time password (OTP) view.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @return Factory|View The generated view object.
+     */
     public function challenge(Request $request)
     {
         return view('auth.otp');
     }
 
+    /**
+     * Validate and process the OTP token.
+     *
+     * @param Request $request The HTTP request instance.
+     *
+     * @return JsonResponse|RedirectResponse The response containing JSON data or a redirect response.
+     *
+     * @throws ValidationException If the OTP token is invalid.
+     */
     public function otp(Request $request)
     {
         $request->validate([
@@ -136,10 +163,11 @@ class LoginController extends Controller
     }
 
     /**
-     * Send the response after the user was authenticated.
+     * Send the login response.
      *
+     * @param \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     protected function sendLoginResponse(Request $request)
     {
@@ -151,9 +179,11 @@ class LoginController extends Controller
     }
 
     /**
-     * @param Guard $guard
+     * Show the login form.
      *
-     * @return Factory|View
+     * @param Request $request The HTTP request object.
+     *
+     * @return \Illuminate\Contracts\View\View The login form view.
      */
     public function showLoginForm(Request $request)
     {
@@ -171,7 +201,11 @@ class LoginController extends Controller
     }
 
     /**
-     * @return RedirectResponse
+     * Reset the LockMe cookie.
+     *
+     * @param CookieJar $cookieJar The CookieJar instance for managing cookies.
+     *
+     * @return \Illuminate\Http\RedirectResponse The redirect response to the login page with the updated cookie.
      */
     public function resetCookieLockMe(CookieJar $cookieJar)
     {
@@ -189,10 +223,11 @@ class LoginController extends Controller
     }
 
     /**
-     * Log the user out of the application.
+     * Logout the authenticated user.
      *
+     * @param Request $request The HTTP request object.
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse The JSON response if the request wants JSON, otherwise the redirect response to the homepage.
      */
     public function logout(Request $request)
     {
@@ -207,13 +242,28 @@ class LoginController extends Controller
             : redirect('/');
     }
 
+    /**
+     * Display the password recovery form.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @return \Illuminate\Contracts\View\View The password recovery form view.
+     */
     public function password(Request $request)
     {
         return view('auth.recovery', [
             'token' => $request->token
         ]);
+
     }
 
+    /**
+     * Perform password recovery.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @return \Illuminate\Http\RedirectResponse The login form redirect response on success, or throws a ValidationException on failure.
+     */
     public function recovery(Request $request)
     {
         $request->validate([
@@ -237,6 +287,12 @@ class LoginController extends Controller
         ]);
     }
 
+    /**
+     * Generate a numeric token.
+     *
+     * @param int $length The length of the token (default: 4).
+     * @return string The generated numeric token.
+     */
     private function generateNumericToken(int $length = 4): string
     {
         $i = 0;

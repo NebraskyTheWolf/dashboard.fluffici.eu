@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts\User;
 
-use App\Orchid\Filters\RoleFilter;
+use app\Platform\Filters\RoleFilter;
 use Orchid\Filters\Filter;
 use Orchid\Screen\Layouts\Selection;
 

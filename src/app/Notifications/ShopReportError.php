@@ -9,6 +9,11 @@ use Illuminate\Notifications\Notification;
 use Orchid\Platform\Notifications\DashboardChannel;
 use Orchid\Platform\Notifications\DashboardMessage;
 
+/**
+ * Class ShopReportError
+ *
+ * This class represents a notification when there is an error generating the shop report.
+ */
 class ShopReportError extends Notification
 {
     use Queueable;

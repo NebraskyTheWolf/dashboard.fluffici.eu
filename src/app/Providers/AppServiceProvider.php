@@ -13,6 +13,14 @@ class AppServiceProvider extends ServiceProvider
 
     public function register(): void { }
 
+    /**
+     * Boot the application.
+     *
+     * This method is called after all service providers have been registered
+     * and the application is ready to handle incoming requests.
+     *
+     * @return void
+     */
     public function boot(): void {
         if (config('app.env') === 'production') {
             URL::forceScheme('https');

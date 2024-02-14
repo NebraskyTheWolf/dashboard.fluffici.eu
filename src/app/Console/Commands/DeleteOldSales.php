@@ -23,7 +23,12 @@ class DeleteOldSales extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
+     * Handle the sales.
+     *
+     * This method handles the sales by checking if the `deleted_at` attribute of each sale is not null.
+     * If it is not null and if the `deleted_at` datetime is in the past, the sale's `reduction` attribute is updated to 0.
+     *
+     * @return void
      */
     public function handle()
     {

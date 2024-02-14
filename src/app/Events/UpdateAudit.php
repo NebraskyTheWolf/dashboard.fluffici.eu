@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace App\Events;
 
+/**
+ * Class UpdateAudit
+ *
+ * Represents an update audit object.
+ */
 class UpdateAudit
 {
 

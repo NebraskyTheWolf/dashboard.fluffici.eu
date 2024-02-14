@@ -7,10 +7,16 @@ use Illuminate\Support\Facades\Storage;
 
 class VoucherController extends Controller
 {
+    /**
+     * This method is used to process the index request and generate a voucher image.
+     *
+     * @param Request $request The request object containing the voucher code.
+     *
+     * @return mixed The generated voucher image or JSON response in case of errors.
+     */
     public function index(Request $request)
     {
         $voucherCode = $request->query('voucherCode');
-        $storage = \Illuminate\Support\Facades\Storage::disk('public');
 
         if ($voucherCode != null) {
             $voucher = \App\Models\ShopVouchers::where('code', $voucherCode);
@@ -62,6 +68,13 @@ class VoucherController extends Controller
         }
     }
 
+    /**
+     * This method is used to process the datamatrix request and generate an order image with a datamatrix code.
+     *
+     * @param Request $request The request object containing the order ID.
+     *
+     * @return mixed The generated order image with datamatrix code or JSON response in case of errors.
+     */
     public function datamatrix(Request $request)
     {
         if ($request->order_id == null) {

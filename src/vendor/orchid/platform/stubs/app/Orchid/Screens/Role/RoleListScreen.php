@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens\Role;
 
-use App\Orchid\Layouts\Role\RoleListLayout;
 use Orchid\Platform\Models\Role;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Link;
@@ -69,7 +68,7 @@ class RoleListScreen extends Screen
     public function layout(): iterable
     {
         return [
-            RoleListLayout::class,
+            \app\Platform\Layouts\Role\RoleListLayout::class,
         ];
     }
 }

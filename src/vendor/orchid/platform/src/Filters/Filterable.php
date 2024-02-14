@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Orchid\Filters;
 
-use App\Orchid\Presenters\UserPresenter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Orchid\Screen\Layouts\Selection;

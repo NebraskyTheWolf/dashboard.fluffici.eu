@@ -7,6 +7,12 @@ use App\Events\UpdateAudit;
 use App\Models\AuditLogs;
 use App\Events\Statistics;
 
+/**
+ * Class AuditListener
+ *
+ * This class is responsible for handling the UpdateAudit event and saving the audit logs.
+ * It uses the InteractsWithQueue trait to handle the event asynchronously.
+ */
 class AuditListener
 {
     use InteractsWithQueue;

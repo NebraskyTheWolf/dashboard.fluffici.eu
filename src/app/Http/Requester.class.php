@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * Class Requester
+ *
+ * The Requester class is responsible for making HTTP requests to a specified endpoint.
+ * It supports different request methods such as GET, POST, PUT, DELETE.
+ */
 class Requester {
     private $endpoint = '';
     private $accessToken = '';

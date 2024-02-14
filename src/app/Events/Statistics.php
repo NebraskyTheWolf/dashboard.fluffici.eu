@@ -10,6 +10,11 @@ use App\Models\Events as DEvents;
 use App\Models\ShopOrders;
 use App\Models\ShopSupportTickets;
 
+/**
+ * Class Statistics
+ *
+ * Represents a set of statistics related to visits, support tickets, shop orders, and events.
+ */
 class Statistics
 {
     use SerializesModels;

@@ -3,10 +3,15 @@
 declare(strict_types=1);
 
 namespace App\Events;
-use App\Orchid\Presenters\UserPresenter;
+use app\Platform\Presenters\UserPresenter;
 use Illuminate\Queue\SerializesModels;
 use Orchid\Platform\Models\User;
 
+/**
+ * Class UserUpdated
+ *
+ * This class represents an event when a user is updated.
+ */
 class UserUpdated
 {
     use SerializesModels;

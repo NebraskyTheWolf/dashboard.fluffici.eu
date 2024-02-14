@@ -1,3 +1,4 @@
+
 $(document).ready(function($) {
     axios.get('https://dashboard.fluffici.eu/build').then(function (response) {
         if (response.status !== 200) {
@@ -5,14 +6,13 @@ $(document).ready(function($) {
         } else {
             console.log(response.data.rev)
             $('#version').text('Version : ' + response.data.version)
-            $('#rev').text('Rev : ' + response.data.rev.substring(0, 8))
+            $('#rev').text('Rev : ' + response.data.rev)
         }
     })
     axios.get('https://autumn.fluffici.eu').then(function (response) {
         if (response.status !== 200) {
             console.log('Cannot update fields for versioning.')
         } else {
-            console.log(response.data.rev)
             $('#autumn').text('Autumn : ' + response.data.autumn)
         }
     })
@@ -20,10 +20,19 @@ $(document).ready(function($) {
     const fiveMinutes = 60 * 30;
     const display = document.getElementById('otp-expiration');
 
-    startTimer(fiveMinutes, display);
+    setTimeout(() => {
+        startTimer(fiveMinutes, display);
+    }, 1500)
 });
 
-
+/**
+ * Starts a timer for the given duration and updates the display with the remaining time.
+ *
+ * @param {number} duration - The duration of the timer in seconds.
+ * @param {HTMLElement} display - The element where the timer will be displayed.
+ *
+ * @return {void}
+ */
 function startTimer(duration, display) {
     let start = Date.now(),
         diff,

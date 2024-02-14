@@ -24,7 +24,9 @@ class DeleteInvalidatedTokens extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
+     * Handle the request.
+     *
+     * @return void
      */
     public function handle()
     {
