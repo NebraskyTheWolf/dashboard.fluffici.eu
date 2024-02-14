@@ -181,4 +181,18 @@ class User extends Authenticatable implements UserInterface
         return $token->token;
     }
 
+    /**
+     * Checks if the target user has bigger power than the current user.
+     *
+     * @param User $targetUser The target user to compare powers with.
+     *
+     * @return bool Returns true if the target user has bigger power, false otherwise.
+     */
+    public function hasUserBiggerPower($targetUser): bool
+    {
+        $userPermissions = count($this->permissions);
+        $targetUserPermissions = count($targetUser->permissions);
+
+        return $targetUserPermissions > $userPermissions;
+    }
 }

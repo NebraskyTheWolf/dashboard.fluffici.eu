@@ -10,6 +10,22 @@ use Throwable;
 class Handler extends ExceptionHandler
 {
     /**
+     * A list of the exception types that should not be reported.
+     *
+     * @var array<int, string>
+     */
+    protected $dontReport = [
+        \Illuminate\Auth\AuthenticationException::class,
+        \Illuminate\Auth\Access\AuthorizationException::class,
+        \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
+        \Illuminate\Validation\ValidationException::class,
+        \Illuminate\Http\Exceptions\ThrottleRequestsException::class,
+        \Illuminate\Http\Exceptions\PostTooLargeException::class,
+        \Illuminate\Routing\Exceptions\InvalidSignatureException::class
+    ];
+
+    /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
      *
      * @var array<int, string>
@@ -20,8 +36,6 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-
-
     /**
      * Registers an error handler for the application.
      *
@@ -30,7 +44,9 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            $this->sendAlert($e);
+            if(!in_array(get_class($e), $this->dontReport)){
+                $this->sendAlert($e);
+            }
         });
     }
 
@@ -43,7 +59,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $e)
     {
-        if ($this->shouldntReport($e)) {
+        if (!in_array(get_class($e), $this->dontReport) || $this->shouldntReport($e)) {
             $this->sendAlert($e);
         }
 

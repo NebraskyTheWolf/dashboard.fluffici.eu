@@ -83,7 +83,8 @@ class UserEditScreen extends Screen
                 ->icon('bs.slash-circle')
                 ->confirm('Are you sure to continue?')
                 ->method('terminate')
-                ->canSee($this->user->exists),
+                ->canSee($this->user->exists)
+                ->canSee(!$this->user->hasUserBiggerPower(Auth::user())),
 
             Button::make(__('user.screen.edit.button.save'))
                 ->icon('bs.check-circle')
@@ -206,6 +207,12 @@ class UserEditScreen extends Screen
             Toast::info('You cannot delete Asherro\'s account.');
 
             event(new UpdateAudit("deleted_user", "Tried to terminate " . $user->name . " account.", Auth::user()->name));
+
+            return redirect()->route('platform.systems.users');
+        }
+
+        if ($this->user->hasUserBiggerPower(Auth::user())) {
+            Toast::info("You cannot terminate this user, this user have bigger power than yours.");
 
             return redirect()->route('platform.systems.users');
         }
