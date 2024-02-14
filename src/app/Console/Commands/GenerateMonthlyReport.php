@@ -11,6 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 use Orchid\Platform\Models\User;
 use Ramsey\Uuid\Uuid;
 
@@ -33,9 +34,7 @@ class GenerateMonthlyReport extends Command
     public $products = array();
 
     /**
-     * Execute the console command.
-     * @throws GuzzleException
-     * @throws \Exception
+     * Handle the generation and sending of a shop report.
      */
     public function handle() {
         $today = Carbon::today()->format("Y-m-d");
@@ -43,10 +42,11 @@ class GenerateMonthlyReport extends Command
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
         $total = OrderedProduct::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->sum('price');
         $paidPrice = OrderPayment::orderBy('created_at', 'desc')->where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price');
+        $refunded = OrderPayment::orderBy('created_at', 'desc')->where('status', 'REFUNDED')->whereMonth('created_at', Carbon::now())->sum('price');
         $carrierFees = OrderCarrier::orderBy('created_at', 'desc')->whereMonth('created_at', Carbon::now())->sum('price');
 
         // This happens when a discounts has been placed in the order.
-        $loss = $total - $paidPrice;
+        $loss = $total - $paidPrice - $refunded;
         // False positive fix
         if ($loss <= 0) {
             $loss = 0;
@@ -95,8 +95,9 @@ class GenerateMonthlyReport extends Command
     {
         $users = User::paginate();
         foreach ($users as $user) {
-            $toNotify = User::find($user->id);
-            $toNotify->notify($notification);
+            if ($user->hasAccess('platform.accounting.monthly_report')) {
+                Mail::to($user->email)->send(new \App\Mail\ShopReportReady());
+            }
         }
     }
 }

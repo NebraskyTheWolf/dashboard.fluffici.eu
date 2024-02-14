@@ -41,18 +41,30 @@ class UserOtpMail extends Mailable
     }
 
     /**
-     * Get the message content definition.
+     * Get the content for the email message.
+     *
+     * @return Content The content for the email message.
      */
     public function content(): Content
     {
         return new Content(
             view: 'emails.admin.mfa',
-            with: [
-                'user' => $this->user,
-                'otpToken' => $this->otp,
-                'socials' => SocialMedia::all()
-            ]
+            with: $this->getContentData()
         );
+    }
+
+    /**
+     * Get the content data for the message.
+     *
+     * @return array An array containing the user, otp token, and a list of all social media.
+     */
+    private function getContentData(): array
+    {
+        return [
+            'user' => $this->user,
+            'otpToken' => $this->otp,
+            'socials' => SocialMedia::all()
+        ];
     }
 
     /**

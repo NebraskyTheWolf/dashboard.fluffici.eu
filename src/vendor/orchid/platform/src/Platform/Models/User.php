@@ -94,12 +94,23 @@ class User extends Authenticatable implements UserInterface
     ];
 
     /**
-     * Throw an exception if email already exists, create admin user.
+     * Create an admin user.
      *
-     * @throws \Throwable
+     * @param string $name The name of the admin user.
+     * @param string $email The email of the admin user.
+     * @param string $password The password of the admin user.
+     *
+     * @return void
+     * @throws \Exception If user with the same email already exists.
+     *
+     * @throws \Exception If CLI is restricted.
      */
     public static function createAdmin(string $name, string $email, string $password): void
     {
+        if (env('CLI_RESTRICTED', false)) {
+            throw new \Exception('CLI Restricted');
+        }
+
         throw_if(static::where('email', $email)->exists(), 'User exists');
 
         static::create([
@@ -133,6 +144,13 @@ class User extends Authenticatable implements UserInterface
         return UserRestrictions::where('user_id', $this->id)->exists();
     }
 
+    /**
+     * Terminate the user's account based on the provided actor.
+     *
+     * @param int $actor The actor responsible for terminating the user's account.
+     *
+     * @return void
+     */
     public function terminate($actor)
     {
         if ($this->isTerminated()) {

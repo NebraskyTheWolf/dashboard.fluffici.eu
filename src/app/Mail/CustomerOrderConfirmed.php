@@ -131,16 +131,27 @@ class CustomerOrderConfirmed extends Mailable
     {
         return new Content(
             view: 'emails.users.confirmation',
-            with: [
-                'order' => $this->order,
-                'product' => $this->product,
-                'productTax' => $this->productTax,
-                'publicData' => $this->publicData,
-                'carrierFees' => $this->fetchOrderCarrier(),
-
-                'socials' => SocialMedia::all()
-            ]
+            with: $this->buildContentData()
         );
+    }
+
+    /**
+     * This method builds an array of content data for a specific order.
+     * It includes the order details, product details, product tax details, public data,
+     * order carrier fees, and social media information.
+     *
+     * @return array Returns an array of content data for the order.
+     */
+    private function buildContentData(): array
+    {
+        return [
+            'order' => $this->order,
+            'product' => $this->product,
+            'productTax' => $this->productTax,
+            'publicData' => $this->publicData,
+            'carrierFees' => $this->fetchOrderCarrier(),
+            'socials' => SocialMedia::all()
+        ];
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\OrderedProduct;
 use App\Models\OrderIdentifiers;
+use App\Models\OrderPayment;
 use App\Models\ShopCategories;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
@@ -35,6 +36,7 @@ class PurgeDummyData extends Command
         $products = ShopProducts::paginate();
         $orderProducts = OrderedProduct::paginate();
         $categories = ShopCategories::paginate();
+        $payments = OrderPayment::paginate();
 
         foreach ($identifiers as $identifier) {
             $identifier->delete();
@@ -54,6 +56,10 @@ class PurgeDummyData extends Command
 
         foreach ($categories as $cat) {
             $cat->delete();
+        }
+
+        foreach ($payments as $payment) {
+            $payment->delete();
         }
 
         printf('All dummies was deleted. \n');

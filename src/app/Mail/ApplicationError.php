@@ -19,9 +19,16 @@ class ApplicationError extends Mailable
     public $line;
     public $code;
 
-
     /**
-     * Create a new message instance.
+     * This method is the constructor of the class and is called when a new instance
+     * of the class is created. It initializes the class properties with the given values.
+     *
+     * @param mixed $class The name of the class being constructed.
+     * @param mixed $contents The contents of the object being constructed.
+     * @param mixed $line The line number of the code being constructed.
+     * @param mixed $code The code being constructed.
+     *
+     * @return void
      */
     public function __construct($class, $contents, $line, $code)
     {
@@ -32,32 +39,52 @@ class ApplicationError extends Mailable
     }
 
     /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Application Error',
-        );
-    }
-
-    /**
-     * Get the message content definition.
+     * Get the content for the email message.
      */
     public function content(): Content
     {
         return new Content(
             view: 'emails.developer.crash',
             with: [
-                'currentDate' => Carbon::now(),
+                'currentDate' => $this->getCurrentDate(),
                 'className' => $this->className,
                 'contents' => $this->contents,
                 'line' => $this->line,
                 'code' => $this->code,
-                'currentService' => env('PUBLIC_URL'),
-                'socials' => SocialMedia::all()
+                'currentService' => $this->getCurrentService(),
+                'socials' => $this->getSocialMedia()
             ]
         );
+    }
+
+    /**
+     * Get the current date and time.
+     *
+     * @return \Carbon\Carbon
+     */
+    private function getCurrentDate()
+    {
+        return Carbon::now();
+    }
+
+    /**
+     * Get the current service URL.
+     *
+     * @return string|null The current service URL or null if not set.
+     */
+    private function getCurrentService()
+    {
+        return env('PUBLIC_URL');
+    }
+
+    /**
+     * Retrieve the social media platforms.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    private function getSocialMedia()
+    {
+        return SocialMedia::all();
     }
 
     /**

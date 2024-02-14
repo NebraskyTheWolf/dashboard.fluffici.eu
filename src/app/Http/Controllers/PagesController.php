@@ -21,20 +21,27 @@ class PagesController extends Controller {
      *                             If the page is found, returns the 'pages.index' view with the 'page' variable compacted.
      *                             If the page is not found, returns the 'errors.404' view.
      */
-    public function index(Request $request) {
-        $pageSlug = (isset($request->slug)) ? $request->slug : false;
+    public function index(Request $request)
+    {
+        $pageSlug = $request->slug ?? false;
 
         $page = Pages::where('page_slug', $pageSlug)->firstOrFail();
 
-        if ($page->exists()) {
-            $page->increment('visits', 1);
-            $page->save();
+        $this->updatePageViews($page);
 
-            event(new Statistics());
+        return view('pages.index', compact('page'));
+    }
 
-            return view('pages.index', compact('page'));
-        } else {
-            return view('errors.404');
-        }
+    /**
+     * Update the page views count for a given page.
+     *
+     * @param object $page The page object to update the page views for.
+     *
+     * @return void
+     */
+    public function updatePageViews($page)
+    {
+        $page->increment('visits', 1);
+        $page->save();
     }
 }

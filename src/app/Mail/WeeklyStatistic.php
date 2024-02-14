@@ -35,25 +35,39 @@ class WeeklyStatistic extends Mailable
     }
 
     /**
-     * Get the message content definition.
+     * Get the content for the statistics email.
+     *
+     * @return Content The content for the statistics email.
      */
     public function content(): Content
     {
+        $currentMonth = Carbon::now();
+        $range = $currentMonth->diffForHumans();
+        $currentMonthVisits = Pages::whereMonth('created_at', $currentMonth)->sum('visits');
+        $percentageVisits = $this->getPercent($currentMonthVisits);
+        $totalVisits = Pages::all()->sum('visits');
+        $orderCount = count(ShopOrders::all());
+        $percentageOrder = $this->getPercent($orderCount);
+        $percentageOverdue = $this->getPercent(count(ShopOrders::where('status', 'UNPAID')->paginate()));
+        $delivered = $this->getPercent(count(ShopOrders::where('status', 'DELIVERED')->paginate()));
+        $shipping = $this->getPercent(count(ShopOrders::where('status', 'SHIPPED')->paginate()));
+        $cancelled = $this->getPercent(count(ShopOrders::where('status', 'CANCELLED')->paginate()));
+        $socials = SocialMedia::all();
+
         return new Content(
             view: 'emails.admin.statistics',
             with: [
-                'range'=> Carbon::now()->diffForHumans(),
-                'percentage' => $this->getPercent(Pages::whereMonth('created_at', Carbon::now())->sum('visits')),
-                'vists' => Pages::whereMonth('created_at', Carbon::now())->sum('visits'),
-                'vistsPrevious' => Pages::all()->sum('visits'),
-                'percentageOrder' => $this->getPercent(count(ShopOrders::paginate())),
-                'orderCount' => count(ShopOrders::all()),
-                'percentageOverdue' => $this->getPercent(count(ShopOrders::where('status', 'UNPAID')->paginate())),
-
-                'delivered' => $this->getPercent(count(ShopOrders::where('status', 'DELIVERED')->paginate())),
-                'shipping' => $this->getPercent(count(ShopOrders::where('status', 'SHIPPED')->paginate())),
-                'cancelled' => $this->getPercent(count(ShopOrders::where('status', 'CANCELLED')->paginate())),
-                'socials' => SocialMedia::all()
+                'range' => $range,
+                'percentage' => $percentageVisits,
+                'vists' => $currentMonthVisits,
+                'vistsPrevious' => $totalVisits,
+                'percentageOrder' => $percentageOrder,
+                'orderCount' => $orderCount,
+                'percentageOverdue' => $percentageOverdue,
+                'delivered' => $delivered,
+                'shipping' => $shipping,
+                'cancelled' => $cancelled,
+                'socials' => $socials
             ]
         );
     }
@@ -72,14 +86,12 @@ class WeeklyStatistic extends Mailable
     {
         $val = intval($value);
 
-        if ($val >= 100) {
-            return 100;
-        }
-
-        if ($val <= 0 || $val == null) {
+        if ($val <= 0) {
             return 0;
+        } else if ($val >= 100) {
+            return 100;
+        } else {
+            return $val;
         }
-
-        return intval($val);
     }
 }

@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 class ReportController extends Controller
 {
 
+    protected array $reportClasses = [
+        'shop' => \App\Models\ShopReports::class,
+        'transactions' => \App\Models\TransactionsReport::class,
+        'accounting' => AccountingDocument::class,
+    ];
+
     /**
      * Retrieves and extracts a specific report based on the provided report ID.
      *
@@ -16,34 +22,34 @@ class ReportController extends Controller
      */
     public function index(Request $request)
     {
-        $type = $request->query('type');
         $reportId = $request->query('reportId');
-
-        if ($reportId != null) {
-            $storage = \Illuminate\Support\Facades\Storage::disk('public');
-
-            switch ($type) {
-                case 'shop': {
-                    $report = \App\Models\ShopReports::where('report_id', $reportId);
-
-                    return $this->extracted($report, $storage, $reportId);
-                }
-                case 'transactions': {
-                    $report = \App\Models\TransactionsReport::where('report_id', $reportId);
-
-                    return $this->extracted($report, $storage, $reportId);
-                }
-                case "accounting": {
-                    $report = AccountingDocument::where('report_id', $reportId);
-
-                    return $this->extracted($report, $storage, $reportId);
-                }
-            }
+        if ($reportId === null) {
+            return response()->json(['error' => 'The reportId cannot be null.']);
         }
 
-        return response()->json([
-            'error' => 'The reportId cannot be null.'
-        ]);
+        $type = $request->query('type');
+        $report = $this->getReport($type, $reportId);
+        if ($report === null) {
+            return response()->json(['error' => 'The report type is not supported.']);
+        }
+
+        $storage = \Illuminate\Support\Facades\Storage::disk('public');
+        return $this->extracted($report, $storage, $reportId);
+    }
+
+    /**
+     * Retrieves a report based on the specified type and report ID.
+     *
+     * @param string $type The type of the report.
+     * @param mixed $reportId The ID of the report.
+     * @return mixed|null The report matching the specified type and ID, or null if the type is not found.
+     */
+    private function getReport(string $type, mixed $reportId) {
+        if (!array_key_exists($type, $this->reportClasses)) {
+            return null;
+        }
+
+        return $this->reportClasses[$type]::where('report_id', $reportId);
     }
 
     // Dummy commit :) where is the fox?

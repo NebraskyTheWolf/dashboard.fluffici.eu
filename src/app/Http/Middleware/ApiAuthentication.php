@@ -41,7 +41,7 @@ class ApiAuthentication
             return response()->json([
                 'status' => false,
                 'error' => 'AUTHENTICATION_TOKEN',
-                'message' => 'User is terminated.'
+                'message' => 'Your account is terminated.'
             ]);
         }
 

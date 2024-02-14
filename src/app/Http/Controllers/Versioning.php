@@ -6,10 +6,17 @@ use App\Models\LastVersion;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-// Assuming you have a Version model
-
+/**
+ * Class Versioning
+ *
+ * Controller for updating versioning based on the commit message.
+ */
 class Versioning extends Controller
 {
+
+    const string PREFIX_BREAKING_CHANGES = "BREAKING CHANGES: ";
+    const string PREFIX_PATCH = "PATCH: ";
+
     /**
      * Update the versioning based on the commit message.
      *
@@ -17,14 +24,14 @@ class Versioning extends Controller
      *
      * @return JsonResponse The JSON response indicating the result of the versioning update.
      */
+
     public function index(Request $request)
     {
         $data = json_decode(json_encode($request->all()), true);
-
         $ref = $data['ref'];
         $before = $data['before'];
         $after = $data['after'];
-        $commits = $data['commits'][0];
+        $commit = $data['commits'][0];
 
         if ($ref !== "refs/heads/master") {
             return response()->setStatusCode(403)->json([
@@ -33,19 +40,11 @@ class Versioning extends Controller
             ]);
         }
 
-        $commitMessage = $commits['message'];
+        $commitMessage = $commit['message'];
         $version = LastVersion::latest()->first();
         $version->last_commit_id = $before;
         $version->current_commit_id = $after;
-
-        if (str_starts_with($commitMessage, "BREAKING CHANGES: ")) {
-            $version->increment('major', 1);
-        } else if (str_starts_with($commitMessage, "PATCH: ")) {
-            $version->increment('patch', 1);
-        } else {
-            $version->increment('minor', 1);
-        }
-
+        $this->incrementVersion($version, $commitMessage);
         $version->save();
 
         return response()->json([
@@ -53,4 +52,16 @@ class Versioning extends Controller
             'message' => 'Versioning updated!'
         ]);
     }
+
+    private function incrementVersion($version, $message): void
+    {
+        if (str_starts_with($message, self::PREFIX_BREAKING_CHANGES)) {
+            $version->increment('major', 1);
+        } elseif (str_starts_with($message, self::PREFIX_PATCH)) {
+            $version->increment('patch', 1);
+        } else {
+            $version->increment('minor', 1);
+        }
+    }
 }
+
