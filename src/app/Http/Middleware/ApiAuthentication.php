@@ -5,10 +5,9 @@ namespace App\Http\Middleware;
 use App\Models\UserApiToken;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\Middleware;
 use Symfony\Component\HttpFoundation\Response;
 
-class ApiAuthentication extends Middleware
+class ApiAuthentication
 {
     /**
      * This method checks and handles the authentication token in the request.
@@ -17,7 +16,7 @@ class ApiAuthentication extends Middleware
      * @param Closure $next The next middleware or controller closure.
      * @return Response The HTTP response object.
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, $next): Response
     {
         $header = $request->bearerToken();
         if ($header == null) {

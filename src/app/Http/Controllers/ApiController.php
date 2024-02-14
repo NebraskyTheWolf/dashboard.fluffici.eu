@@ -41,8 +41,8 @@ class ApiController extends Controller
     {
         $data = json_decode(json_encode($request->all()), true);
 
-        if ($data['username'] == null
-            && $data['password'] == null) {
+        if ($data['username'] != null
+            && $data['password'] != null) {
 
             $user = User::where('name', $data['username']);
             if ($user->exists()) {

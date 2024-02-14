@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\SocialMedia;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -38,6 +39,9 @@ class UserApiNotification extends Mailable
     {
         return new Content(
             view: 'emails.admin.api',
+            with: [
+                'socials' => SocialMedia::all()
+            ]
         );
     }
 
