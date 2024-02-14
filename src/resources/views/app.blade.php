@@ -26,7 +26,7 @@
     <meta property="og:image" content="https://autumn.fluffici.eu/attachments/jVrNMLSH1BNA5ZnqGhpLGhVkFoteCwM_Lq0Y5G9Ij7" />
     <meta property="og:image:secure_url" content="https://autumn.fluffici.eu/attachments/jVrNMLSH1BNA5ZnqGhpLGhVkFoteCwM_Lq0Y5G9Ij7" />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="128" />
+    <meta property="og:image:width" content="300" />
 
     <meta name="og:title" content="@yield('title') • Fluffici"/>
     <meta name="og:type" content="website"/>

@@ -38,16 +38,8 @@ class ShopProductEdit extends Screen
      */
     public function query(ShopProducts $products): iterable
     {
-        $tax = ProductTax::where('product_id', $products->id);
-        if ($tax->exists()) {
-            $tax = $tax->first();
-        } else {
-            $tax = [];
-        }
-
         return [
-            'products' => $products,
-            'currentTax' => $tax
+            'products' => $products
         ];
     }
 
@@ -143,14 +135,6 @@ class ShopProductEdit extends Screen
                         ->placeholder(__('products.screen.edit.input.price.placeholder'))
                         ->type('number'),
 
-                    Relation::make('currentTax.tax_id')
-                        ->title("Tax applied")
-                        ->placeholder("Please select the tax group")
-                        ->help('If there is no tax applied let it blank.')
-                        ->required(false)
-                        ->fromModel(TaxGroup::class, 'name', 'id')
-                        ->canSee($this->products->exists),
-
                     CheckBox::make('products.displayed')
                         ->title(__('products.screen.edit.input.displayed.title'))
                         ->placeholder(__('products.screen.edit.input.displayed.placeholder'))
@@ -191,10 +175,11 @@ class ShopProductEdit extends Screen
 
         $data->save();
 
-        if ($this->currentTax->tax_id != null) {
+        $taxes = TaxGroup::paginate();
+        foreach ($taxes as $taxs) {
             $tax = new ProductTax();
-            $tax->product_id = $data->id;
-            $tax->tax_id = $this->products->tax_id;
+            $tax->product_id = ShopProducts::latest()->first()->id;
+            $tax->tax_id = $taxs->id;
             $tax->save();
         }
 

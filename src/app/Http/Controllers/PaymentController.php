@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\UpdateAudit;
+use App\Models\ShopProducts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,7 +23,7 @@ class PaymentController extends Controller
         $paymentType = $request->query('paymentType');
         $encodedData = $request->query('encodedData');
 
-        if ($orderId == null && $paymentType == null) {
+        if ($orderId == null || $paymentType == null) {
             return response()->json([
                 'status' => false,
                 'error' => 'MISSING_ID',
@@ -30,8 +31,18 @@ class PaymentController extends Controller
             ]);
         }
 
-        $order = \App\Models\ShopOrders::where('order_id', $orderId)->first();
+        $order = \App\Models\ShopOrders::where('order_id', $orderId);
+        if (!$order->exists()) {
+            return response()->json([
+                'status' => false,
+                'error' => 'INVALID_ORDER',
+                'message' => 'This order does not exists.'
+            ]);
+        }
+        $order = $order->first();
+
         $product = \App\Models\OrderedProduct::where('order_id', $orderId)->first();
+        $product = ShopProducts::where('id', $product->product_id)->first();
 
         switch ($paymentType) {
             case 'VOUCHER':
@@ -63,9 +74,9 @@ class PaymentController extends Controller
                     $voucher = \App\Models\ShopVouchers::where('code', $voucherCode);
                     if ($voucher->exists()) {
                         $voucherData = $voucher->first();
-                        if (!($voucherData->money < $product->price)) {
+                        if (!($voucherData->money < $product->getNormalizedPrice())) {
                             $voucherData->update([
-                                'money' => $voucherData->money - $product->price
+                                'money' => $voucherData->money - $product->getNormalizedPrice()
                             ]);
 
                             $payment = new \App\Models\OrderPayment();
@@ -73,7 +84,7 @@ class PaymentController extends Controller
                             $payment->status = 'PAID';
                             $payment->transaction_id = \Ramsey\Uuid\Uuid::uuid4();
                             $payment->provider = 'Voucher #' . $voucherData->id;
-                            $payment->price = $product->price;
+                            $payment->price = $product->getNormalizedPrice();
                             $payment->save();
 
                             $order->update([
@@ -121,7 +132,7 @@ class PaymentController extends Controller
                 $payment->status = 'PAID';
                 $payment->transaction_id = \Ramsey\Uuid\Uuid::uuid4();
                 $payment->provider = 'Cash';
-                $payment->price = $product->price;
+                $payment->price = $product->getNormalizedPrice();
                 $payment->save();
 
                 $order->update([

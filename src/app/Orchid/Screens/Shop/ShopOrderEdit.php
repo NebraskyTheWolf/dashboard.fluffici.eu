@@ -114,6 +114,7 @@ class ShopOrderEdit extends Screen
                         Sight::make('status')
                             ->render(fn() => $this->orderStatus())
                     ])->title('Contact & Address'),
+
                     Layout::legend('orderCarrier', [
                         Sight::make('Name')
                             ->render(fn() => $this->getOrderCarrier()->carrierName),
@@ -122,6 +123,7 @@ class ShopOrderEdit extends Screen
                         Sight::make('Price')
                             ->render(fn() => $this->getOrderCarrier()->carrierPrice . ' Kc'),
                     ])->title('Carrier')
+                      ->canSee($this->orderCarrier !== null)
                 ],
                 'Payment' => [
                     \App\Orchid\Layouts\Shop\OrderPayment::class
@@ -133,7 +135,13 @@ class ShopOrderEdit extends Screen
                         Sight::make('quantity', 'Quantity')
                             ->render(fn() => $this->orderProducts->quantity),
                         Sight::make('price', 'Price')
-                            ->render(fn() => $this->orderProducts->price),
+                            ->render(fn() => $this->getProduct()->getNormalizedPrice()),
+
+                        Sight::make('vat', 'Tax')
+                            ->render(fn() => $this->getProduct()->getProductTax() . '%'),
+
+                        Sight::make('sale', 'Discount')
+                            ->render(fn() => $this->getProduct()->getProductSale() . '%')
                     ])->title('Products')
                 ]
             ])->activeTab('Order Information'),
@@ -187,7 +195,7 @@ class ShopOrderEdit extends Screen
         if (!$country->exists()) {
             return $this->order->country;
         }
-        return $country->get()->country_name;
+        return $country->first()->country_name;
     }
 
     public function completed()
@@ -271,4 +279,8 @@ class ShopOrderEdit extends Screen
         return ShopCarriers::where('slug', $this->orderCarrier->carrier_name)->first();
     }
 
+    public function getProduct(): \App\Models\ShopProducts
+    {
+        return \App\Models\ShopProducts::where('id', $this->orderProducts->product_id)->first();
+    }
 }

@@ -46,6 +46,7 @@ class ApiAuthentication
         }
 
         $request->merge(['user_id' => $token->user_id]);
+        $request->merge(['username' => $token->getUser()->name]);
 
         return $next($request);
     }

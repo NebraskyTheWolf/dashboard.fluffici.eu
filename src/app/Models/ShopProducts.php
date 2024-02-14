@@ -21,6 +21,14 @@ class ShopProducts extends Model
         'deleted_at'
     ];
 
+    /**
+     * Returns the URL of the image.
+     *
+     * If the image path is not null, it returns the URL based on the image path.
+     * Otherwise, it returns a default URL.
+     *
+     * @return string The URL of the image.
+     */
     public function getImage(): string
     {
         if ($this->image_path !== null) {
