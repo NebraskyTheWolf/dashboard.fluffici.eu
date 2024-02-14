@@ -63,15 +63,13 @@ use App\Orchid\Screens\Attachments\AttachmentUpload;
 
 // Main
 Route::screen('/main', PlatformScreen::class)
-    ->name('main')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->push('Main', route('main')));
+    ->name('main');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
     ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
+        ->parent('index')
         ->push('Profile', route('platform.profile')));
 
 // Platform > System > Users > User
@@ -92,7 +90,7 @@ Route::screen('users/create', UserEditScreen::class)
 Route::screen('users', UserListScreen::class)
     ->name('platform.systems.users')
     ->breadcrumbs(fn (Trail $trail) => $trail
-        .parent('main')
+        ->parent('index')
         ->push('Users', route('platform.systems.users')));
 
 // Platform > System > Roles > Role
@@ -113,246 +111,135 @@ Route::screen('roles/create', RoleEditScreen::class)
 Route::screen('roles', RoleListScreen::class)
     ->name('platform.systems.roles')
     ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
+        ->parent('index')
         ->push('Roles', route('platform.systems.roles')));
 
 
 Route::screen('post/{post?}', PostEditScreen::class)
     ->name('platform.post.edit')
     ->breadcrumbs(fn (Trail $trail, $post) => $trail
-        ->parent('main')
+        ->parent('index')
         ->push('Edit', route('platform.post.edit', $post)));
 
 Route::screen('posts', PostListScreen::class)
     ->name('platform.post.list')
     ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
+        ->parent('index')
         ->push('Posts', route('platform.post.list')));
 
 Route::screen('event/{events?}', EventsEditScreen::class)
-    ->name('platform.events.edit')
-    ->breadcrumbs(fn (Trail $trail, $events) => $trail
-        ->parent('main')
-        ->push('Edit', route('platform.events.edit', $events)));
+    ->name('platform.events.edit');
 
 Route::screen('events', EventsListScreen::class)
     ->name('platform.events.list')
     ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
+        ->parent('index')
         ->push('Events', route('platform.events.list')));
 
 Route::screen('socials', SocialMedia::class)
-    ->name('platform.social.list')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Socials', route('platform.social.list')));
+    ->name('platform.social.list');
 
 Route::screen('socials/edit/{social?}', SocialMediaEdit::class)
-    ->name('platform.social.edit')
-    ->breadcrumbs(fn (Trail $trail, $social) => $trail
-        ->parent('platform.social.list')
-        ->push('Edit', route('platform.social.edit', $social)));
+    ->name('platform.social.edit');
 
 Route::screen('page/{events?}', PagesEditScreen::class)
-    ->name('platform.pages.edit')
-    ->breadcrumbs(fn (Trail $trail, $events) => $trail
-        ->parent('main')
-        ->push('Edit', route('platform.pages.edit', $events)));
+    ->name('platform.pages.edit');
 
 Route::screen('pages', PagesListScreen::class)
-    ->name('platform.pages.list')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Pages', route('platform.pages.list')));
+    ->name('platform.pages.list');
 
 Route::screen('audit', AuditLogsListScreen::class)
-    ->name('platform.audit')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Audit', route('platform.audit')));
+    ->name('platform.audit');
 
 Route::screen('files', AttachmentLists::class)
-    ->name('platform.attachments')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Files', route('platform.attachments')));
+    ->name('platform.attachments');
 
 Route::screen('files/platform/upload', AttachmentUpload::class)
-    ->name('platform.attachments.upload')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('platform.attachments')
-        ->push('Upload', route('platform.attachments.upload')));
+    ->name('platform.attachments.upload');
 
 Route::screen('files/lookup/{file}', AttachmentUpload::class)
-    ->name('platform.attachments.lookup')
-    ->breadcrumbs(fn (Trail $trail, $file) => $trail
-        ->parent('platform.attachments')
-        ->push('Lookup', route('platform.attachments.lookup', $file)));
+    ->name('platform.attachments.lookup');
 
 Route::screen('reports', AttachmentReports::class)
-    ->name('platform.reports')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Reports', route('platform.reports')));
+    ->name('platform.reports');
 
 Route::screen('shop/statistics', ShopStatistics::class)
-    ->name('platform.shop.statistics')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Statistics', route('platform.shop.statistics')));
+    ->name('platform.shop.statistics');
 
 Route::screen('shop/products', ShopProducts::class)
-    ->name('platform.shop.products')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Products', route('platform.shop.products')));
+    ->name('platform.shop.products');
 
 Route::screen('shop/products/edit/{products?}', ShopProductEdit::class)
-    ->name('platform.shop.products.edit')
-    ->breadcrumbs(fn (Trail $trail, $products) => $trail
-        ->parent('platform.shop.products')
-        ->push('Edit', route('platform.shop.products.edit', $products)));
+    ->name('platform.shop.products.edit');
 
 Route::screen('shop/categories', ShopCategories::class)
-    ->name('platform.shop.categories')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Categories', route('platform.shop.categories')));
+    ->name('platform.shop.categories');
 
 Route::screen('shop/categories/edit/{category?}', ShopCategoryEdit::class)
-    ->name('platform.shop.categories.edit')
-    ->breadcrumbs(fn (Trail $trail, $category) => $trail
-        ->parent('platform.shop.categories')
-        ->push('Edit', route('platform.shop.categories.edit', $category)));
+    ->name('platform.shop.categories.edit');
 
 Route::screen('shop/sales', ShopSales::class)
-    ->name('platform.shop.sales')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Sales', route('platform.shop.sales')));
+    ->name('platform.shop.sales');
 
 Route::screen('shop/sales/edit/{sales?}', ShopSalesEdit::class)
-    ->name('platform.shop.sales.edit')
-    ->breadcrumbs(fn (Trail $trail, $sales) => $trail
-        ->parent('platform.shop.sales')
-        ->push('Edit', route('platform.shop.sales.edit', $sales)));
+    ->name('platform.shop.sales.edit');
 
 Route::screen('shop/vouchers', ShopVouchers::class)
-    ->name('platform.shop.vouchers')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Vouchers', route('platform.shop.vouchers')));
+    ->name('platform.shop.vouchers');
 
 Route::screen('shop/vouchers/edit/{voucher?}', ShopVoucherEdit::class)
-    ->name('platform.shop.vouchers.edit')
-    ->breadcrumbs(fn (Trail $trail, $voucher) => $trail
-        ->parent('platform.shop.vouchers')
-        ->push('Edit', route('platform.shop.vouchers.edit', $voucher)));
+    ->name('platform.shop.vouchers.edit');
 
 Route::screen('shop/orders', ShopOrders::class)
-    ->name('platform.shop.orders')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Orders', route('platform.shop.orders')));
+    ->name('platform.shop.orders');
 
 Route::screen('shop/orders/{order?}', ShopOrderEdit::class)
-    ->name('platform.shop.orders.edit')
-    ->breadcrumbs(fn (Trail $trail, $order) => $trail
-        ->parent('platform.shop.orders')
-        ->push('Edit', route('platform.shop.orders.edit', $order)));
+    ->name('platform.shop.orders.edit');
 
 Route::screen('shop/support', ShopSupport::class)
-    ->name('platform.shop.support')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Support', route('platform.shop.support')));
+    ->name('platform.shop.support');
 
 Route::screen('shop/edit/settings', ShopSettings::class)
-    ->name('platform.shop.settings')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Settings', route('platform.shop.settings')));
+    ->name('platform.shop.settings');
 
 Route::screen('shop/carriers', ShopCarrierList::class)
-    ->name('platform.shop.carriers')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Carriers', route('platform.shop.carriers')));
+    ->name('platform.shop.carriers');
 
 Route::screen('shop/carriers/edit/{carrier?}', ShopCarrierEdit::class)
-    ->name('platform.shop.carriers.edit')
-    ->breadcrumbs(fn (Trail $trail, $carrier) => $trail
-        ->parent('platform.shop.carriers')
-        ->push('Edit', route('platform.shop.carriers.edit', $carrier)));
+    ->name('platform.shop.carriers.edit');
 
 Route::screen('shop/countries', ShopCountriesList::class)
-    ->name('platform.shop.countries.list')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Countries', route('platform.shop.countries.list')));
+    ->name('platform.shop.countries.list');
 
 Route::screen('shop/countries/edit/{country?}', ShopCountriesEdit::class)
-    ->name('platform.shop.countries.edit')
-    ->breadcrumbs(fn (Trail $trail, $country) => $trail
-        ->parent('platform.shop.countries.list')
-        ->push('Edit', route('platform.shop.countries.edit', $country)));
+    ->name('platform.shop.countries.edit');
 
 Route::screen('shop/report/list', ShopReportList::class)
-    ->name('platform.shop.reports')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Report List', route('platform.shop.reports')));
+    ->name('platform.shop.reports');
 
 Route::screen('accounting/main', AccountingMain::class)
-    ->name('platform.accounting.main')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Main', route('platform.accounting.main')));
+    ->name('platform.accounting.main');
 
 Route::screen('accounting/new/{accounting?}', AccountingMake::class)
-    ->name('platform.accounting.new')
-    ->breadcrumbs(fn (Trail $trail, $accounting) => $trail
-        ->parent('platform.accounting.main')
-        ->push('New', route('platform.accounting.new', $accounting)));
+    ->name('platform.accounting.new');
 
 Route::screen('accounting/invoices', AccountingInvoiceList::class)
-    ->name('platform.accounting.invoices')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('platform.accounting.main')
-        ->push('Invoices', route('platform.accounting.invoices')));
+    ->name('platform.accounting.invoices');
 
 Route::screen('accounting/transactions', AccountingTransactionsList::class)
-    ->name('platform.accounting.transactions')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('platform.accounting.main')
-        ->push('Transactions', route('platform.accounting.transactions')));
+    ->name('platform.accounting.transactions');
 
 Route::screen('accounting/report/list', AccountingReportList::class)
-    ->name('platform.accounting.reports')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('platform.accounting.main')
-        ->push('Report List', route('platform.accounting.reports')));
+    ->name('platform.accounting.reports');
 
 Route::screen('accounting/transactions/edit/{payment?}', AccountingShopCreatePayment::class)
-    ->name('platform.accounting.transactions.new')
-    ->breadcrumbs(fn (Trail $trail, $payment) => $trail
-        ->parent('platform.accounting.transactions')
-        ->push('Edit', route('platform.accounting.transactions.new', $payment)));
+    ->name('platform.accounting.transactions.new');
 
 Route::screen('accounting/transactions/reports', AccountingTRSReport::class)
-    ->name('platform.accounting.transactions.reports')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('platform.accounting.transactions')
-        ->push('Reports', route('platform.accounting.transactions.reports')));
+    ->name('platform.accounting.transactions.reports');
 
 Route::screen('shop/tax/edit/{group?}', TaxGroupEdit::class)
-    ->name('tax.edit.group')
-    ->breadcrumbs(fn (Trail $trail, $group) => $trail
-        ->parent('main')
-        ->push('Edit', route('tax.edit.group', $group)));
+    ->name('tax.edit.group');
 
 Route::screen('shop/taxes', TaxGroupList::class)
-    ->name('tax.group.list')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('main')
-        ->push('Taxes', route('tax.group.list')));
+    ->name('tax.group.list');

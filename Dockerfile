@@ -1,8 +1,12 @@
-FROM php:8.3-fpm-bullseye AS base
+FROM jkaninda/nginx-php-fpm:8.3 AS base
 
 USER root
 
-WORKDIR /workspace
+WORKDIR /var/www/html
+
+RUN chown -R root:root /var/www/html
+
+VOLUME /var/www/html/storage
 
 # timezone environment
 ENV TZ=UTC \
@@ -56,7 +60,9 @@ COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 FROM base AS deploy
 
 COPY ./php.deploy.ini /usr/local/etc/php/php.ini
-COPY ./src /workspace
+
+COPY ./src /var/www/html
+
 
 RUN <<EOF
   chmod -R 777 storage bootstrap/cache
@@ -74,10 +80,4 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/*
 EOF
 
-ARG GIT_COMMIT
-ENV GIT_COMMIT=$GIT_COMMIT
-
-
 RUN docker-php-ext-install mysqli pdo pdo_mysql
-
-
