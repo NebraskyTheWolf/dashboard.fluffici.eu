@@ -84,7 +84,7 @@ class UserEditScreen extends Screen
                 ->confirm('Are you sure to continue?')
                 ->method('terminate')
                 ->canSee($this->user->exists)
-                ->canSee(!$this->user->hasUserBiggerPower(Auth::user())),
+                ->canSee($this->user->hasUserBiggerPower(Auth::user())),
 
             Button::make(__('user.screen.edit.button.save'))
                 ->icon('bs.check-circle')
