@@ -31,8 +31,7 @@
 
         <div class="row align-items-center">
             <div class="col-md-6 col-xs-12">
-                <a class="small"> The code will expire in : </a>
-                <div class="small" id="otp-expiration">30:00</div>
+                <a class="small"> The code will expire in : <div class="small" id="otp-expiration">30:00</div></a>
             </div>
             <div class="col-md-6 col-xs-12">
                 <button id="button-login" type="submit" class="btn btn-primary btn-block" tabindex="3">

@@ -8,8 +8,22 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Orchid\Platform\Models\User;
 
+/**
+ * Class ApiController
+ *
+ * This class represents the controller for API-related actions.
+ * It extends the Controller class.
+ *
+ * @package App\Http\Controllers
+ */
 class ApiController extends Controller
 {
+
+
+    public function __constructor()
+    {
+        $this->middleware('auth.api');
+    }
 
     /**
      * Index method
@@ -25,10 +39,10 @@ class ApiController extends Controller
      */
     public function index(Request $request)
     {
-        $data = json_decode($request->json(), true);
+        $data = json_decode(json_encode($request->all()), true);
 
-        if ($data['username'] != null
-            && $data['password'] != null) {
+        if ($data['username'] == null
+            && $data['password'] == null) {
 
             $user = User::where('name', $data['username']);
             if ($user->exists()) {

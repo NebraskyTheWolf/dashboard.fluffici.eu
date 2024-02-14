@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UpdateAudit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -79,6 +80,8 @@ class PaymentController extends Controller
                                 'status' => 'DELIVERED'
                             ]);
 
+                            event(new UpdateAudit('order_payment', 'Validated ' . substr($orderId, 0, 8) . ' payment with a voucher.', $request->input('username')));
+
                             return response()->json([
                                 'status' => true,
                                 'message' => "Remaining balance " . number_format(($voucherData->money - $product->price)) . " Kc"
@@ -124,6 +127,8 @@ class PaymentController extends Controller
                 $order->update([
                     'status' => 'DELIVERED'
                 ]);
+
+                event(new UpdateAudit('order_payment', 'Validated ' . substr($orderId, 0, 8) . ' payment with cash.', $request->input('username')));
 
                 return response()->json([
                     'status' => true,
@@ -193,6 +198,8 @@ class PaymentController extends Controller
             } else {
                 $data['product'] = false;
             }
+
+            event(new UpdateAudit('order_reading', 'Accessed ' . substr($data['order'], 0, 8) . ' order information.', $request->input('username')));
 
             return response()->json([
                 'status' => true,

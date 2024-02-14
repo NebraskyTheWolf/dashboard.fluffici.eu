@@ -31,7 +31,7 @@ class FinishOldEvent extends Command
         $events = Events::paginate();
         foreach ($events as $event) {
             if ($event->end != null) {
-                if (Carbon::parse($event->end)->isPast() && $event->status != "FINISHED") {
+                if (Carbon::parse($event->end)->isPast()) {
                     $event->update(
                         [
                             'status' => 'FINISHED'

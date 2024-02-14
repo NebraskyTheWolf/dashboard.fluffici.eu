@@ -26,11 +26,6 @@ class DeleteUsedVouchers extends Command
      */
     public function handle()
     {
-        $vouchers = ShopVouchers::paginate();
-        foreach ($vouchers as $voucher) {
-            if ($voucher->money <= 0) {
-                $voucher->remove();
-            }
-        }
+
     }
 }

@@ -5,9 +5,10 @@ namespace App\Http\Middleware;
 use App\Models\UserApiToken;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\Middleware;
 use Symfony\Component\HttpFoundation\Response;
 
-class ApiAuthentication
+class ApiAuthentication extends Middleware
 {
     /**
      * This method checks and handles the authentication token in the request.
@@ -20,7 +21,7 @@ class ApiAuthentication
     {
         $header = $request->bearerToken();
         if ($header == null) {
-            \response()->json([
+            return response()->json([
                 'status' => false,
                 'error' => 'AUTHENTICATION_TOKEN',
                 'message' => 'No bearer token found.'

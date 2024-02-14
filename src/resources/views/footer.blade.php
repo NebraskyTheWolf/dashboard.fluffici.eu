@@ -4,8 +4,6 @@
 
         <small style="color: white;" id="version"> Version : <i class="loading cog icon"></i></small>
         <br>
-        <small style="color: white;" id="autumn"> Autumn : <i class="loading cog icon"></i></small>
-        <br>
         <small style="color: white;" id="rev"> Rev : <i class="loading cog icon"></i></small>
     </div>
 @else

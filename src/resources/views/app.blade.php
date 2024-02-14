@@ -8,9 +8,9 @@
     <meta name="description" content="Fluffici Admin Panel">
 
     <title>
-        @yield('title', config('app.name'))
+        @yield('title', 'Fluffici')
         @hasSection('title')
-            - {{ config('app.name') }}
+            - Fluffici
         @endif
     </title>
     <meta name="csrf_token" content="{{  csrf_token() }}" id="csrf_token">
@@ -22,6 +22,25 @@
     <meta name="turbo-root" content="{{  Dashboard::prefix() }}">
     <meta name="dashboard-prefix" content="{{  Dashboard::prefix() }}">
     <meta name="turbo-cache-control" content="no-cache">
+
+    <meta property="og:image" content="https://autumn.fluffici.eu/attachments/jVrNMLSH1BNA5ZnqGhpLGhVkFoteCwM_Lq0Y5G9Ij7" />
+    <meta property="og:image:secure_url" content="https://autumn.fluffici.eu/attachments/jVrNMLSH1BNA5ZnqGhpLGhVkFoteCwM_Lq0Y5G9Ij7" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="128" />
+
+    <meta name="og:title" content="@yield('title') • Fluffici"/>
+    <meta name="og:type" content="website"/>
+
+    <meta name="copyright" content="Fluffici">
+    <meta name="webmaster" content="Vakea, vakea@fluffici.eu">
+
+    <meta name="contact" content="administrace@fluffici.eu">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="red">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="theme-color" content="#FF002E">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>

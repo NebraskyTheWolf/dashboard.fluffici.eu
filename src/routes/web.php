@@ -108,12 +108,12 @@ Route::get('/build/{variable?}', function ($request) {
 
 
 Route::middleware('auth.session')->get('/report', [\App\Http\Controllers\ReportController::class, 'index'])->name('api.shop.report');
-Route::middleware('auth.session')->get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->middleware('auth.session')->name('api.shop.voucher');
+Route::middleware('auth.session')->get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->name('api.shop.voucher');
 
 Route::post('/api/login', [\App\Http\Controllers\ApiController::class, 'index']);
 
-Route::middleware('api')->get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder']);
-Route::middleware('api')->get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index']);
+Route::middleware('auth.api')->get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder']);
+Route::middleware('auth.api')->get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index']);
 
 Route::get('/api/generate/order/{order_id}', [\App\Http\Controllers\VoucherController::class, 'datamatrix'])->middleware('throttle');
 

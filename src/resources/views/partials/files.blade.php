@@ -12,7 +12,6 @@
         </div>
     @endif
 
-
     @foreach($files as $file)
         <div class="column">
             <div class="ui segment">

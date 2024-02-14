@@ -20,6 +20,8 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+
+
     /**
      * Registers an error handler for the application.
      *

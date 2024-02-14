@@ -27,7 +27,7 @@ class Versioning extends Controller
         $commits = $data['commits'][0];
 
         if ($ref !== "refs/heads/master") {
-            return response()->json([
+            return response()->setStatusCode(403)->json([
                 'status' => false,
                 'message' => 'Cannot update versioning on a branch out of \'refs/heads/master\''
             ]);

@@ -4,25 +4,18 @@ $(document).ready(function($) {
         if (response.status !== 200) {
             console.log('Cannot update fields for versioning.')
         } else {
-            console.log(response.data.rev)
             $('#version').text('Version : ' + response.data.version)
             $('#rev').text('Rev : ' + response.data.rev)
-        }
-    })
-    axios.get('https://autumn.fluffici.eu').then(function (response) {
-        if (response.status !== 200) {
-            console.log('Cannot update fields for versioning.')
-        } else {
-            $('#autumn').text('Autumn : ' + response.data.autumn)
         }
     })
 
     const fiveMinutes = 60 * 30;
     const display = document.getElementById('otp-expiration');
-
-    setTimeout(() => {
-        startTimer(fiveMinutes, display);
-    }, 1500)
+    if (display !== null) {
+        setTimeout(() => {
+            startTimer(fiveMinutes, display);
+        }, 1500)
+    }
 });
 
 /**
@@ -54,9 +47,7 @@ function startTimer(duration, display) {
         display.innerHTML = minutes + ":" + seconds;
 
         if (diff <= 0) {
-            // add one second so that the count down starts at the full duration
-            // example 05:00 not 04:59
-            start = Date.now() + 1000;
+            display.innerHTML = "Expired"
         }
     }
     // we don't want to wait a full second before the timer starts
