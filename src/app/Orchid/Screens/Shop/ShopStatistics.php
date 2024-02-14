@@ -109,8 +109,11 @@ class ShopStatistics extends Screen
      * @param float $previous The previous value.
      * @return float The difference as a percentage.
      */
-    public function diff($recent, $previous): float
+    public function diff(float $recent, float $previous): float
     {
+        if ($recent <= 0 || $previous <= 0)
+            return 0.0;
+
         return (($recent-$previous)/abs($previous)) * 100;
     }
 }
