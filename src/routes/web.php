@@ -96,7 +96,7 @@ Route::get('/health', function ($request) {
     ]);
 })->name("health");
 
-Route::get('/build/{variable?}', function ($variable = "null") {
+Route::get('/build/{variable?}', function ($request) {
     $version = LastVersion::latest()->first();
 
     return response()->json([

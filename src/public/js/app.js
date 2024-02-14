@@ -1,6 +1,6 @@
 
 $(document).ready(function($) {
-    axios.get('https://dashboard.fluffici.eu/build').then(function (response) {
+    axios.get('https://dashboard.fluffici.eu/build/E').then(function (response) {
         if (response.status !== 200) {
             console.log('Cannot update fields for versioning.')
         } else {
