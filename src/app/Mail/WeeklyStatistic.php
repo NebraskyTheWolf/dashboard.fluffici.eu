@@ -6,6 +6,7 @@ use App\Models\Pages;
 use App\Models\ShopOrders;
 use App\Models\SocialMedia;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -41,9 +42,9 @@ class WeeklyStatistic extends Mailable
      */
     public function content(): Content
     {
-        $currentMonth = Carbon::now();
-        $range = $currentMonth->diffForHumans();
-        $currentMonthVisits = Pages::whereMonth('created_at', $currentMonth)->sum('visits');
+        $currentDate = Carbon::now();
+
+        $currentMonthVisits = Pages::whereMonth('created_at', $currentDate)->sum('visits');
         $percentageVisits = $this->getPercent($currentMonthVisits);
         $totalVisits = Pages::all()->sum('visits');
         $orderCount = count(ShopOrders::all());
@@ -57,7 +58,7 @@ class WeeklyStatistic extends Mailable
         return new Content(
             view: 'emails.admin.statistics',
             with: [
-                'range' => $range,
+                'range' => $this->getPeriod(),
                 'percentage' => $percentageVisits,
                 'vists' => $currentMonthVisits,
                 'vistsPrevious' => $totalVisits,
@@ -70,6 +71,35 @@ class WeeklyStatistic extends Mailable
                 'socials' => $socials
             ]
         );
+    }
+
+    /**
+     * Format a given date into a string representing the day in the following format: [Day Name] [Day Number] at [Time].
+     *
+     * @param Carbon $date The date to format.
+     *
+     * @return string The formatted day string in the format of [Day Name] [Day Number] at [Time].
+     */
+    public function formatDay(Carbon $date): string
+    {
+        return substr($date->dayName, 0, 3) . ' ' . $date->day . ' at ' . $date->format('H:i');
+    }
+
+    /**
+     * Get the current period in a specific format.
+     *
+     * @return string The current period in the format "start day, end day".
+     */
+    public function getPeriod(): string
+    {
+        $currentDate = Carbon::now();
+        $startOfWeek = $currentDate->copy()->startOfWeek();
+        $endOfWeek = $currentDate->copy()->endOfWeek();
+
+        $start = $this->formatDay($startOfWeek);
+        $end = $this->formatDay($endOfWeek);
+
+        return $start . ', ' . $end;
     }
 
     /**
