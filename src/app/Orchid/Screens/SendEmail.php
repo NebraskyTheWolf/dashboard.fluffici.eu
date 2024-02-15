@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Quill;
+use Orchid\Screen\Layout;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Toast;
@@ -62,25 +63,27 @@ class SendEmail extends Screen
     public function layout(): iterable
     {
         return [
-            Input::make('email.to')
-                ->title('To')
-                ->type('email')
-                ->placeholder('Please enter the receiver email.')
-                ->help('Example : john.smith@example.com')
-                ->max(40)
-                ->min(25)
-                ->required(),
+            \Orchid\Support\Facades\Layout::rows([
+                Input::make('email.to')
+                    ->title('To')
+                    ->type('email')
+                    ->placeholder('Please enter the receiver email.')
+                    ->help('Example : john.smith@example.com')
+                    ->max(40)
+                    ->min(25)
+                    ->required(),
 
-            Input::make('email.subject')
-                ->placeholder('Please enter the subject')
-                ->max(140)
-                ->min(15)
-                ->required(),
+                Input::make('email.subject')
+                    ->placeholder('Please enter the subject')
+                    ->max(140)
+                    ->min(15)
+                    ->required(),
 
-            Quill::make('email.message')
-                ->title('Please enter the email content')
-                ->help('If you need to use CSS please refer to the documentation.')
-                ->required()
+                Quill::make('email.message')
+                    ->title('Please enter the email content')
+                    ->help('If you need to use CSS please refer to the documentation.')
+                    ->required()
+            ])
         ];
     }
 
