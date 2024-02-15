@@ -72,28 +72,28 @@ class EventsEditScreen extends Screen
                 ->icon('bs.note')
                 ->method('createOrUpdate')
                 ->canSee($this->events->exists)
-                ->canSee(!$this->events->status == "INCOMING"),
+                ->canSee($this->events->status == "INCOMING"),
 
             Button::make(__('events.screen.edit.button.cancel'))
                 ->icon('bs.trash')
                 ->confirm(__('common.modal.event.cancel'))
                 ->method('cancel')
                 ->canSee($this->events->exists)
-                ->canSee(!$this->events->status == "INCOMING")
+                ->canSee($this->events->status == "INCOMING")
                 ->type(Color::DANGER),
 
             Button::make(__('events.screen.edit.button.undo'))
                 ->icon('bs.arrow-clockwise')
                 ->method('undo')
                 ->canSee($this->events->exists)
-                ->canSee(!$this->events->status == "ENDED")
+                ->canSee($this->events->status == "ENDED")
                 ->type(Color::INFO),
 
             Button::make(__('events.screen.edit.button.finish'))
                 ->icon('bs.check-lg')
                 ->method('finish')
                 ->canSee($this->events->exists)
-                ->canSee(!$this->events->status == "FINISHED")
+                ->canSee($this->events->status == "INCOMING")
                 ->type(Color::SUCCESS),
         ];
     }
