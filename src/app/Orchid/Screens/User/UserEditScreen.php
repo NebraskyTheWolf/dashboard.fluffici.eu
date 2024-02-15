@@ -152,12 +152,6 @@ class UserEditScreen extends Screen
      */
     public function save(User $user, Request $request)
     {
-        if ($user->inRole('admin')) {
-            Toast::info("You cannot change a administrator");
-
-            return redirect()->route('platform.systems.users');
-        }
-
         $request->validate([
             'user.email' => [
                 'required',
