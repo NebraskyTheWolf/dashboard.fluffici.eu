@@ -13,6 +13,7 @@ use App\Orchid\Screens\Posts\PostEditScreen;
 use App\Orchid\Screens\Posts\PostListScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\SendEmail;
 use App\Orchid\Screens\Shop\ShopProductEdit;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
@@ -243,3 +244,6 @@ Route::screen('shop/tax/edit/{group?}', TaxGroupEdit::class)
 
 Route::screen('shop/taxes', TaxGroupList::class)
     ->name('tax.group.list');
+
+Route::screen('email/send', SendEmail::class)
+    ->name('platform.admin.sendmail');

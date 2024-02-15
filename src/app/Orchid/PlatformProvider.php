@@ -80,6 +80,10 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.book')
                         ->route('platform.post.list')
                         ->permission('platform.systems.posts'),
+                    Menu::make('Send Email')
+                        ->icon('bs.envelope')
+                        ->route('platform.admin.sendmail')
+                        ->permission('platform.systems.email'),
                     Menu::make('Akce')
                         ->icon('bs.calendar-event')
                         ->route('platform.events.list')
@@ -267,6 +271,7 @@ class PlatformProvider extends OrchidServiceProvider
 
                 ->addPermission('platform.systems.post.read', "Posts (read)")
                 ->addPermission('platform.systems.post.write', "Posts (write)")
+                ->addPermission('platform.systems.email', "Send Email")
         ];
     }
 

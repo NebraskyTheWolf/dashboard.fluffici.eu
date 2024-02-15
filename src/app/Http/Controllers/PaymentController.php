@@ -6,6 +6,7 @@ use App\Events\UpdateAudit;
 use App\Models\ShopProducts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Orchid\Platform\Models\User;
 
 class PaymentController extends Controller
 {
@@ -19,6 +20,15 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
+        $user = User::where('id', $request->input('user_id'))->first();
+        if (!$user->hasAccess('platform.shop.vouchers.read')) {
+            return response()->json([
+                'status' => false,
+                'error' => 'PERMISSION',
+                'message' => 'You do not have the permission to perform this operation.'
+            ]);
+        }
+
         $orderId =  $request->query('orderId');
         $paymentType = $request->query('paymentType');
         $encodedData = $request->query('encodedData');
@@ -166,6 +176,15 @@ class PaymentController extends Controller
      */
     public function fetchOrder(Request $request)
     {
+        $user = User::where('id', $request->input('user_id'))->first();
+        if (!$user->hasAccess('platform.systems.eshop.orders')) {
+            return response()->json([
+                'status' => false,
+                'error' => 'PERMISSION',
+                'message' => 'You do not have the permission to perform this operation.'
+            ]);
+        }
+
         $orderId = $request->query('orderId');
         if ($orderId == null) {
             return response()->json([

@@ -38,7 +38,7 @@ class SupportMessage extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.admin.support.new_message',
             with: [
                 'socials' => SocialMedia::all()
             ]
