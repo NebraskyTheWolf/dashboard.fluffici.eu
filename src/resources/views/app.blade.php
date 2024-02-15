@@ -17,15 +17,6 @@
     <meta name="auth" content="{{  Auth::check() }}" id="auth">
     <link rel="stylesheet" type="text/css" href="{{  mix('/css/dashy.css','vendor/fluffici') }}">
 
-    <!-- Inserting custom style for mobile devices -->
-    <style>
-        @media screen and (max-width:600px) {
-            body {
-                background-color: #0E1414;
-            }
-        }
-    </style>
-
     @stack('head')
 
     <meta name="turbo-root" content="{{  Dashboard::prefix() }}">

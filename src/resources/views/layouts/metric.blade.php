@@ -10,7 +10,7 @@
                 <div class="p-4 bg-white rounded shadow-sm h-100 d-flex flex-column">
                     <small class="text-muted d-block mb-1">{{ $key }}</small>
 
-                    @if($metric['value'] <= 0)
+                    @if($metric['value'] < 0)
                         <a class="h3 fw-light mt-auto text-primary" id="{{  $metric['key'] }}">
                             {{ $metric['value'] }}
                         </a>

@@ -98,6 +98,8 @@ class SendEmail extends Screen
      */
     public function sendEmail(Request $request)
     {
+        $this->email->fill($request->get('email'));
+
         Mail::to($this->email->to)->send(new DefaultEmail($this->email->subject, Auth::user()->email, $this->email->message));
 
         Toast::info("You send a email to " . $this->email->to);
