@@ -4,12 +4,12 @@ namespace App\Orchid\Screens;
 
 use App\Events\UpdateAudit;
 use App\Mail\DefaultEmail;
+use app\Models\TempMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Quill;
-use Orchid\Screen\Layout;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Toast;
@@ -27,7 +27,9 @@ class SendEmail extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'email' => []
+        ];
     }
 
     /**
@@ -74,6 +76,7 @@ class SendEmail extends Screen
                     ->required(),
 
                 Input::make('email.subject')
+                    ->title('Subject')
                     ->placeholder('Please enter the subject')
                     ->max(140)
                     ->min(15)

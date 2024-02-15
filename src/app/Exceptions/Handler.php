@@ -4,7 +4,9 @@ namespace App\Exceptions;
 
 use App\Mail\ApplicationError;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -22,7 +24,8 @@ class Handler extends ExceptionHandler
         \Illuminate\Validation\ValidationException::class,
         \Illuminate\Http\Exceptions\ThrottleRequestsException::class,
         \Illuminate\Http\Exceptions\PostTooLargeException::class,
-        \Illuminate\Routing\Exceptions\InvalidSignatureException::class
+        \Illuminate\Routing\Exceptions\InvalidSignatureException::class,
+        ValidationException::class
     ];
 
     /**
