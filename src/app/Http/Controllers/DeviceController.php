@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Http\Controllers;
+namespace App\Http\Controllers;
 
 use App\Events\UpdateAudit;
 use App\Models\DeviceAuthorization;

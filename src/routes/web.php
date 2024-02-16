@@ -1,6 +1,6 @@
 <?php
 
-use app\Http\Controllers\DeviceController;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\IntegrationsController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReportController;
