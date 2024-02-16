@@ -4,11 +4,25 @@ namespace app\Http\Controllers;
 
 use App\Events\UpdateAudit;
 use App\Models\DeviceAuthorization;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Orchid\Platform\Models\User;
 
 class DeviceController extends Controller
 {
+    /**
+     * index method.
+     *
+     * Retrieves the device ID from the request and performs authorization checks.
+     * If the device is authorized, it returns a JSON response with a token,
+     * indicating that the device is valid. If the device is unauthorized,
+     * it returns a JSON response with an error message.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @return JsonResponse A JSON response with status, token (if the device is authorized),
+     *                     or an error message (if the device is unauthorized).
+     */
     public function index(Request $request)
     {
         $deviceId =  $request->query('deviceId');
@@ -41,10 +55,12 @@ class DeviceController extends Controller
                 ]);
             }
 
+
             event(new UpdateAudit("devices", "Authorized " . $deviceId, "System"));
 
             return response()->json([
                 'status' => true,
+                'token' => $user->createUserToken(),
                 'message' => "Valid device."
             ]);
         } else {
