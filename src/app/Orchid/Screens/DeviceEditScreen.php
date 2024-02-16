@@ -79,6 +79,8 @@ class DeviceEditScreen extends Screen
 
     public function createOrUpdate(Request $request)
     {
+        $this->device->status = "Ready";
+
         $this->device->fill($request->get('device'))->save();
 
         Toast::info("You created a new device authorization.");
