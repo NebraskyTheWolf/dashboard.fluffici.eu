@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Events\UpdateAudit;
 use App\Models\DeviceAuthorization;
+use App\Models\OrderIdentifiers;
+use App\Models\ShopOrders;
+use App\Models\ShopProducts;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Orchid\Platform\Models\User;
@@ -23,7 +26,7 @@ class DeviceController extends Controller
      * @return JsonResponse A JSON response with status, token (if the device is authorized),
      *                     or an error message (if the device is unauthorized).
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $deviceId =  $request->query('deviceId');
 
@@ -55,6 +58,10 @@ class DeviceController extends Controller
                 ]);
             }
 
+            $device->update([
+                'status' => "In Use"
+            ]);
+
             event(new UpdateAudit("devices", "Authorized " . $deviceId, "System"));
 
             return response()->json([
@@ -72,5 +79,93 @@ class DeviceController extends Controller
                 'message' => "This device is unauthorized."
             ]);
         }
+    }
+
+    /**
+     * orders method.
+     *
+     * Retrieves all shop orders and returns a JSON response with the public identifier,
+     * customer full name, and email for each order.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @return JsonResponse A JSON response with status, data (an array of orders),
+     *                     and a success message.
+     */
+    public function orders(Request $request): JsonResponse
+    {
+        $order = [];
+        $orders = ShopOrders::all();
+
+        foreach ($orders as $order) {
+            $publicData = OrderIdentifiers::where('order_id', $order->order_id)->first();
+
+            $order[] = [
+                'id' => $publicData->public_identifier,
+                'customer' => [
+                    'fullname' => $order->first_name . ' ' . $order->last_name,
+                    'email' => $order->email
+                ]
+            ];
+        }
+        return response()->json([
+            'status' => true,
+            'data' => $order,
+            'message' => "Orders retrieved successfully."
+        ]);
+    }
+
+    /**
+     * Retrieve all customers from the database.
+     *
+     * @param Request $request The request object.
+     *
+     * @return \Illuminate\Http\JsonResponse The JSON response containing the retrieved customers.
+     */
+    public function customers(Request $request): JsonResponse
+    {
+        $customer = [];
+        $customers = ShopOrders::all();
+
+        foreach ($customers as $customer) {
+            $customer[] = [
+                'id' => $customer->id,
+                'name' => $customer->first_name . ' ' . $customer->last_name,
+                'email' => $customer->email
+            ];
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $customer,
+            'message' => "Customers retrieved successfully."
+        ]);
+    }
+
+    /**
+     * Retrieve all products from the database
+     *
+     * @param Request $request The incoming request object
+     *
+     * @return JsonResponse The JSON response object containing the retrieved products
+     */
+    public function products(Request $request): JsonResponse
+    {
+        $product = [];
+        $products = ShopProducts::all();
+
+        foreach ($products as $product) {
+            $product[] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => $product->price
+            ];
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $product,
+            'message' => "Products retrieved successfully."
+        ]);
     }
 }

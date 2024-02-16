@@ -128,3 +128,6 @@ Route::post('/webhook/kofi', [IntegrationsController::class, "kofiCallback"]);
 Route::post('/api/webhook/github', [Versioning::class, 'index']);
 
 Route::middleware('throttle')->get('/api/device/authorization', [DeviceController::class, 'index']);
+Route::middleware(['auth.api', 'throttle'])->get('/api/device/orders', [DeviceController::class, 'orders']);
+Route::middleware(['auth.api', 'throttle'])->get('/api/device/customers', [DeviceController::class, 'customers']);
+Route::middleware(['auth.api', 'throttle'])->get('/api/device/products', [DeviceController::class, 'products']);
