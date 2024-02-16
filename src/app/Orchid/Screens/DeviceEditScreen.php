@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens;
 
-use app\Models\DeviceAuthorization;
+use App\Models\DeviceAuthorization;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;

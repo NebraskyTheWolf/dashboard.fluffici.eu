@@ -3,7 +3,7 @@
 namespace app\Http\Controllers;
 
 use App\Events\UpdateAudit;
-use app\Models\DeviceAuthorization;
+use App\Models\DeviceAuthorization;
 use Illuminate\Http\Request;
 use Orchid\Platform\Models\User;
 

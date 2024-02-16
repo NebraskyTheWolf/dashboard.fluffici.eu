@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens;
 
-use app\Models\DeviceAuthorization;
+use App\Models\DeviceAuthorization;
 use App\Orchid\Layouts\DeviceList;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;

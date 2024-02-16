@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
-use app\Models\DeviceAuthorization;
+use App\Models\DeviceAuthorization;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Layouts\Table;
