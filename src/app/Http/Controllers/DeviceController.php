@@ -55,12 +55,14 @@ class DeviceController extends Controller
                 ]);
             }
 
-
             event(new UpdateAudit("devices", "Authorized " . $deviceId, "System"));
 
             return response()->json([
                 'status' => true,
-                'token' => $user->createUserToken(),
+                'data' => [
+                    'username' => $user->name,
+                    'token' => $user->createUserToken()
+                ],
                 'message' => "Valid device."
             ]);
         } else {

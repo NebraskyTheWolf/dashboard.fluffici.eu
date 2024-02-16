@@ -34,7 +34,7 @@ class AuditLogsListLayout extends Table
                 ->cantHide()
                 ->filter(Input::make())
                 ->render(function (AuditLogs $auditLogs) {
-                    if ($auditLogs->name == "SYSTEM") {
+                    if ($auditLogs->name == "System") {
                         return new Persona(new AuditPresenter((object)[
                             'name' => 'System',
                             'roles' => array([]),

@@ -29,11 +29,12 @@ class DeviceList extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('id', "Restrict")
+            TD::make('id', "Action")
                 ->render(function (DeviceAuthorization $authorization) {
-                    return Button::make($authorization->restricted ? "Reinstate" : "Restrict")
+                    return Button::make($authorization->restricted == 1 ? "Reinstate" : "Restrict")
                         ->icon('bs.trash')
                         ->method("restrictDevice")
+                        ->download(true)
                         ->type(Color::PRIMARY);
                 }),
             TD::make('linked_user', "Assigned User")

@@ -7,6 +7,7 @@ use App\Orchid\Layouts\DeviceList;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use Symfony\Component\HttpFoundation\Request;
 
 class DeviceScreen extends Screen
 {
@@ -57,5 +58,10 @@ class DeviceScreen extends Screen
         return [
             DeviceList::class
         ];
+    }
+
+    public function restrictDevice(Request $request)
+    {
+
     }
 }
