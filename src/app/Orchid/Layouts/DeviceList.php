@@ -5,6 +5,7 @@ namespace App\Orchid\Layouts;
 use App\Models\DeviceAuthorization;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
@@ -41,7 +42,9 @@ class DeviceList extends Table
                 ->render(function (DeviceAuthorization $authorization) {
                     $user = User::where('id', $authorization->linked_user)->first();
                     if ($user) {
-                        return $user->name;
+                        return Link::make($user->name)
+                            ->icon('bs.caret-down')
+                            ->route('platform.device.new', $authorization);
                     } else {
                         return 'Unknown';
                     }

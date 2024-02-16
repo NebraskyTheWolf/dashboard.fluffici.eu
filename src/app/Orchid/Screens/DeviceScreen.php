@@ -7,6 +7,7 @@ use App\Orchid\Layouts\DeviceList;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use Orchid\Support\Facades\Toast;
 use Symfony\Component\HttpFoundation\Request;
 
 class DeviceScreen extends Screen
@@ -62,6 +63,20 @@ class DeviceScreen extends Screen
 
     public function restrictDevice(Request $request)
     {
+        $device = DeviceAuthorization::where('id', $request->get('id'))->first();
 
+        if ($device->restricted) {
+            $device->update([
+                'restricted' => 0
+            ]);
+        } else {
+            $device->update([
+                'restricted' => 1
+            ]);
+        }
+
+        Toast::info("Device restriction updated.");
+
+        return redirect()->route('platform.device');
     }
 }
