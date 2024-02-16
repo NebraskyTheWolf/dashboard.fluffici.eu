@@ -35,6 +35,9 @@ class AuditPresenter extends Presenter implements Personable, Searchable
         if ($this->entity->name === 'Deleted User')
             return '';
 
+        if ($this->entity->name === 'System')
+            return 'System';
+
         $roles = $this->entity->roles->pluck('name')->implode(' / ');
 
         return (string) Str::of($roles)

@@ -34,6 +34,14 @@ class AuditLogsListLayout extends Table
                 ->cantHide()
                 ->filter(Input::make())
                 ->render(function (AuditLogs $auditLogs) {
+                    if ($auditLogs->name == "SYSTEM") {
+                        return new Persona(new AuditPresenter((object)[
+                            'name' => 'System',
+                            'roles' => array([]),
+                            'avatar' => 0
+                        ]));
+                    }
+
                     $user = \Orchid\Platform\Models\User::where('name', $auditLogs->name);
 
                     if ($user->exists()) {

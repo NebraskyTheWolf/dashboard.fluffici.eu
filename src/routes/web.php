@@ -1,5 +1,11 @@
 <?php
 
+use app\Http\Controllers\DeviceController;
+use App\Http\Controllers\IntegrationsController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Versioning;
+use App\Http\Controllers\VoucherController;
 use App\Models\LastVersion;
 use Illuminate\Support\Facades\Route;
 
@@ -106,16 +112,18 @@ Route::get('/build/{variable?}', function ($request) {
 
 })->name("build");
 
-Route::middleware('auth.session')->get('/report', [\App\Http\Controllers\ReportController::class, 'index'])->name('api.shop.report');
-Route::middleware('auth.session')->get('/voucher', [\App\Http\Controllers\VoucherController::class, 'index'])->name('api.shop.voucher');
+Route::middleware('auth.session')->get('/report', [ReportController::class, 'index'])->name('api.shop.report');
+Route::middleware('auth.session')->get('/voucher', [VoucherController::class, 'index'])->name('api.shop.voucher');
 
 Route::post('/api/login', [\App\Http\Controllers\ApiController::class, 'index']);
 
-Route::middleware('auth.api')->get('/api/order', [\App\Http\Controllers\PaymentController::class, 'fetchOrder']);
-Route::middleware('auth.api')->get('/api/order/payment', [\App\Http\Controllers\PaymentController::class, 'index']);
+Route::middleware('auth.api')->get('/api/order', [PaymentController::class, 'fetchOrder']);
+Route::middleware('auth.api')->get('/api/order/payment', [PaymentController::class, 'index']);
 
-Route::get('/api/generate/order/{order_id}', [\App\Http\Controllers\VoucherController::class, 'datamatrix'])->middleware('throttle');
+Route::get('/api/generate/order/{order_id}', [VoucherController::class, 'datamatrix'])->middleware('throttle');
 
-Route::post('/webhook/kofi', [\App\Http\Controllers\IntegrationsController::class, "kofiCallback"]);
+Route::post('/webhook/kofi', [IntegrationsController::class, "kofiCallback"]);
 
-Route::post('/api/webhook/github', [\App\Http\Controllers\Versioning::class, 'index']);
+Route::post('/api/webhook/github', [Versioning::class, 'index']);
+
+Route::middleware('throttle')->get('/api/device/authorization', [DeviceController::class, 'index']);

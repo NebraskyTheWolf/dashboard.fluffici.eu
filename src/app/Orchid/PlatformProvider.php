@@ -12,6 +12,7 @@ use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
 use Orchid\Platform\OrchidServiceProvider;
 use Orchid\Screen\Actions\Menu;
+use Orchid\Support\Color;
 
 class PlatformProvider extends OrchidServiceProvider
 {
@@ -41,6 +42,11 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.person-walking')
                         ->route('platform.social.list')
                         ->permission('platform.systems.social'),
+                    Menu::make('Devices')
+                        ->badge(fn () => "Beta", Color::WARNING)
+                        ->icon('bs.phone')
+                        ->route('platform.device')
+                        ->permission('platform.device'),
                     Menu::make("Uživatelé")
                         ->icon('bs.people')
                         ->route('platform.systems.users')
@@ -256,6 +262,9 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.accounting.navbar', 'Access (Navbar)')
                 ->addPermission('platform.accounting.invoices', 'Invoices (Read / Write)')
                 ->addPermission('platform.accounting.transactions', 'Transactions (Read / Write)'),
+
+            ItemPermission::group('Device Management')
+                ->addPermission("platform.device", "Device (Access)"),
 
             ItemPermission::group("Pages & Event management")
                 ->addPermission('platform.systems.posts', "Posts (Navbar)")

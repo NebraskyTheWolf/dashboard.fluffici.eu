@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Orchid\Screens\Attachments\AttachmentReports;
 use App\Orchid\Screens\Audit\AuditLogsListScreen;
+use App\Orchid\Screens\DeviceEditScreen;
+use App\Orchid\Screens\DeviceScreen;
 use App\Orchid\Screens\Events\EventsEditScreen;
 use App\Orchid\Screens\Events\EventsListScreen;
 use App\Orchid\Screens\Pages\PagesEditScreen;
@@ -247,3 +249,9 @@ Route::screen('shop/taxes', TaxGroupList::class)
 
 Route::screen('email/send', SendEmail::class)
     ->name('platform.admin.sendmail');
+
+Route::screen('devices', DeviceScreen::class)
+    ->name('platform.device');
+
+Route::screen('devices/new/{device?}', DeviceEditScreen::class)
+    ->name('platform.device.new');
