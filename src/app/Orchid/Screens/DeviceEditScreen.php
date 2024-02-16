@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens;
 
 use App\Models\DeviceAuthorization;
+use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
@@ -64,11 +65,14 @@ class DeviceEditScreen extends Screen
                 Input::make("device.deviceId")
                     ->title('Device ID')
                     ->placeholder("Please enter the deviceId.")
-                    ->help('You can find it when launching the PDA Application.'),
+                    ->help('You can find it when launching the PDA Application.')
+                    ->required(),
 
                 Relation::make('device.linked_user')
                     ->help('Select the user allowed to use this device.')
                     ->title("Select a user")
+                    ->fromModel(User::class, 'name', 'id')
+                    ->required()
             ])
         ];
     }
