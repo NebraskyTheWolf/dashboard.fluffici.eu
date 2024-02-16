@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\IntegrationsController;
 use App\Http\Controllers\PaymentController;
@@ -115,7 +116,7 @@ Route::get('/build/{variable?}', function ($request) {
 Route::middleware('auth.session')->get('/report', [ReportController::class, 'index'])->name('api.shop.report');
 Route::middleware('auth.session')->get('/voucher', [VoucherController::class, 'index'])->name('api.shop.voucher');
 
-Route::post('/api/login', [\App\Http\Controllers\ApiController::class, 'index']);
+Route::post('/api/login', [ApiController::class, 'index']);
 
 Route::middleware('auth.api')->get('/api/order', [PaymentController::class, 'fetchOrder']);
 Route::middleware('auth.api')->get('/api/order/payment', [PaymentController::class, 'index']);
