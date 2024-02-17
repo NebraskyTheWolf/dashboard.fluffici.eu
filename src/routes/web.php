@@ -116,6 +116,8 @@ Route::get('/build/{variable?}', function ($request) {
 Route::middleware('auth.session')->get('/report', [ReportController::class, 'index'])->name('api.shop.report');
 Route::middleware('auth.session')->get('/voucher', [VoucherController::class, 'index'])->name('api.shop.voucher');
 
+Route::middleware('auth.session')->get('/product/ean', [ApiController::class, 'fetchEANCode'])->name('api.shop.barcode');
+
 Route::post('/api/login', [ApiController::class, 'index']);
 
 Route::middleware('auth.api')->get('/api/order', [PaymentController::class, 'fetchOrder']);
@@ -131,3 +133,5 @@ Route::middleware('throttle')->get('/api/device/authorization', [DeviceControlle
 Route::middleware(['auth.api', 'throttle'])->get('/api/device/orders', [DeviceController::class, 'orders']);
 Route::middleware(['auth.api', 'throttle'])->get('/api/device/customers', [DeviceController::class, 'customers']);
 Route::middleware(['auth.api', 'throttle'])->get('/api/device/products', [DeviceController::class, 'products']);
+
+

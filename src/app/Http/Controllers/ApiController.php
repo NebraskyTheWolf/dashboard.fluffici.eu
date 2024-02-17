@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Mail\UserApiNotification;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Orchid\Platform\Models\User;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Class ApiController
@@ -35,9 +38,9 @@ class ApiController extends Controller
      * If the user does not exist or the password is incorrect, a response with a credentials error message is returned.
      *
      * @param Request $request The request object containing the JSON data with the username and password.
-     * @return \Illuminate\Http\JsonResponse The response JSON object containing the login status, token, error (if any), and message.
+     * @return JsonResponse The response JSON object containing the login status, token, error (if any), and message.
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $data = $this->validateInput($request);
         if ($data === false) {
@@ -65,11 +68,11 @@ class ApiController extends Controller
     /**
      * Validates the input from the request.
      *
-     * @param \Illuminate\Http\Request $request The request object containing the input data.
+     * @param Request $request The request object containing the input data.
      *
      * @return array|bool The validated input data if it passes the validation, or false if any required fields are missing.
      */
-    private function validateInput($request)
+    private function validateInput(Request $request): bool|array
     {
         $data = json_decode(json_encode($request->all()), true);
 
@@ -87,7 +90,7 @@ class ApiController extends Controller
      *
      * @return \App\Models\User|null The user object if found, null otherwise.
      */
-    private function findByUsername($username)
+    private function findByUsername(string $username): ?\App\Models\User
     {
         $user = User::where('name', $username);
 
@@ -102,7 +105,7 @@ class ApiController extends Controller
      *
      * @return bool True if the password is valid, false otherwise.
      */
-    private function validatePassword($inputPassword, $userPassword)
+    private function validatePassword(string $inputPassword, string $userPassword): bool
     {
         return Hash::check($inputPassword, $userPassword);
     }
@@ -114,7 +117,7 @@ class ApiController extends Controller
      *
      * @return void
      */
-    private function sendNotification($user)
+    private function sendNotification(\App\Models\User $user): void
     {
         Mail::to($user->email)->send(new UserApiNotification());
     }
@@ -125,9 +128,9 @@ class ApiController extends Controller
      * @param string $error The error code or message to be included in the response.
      * @param string $message The error description or additional message to be included in the response.
      *
-     * @return \Illuminate\Http\JsonResponse The JSON response indicating an error occurred.
+     * @return JsonResponse The JSON response indicating an error occurred.
      */
-    private function createErrorResponse($error, $message)
+    private function createErrorResponse(string $error, string $message): JsonResponse
     {
         return response()->json([
             'status' => false,
@@ -141,14 +144,57 @@ class ApiController extends Controller
      *
      * @param string $token The token to be included in the response.
      *
-     * @return \Illuminate\Http\JsonResponse The JSON response indicating a successful login.
+     * @return JsonResponse The JSON response indicating a successful login.
      */
-    private function createSuccessResponse($token)
+    private function createSuccessResponse(string $token): JsonResponse
     {
         return response()->json([
             'status' => true,
             'token' => $token,
             'message' => 'Login successful.'
         ]);
+    }
+
+    /**
+     * Fetches the EAN code for a given product ID.
+     *
+     * @param Request $request The HTTP request object.
+     *                        Use the query() method to retrieve parameters from the request.
+     *                        The 'productId' parameter is required.
+     *
+     * @return JsonResponse|BinaryFileResponse The EAN code for the given product ID, or an error response if the product ID is missing.
+     *               The error response is in the form of an associative array with keys 'error_code' and 'error_message'.
+     *               If the product ID is missing, the error code will be "MISSING_PRODUCT_ID" and the error message
+     *               will be "The productId is missing".
+     *               If the product ID is found, the EAN code will be returned as a string.
+     */
+    public function fetchEANCode(Request $request): JsonResponse|BinaryFileResponse
+    {
+        $productId = $request->query('productId');
+        if ($productId == null) {
+            return $this->createErrorResponse("MISSING_PRODUCT_ID", "The productId is missing");
+        }
+
+        return $this->fetchProductImage($productId);
+    }
+
+    /**
+     * Fetches the product image for a given product.
+     *
+     * @param string $productId The ID of the product.
+     *
+     * @return JsonResponse|BinaryFileResponse The product image in case it exists, or a JSON response with an error message if it does not.
+     *   - If the product image file exists in the storage, it will be downloaded.
+     *   - If the product image file does not exist in the storage, a JSON response will be returned:
+     *     - error: Not found in the storage.
+     */
+    private function fetchProductImage(string $productId): JsonResponse|BinaryFileResponse
+    {
+        $storage = Storage::disk('public');
+        if ($storage->exists($productId . '-code128.png')) {
+            return response()->download(storage_path('app/public/' . $productId . '-code128.png'));
+        } else {
+            return $this->createErrorResponse("FILE_NOT_FOUND", "Not found in the storage.");
+        }
     }
 }
