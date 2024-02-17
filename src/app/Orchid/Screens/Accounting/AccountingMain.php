@@ -48,7 +48,7 @@ class AccountingMain extends Screen
      *               - 'value': The formatted total amount with currency symbol.
      *               - 'diff': The difference between the last month amount and the total amount.
      */
-    protected function calculateMetric(string $key, mixed $totalAmount, Carbon $lastMonth): array
+    protected function calculateMetric(string $key, $totalAmount, Carbon $lastMonth)
     {
         $lastMonthAmount = OrderPayment::whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])->sum('price');
 

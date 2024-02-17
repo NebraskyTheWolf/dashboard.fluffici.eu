@@ -159,7 +159,7 @@ class ShopStatistics extends Screen
      * @return float The percentage difference between the recent and previous numbers.
      *               If either the recent or previous number is less than or equal to zero, returns 0.0.
      */
-    public function diff(float $recent, float $previous): float
+    public function diff(float $recent, float $previous)
     {
         if ($recent <= 0 || $previous <= 0)
             return 0.0;
