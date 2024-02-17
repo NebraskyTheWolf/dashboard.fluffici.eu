@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('send_email');
         Schema::create('send_email', function (Blueprint $table) {
             $table->id();
+            $table->string("to");
+            $table->string("subject");
+            $table->longText("message");
             $table->timestamps();
         });
     }

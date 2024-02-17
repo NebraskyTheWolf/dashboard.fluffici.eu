@@ -12,8 +12,8 @@ class CreateSendEmail extends Model
 
     public $fillable = [
         'to',
-        'email',
-        'content'
+        'subject',
+        'message'
     ];
 
     public $table = 'send_email';
