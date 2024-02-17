@@ -16,7 +16,6 @@ class DefaultEmail extends Mailable
     protected $messageTitle;
     protected $messageContent;
 
-    protected $messageFrom;
 
     /**
      * Constructor method for creating a new object of this class.
@@ -31,7 +30,6 @@ class DefaultEmail extends Mailable
     {
         $this->messageTitle = $title;
         $this->messageContent = $content;
-        $this->messageFrom = $from;
     }
 
     /**
@@ -42,7 +40,6 @@ class DefaultEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: $this->messageFrom,
             subject: $this->messageTitle
         );
     }
