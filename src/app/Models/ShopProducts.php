@@ -177,4 +177,26 @@ class ShopProducts extends Model
             return $inventory;
         }
     }
+
+    /**
+     * Generates a valid EAN-13 barcode.
+     *
+     * The barcode is generated based on the ID of the object.
+     * It uses the Luhn algorithm to calculate the checksum digit.
+     *
+     * @return string The generated EAN-13 barcode.
+     */
+    public function generateEAN13(): string
+    {
+        $code = str_pad($this->id, 12, '0', STR_PAD_LEFT);
+
+        $sum = 0;
+        foreach (str_split(strrev($code)) as $index => $digit) {
+            $sum += $digit * (3 - 2 * ($index % 2));
+        }
+
+        $checksum = (10 - ($sum % 10)) % 10;
+
+        return $code . $checksum;
+    }
 }
