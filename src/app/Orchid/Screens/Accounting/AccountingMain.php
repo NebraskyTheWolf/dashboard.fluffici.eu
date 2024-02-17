@@ -64,11 +64,11 @@ class AccountingMain extends Screen
                             ->whereYear('created_at', $currentYear)
                             ->sum('price')) . ' Kč',
                     'diff' => $this->diff(
-                        OrderPayment::where('status', 'UNPAID')->sum('price'),
                         OrderPayment::where('status', 'UNPAID')
                             ->whereMonth('created_at', $lastMonth)
                             ->whereYear('created_at', $currentYear)
-                            ->sum('price')
+                            ->sum('price'),
+                        OrderPayment::where('status', 'UNPAID')->sum('price')
                     ),
                 ],
                 'expenses' => [
@@ -78,11 +78,11 @@ class AccountingMain extends Screen
                             ->whereYear('created_at', $currentYear)
                             ->sum('amount')) . ' Kč',
                     'diff' => $this->diff(
-                        Accounting::where('type', 'EXPENSE')->sum('amount'),
                         Accounting::where('type', 'EXPENSE')->sum('amount')
                             ->whereMonth('created_at',$lastMonth)
                             ->whereYear('created_at', $currentYear)
-                            ->sum('amount')
+                            ->sum('amount'),
+                        Accounting::where('type', 'EXPENSE')->sum('amount')
                     ),
                 ]
             ],
