@@ -168,4 +168,112 @@ class DeviceController extends Controller
             'message' => "Products retrieved successfully."
         ]);
     }
+
+    /**
+     * Fetches a product based on the provided EAN13 code.
+     *
+     * @param Request $request The HTTP request object.
+     * @return JsonResponse A response with information about the requested product.
+     * If the product is found, it will have the following structure:
+     *                     {
+     *                         "status": true,
+     *                         "data": {
+     *                             "id": int,
+     *                             "name": string,
+     *                             "price": float
+     *                         },
+     *                         "message": "Product retrieved successfully."
+     *                     }
+     * If the EAN13 code is missing in the query parameters, the response will be:
+     *                     {
+     *                         "status": true,
+     *                         "error": "MISSING_PRODUCT_ID",
+     *                         "message": "The product id is missing in the query parameters."
+     *                     }
+     * If the product is not found, the response will be:
+     *                     {
+     *                         "status": false,
+     *                         "error": "PRODUCT_NOT_FOUND",
+     *                         "message": "Product not found."
+     *                     }
+     */
+    public function fetchProduct(Request $request): JsonResponse
+    {
+        $ean13Code = $request->query('bid');
+
+        if ($ean13Code == null) {
+            return response()->json([
+                'status' => true,
+                'error' => "MISSING_PRODUCT_ID",
+                'message' => "The product id is missing in the query parameters."
+            ]);
+        }
+
+        $product = new ShopProducts();
+        $product = $product->getProductFromEan($ean13Code);
+
+        if ($product != null) {
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => $product->price
+                ],
+                'message' => "Product retrieved successfully."
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'error' => "PRODUCT_NOT_FOUND",
+                'message' => "Product not found."
+            ]);
+        }
+    }
+
+    /**
+     * Increment the quantity of a product.
+     *
+     * @param Request $request The request object containing the product ID as a query parameter.
+     *
+     * @return JsonResponse The response JSON containing the updated product information and a success message
+     *                    or an error message if the product ID is missing or the product is not found.
+     */
+    public function incrementProduct(Request $request): JsonResponse
+    {
+        $ean13Code = $request->query('bid');
+
+        if ($ean13Code == null) {
+            return response()->json([
+                'status' => true,
+                'error' => "MISSING_PRODUCT_ID",
+                'message' => "The product id is missing in the query parameters."
+            ]);
+        }
+
+        $product = new ShopProducts();
+        $product = $product->getProductFromEan($ean13Code);
+        // In case the inventory was never created
+        $product->createOrGetInventory();
+
+        if ($product != null) {
+            $product->incrementQuantity();
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'quantity' => $product->getAvailableProducts()
+                ],
+                'message' => "Product quantity incremented successfully."
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'error' => "PRODUCT_NOT_FOUND",
+                'message' => "Product not found."
+            ]);
+        }
+    }
 }

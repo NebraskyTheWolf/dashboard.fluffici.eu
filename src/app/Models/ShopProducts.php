@@ -3,6 +3,7 @@
 
 namespace App\Models;
 
+use InvalidArgumentException;
 use Orchid\Metrics\Chartable;
 use Orchid\Screen\AsSource;
 use Illuminate\Database\Eloquent\Model;
@@ -100,24 +101,80 @@ class ShopProducts extends Model
     }
 
     /**
-     * Generates a valid EAN-13 barcode.
+     * Retrieves a product based on the specified EAN code.
      *
-     * The barcode is generated based on the ID of the object.
-     * It uses the Luhn algorithm to calculate the checksum digit.
+     * The method first validates the provided EAN code and throws an exception if it is invalid.
+     * Then, it removes the check digit from the EAN and extracts the product ID.
+     * Finally, it fetches the product with the matching ID and returns it.
      *
-     * @return string The generated EAN-13 barcode.
+     * @param string $ean The EAN code of the product.
+     * @return ShopProducts|null The fetched product or null if no product is found.
+     *
+     * @throws InvalidArgumentException If the provided EAN is invalid.
      */
-    public function generateEAN13(): string
+    public function getProductFromEan(string $ean): ?ShopProducts
     {
-        $code = str_pad($this->id, 12, '0', STR_PAD_LEFT);
-
-        $sum = 0;
-        foreach (str_split(strrev($code)) as $index => $digit) {
-            $sum += $digit * (3 - 2 * ($index % 2));
+        // Check if EAN is valid
+        if (!$this->isValidEan($ean)) {
+            return null;
         }
 
-        $checksum = (10 - ($sum % 10)) % 10;
+        // Remove the check digit
+        $productId = substr($ean, 0, -1);
 
-        return $code . $checksum;
+        // Fetch the product by ID
+        // Here Product::find is a placeholder, replace it with actual product fetching code.
+        return ShopProducts::find($productId);
+    }
+
+    /**
+     * Checks if the given EAN code is valid.
+     *
+     * The method calculates the check digit of the EAN code and checks if the calculated digit is a valid check digit.
+     * If the calculated digit is a valid check digit, the method returns true, otherwise it returns false.
+     *
+     * @param string $ean The EAN code to be validated.
+     * @return bool True if the EAN code is valid, false otherwise.
+     */
+    private function isValidEan(string $ean): bool
+    {
+        $check = 0;
+        for ($i = 0; $i < 13; $i += 2) {
+            $check .= substr($ean, $i, 1);
+        }
+        for ($i = 1; $i < 12; $i += 2) {
+            $check += 3 * substr($ean, $i, 1);
+        }
+
+        return ($check % 10 === 0);
+    }
+
+    public function getAvailableProducts(): int
+    {
+        return ProductInventory::where('product_id', $this->id)->first()->available ?: 0;
+    }
+
+    public function incrementQuantity(): void
+    {
+        ProductInventory::where('product_id', $this->id)->first()->increment('available', 1);
+    }
+
+    public function decrementQuantity(): void
+    {
+        ProductInventory::where('product_id', $this->id)->first()->decrement('available', 1);
+    }
+
+    public function createOrGetInventory(): ProductInventory
+    {
+        $inventory = ProductInventory::where('product_id', $this->id);
+        if ($inventory->exists()) {
+            return $inventory->first();
+        } else {
+            $inventory = new ProductInventory();
+            $inventory->product_id = $this->id;
+            $inventory->available = 0;
+            $inventory->save();
+            return $inventory;
+        }
     }
 }

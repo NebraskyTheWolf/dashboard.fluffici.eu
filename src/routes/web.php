@@ -133,4 +133,5 @@ Route::middleware(['auth.api', 'throttle'])->get('/api/device/orders', [DeviceCo
 Route::middleware(['auth.api', 'throttle'])->get('/api/device/customers', [DeviceController::class, 'customers']);
 Route::middleware(['auth.api', 'throttle'])->get('/api/device/products', [DeviceController::class, 'products']);
 
-
+Route::middleware(['auth.api', 'throttle'])->get('/api/device/fetch/product', [DeviceController::class, 'fetchProduct']);
+Route::middleware(['auth.api', 'throttle'])->get('/api/device/increment/product', [DeviceController::class, 'incrementProduct']);
