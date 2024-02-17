@@ -176,7 +176,7 @@ class ApiController extends Controller
         }
 
 
-        $response = \Httpful\Request::post(env("IMAGER_HOST", 'http://185.188.249.234:3900/voucher/'), [
+        $response = \Httpful\Request::post(env("IMAGER_HOST", 'http://185.188.249.234:3900/product/'), [
             'productId' => $productId
         ], "application/json")->expectsJson()->send();
 

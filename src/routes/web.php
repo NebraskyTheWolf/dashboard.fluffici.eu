@@ -126,7 +126,6 @@ Route::middleware('auth.api')->get('/api/order/payment', [PaymentController::cla
 Route::get('/api/generate/order/{order_id}', [VoucherController::class, 'datamatrix'])->middleware('throttle');
 
 Route::post('/webhook/kofi', [IntegrationsController::class, "kofiCallback"]);
-
 Route::post('/api/webhook/github', [Versioning::class, 'index']);
 
 Route::middleware('throttle')->get('/api/device/authorization', [DeviceController::class, 'index']);
