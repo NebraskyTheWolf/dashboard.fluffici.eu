@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Orchid\Platform\Models\User;
 
 class DefaultEmail extends Mailable
 {
@@ -15,6 +16,7 @@ class DefaultEmail extends Mailable
 
     protected $messageTitle;
     protected $messageContent;
+    protected $author;
 
 
     /**
@@ -25,10 +27,11 @@ class DefaultEmail extends Mailable
      *
      * @return void
      */
-    public function __construct(string $title, string $content)
+    public function __construct(string $title, string $content, User $author)
     {
         $this->messageTitle = $title;
         $this->messageContent = $content;
+        $this->author = $author;
     }
 
     /**
@@ -53,10 +56,20 @@ class DefaultEmail extends Mailable
         return new Content(
             view: 'emails.default',
             with: [
+                'assignee' => $this->author->name,
+                'avatarURL' => $this->fetchUserAvatar(),
                 'content' => $this->messageContent,
                 'socials' => SocialMedia::all()
             ]
         );
+    }
+
+    public function fetchUserAvatar(): string
+    {
+        if ($this->author->avatar == 1) {
+            return 'https://autumn.fluffici.eu/avatars/' . $this->author->avatar_id . '?width=256&height=256';
+        }
+        return 'https://ui-avatars.com/api/?name=' . $this->author->name . '&background=0D8ABC&color=fff';
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ShopVouchers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Orchid\Platform\Models\User;
@@ -20,7 +21,7 @@ class VoucherController extends Controller
         $voucherCode = $request->query('voucherCode');
 
         if ($voucherCode != null) {
-            $voucher = \App\Models\ShopVouchers::where('code', $voucherCode);
+            $voucher = ShopVouchers::where('code', $voucherCode);
 
             if ($voucher->exists()) {
                 $voucherData = $voucher->first();
