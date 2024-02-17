@@ -21,12 +21,11 @@ class DefaultEmail extends Mailable
      * Constructor method for creating a new object of this class.
      *
      * @param string $title The title of the message.
-     * @param string $from The sender's name or email address.
      * @param string $content The content of the message.
      *
      * @return void
      */
-    public function __construct(string $title, string $from, string $content)
+    public function __construct(string $title, string $content)
     {
         $this->messageTitle = $title;
         $this->messageContent = $content;
