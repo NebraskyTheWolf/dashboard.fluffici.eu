@@ -220,12 +220,12 @@ class ShopProducts extends Model
      */
     public function generateUPCA(): string
     {
-        $code = str_pad($this->id, 11, '0', STR_PAD_LEFT);
+        $code = str_pad($this->id, 12, '0', STR_PAD_LEFT);
 
         $oddSum = 0;
         $evenSum = 0;
 
-        for ($i = 0; $i < 11; $i++) {
+        for ($i = 0; $i < 12; $i++) {
             if ($i % 2 == 0) {
                 $oddSum += $code[$i];
             } else {
