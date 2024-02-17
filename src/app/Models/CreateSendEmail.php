@@ -15,4 +15,6 @@ class CreateSendEmail extends Model
         'email',
         'content'
     ];
+
+    public $table = 'send_email';
 }
