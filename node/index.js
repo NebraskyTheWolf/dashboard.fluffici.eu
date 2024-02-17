@@ -31,23 +31,40 @@ app.post('/order', async function (req, res) {
     })
 })
 
+const BARCODE_CONFIG = {
+    bcid: 'upca',
+    barcolor: '#000',
+    includetext: true,            // Show human-readable text
+    textxalign: 'center',        // Always good to set this
+    textcolor: 'ff0000',        // Red text
+};
+
+const OUTPUT_PATH = '/workspace/storage/app/public/';
+
+const SUCCESS_RESPONSE = {
+    status: true,
+    result: 'success'
+};
+
+async function createBarcode(productId) {
+    return bwipJs.toBuffer({
+        ...BARCODE_CONFIG,
+        text: productId,
+    });
+}
+
 app.post('/product', async function (req, res) {
-    bwipJs.toBuffer({
-        bcid: 'upca',
-        text: req.body.productId,
-        barcolor: '#000',
-        includetext: true,            // Show human-readable text
-        textxalign:  'center',        // Always good to set this
-        textcolor:   'ff0000',        // Red text
-    }).then(png => {
-        const dout = fs.createWriteStream('/workspace/storage/app/public/' + req.body.productId + '-code128.png'),
+
+    console.log(req.body.productId.length);
+
+    createBarcode(req.body.productId).then(png => {
+
+        const dout = fs.createWriteStream(OUTPUT_PATH + req.body.productId + '-code128.png'),
             dstream = new PNGStream.from(png);
+
         dstream.pipe(dout);
 
-        return res.status(200).json({
-            'status': true,
-            'result': 'success'
-        })
+        return res.status(200).json(SUCCESS_RESPONSE);
     })
 })
 
