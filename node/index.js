@@ -33,7 +33,7 @@ app.post('/order', async function (req, res) {
 
 app.post('/product', async function (req, res) {
     bwipJs.toBuffer({
-        bcid: 'ean13',
+        bcid: 'upca',
         text: req.body.productId,
         barcolor: '#000',
         includetext: true,            // Show human-readable text
