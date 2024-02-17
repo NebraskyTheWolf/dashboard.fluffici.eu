@@ -14,29 +14,32 @@ use Orchid\Support\Facades\Layout;
 class ShopStatistics extends Screen
 {
     /**
-     * Fetch data to be displayed on the screen.
+     * Queries the data for metrics, pie charts, dataset charts, and order charts.
      *
-     * @return array
+     * @return iterable The query result containing metrics, pie charts, dataset charts, and order charts.
      */
     public function query(): iterable
     {
+        $currentYear = Carbon::now()->year;
+        $currentMonth = Carbon::now();
         $previousMonth = Carbon::now()->subMonth();
 
         return [
             'metrics' => [
                 'products' => [
                     'key' => 'products',
-                    'value' => number_format(OrderedProduct::all()->sum('quantity')),
+                    'value' => $this->sumQuantityOrderedProduct(),
                 ],
-                'overall'   => [
+                'overall' => [
                     'key' => 'overall',
-                    'value' => number_format(OrderPayment::where('status', 'PAID')->sum('price')) . ' Kč',
-                    'diff' => $this->diff(OrderPayment::where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price'), OrderPayment::where('status', 'PAID')->whereMonth('created_at',$previousMonth)->sum('price'))
+                    'value' => $this->overall(),
+                    'diff' => $this->diff($this->sumPriceOrderPayment(), $this->sumPriceOrderPayment())
                 ],
-                'monthly'   => [
+                'monthly' => [
                     'key' => 'monthly',
-                    'value' => number_format(OrderPayment::where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price')) . ' Kč',
-                    'diff' => $this->diff(OrderPayment::where('status', 'PAID')->whereMonth('created_at', Carbon::now())->sum('price'), OrderPayment::where('status', 'PAID')->whereMonth('created_at',$previousMonth)->sum('price'))
+                    'value' => $this->sumPriceOrderPaymentByDate($currentYear, $currentMonth),
+                    'diff' => $this->diff($this->sumPriceOrderPaymentByDate($currentYear, $currentMonth),
+                        $this->sumPriceOrderPaymentByDate($currentYear, $previousMonth))
                 ],
             ],
             'pie' => [
@@ -56,6 +59,43 @@ class ShopStatistics extends Screen
     }
 
     /**
+     * Calculates the total quantity of ordered products.
+     *
+     * @return int The total quantity of ordered products.
+     */
+    private function sumQuantityOrderedProduct(): int
+    {
+        return number_format(OrderedProduct::all()->sum('quantity'));
+    }
+
+    /**
+     * Calculates the sum of prices for all order payments with status 'PAID'.
+     *
+     * @return float The sum of prices for all 'PAID' order payments.
+     */
+    private function sumPriceOrderPayment(): float
+    {
+        return OrderPayment::where('status', 'PAID')->sum('price');
+    }
+
+    /**
+     * Calculates the sum of price for order payments by date.
+     *
+     * @param int $year The year of the date.
+     * @param mixed $month The month of the date. Can be integer or string representation of the month.
+     * @return float The sum of price for order payments in Czech koruna (Kč).
+     */
+    private function sumPriceOrderPaymentByDate(int $year, mixed $month): float
+    {
+        return number_format(
+                OrderPayment::where('status', 'PAID')
+                    ->whereYear('created_at', $year)
+                    ->whereMonth('created_at', $month)
+                    ->sum('price')
+            ) . ' Kč';
+    }
+
+    /**
      * The name of the screen displayed in the header.
      *
      * @return string|null
@@ -65,6 +105,11 @@ class ShopStatistics extends Screen
         return __('statistics.screen.title');
     }
 
+    /**
+     * Get the permissions for accessing shop statistics.
+     *
+     * @return iterable|null The permissions for accessing shop statistics.
+     */
     public function permission(): ?iterable
     {
         return [
@@ -73,9 +118,9 @@ class ShopStatistics extends Screen
     }
 
     /**
-     * The screen's action buttons.
+     * Retrieves the list of commands for the command bar.
      *
-     * @return \Orchid\Screen\Action[]
+     * @return iterable The list of commands for the command bar.
      */
     public function commandBar(): iterable
     {
@@ -83,9 +128,9 @@ class ShopStatistics extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Generates the layout for the statistics screen.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return iterable The layout containing metrics, pie charts, dataset charts, and order charts.
      */
     public function layout(): iterable
     {
@@ -103,11 +148,12 @@ class ShopStatistics extends Screen
     }
 
     /**
-     * Calculate the difference between two values as a percentage.
+     * Calculates the percentage difference between two given numbers.
      *
-     * @param float $recent The more recent value.
-     * @param float $previous The previous value.
-     * @return float The difference as a percentage.
+     * @param float $recent The recent number.
+     * @param float $previous The previous number.
+     * @return float The percentage difference between the recent and previous numbers.
+     *               If either the recent or previous number is less than or equal to zero, returns 0.0.
      */
     public function diff(float $recent, float $previous): float
     {
@@ -115,5 +161,19 @@ class ShopStatistics extends Screen
             return 0.0;
 
         return (($recent-$previous)/abs($previous)) * 100;
+    }
+
+    /**
+     * Calculates and returns the overall payment amount as a formatted string.
+     *
+     * @return string The overall payment amount in Czech crowns (Kč).
+     */
+    public function overall(): string
+    {
+        return number_format(
+            OrderPayment::where('status', 'PAID')->sum('price') -
+            OrderPayment::where('status', 'UNPAID')->sum('price') -
+            OrderPayment::where('status', 'REFUNDED')->sum('price') -
+            OrderPayment::where('status', 'CANCELLED')->sum('price')) . ' Kč';
     }
 }

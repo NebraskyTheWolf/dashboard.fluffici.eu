@@ -18,62 +18,66 @@ class AccountingMain extends Screen
     public function query(): iterable
     {
         $lastMonth = Carbon::now()->subMonth();
-
         return [
             'metrics' => [
-                'outstanding_amount' => [
-                    'key' => 'outstanding_amount',
-                    'value' => number_format(OrderPayment::where('status', 'PAID')->sum('price') + Accounting::where('type', 'INCOME')->sum('amount') - Accounting::where('type', 'EXPENSE')->sum('amount')) . ' Kč',
-                    'diff' => $this->diff(
-                        OrderPayment::where('status', 'PAID')
-                            ->whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])
-                            ->sum('price') +
-                        Accounting::where('type', 'INCOME')
-                            ->whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])
-                            ->sum('amount') -
-                        Accounting::where('type', 'EXPENSE')
-                            ->whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])
-                            ->sum('amount'),
-                        OrderPayment::where('status', 'PAID')->sum('price') +
-                        Accounting::where('type', 'INCOME')->sum('amount') -
-                        Accounting::where('type', 'EXPENSE')->sum('amount'))
-                ],
-                'overdue_amount'   => [
-                    'key' => 'overdue_amount',
-                    'value' => number_format(OrderPayment::where('status', 'UNPAID')->sum('price')) . ' Kč',
-                    'diff' => $this->diff(
-                        OrderPayment::where('status', 'UNPAID')
-                            ->whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])
-                            ->sum('price'),
-                        OrderPayment::where('status', 'UNPAID')->sum('price'))
-                ],
-                'expenses' => [
-                    'key' => 'expensed',
-                    'value' => number_format(Accounting::where('type', 'EXPENSE')->sum('amount')) . ' Kč',
-                    'diff' => $this->diff(
-                        Accounting::where('type', 'EXPENSE')
-                            ->whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])
-                            ->sum('amount'),
-                        Accounting::where('type', 'EXPENSE')->sum('amount'))
-                ]
+                $this->calculateMetric('outstanding_amount', OrderPayment::where('status', 'PAID')->sum('price') - OrderPayment::where('status', 'REFUNDED')->sum('price') - OrderPayment::where('status', 'UNPAID')->sum('price') + Accounting::where('type', 'INCOME')->sum('amount') - Accounting::where('type', 'EXPENSE')->sum('amount'), $lastMonth),
+                $this->calculateMetric('overdue_amount', OrderPayment::where('status', 'UNPAID')->sum('price'), $lastMonth),
+                $this->calculateMetric('expenses', Accounting::where('type', 'EXPENSE')->sum('amount'), $lastMonth)
             ],
-
             'income_ratio' => [
                 OrderPayment::where('status', 'PAID')->sumByDays('price')->toChart('Shop Income'),
                 Accounting::where('type', 'INCOME')->sumByDays('amount')->toChart('External Income')
             ],
             'external_expense' => [
+                OrderPayment::where('status', 'REFUNDED')->sumByDays('price')->toChart('Shop Refund'),
+                OrderPayment::where('status', 'UNPAID')->sumByDays('price')->toChart('Shop Overdue'),
                 Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart("External Expense")
             ],
             'accounting' => Accounting::orderBy('created_at', 'desc')->paginate()
         ];
     }
 
+    /**
+     * Calculate the metric for a given key, total amount and last month.
+     *
+     * @param string $key The key for the metric.
+     * @param mixed $totalAmount The total amount for the metric.
+     * @param Carbon $lastMonth The last month to calculate the metric for.
+     * @return array The calculated metric as an associative array with the following keys:
+     *               - 'key': The key for the metric.
+     *               - 'value': The formatted total amount with currency symbol.
+     *               - 'diff': The difference between the last month amount and the total amount.
+     */
+    protected function calculateMetric(string $key, mixed $totalAmount, Carbon $lastMonth): array
+    {
+        $lastMonthAmount = OrderPayment::whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])->sum('price');
+
+        return [
+            'key' => $key,
+            'value' => number_format($totalAmount) . ' Kč',
+            'diff' => $this->diff(
+                $lastMonthAmount,
+                $totalAmount
+            ),
+        ];
+    }
+
+    /**
+     * Retrieves the name of the accounting entity, if available.
+     *
+     * @return string|null The name of the accounting entity, or null if the name is not available.
+     */
     public function name(): ?string
     {
         return 'Accounting';
     }
 
+    /**
+     * Retrieves the permissions for a user.
+     *
+     * @return iterable|null A list of permissions assigned to the user.
+     *   If no permissions are assigned, the function returns null.
+     */
     public function permission(): ?iterable
     {
         return [
@@ -81,6 +85,12 @@ class AccountingMain extends Screen
         ];
     }
 
+    /**
+     * Generates an iterable array of command bar links.
+     * Each link includes an icon and a href to a specific route.
+     *
+     * @return iterable An iterable array of command bar links.
+     */
     public function commandBar(): iterable
     {
         return [
@@ -90,6 +100,20 @@ class AccountingMain extends Screen
         ];
     }
 
+    /**
+     * Generates the layout for a report.
+     *
+     * @return iterable The layout of the report.
+     *
+     * The layout is an iterable containing the following elements:
+     * 1. An array of metrics related to standing balance and overdue amounts.
+     *    Each metric is represented by an associative array with the following key-value pairs:
+     *     - 'Standing Balance': The metric for outstanding amount. The value is retrieved from 'metrics.outstanding_amount'.
+     *     - 'Overdue': The metric for overdue amount. The value is retrieved from 'metrics.overdue_amount'.
+     * 2. A ShopProfit instance representing the 'Net Income Ratio'. This instance is exported.
+     * 3. A ShopProfit instance representing the 'Expenses'. This instance is exported.
+     * 4. An instance of the AccountingTracks class.
+     */
     public function layout(): iterable
     {
         return [
@@ -108,6 +132,15 @@ class AccountingMain extends Screen
         ];
     }
 
+    /**
+     * Calculates the difference in percentage between two values.
+     *
+     * @param float|int $recent The recent value.
+     * @param float|int $previous The previous value.
+     *
+     * @return float The difference in percentage between the recent and previous values.
+     *   If either the recent or previous value is less than or equal to zero, the function returns 0.0.
+     */
     public function diff($recent, $previous): float
     {
         if ($recent <= 0 || $previous <= 0)
