@@ -13,7 +13,9 @@ class DeviceAuthorization extends Model
 
     public $fillable = [
         'linked_user',
-        'deviceId'
+        'deviceId',
+        'restricted',
+        'status'
     ];
 
 }
