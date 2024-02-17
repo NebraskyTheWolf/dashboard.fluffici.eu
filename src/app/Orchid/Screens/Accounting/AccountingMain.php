@@ -53,12 +53,14 @@ class AccountingMain extends Screen
         $lastMonthAmount = OrderPayment::whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])->sum('price');
 
         return [
-            'key' => $key,
-            'value' => number_format($totalAmount) . ' Kč',
-            'diff' => $this->diff(
-                $lastMonthAmount,
-                $totalAmount
-            ),
+            $key => [
+                'key' => $key,
+                'value' => number_format($totalAmount) . ' Kč',
+                'diff' => $this->diff(
+                    $lastMonthAmount,
+                    $totalAmount
+                ),
+            ]
         ];
     }
 
