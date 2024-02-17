@@ -20,9 +20,48 @@ class AccountingMain extends Screen
         $lastMonth = Carbon::now()->subMonth();
         return [
             'metrics' => [
-                $this->calculateMetric('outstanding_amount', OrderPayment::where('status', 'PAID')->sum('price') - OrderPayment::where('status', 'REFUNDED')->sum('price') - OrderPayment::where('status', 'UNPAID')->sum('price') + Accounting::where('type', 'INCOME')->sum('amount') - Accounting::where('type', 'EXPENSE')->sum('amount'), $lastMonth),
-                $this->calculateMetric('overdue_amount', OrderPayment::where('status', 'UNPAID')->sum('price'), $lastMonth),
-                $this->calculateMetric('expenses', Accounting::where('type', 'EXPENSE')->sum('amount'), $lastMonth)
+                'outstanding_amount' => [
+                    'key' => 'outstanding_amount',
+                    'value' => number_format(OrderPayment::where('status', 'PAID')
+                            ->sum('price') -
+                        OrderPayment::where('status', 'REFUNDED')
+                            ->sum('price') -
+                        OrderPayment::where('status', 'UNPAID')
+                            ->sum('price') +
+                        Accounting::where('type', 'INCOME')
+                            ->sum('amount') -
+                        Accounting::where('type', 'EXPENSE')
+                            ->sum('amount'), $lastMonth) . ' Kč',
+                    'diff' => $this->diff(
+                        OrderPayment::all()->sum('price'),
+                        OrderPayment::whereBetween('created_at', [
+                            $lastMonth->startOfMonth(),
+                            $lastMonth->endOfMonth()
+                        ])->sum('price')
+                    ),
+                ],
+                'overdue_amount' => [
+                    'key' => 'overdue_amount',
+                    'value' => number_format(OrderPayment::where('status', 'UNPAID')->sum('price')) . ' Kč',
+                    'diff' => $this->diff(
+                        OrderPayment::where('status', 'UNPAID')->sum('price'),
+                        OrderPayment::where('status', 'UNPAID')->whereBetween('created_at', [
+                            $lastMonth->startOfMonth(),
+                            $lastMonth->endOfMonth()
+                        ])->sum('price')
+                    ),
+                ],
+                'expenses' => [
+                    'key' => 'expenses',
+                    'value' => number_format(Accounting::where('type', 'EXPENSE')->sum('amount')) . ' Kč',
+                    'diff' => $this->diff(
+                        Accounting::where('type', 'EXPENSE')->sum('amount'),
+                        Accounting::where('type', 'EXPENSE')->sum('amount')->whereBetween('created_at', [
+                            $lastMonth->startOfMonth(),
+                            $lastMonth->endOfMonth()
+                        ])->sum('amount')
+                    ),
+                ]
             ],
             'income_ratio' => [
                 OrderPayment::where('status', 'PAID')->sumByDays('price')->toChart('Shop Income'),
@@ -34,33 +73,6 @@ class AccountingMain extends Screen
                 Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart("External Expense")
             ],
             'accounting' => Accounting::orderBy('created_at', 'desc')->paginate()
-        ];
-    }
-
-    /**
-     * Calculate the metric for a given key, total amount and last month.
-     *
-     * @param string $key The key for the metric.
-     * @param mixed $totalAmount The total amount for the metric.
-     * @param Carbon $lastMonth The last month to calculate the metric for.
-     * @return array The calculated metric as an associative array with the following keys:
-     *               - 'key': The key for the metric.
-     *               - 'value': The formatted total amount with currency symbol.
-     *               - 'diff': The difference between the last month amount and the total amount.
-     */
-    protected function calculateMetric(string $key, $totalAmount, Carbon $lastMonth)
-    {
-        $lastMonthAmount = OrderPayment::whereBetween('created_at', [$lastMonth->startOfMonth(), $lastMonth->endOfMonth()])->sum('price');
-
-        return [
-            $key => [
-                'key' => $key,
-                'value' => number_format($totalAmount) . ' Kč',
-                'diff' => $this->diff(
-                    $lastMonthAmount,
-                    $totalAmount
-                ),
-            ]
         ];
     }
 
