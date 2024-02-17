@@ -210,23 +210,31 @@ class ShopProducts extends Model
     }
 
     /**
-     * Generates a valid EAN-13 barcode.
+     * Generate a UPC-A code for the product.
      *
-     * The barcode is generated based on the ID of the object.
-     * It uses the Luhn algorithm to calculate the checksum digit.
+     * This method generates a UPC-A code for the product based on its ID.
+     * The UPC-A code is a 12-digit string that includes a checksum digit.
+     * The checksum digit is calculated using the modulo 10 algorithm.
      *
-     * @return string The generated EAN-13 barcode.
+     * @return string The UPC-A code for the product.
      */
-    public function generateEAN13(): string
+    public function generateUPCA(): string
     {
-        $code = str_pad($this->id, 12, '0', STR_PAD_LEFT);
+        $code = str_pad($this->id, 11, '0', STR_PAD_LEFT);
 
-        $sum = 0;
-        foreach (str_split(strrev($code)) as $index => $digit) {
-            $sum += $digit * (3 - 2 * ($index % 2));
+        $oddSum = 0;
+        $evenSum = 0;
+
+        for ($i = 0; $i < 11; $i++) {
+            if ($i % 2 == 0) {
+                $oddSum += $code[$i];
+            } else {
+                $evenSum += $code[$i];
+            }
         }
 
-        $checksum = (10 - ($sum % 10)) % 10;
+        $totalSum = $oddSum + (3 * $evenSum);
+        $checksum = 10 - ($totalSum % 10) % 10;
 
         return $code . $checksum;
     }
