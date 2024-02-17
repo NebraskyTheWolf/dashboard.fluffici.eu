@@ -15,9 +15,14 @@ use Orchid\Support\Facades\Layout;
 
 class AccountingMain extends Screen
 {
+    /**
+     * Retrieves metrics and data related to financial transactions.
+     *
+     * @return iterable Returns an iterable data structure containing various financial metrics and data.
+     */
     public function query(): iterable
     {
-        $lastMonth = Carbon::now()->subMonth();
+        $lastMonth = Carbon::now();
         $currentYear = Carbon::now()->year;
 
         return [
@@ -45,10 +50,11 @@ class AccountingMain extends Screen
                             ->whereYear('created_at', $currentYear)
                             ->sum('amount')) . ' Kč',
                     'diff' => $this->diff(
-                        OrderPayment::all()->sum('price'),
-                        OrderPayment::whereMonth('created_at', $lastMonth)
+                        OrderPayment::all()
+                            ->whereMonth('created_at', $lastMonth)
                             ->whereYear('created_at', $currentYear)
-                            ->sum('price')
+                            ->sum('price'),
+                        OrderPayment::all()->sum('price')
                     ),
                 ],
                 'overdue_amount' => [
