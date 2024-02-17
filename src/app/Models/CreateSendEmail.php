@@ -10,7 +10,7 @@ class CreateSendEmail extends Model
 {
     use AsSource;
 
-    public $table = [
+    public $fillable = [
         'to',
         'email',
         'content'

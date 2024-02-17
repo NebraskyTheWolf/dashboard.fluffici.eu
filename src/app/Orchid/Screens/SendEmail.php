@@ -99,7 +99,7 @@ class SendEmail extends Screen
      * @param \Illuminate\Http\Request $request The request object containing email details.
      * @return RedirectResponse A redirect response to the sendmail route.
      */
-    public function sendEmail(Request $request)
+    public function sendEmail(Request $request): RedirectResponse
     {
         $this->email->fill($request->get('email'))->save();
 
