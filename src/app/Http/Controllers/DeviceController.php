@@ -44,7 +44,7 @@ class DeviceController extends Controller
             if ($device->restricted) {
                 return response()->json([
                     'status' => false,
-                    'data' => "DEVICE_RESTRICTED",
+                    'error' => "DEVICE_RESTRICTED",
                     'message' => "This device was restricted, please refer to your superior admin."
                 ]);
             }
@@ -53,7 +53,7 @@ class DeviceController extends Controller
             if ($user->isTerminated()) {
                 return response()->json([
                     'status' => false,
-                    'data' => "ACCOUNT_TERMINATED",
+                    'error' => "ACCOUNT_TERMINATED",
                     'message' => "You are not allowed to use this device, because your account is terminated."
                 ]);
             }

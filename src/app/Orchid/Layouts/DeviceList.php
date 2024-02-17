@@ -34,7 +34,9 @@ class DeviceList extends Table
                 ->render(function (DeviceAuthorization $authorization) {
                     return Button::make($authorization->restricted == 1 ? "Reinstate" : "Restrict")
                         ->icon('bs.trash')
-                        ->method("restrictDevice")
+                        ->method("restrictDevice",  [
+                                'id' => $authorization->id
+                        ])
                         ->download(true)
                         ->type(Color::PRIMARY);
                 }),

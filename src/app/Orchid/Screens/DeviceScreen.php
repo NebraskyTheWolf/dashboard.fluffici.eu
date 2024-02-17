@@ -67,11 +67,11 @@ class DeviceScreen extends Screen
 
         if ($device->restricted) {
             $device->update([
-                'restricted' => 0
+                'restricted' => false
             ]);
         } else {
             $device->update([
-                'restricted' => 1
+                'restricted' => true
             ]);
         }
 
