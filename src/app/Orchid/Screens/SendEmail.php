@@ -4,14 +4,17 @@ namespace App\Orchid\Screens;
 
 use App\Events\UpdateAudit;
 use App\Mail\DefaultEmail;
-use app\Models\TempMail;
+use App\Models\CreateSendEmail;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,10 +28,10 @@ class SendEmail extends Screen
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(CreateSendEmail $email): iterable
     {
         return [
-            'email' => []
+            'email' => $email
         ];
     }
 
@@ -45,7 +48,7 @@ class SendEmail extends Screen
     /**
      * The screen's action buttons.
      *
-     * @return \Orchid\Screen\Action[]
+     * @return Action[]
      */
     public function commandBar(): iterable
     {
@@ -58,14 +61,14 @@ class SendEmail extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Set up the layout for the email composition page.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return array An array containing the layout elements.
      */
     public function layout(): iterable
     {
         return [
-            \Orchid\Support\Facades\Layout::rows([
+            Layout::rows([
                 Input::make('email.to')
                     ->title('To')
                     ->type('email')
@@ -94,11 +97,11 @@ class SendEmail extends Screen
      * Send an email based on the given request.
      *
      * @param \Illuminate\Http\Request $request The request object containing email details.
-     * @return \Illuminate\Http\RedirectResponse A redirect response to the sendmail route.
+     * @return RedirectResponse A redirect response to the sendmail route.
      */
     public function sendEmail(Request $request)
     {
-        $this->email->fill($request->get('email'));
+        $this->email->fill($request->get('email'))->save();
 
         Mail::to($this->email->to)->send(new DefaultEmail($this->email->subject, Auth::user()->email, $this->email->message));
 
