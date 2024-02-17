@@ -89,7 +89,7 @@ class ShopStatistics extends Screen
      * @param mixed $month The month of the date. Can be integer or string representation of the month.
      * @return float The sum of price for order payments in Czech koruna (Kč).
      */
-    private function sumPriceOrderPaymentByDate(int $year, mixed $month): float
+    private function sumPriceOrderPaymentByDate(int $year, mixed $month) : string
     {
         return number_format(
                 OrderPayment::where('status', 'PAID')
