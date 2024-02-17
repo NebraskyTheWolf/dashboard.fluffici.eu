@@ -175,7 +175,18 @@ class ApiController extends Controller
             return $this->createErrorResponse("MISSING_PRODUCT_ID", "The productId is missing");
         }
 
-        return $this->fetchProductImage($productId);
+
+        $response = \Httpful\Request::post(env("IMAGER_HOST", 'http://185.188.249.234:3900/voucher/'), [
+            'productId' => $productId
+        ], "application/json")->expectsJson()->send();
+
+        if ($response->code == 200) {
+            return $this->fetchProductImage($productId);
+        } else {
+            return response()->json([
+                'error' => 'The server was not responding correctly.'
+            ]);
+        }
     }
 
     /**

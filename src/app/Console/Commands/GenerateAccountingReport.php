@@ -51,7 +51,7 @@ class GenerateAccountingReport extends Command
         $document = Pdf::loadView('documents.accounting', [
             'reportId' => $reportId,
             'reportDate' => $today,
-            'transactions' => Accounting::whereMonth('created_at', Carbon::now())->get(),
+            'transactions' => Accounting::whereMonth('created_at', Carbon::now())->whereYear('created_at', $currentYear)->get(),
 
             'incomes' => number_format($income),
             'expenses' => number_format($expense),
