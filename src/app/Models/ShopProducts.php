@@ -247,7 +247,7 @@ class ShopProducts extends Model
         $upca = $code . $checksum;
 
         // validate if the length of UPC-A code is not 12
-        if(strlen($upca) != 12){
+        if(strlen($upca) > 12){
             throw new ValidationException("UPC-A code should be 12 digits long");
         }
 
