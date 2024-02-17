@@ -145,6 +145,18 @@ class ShopProducts extends Model
         return ShopProducts::find($productId);
     }
 
+    public function getProductFromEanDBG(string $ean): string
+    {
+        // Check if EAN is valid
+        if (!$this->isValidEan($ean)) {
+            return "Not Valid EAN-13 format.";
+        }
+
+        // Remove the check digit
+        // Fetch the product by ID
+        return substr($ean, 0, -1);
+    }
+
     /**
      * Checks if the given EAN code is valid.
      *

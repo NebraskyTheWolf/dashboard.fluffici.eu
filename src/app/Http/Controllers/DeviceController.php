@@ -226,7 +226,11 @@ class DeviceController extends Controller
             return response()->json([
                 'status' => false,
                 'error' => "PRODUCT_NOT_FOUND",
-                'message' => "Product not found."
+                'message' => "Product not found.",
+                'data' => [
+                    'bid' => $ean13Code,
+                    'dbg' => $product->getProductFromEanDBG($ean13Code)
+                ]
             ]);
         }
     }
