@@ -50,10 +50,22 @@ class AccountingMain extends Screen
                             ->whereYear('created_at', $currentYear)
                             ->sum('amount')) . ' Kč',
                     'diff' => $this->diff(
-                        OrderPayment::all()
-                            ->whereMonth('created_at', $lastMonth)
-                            ->whereYear('created_at', $currentYear)
-                            ->sum('price'),
+                        OrderPayment::where('status', 'PAID')
+                                ->whereMonth('created_at', $lastMonth)
+                                ->whereYear('created_at', $currentYear)
+                                ->sum('price') +
+                            OrderPayment::where('status', 'UNPAID')
+                                ->whereMonth('created_at', $lastMonth)
+                                ->whereYear('created_at', $currentYear)
+                                ->sum('price') +
+                            OrderPayment::where('status', 'REFUNDED')
+                                ->whereMonth('created_at', $lastMonth)
+                                ->whereYear('created_at', $currentYear)
+                                ->sum('price') +
+                            OrderPayment::where('status', 'CANCELLED')
+                                ->whereMonth('created_at', $lastMonth)
+                                ->whereYear('created_at', $currentYear)
+                                ->sum('price'),
                         OrderPayment::all()->sum('price')
                     ),
                 ],
@@ -78,7 +90,7 @@ class AccountingMain extends Screen
                             ->whereYear('created_at', $currentYear)
                             ->sum('amount')) . ' Kč',
                     'diff' => $this->diff(
-                        Accounting::where('type', 'EXPENSE')->sum('amount')
+                        Accounting::where('type', 'EXPENSE')
                             ->whereMonth('created_at',$lastMonth)
                             ->whereYear('created_at', $currentYear)
                             ->sum('amount'),
