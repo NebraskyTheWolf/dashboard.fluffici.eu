@@ -34,10 +34,9 @@ class AccountingMain extends Screen
                             ->sum('amount')) . ' Kč',
                     'diff' => $this->diff(
                         OrderPayment::all()->sum('price'),
-                        OrderPayment::whereBetween('created_at', [
-                            $lastMonth->startOfMonth(),
-                            $lastMonth->endOfMonth()
-                        ])->sum('price')
+                        OrderPayment::whereMonth('created_at', Carbon::now())
+                            ->whereYear('created_at', Carbon::now()->year)
+                            ->sum('price')
                     ),
                 ],
                 'overdue_amount' => [
@@ -45,10 +44,10 @@ class AccountingMain extends Screen
                     'value' => number_format(OrderPayment::where('status', 'UNPAID')->sum('price')) . ' Kč',
                     'diff' => $this->diff(
                         OrderPayment::where('status', 'UNPAID')->sum('price'),
-                        OrderPayment::where('status', 'UNPAID')->whereBetween('created_at', [
-                            $lastMonth->startOfMonth(),
-                            $lastMonth->endOfMonth()
-                        ])->sum('price')
+                        OrderPayment::where('status', 'UNPAID')
+                            ->whereMonth('created_at', Carbon::now())
+                            ->whereYear('created_at', Carbon::now()->year)
+                            ->sum('price')
                     ),
                 ],
                 'expenses' => [
@@ -56,10 +55,10 @@ class AccountingMain extends Screen
                     'value' => number_format(Accounting::where('type', 'EXPENSE')->sum('amount')) . ' Kč',
                     'diff' => $this->diff(
                         Accounting::where('type', 'EXPENSE')->sum('amount'),
-                        Accounting::where('type', 'EXPENSE')->sum('amount')->whereBetween('created_at', [
-                            $lastMonth->startOfMonth(),
-                            $lastMonth->endOfMonth()
-                        ])->sum('amount')
+                        Accounting::where('type', 'EXPENSE')->sum('amount')
+                            ->whereMonth('created_at', Carbon::now())
+                            ->whereYear('created_at', Carbon::now()->year)
+                            ->sum('amount')
                     ),
                 ]
             ],
