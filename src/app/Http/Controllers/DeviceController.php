@@ -170,7 +170,7 @@ class DeviceController extends Controller
     }
 
     /**
-     * Fetches a product based on the provided EAN13 code.
+     * Fetches a product based on the provided UPC-A code.
      *
      * @param Request $request The HTTP request object.
      * @return JsonResponse A response with information about the requested product.
@@ -184,7 +184,7 @@ class DeviceController extends Controller
      *                         },
      *                         "message": "Product retrieved successfully."
      *                     }
-     * If the EAN13 code is missing in the query parameters, the response will be:
+     * If the UPC-A code is missing in the query parameters, the response will be:
      *                     {
      *                         "status": true,
      *                         "error": "MISSING_PRODUCT_ID",
@@ -210,8 +210,7 @@ class DeviceController extends Controller
         }
 
         $product = new ShopProducts();
-        $dbg = $product->getProductFromEanDBG($ean13Code);
-        $product = $product->getProductFromEan($ean13Code);
+        $product = $product->getProductFromUpcA($ean13Code);
 
         if ($product != null) {
             return response()->json([
@@ -229,8 +228,7 @@ class DeviceController extends Controller
                 'error' => "PRODUCT_NOT_FOUND",
                 'message' => "Product not found.",
                 'data' => [
-                    'bid' => $ean13Code,
-                    'dbg' => $dbg
+                    'bid' => $ean13Code
                 ]
             ]);
         }
@@ -257,7 +255,7 @@ class DeviceController extends Controller
         }
 
         $product = new ShopProducts();
-        $product = $product->getProductFromEan($ean13Code);
+        $product = $product->getProductFromUpcA($ean13Code);
         // In case the inventory was never created
         $product->createOrGetInventory();
 

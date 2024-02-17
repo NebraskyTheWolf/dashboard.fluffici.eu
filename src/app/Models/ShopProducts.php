@@ -119,64 +119,65 @@ class ShopProducts extends Model
     }
 
     /**
-     * Retrieves a product based on the specified EAN code.
+     * Retrieves a product based on the specified UPC-A code.
      *
-     * The method first validates the provided EAN code and throws an exception if it is invalid.
-     * Then, it removes the check digit from the EAN and extracts the product ID.
+     * The method first validates the provided UPC-A code and returns null if it is invalid.
+     * Then, it removes the check digit from the UPC-A and extracts the product ID.
      * Finally, it fetches the product with the matching ID and returns it.
      *
-     * @param string $ean The EAN code of the product.
+     * @param string $upc The UPC-A code of the product.
      * @return ShopProducts|null The fetched product or null if no product is found.
      *
-     * @throws InvalidArgumentException If the provided EAN is invalid.
+     * @throws InvalidArgumentException If the provided UPC-A is invalid.
      */
-    public function getProductFromEan(string $ean): ?ShopProducts
+    public function getProductFromUpcA(string $upc): ?ShopProducts
     {
-        // Check if EAN is valid
-        if (!$this->isValidEan($ean)) {
+        // Check if UPC-A is valid
+        if (!$this->isValidUPCA($upc)) {
             return null;
         }
 
         // Remove the check digit
-        $productId = substr($ean, 0, -1);
+        $productId = substr($upc, 0, -1);
 
         // Fetch the product by ID
-        // Here Product::find is a placeholder, replace it with actual product fetching code.
         return ShopProducts::find($productId);
     }
 
-    public function getProductFromEanDBG(string $ean): string
-    {
-        // Check if EAN is valid
-        if (!$this->isValidEan($ean)) {
-            return "Not Valid EAN-13 format.";
-        }
-
-        // Remove the check digit
-        // Fetch the product by ID
-        return substr($ean, 0, -1);
-    }
-
     /**
-     * Checks if the given EAN code is valid.
+     * Check if a UPC-A (Universal Product Code) is valid.
      *
-     * The method calculates the check digit of the EAN code and checks if the calculated digit is a valid check digit.
-     * If the calculated digit is a valid check digit, the method returns true, otherwise it returns false.
+     * This method validates a given UPC-A by performing a series of checks on its structure and checksum.
+     * A valid UPC-A must have a total of 12 digits.
+     * It calculates the sum of the digits at odd and even positions separately.
+     * The total sum is multiplied by 3 for the odd digits and added to the sum of even digits.
+     * The result is then subtracted from the nearest greater multiple of 10.
+     * If the calculated checksum is equal to the last digit of the UPC-A, it is considered valid.
      *
-     * @param string $ean The EAN code to be validated.
-     * @return bool True if the EAN code is valid, false otherwise.
+     * @param string $upc The UPC-A string to be validated.
+     * @return bool True if the UPC-A is valid, false otherwise.
      */
-    private function isValidEan(string $ean): bool
+    public function isValidUPCA(string $upc): bool
     {
-        $check = 0;
-        for ($i = 0; $i < 13; $i += 2) {
-            $check .= substr($ean, $i, 1);
-        }
-        for ($i = 1; $i < 12; $i += 2) {
-            $check += 3 * substr($ean, $i, 1);
+        if (strlen($upc) != 12) {
+            return false;
         }
 
-        return ($check % 10 === 0);
+        $oddSum = 0;
+        $evenSum = 0;
+
+        for ($i = 0; $i < 12; $i++) {
+            if ($i % 2 == 0) {
+                $oddSum .= $upc[$i];
+            } else {
+                $evenSum .= $upc[$i];
+            }
+        }
+
+        $totalSum = $evenSum + (3 * $oddSum);
+        $checksum = 10 - ($totalSum % 10);
+
+        return $checksum == $upc[11];
     }
 
     public function getAvailableProducts(): int
