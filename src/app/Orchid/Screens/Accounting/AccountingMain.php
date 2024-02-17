@@ -18,46 +18,64 @@ class AccountingMain extends Screen
     public function query(): iterable
     {
         $lastMonth = Carbon::now()->subMonth();
+        $currentYear = Carbon::now()->year;
+
         return [
             'metrics' => [
                 'outstanding_amount' => [
                     'key' => 'outstanding_amount',
                     'value' => number_format(OrderPayment::where('status', 'PAID')
-                            ->sum('price') -
+                                ->whereMonth('created_at',$lastMonth)
+                                ->whereYear('created_at', $currentYear)
+                                ->sum('price') -
                         OrderPayment::where('status', 'REFUNDED')
+                            ->whereMonth('created_at',$lastMonth)
+                            ->whereYear('created_at', $currentYear)
                             ->sum('price') -
                         OrderPayment::where('status', 'UNPAID')
+                            ->whereMonth('created_at',$lastMonth)
+                            ->whereYear('created_at', $currentYear)
                             ->sum('price') +
                         Accounting::where('type', 'INCOME')
+                            ->whereMonth('created_at',$lastMonth)
+                            ->whereYear('created_at', $currentYear)
                             ->sum('amount') -
                         Accounting::where('type', 'EXPENSE')
+                            ->whereMonth('created_at',$lastMonth)
+                            ->whereYear('created_at', $currentYear)
                             ->sum('amount')) . ' Kč',
                     'diff' => $this->diff(
                         OrderPayment::all()->sum('price'),
-                        OrderPayment::whereMonth('created_at', Carbon::now())
-                            ->whereYear('created_at', Carbon::now()->year)
+                        OrderPayment::whereMonth('created_at', $lastMonth)
+                            ->whereYear('created_at', $currentYear)
                             ->sum('price')
                     ),
                 ],
                 'overdue_amount' => [
                     'key' => 'overdue_amount',
-                    'value' => number_format(OrderPayment::where('status', 'UNPAID')->sum('price')) . ' Kč',
+                    'value' => number_format(OrderPayment::where('status', 'UNPAID')
+                            ->whereMonth('created_at',$lastMonth)
+                            ->whereYear('created_at', $currentYear)
+                            ->sum('price')) . ' Kč',
                     'diff' => $this->diff(
                         OrderPayment::where('status', 'UNPAID')->sum('price'),
                         OrderPayment::where('status', 'UNPAID')
-                            ->whereMonth('created_at', Carbon::now())
-                            ->whereYear('created_at', Carbon::now()->year)
+                            ->whereMonth('created_at', $lastMonth)
+                            ->whereYear('created_at', $currentYear)
                             ->sum('price')
                     ),
                 ],
                 'expenses' => [
                     'key' => 'expenses',
-                    'value' => number_format(Accounting::where('type', 'EXPENSE')->sum('amount')) . ' Kč',
+                    'value' => number_format(Accounting::where('type', 'EXPENSE')
+                            ->whereMonth('created_at',$lastMonth)
+                            ->whereYear('created_at', $currentYear)
+                            ->sum('amount')) . ' Kč',
                     'diff' => $this->diff(
                         Accounting::where('type', 'EXPENSE')->sum('amount'),
                         Accounting::where('type', 'EXPENSE')->sum('amount')
-                            ->whereMonth('created_at', Carbon::now())
-                            ->whereYear('created_at', Carbon::now()->year)
+                            ->whereMonth('created_at',$lastMonth)
+                            ->whereYear('created_at', $currentYear)
                             ->sum('amount')
                     ),
                 ]
@@ -154,7 +172,7 @@ class AccountingMain extends Screen
      * @return float The difference in percentage between the recent and previous values.
      *   If either the recent or previous value is less than or equal to zero, the function returns 0.0.
      */
-    public function diff(float|int $recent, float|int $previous): float
+    public function diff($recent,$previous): float
     {
         if ($recent <= 0 || $previous <= 0)
             return 0.0;
