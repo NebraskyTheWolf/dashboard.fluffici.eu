@@ -141,7 +141,7 @@ class AccountingMain extends Screen
      * @return float The difference in percentage between the recent and previous values.
      *   If either the recent or previous value is less than or equal to zero, the function returns 0.0.
      */
-    public function diff($recent, $previous): float
+    public function diff(float|int $recent, float|int $previous): float
     {
         if ($recent <= 0 || $previous <= 0)
             return 0.0;
