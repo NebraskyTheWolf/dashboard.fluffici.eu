@@ -32,7 +32,11 @@ class ShopStatistics extends Screen
                 ],
                 'overall' => [
                     'key' => 'overall',
-                    'value' => $this->overall(),
+                    'value' => number_format(
+                            OrderPayment::where('status', 'PAID')->sum('price') -
+                            OrderPayment::where('status', 'UNPAID')->sum('price') -
+                            OrderPayment::where('status', 'REFUNDED')->sum('price') -
+                            OrderPayment::where('status', 'CANCELLED')->sum('price')) . ' Kč',
                     'diff' => $this->diff($this->sumPriceOrderPayment(), $this->sumPriceOrderPayment())
                 ],
                 'monthly' => [
@@ -161,19 +165,5 @@ class ShopStatistics extends Screen
             return 0.0;
 
         return (($recent-$previous)/abs($previous)) * 100;
-    }
-
-    /**
-     * Calculates and returns the overall payment amount as a formatted string.
-     *
-     * @return string The overall payment amount in Czech crowns (Kč).
-     */
-    public function overall(): string
-    {
-        return number_format(
-            OrderPayment::where('status', 'PAID')->sum('price') -
-            OrderPayment::where('status', 'UNPAID')->sum('price') -
-            OrderPayment::where('status', 'REFUNDED')->sum('price') -
-            OrderPayment::where('status', 'CANCELLED')->sum('price')) . ' Kč';
     }
 }
