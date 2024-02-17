@@ -210,6 +210,7 @@ class DeviceController extends Controller
         }
 
         $product = new ShopProducts();
+        $dbg = $product->getProductFromEanDBG($ean13Code);
         $product = $product->getProductFromEan($ean13Code);
 
         if ($product != null) {
@@ -229,7 +230,7 @@ class DeviceController extends Controller
                 'message' => "Product not found.",
                 'data' => [
                     'bid' => $ean13Code,
-                    'dbg' => $product->getProductFromEanDBG($ean13Code)
+                    'dbg' => $dbg
                 ]
             ]);
         }
