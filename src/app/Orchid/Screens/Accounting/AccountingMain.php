@@ -31,7 +31,7 @@ class AccountingMain extends Screen
                         Accounting::where('type', 'INCOME')
                             ->sum('amount') -
                         Accounting::where('type', 'EXPENSE')
-                            ->sum('amount'), $lastMonth) . ' Kč',
+                            ->sum('amount')) . ' Kč',
                     'diff' => $this->diff(
                         OrderPayment::all()->sum('price'),
                         OrderPayment::whereBetween('created_at', [
