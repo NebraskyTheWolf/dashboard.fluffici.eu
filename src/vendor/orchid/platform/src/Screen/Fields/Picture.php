@@ -17,6 +17,7 @@ use Orchid\Support\Init;
  * @method Picture required(bool $value = true)
  * @method Picture size($value = true)
  * @method Picture src($value = true)
+ * @method Picture url(string $value = null)
  * @method Picture value($value = true)
  * @method Picture help(string $value = null)
  * @method Picture popover(string $value = null)
@@ -39,12 +40,7 @@ class Picture extends Field
      * @var array
      */
     protected $attributes = [
-        'autumnUrl' => '',
-        'bucket' => '',
-        'objectId' => '',
-        'width' => 256,
-        'height' => 256,
-        'readOnly' => false
+        'url' => '',
     ];
 
     /**
