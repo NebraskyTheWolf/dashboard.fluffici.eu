@@ -39,6 +39,15 @@ class ShopProducts extends Model
         }
     }
 
+    /**
+     * Retrieve the tax percentage for the product.
+     *
+     * This method queries the ProductTax and TaxGroup models to find the tax percentage for the product with the specified ID.
+     * If a tax percentage exists, the percentage value is returned as an integer.
+     * If no tax percentage exists, 0 is returned.
+     *
+     * @return int The tax percentage for the product, or 0 if no tax percentage exists.
+     */
     public function getProductTax(): int
     {
         $productTax = ProductTax::where('product_id', $this->id);
@@ -52,6 +61,15 @@ class ShopProducts extends Model
         return 0;
     }
 
+    /**
+     * Retrieve the sale reduction value for the product.
+     *
+     * This method queries the ShopSales model to find the sale reduction value for the product with the specified ID.
+     * If a sale reduction exists, the reduction value is returned as an integer.
+     * If no sale reduction exists, 0 is returned.
+     *
+     * @return int The sale reduction value for the product, or 0 if no reduction exists.
+     */
     public function getProductSale(): int
     {
         $productSale = ShopSales::where('product_id', $this->id);
