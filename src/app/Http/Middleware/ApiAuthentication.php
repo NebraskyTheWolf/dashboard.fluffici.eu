@@ -10,13 +10,19 @@ use Symfony\Component\HttpFoundation\Response;
 class ApiAuthentication
 {
     /**
-     * This method checks and handles the authentication token in the request.
+     * Handle the request.
      *
-     * @param Request $request The HTTP request object.
-     * @param Closure $next The next middleware or controller closure.
-     * @return Response The HTTP response object.
+     * This method handles the incoming request by performing the necessary checks for authentication
+     * and permission access. If the authentication fails or the user does not have the required permission,
+     * an appropriate response is returned. Otherwise, the request is processed and passed on to the next
+     * middleware or route handler.
+     *
+     * @param Request $request The incoming request object.
+     * @param \Closure $next The closure representing the next middleware or route handler.
+     * @param string $permission The required permission for the operation.
+     * @return \Illuminate\Http\Response The response object.
      */
-    public function handle(Request $request, $next): Response
+    public function handle(Request $request, Closure $next, string $permission): Response
     {
         $header = $request->bearerToken();
         if ($header == null) {
@@ -42,6 +48,15 @@ class ApiAuthentication
                 'status' => false,
                 'error' => 'AUTHENTICATION_TOKEN',
                 'message' => 'Your account is terminated.'
+            ]);
+        }
+
+        // Permission blocked
+        if (!$token->getUser()->hasAccess($permission)) {
+            return response()->json([
+                'status' => false,
+                'error' => 'PERMISSION_DENIED',
+                'message' => 'You don\'t have the permission to perform this operation.'
             ]);
         }
 

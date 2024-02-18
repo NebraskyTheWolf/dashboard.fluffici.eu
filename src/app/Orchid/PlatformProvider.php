@@ -216,6 +216,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.shop.categories.read', 'Categories (Read)')
                 ->addPermission('platform.shop.categories.write', 'Categories (Write)')
                 ->addPermission('platform.shop.orders.read', 'Orders (Read)')
+                ->addPermission('platform.shop.orders.write', 'Orders (Write)')
                 ->addPermission('platform.shop.products.read', 'Products (Read)')
                 ->addPermission('platform.shop.products.write', 'Products (Write)')
                 ->addPermission('platform.shop.sales.read', 'Sales (Read)')
