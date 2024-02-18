@@ -131,9 +131,9 @@ class EventsEditScreen extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Generate the layout for displaying event information and weather metrics.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return array The layout configuration for displaying event information and weather metrics.
      */
     public function layout(): iterable
     {
@@ -142,8 +142,10 @@ class EventsEditScreen extends Screen
         }
 
         if ($this->events->exists) {
-            $this->lon = $this->events->min['lat'] ?: 0.0;
-            $this->lng = $this->events->min['lng'] ?: 0.0;
+            $min = json_decode($this->events->min, true);
+
+            $this->lon = $min['lat'];
+            $this->lng = $min['lng'];
         }
 
         return [

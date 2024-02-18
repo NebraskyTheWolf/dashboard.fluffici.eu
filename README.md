@@ -1,4 +1,4 @@
-![SamaGames](https://cdn.discordapp.com/attachments/1085403957519728744/1197610110328000544/favicon.png "SamaGames logo")
+![Fluffici](https://avatars.githubusercontent.com/u/82099791?s=200&v=4 "Fluffici logo")
 
 ## Fluffici - Dashboard
 
