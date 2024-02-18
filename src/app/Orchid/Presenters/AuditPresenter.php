@@ -52,7 +52,11 @@ class AuditPresenter extends Presenter implements Personable, Searchable
         if ($this->entity->avatar == 1) {
             return 'https://autumn.fluffici.eu/avatars/' . $this->entity->avatar_id . '?width=256&height=256';
         }
-        return 'https://ui-avatars.com/api/?name=' . $this->title() . '&background=0D8ABC&color=fff';
+        if ($this->entity->name === "System") {
+            return 'https://ui-avatars.com/api/?name=' . $this->title() . '&background=DC143C&color=fff';
+        } else {
+            return 'https://ui-avatars.com/api/?name=' . $this->title() . '&background=0D8ABC&color=fff';
+        }
     }
 
     /**

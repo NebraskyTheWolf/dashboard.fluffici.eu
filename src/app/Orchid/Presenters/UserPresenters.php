@@ -56,9 +56,14 @@ class UserPresenters extends Presenter implements Personable, Searchable
      */
     public function image(): ?string {
         if ($this->entity->avatar == 1) {
-            return 'https://autumn.fluffici.eu/avatars/' . $this->entity->avatar_id . '?width=256&height=256';
+            if ($this->entity->avatar_id == null) {
+                return 'https://ui-avatars.com/api/?name=' . $this->title() . '&background=0D8ABC&color=fff';
+            } else {
+                return 'https://autumn.fluffici.eu/avatars/' . $this->entity->avatar_id . '?width=256&height=256';
+            }
+        } else {
+            return 'https://ui-avatars.com/api/?name=' . $this->title() . '&background=0D8ABC&color=fff';
         }
-        return 'https://ui-avatars.com/api/?name=' . $this->title() . '&background=0D8ABC&color=fff';
     }
 
     /**
