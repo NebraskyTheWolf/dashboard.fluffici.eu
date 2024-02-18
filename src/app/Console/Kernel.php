@@ -10,6 +10,7 @@ use App\Console\Commands\FinishOldEvent;
 use App\Console\Commands\GenerateMonthlyReport;
 use App\Console\Commands\GenerateTransactionsReport;
 use App\Console\Commands\Refresh;
+use App\Console\Commands\SendSchedulesEmail;
 use App\Console\Commands\StartNewEvent;
 use App\Console\Commands\StatisticsMail;
 use Illuminate\Console\Scheduling\Schedule;
@@ -29,6 +30,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(Refresh::class)->daily();
         $schedule->command(StatisticsMail::class)->weekly();
+        $schedule->command(SendSchedulesEmail::class)->weekly();
 
         $schedule->command(DeleteOldProducts::class)->everyTenSeconds();
         $schedule->command(DeleteOldSales::class)->everyTenSeconds();

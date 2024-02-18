@@ -6,6 +6,7 @@ use App\Events\UpdateAudit;
 use App\Mail\ScheduleMail;
 use App\Models\Events;
 use App\Models\PlatformAttachments;
+use Httpful\Exception\ConnectionErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -37,7 +38,13 @@ class EventsEditScreen extends Screen
     public function query(Events $events): iterable
     {
         return [
-            'events' => $events
+            'events' => $events,
+            'metrics' => [
+                'summary' => [],
+                'temperature' => [],
+                'wind' => [],
+                'precipitation' => [],
+            ]
         ];
     }
 
@@ -116,66 +123,68 @@ class EventsEditScreen extends Screen
         }
 
         return [
-            Layout::rows([
-                Group::make([
-                    Input::make('events.name')
-                        ->title(__('events.screen.input.event_name.title'))
-                        ->placeholder(__('events.screen.input.event_name.placeholder'))
-                        ->help(__('events.screen.input.event_name.help'))
-                        ->disabled($this->events->status == "CANCELLED"),
+            Layout::tabs([
+                'Information' => [
+                    Group::make([
+                        Input::make('events.name')
+                            ->title(__('events.screen.input.event_name.title'))
+                            ->placeholder(__('events.screen.input.event_name.placeholder'))
+                            ->help(__('events.screen.input.event_name.help'))
+                            ->disabled($this->events->status == "CANCELLED"),
 
-                    Quill::make('events.descriptions')
-                        ->title(__('events.screen.input.description.title'))
-                        ->canSee(!$this->events->exists || ($this->events->exists && $this->events->status == "INCOMING")),
+                        Quill::make('events.descriptions')
+                            ->title(__('events.screen.input.description.title'))
+                            ->canSee(!$this->events->exists || ($this->events->exists && $this->events->status == "INCOMING")),
 
-                    Select::make('events.type')
-                        ->options([
-                            'PHYSICAL'   => __('events.screen.input.type.choice.one'),
-                            'ONLINE' => __('events.screen.input.type.choice.two'),
-                        ])
-                        ->title(__('events.screen.input.type.title'))
-                        ->help(__('events.screen.input.type.help'))
-                        ->disabled($this->events->status == "CANCELLED")
-                ]),
+                        Select::make('events.type')
+                            ->options([
+                                'PHYSICAL'   => __('events.screen.input.type.choice.one'),
+                                'ONLINE' => __('events.screen.input.type.choice.two'),
+                            ])
+                            ->title(__('events.screen.input.type.title'))
+                            ->help(__('events.screen.input.type.help'))
+                            ->disabled($this->events->status == "CANCELLED")
+                    ]),
 
-                Group::make([
-                    DateTimer::make('events.begin')
-                        ->title(__('events.screen.input.begin.title'))
-                        ->disabled($this->events->status == "CANCELLED"),
+                    Group::make([
+                        DateTimer::make('events.begin')
+                            ->title(__('events.screen.input.begin.title'))
+                            ->disabled($this->events->status == "CANCELLED"),
 
-                    DateTimer::make('events.end')
-                        ->title(__('events.screen.input.end.title'))
-                        ->disabled($this->events->status == "CANCELLED"),
-                ]),
+                        DateTimer::make('events.end')
+                            ->title(__('events.screen.input.end.title'))
+                            ->disabled($this->events->status == "CANCELLED"),
+                    ]),
 
-                Group::make([
-                    Map::make('events.min')
-                        ->title(__('events.screen.input.map_min.title'))
-                        ->help(__('events.screen.input.map_min.help')),
-                    Map::make('events.max')
-                        ->title(__('events.screen.input.map_max.title'))
-                        ->help(__('events.screen.input.map_max.help'))
-                ]),
+                    Group::make([
+                        Map::make('events.min')
+                            ->title(__('events.screen.input.map_min.title'))
+                            ->help(__('events.screen.input.map_min.help')),
+                        Map::make('events.max')
+                            ->title(__('events.screen.input.map_max.title'))
+                            ->help(__('events.screen.input.map_max.help'))
+                    ]),
 
-                Group::make([
-                    Input::make('events.link')
-                        ->title(__('events.screen.input.link.title'))
-                        ->placeholder(__('events.screen.input.link.placeholder'))
-                        ->help(__('events.screen.input.link.help'))
-                        ->disabled($this->events->status == "CANCELLED"),
-                ]),
+                    Group::make([
+                        Input::make('events.link')
+                            ->title(__('events.screen.input.link.title'))
+                            ->placeholder(__('events.screen.input.link.placeholder'))
+                            ->help(__('events.screen.input.link.help'))
+                            ->disabled($this->events->status == "CANCELLED"),
+                    ]),
 
-                Cropper::make('events.banner')
-                    ->title(__('events.screen.input.banner.title'))
-                    ->actionId($this->events->event_id)
-                    ->remoteTag('banners')
-                    ->minWidth(750)
-                    ->maxWidth(1500)
-                    ->minHeight(250)
-                    ->maxHeight(500)
-                    ->maxFileSize(200)
-
-            ])->title(__('events.screen.group.title')),
+                    Cropper::make('events.banner')
+                        ->title(__('events.screen.input.banner.title'))
+                        ->actionId($this->events->event_id)
+                        ->remoteTag('banners')
+                        ->minWidth(750)
+                        ->maxWidth(1500)
+                        ->minHeight(250)
+                        ->maxHeight(500)
+                        ->maxFileSize(200)
+                ],
+                'Weather' => []
+            ])->activeTab('Information')
         ];
     }
 
@@ -254,5 +263,92 @@ class EventsEditScreen extends Screen
         } else {
             return NULL;
         }
+    }
+
+    /**
+     * Fetches the temperature from a remote API.
+     *
+     * @return float The temperature in Celsius, or 0.0 if the API request fails.
+     * @throws ConnectionErrorException
+     */
+    private function getTemperature(): float
+    {
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
+        if ($response->code === 200) {
+            return json_decode($response->body, true)['current']['temperature'];
+        }
+
+        return 0.0;
+    }
+
+    private function getSummary(): string
+    {
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
+        if ($response->code === 200) {
+            return json_decode($response->body, true)['current']['summary'];
+        }
+
+        return "Nominal";
+    }
+
+    /**
+     * Get the wind index for the given latitude and longitude.
+     *
+     * @return string Returns the wind index as a string.
+     */
+    private function getWindIndex(): string
+    {
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
+        if ($response->code === 200) {
+            return json_decode($response->body, true)['current']['wind'];
+        }
+
+        return "Nominal";
+    }
+
+    /**
+     * Get the wind icon based on the current wind angle.
+     * Uses the Meteosource API to fetch wind information.
+     *
+     * @return string The name of the wind icon.
+     * @throws ConnectionErrorException
+     */
+    private function getWindIcon(): string
+    {
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
+        if ($response->code === 200) {
+            $windAngle = json_decode($response->body, true)['current']['wind']['angle'];
+            if ($windAngle >= 0 && $windAngle < 45) {
+                return "north_east_wind_icon";
+            } elseif ($windAngle >= 45 && $windAngle < 90) {
+                return "east_wind_icon";
+            } elseif ($windAngle >= 90 && $windAngle < 135) {
+                return "south_east_wind_icon";
+            } elseif ($windAngle >= 135 && $windAngle < 180) {
+                return "south_wind_icon";
+            } elseif ($windAngle >= 180 && $windAngle < 225) {
+                return "south_west_wind_icon";
+            } elseif ($windAngle >= 225 && $windAngle < 270) {
+                return "west_wind_icon";
+            } elseif ($windAngle >= 270 && $windAngle < 315) {
+                return "north_west_wind_icon";
+            } else {
+                return "north_wind_icon";
+            }
+        }
+
+        return "none_wind_icon";
+    }
+
+    /**
+     * Send a request to the given URL and return the response.
+     *
+     * @param string $url The URL to send the request to.
+     * @return \Httpful\Response The response from the request.
+     * @throws ConnectionErrorException
+     */
+    private function sendRequest(string $url): \Httpful\Response
+    {
+        return \Httpful\Request::get($url . '&key=' . env('WEATHER_API_SECRET', ''), "application/json")->expectsJson()->send();
     }
 }

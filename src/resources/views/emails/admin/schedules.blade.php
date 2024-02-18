@@ -23,8 +23,7 @@
                                 @forelse($schedules as $schedule)
                                     <tr class="list-item">
                                         <td class="w-1p">
-                                            Start at : {{ $schedule->begin }}<br />
-                                            <span class="text-muted">Ending : {{ \Carbon\Carbon::parse($schedule->end)->diffForHumans() }}</span>
+                                            Start in : {{ \Carbon\Carbon::parse($schedule->begin)->diffForHumans() }}
                                         </td>
                                         <td class="w-1p pl-md pr-md">
                                             <img src="{{ url('/icons/checks.png') }}" class=" avatar d-block " width="40" height="40" alt="" />
@@ -37,20 +36,26 @@
                                                 <img src="{{ url('/icons/augmented-reality.png') }}" class=" va-middle" width="24" height="24" alt="star" /><br>
                                                 <span class="text-green text-uppercase">Started</span>
                                             </td>
-                                        @endif
-
-                                        @if($schedule->status === "FINISHED")
-                                            <td class="text-center d-mobile-none">
+                                        @else
+                                            @if($schedule->status == "FINISHED")
+                                                <td class="text-center d-mobile-none">
                                                     <img src="{{ url('/icons/check.png') }}" class=" va-middle" width="24" height="24" alt="star" /><br>
                                                     <span class="text-red text-uppercase">Finished</span>
-                                            </td>
-                                        @else
-                                            <td class="text-center d-mobile-none">
-                                                <img src="{{ url('/icons/clock.png') }}" class=" va-middle" width="24" height="24" alt="star" /><br>
-                                                <span class="text-blue text-uppercase">On time</span>
-                                            </td>
+                                                </td>
+                                            @else
+                                                @if($schedule->status == "CANCELLED")
+                                                    <td class="text-center d-mobile-none">
+                                                        <img src="{{ url('/icons/check.png') }}" class=" va-middle" width="24" height="24" alt="star" /><br>
+                                                        <span class="text-red text-uppercase">Cancelled</span>
+                                                    </td>
+                                                @else
+                                                    <td class="text-center d-mobile-none">
+                                                        <img src="{{ url('/icons/clock.png') }}" class=" va-middle" width="24" height="24" alt="star" /><br>
+                                                        <span class="text-blue text-uppercase">On time</span>
+                                                    </td>
+                                                @endif
+                                            @endif
                                         @endif
-
                                     </tr>
 
                                     @empty

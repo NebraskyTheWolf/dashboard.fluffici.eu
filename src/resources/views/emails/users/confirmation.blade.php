@@ -67,7 +67,7 @@
               "value": "1"
             }
           },
-          "url": "https://www.amazon.ca/gp/css/summary/edit.html/orderID=123-4567890-1234567",
+          "url": "",
           "potentialAction": {
             "@type": "ViewAction",
             "url": "https://shop.fluffici.eu/"
