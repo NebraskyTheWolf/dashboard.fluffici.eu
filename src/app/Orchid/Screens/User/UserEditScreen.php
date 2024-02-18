@@ -198,7 +198,7 @@ class UserEditScreen extends Screen
             return redirect()->route('platform.systems.users');
         }
 
-        if ($this->user->hasUserBiggerPower(Auth::user())) {
+        if (!$this->user->hasUserBiggerPower(Auth::user())) {
             Toast::info("You cannot terminate this user, this user have bigger power than yours.");
 
             return redirect()->route('platform.systems.users');
