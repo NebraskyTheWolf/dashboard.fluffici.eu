@@ -29,12 +29,14 @@ class EventsEditScreen extends Screen
 {
 
     public $events;
+    public $lon = 0.0;
+    public $lng = 0.0;
 
     /**
-     * Fetch data to be displayed on the screen.
+     * Query method for retrieving events and associated metrics.
      *
-     * @return array
-     * @throws ConnectionErrorException
+     * @param Events $events The events object containing event information.
+     * @return array The query result containing events and metrics.
      */
     public function query(Events $events): iterable
     {
@@ -137,6 +139,11 @@ class EventsEditScreen extends Screen
     {
         if ($this->events->event_id == NULL) {
             $this->events->event_id = Uuid::uuid4();
+        }
+
+        if ($this->events->exists) {
+            $this->lon = $this->events->min['lat'] ?: 0.0;
+            $this->lng = $this->events->min['lng'] ?: 0.0;
         }
 
         return [
@@ -302,10 +309,7 @@ class EventsEditScreen extends Screen
      */
     private function getTemperature(): float
     {
-        if (!$this->events->exists)
-            return 0.0;
-
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng .'&timezone=UTC&language=cs&units=metric');
         if ($response->code === 200) {
             return json_decode($response->body, true)['current']['temperature'];
         }
@@ -320,10 +324,7 @@ class EventsEditScreen extends Screen
      */
     private function getSummary(): string
     {
-        if (!$this->events->exists)
-            return 'Nominal';
-
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng .'&timezone=UTC&language=cs&units=metric');
         if ($response->code === 200) {
             return json_decode($response->body, true)['current']['summary'];
         }
@@ -339,9 +340,6 @@ class EventsEditScreen extends Screen
      */
     private function getSummaryIcon(): string
     {
-        if (!$this->events->exists)
-            return 'bs.patch-question';
-
         $iconMap = [
             1 => 'bs.patch-question',
             2 => 'bs.brightness-high',
@@ -381,7 +379,7 @@ class EventsEditScreen extends Screen
             36 => 'bs.cloud-snow',
         ];
 
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] . '&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng . '&timezone=UTC&language=cs&units=metric');
         if ($response->code === 200) {
             $index = json_decode($response->body, true)['current']['icon_num'];
             return $iconMap[$index] ?? 'bs.patch-question';
@@ -396,10 +394,7 @@ class EventsEditScreen extends Screen
      */
     private function getWindIndex(): string
     {
-        if (!$this->events->exists)
-            return "Nominal";
-
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng .'&timezone=UTC&language=cs&units=metric');
         if ($response->code === 200) {
             return json_decode($response->body, true)['current']['wind'];
         }
@@ -416,10 +411,7 @@ class EventsEditScreen extends Screen
      */
     private function getWindIcon(): string
     {
-        if (!$this->events->exists)
-            return "bs.patch-question";
-
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng .'&timezone=UTC&language=cs&units=metric');
         if ($response->code === 200) {
             $windAngle = json_decode($response->body, true)['current']['wind']['angle'];
             if ($windAngle >= 0 && $windAngle < 45) {
@@ -446,10 +438,7 @@ class EventsEditScreen extends Screen
 
     private function getPrecipitation(): int
     {
-        if (!$this->events->exists)
-            return 0;
-
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng .'&timezone=UTC&language=cs&units=metric');
         if ($response->code === 200) {
             return json_decode($response->body, true)['current']['precipitation']['total'];
         }
