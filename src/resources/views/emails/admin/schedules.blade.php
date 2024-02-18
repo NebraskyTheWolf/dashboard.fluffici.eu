@@ -24,7 +24,7 @@
                                     <tr class="list-item">
                                         <td class="w-1p">
                                             Start at : {{ $schedule->begin }}<br />
-                                            <span class="text-muted">Ending : {{ $schedule->end->diffForHumans() }}</span>
+                                            <span class="text-muted">Ending : {{ \Carbon\Carbon::parse($schedule->end)->diffForHumans() }}</span>
                                         </td>
                                         <td class="w-1p pl-md pr-md">
                                             <img src="{{ url('/icons/checks.png') }}" class=" avatar d-block " width="40" height="40" alt="" />
