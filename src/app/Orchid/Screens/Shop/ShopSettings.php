@@ -110,7 +110,7 @@ class ShopSettings extends Screen
 
     public function createOrUpdate(Request $request)
     {
-        $this->settings['shop_maintenance-text'] = strip_tags($this->settings['shop_maintenance-text']);
+        $this->settings['shop_maintenance-text'] = strip_tags($this->settings['shop_maintenance']);
 
         $this->settings->fill($request->get('settings'))->save();
 

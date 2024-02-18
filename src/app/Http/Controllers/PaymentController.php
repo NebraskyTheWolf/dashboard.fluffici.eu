@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\UpdateAudit;
+use App\Models\OrderedProduct;
+use App\Models\ShopOrders;
 use App\Models\ShopProducts;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Orchid\Platform\Models\User;
@@ -14,8 +17,8 @@ class PaymentController extends Controller
     /**
      * Process the payment for an order.
      *
-     * @param \Illuminate\Http\Request $request The HTTP request object.
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request The HTTP request object.
+     * @return JsonResponse
      *   The JSON response indicating the payment status.
      */
     public function index(Request $request)
@@ -41,7 +44,7 @@ class PaymentController extends Controller
             ]);
         }
 
-        $order = \App\Models\ShopOrders::where('order_id', $orderId);
+        $order = ShopOrders::where('order_id', $orderId);
         if (!$order->exists()) {
             return response()->json([
                 'status' => false,
@@ -51,7 +54,7 @@ class PaymentController extends Controller
         }
         $order = $order->first();
 
-        $product = \App\Models\OrderedProduct::where('order_id', $orderId)->first();
+        $product = OrderedProduct::where('order_id', $orderId)->first();
         $product = ShopProducts::where('id', $product->product_id)->first();
 
         switch ($paymentType) {
@@ -172,7 +175,7 @@ class PaymentController extends Controller
      * Fetches an order from the database based on the given order ID.
      *
      * @param Request $request The HTTP request object.
-     * @return \Illuminate\Http\JsonResponse The JSON response containing the order details.
+     * @return JsonResponse The JSON response containing the order details.
      */
     public function fetchOrder(Request $request)
     {
@@ -194,9 +197,9 @@ class PaymentController extends Controller
             ]);
         }
 
-        $order = \App\Models\ShopOrders::where('order_id', $orderId);
+        $order = ShopOrders::where('order_id', $orderId);
         $payment = \App\Models\OrderPayment::where('order_id', $orderId);
-        $products = \App\Models\OrderedProduct::where('order_id', $orderId);
+        $products = OrderedProduct::where('order_id', $orderId);
 
 
         if ($order->exists()) {
@@ -223,7 +226,7 @@ class PaymentController extends Controller
             if ($products->exists()) {
                 $data1 = $products->first();
                 $data['product'] = $data1;
-                $prd = \App\Models\ShopProducts::where('id', $data1->product_id)->first();
+                $prd = ShopProducts::where('id', $data1->product_id)->first();
                 $data['productURL'] = $prd->getImage();
             } else {
                 $data['product'] = false;

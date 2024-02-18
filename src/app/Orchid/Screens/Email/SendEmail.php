@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Orchid\Screens;
+namespace App\Orchid\Screens\Email;
 
 use App\Events\UpdateAudit;
 use App\Mail\DefaultEmail;

@@ -39,7 +39,7 @@ class PagesController extends Controller {
      *
      * @return void
      */
-    public function updatePageViews($page)
+    public function updatePageViews($page): void
     {
         $page->increment('visits', 1);
         $page->save();

@@ -2,10 +2,20 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\Accounting\AccountingInvoiceList;
+use App\Orchid\Screens\Accounting\AccountingMain;
+use App\Orchid\Screens\Accounting\AccountingMake;
+use App\Orchid\Screens\Accounting\AccountingReportList;
+use App\Orchid\Screens\Accounting\AccountingShopCreatePayment;
+use App\Orchid\Screens\Accounting\AccountingTransactionsList;
+use App\Orchid\Screens\Accounting\AccountingTRSReport;
+use App\Orchid\Screens\Attachments\AttachmentLists;
 use App\Orchid\Screens\Attachments\AttachmentReports;
+use App\Orchid\Screens\Attachments\AttachmentUpload;
 use App\Orchid\Screens\Audit\AuditLogsListScreen;
-use App\Orchid\Screens\DeviceEditScreen;
-use App\Orchid\Screens\DeviceScreen;
+use App\Orchid\Screens\Devices\DeviceEditScreen;
+use App\Orchid\Screens\Devices\DeviceScreen;
+use App\Orchid\Screens\Email\SendEmail;
 use App\Orchid\Screens\Events\EventsEditScreen;
 use App\Orchid\Screens\Events\EventsListScreen;
 use App\Orchid\Screens\Pages\PagesEditScreen;
@@ -15,28 +25,15 @@ use App\Orchid\Screens\Posts\PostEditScreen;
 use App\Orchid\Screens\Posts\PostListScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
-use App\Orchid\Screens\SendEmail;
-use App\Orchid\Screens\Shop\ShopProductEdit;
-use App\Orchid\Screens\User\UserEditScreen;
-use App\Orchid\Screens\User\UserListScreen;
-use App\Orchid\Screens\User\UserProfileScreen;
-use Illuminate\Support\Facades\Route;
-use Tabuna\Breadcrumbs\Trail;
-use App\Orchid\Screens\Accounting\AccountingInvoiceList;
-use App\Orchid\Screens\Accounting\AccountingMain;
-use App\Orchid\Screens\Accounting\AccountingMake;
-use App\Orchid\Screens\Accounting\AccountingReportList;
-use App\Orchid\Screens\Accounting\AccountingShopCreatePayment;
-use App\Orchid\Screens\Accounting\AccountingTRSReport;
-use App\Orchid\Screens\Accounting\AccountingTransactionsList;
 use App\Orchid\Screens\Shop\ShopCarrierEdit;
 use App\Orchid\Screens\Shop\ShopCarrierList;
 use App\Orchid\Screens\Shop\ShopCategories;
 use App\Orchid\Screens\Shop\ShopCategoryEdit;
 use App\Orchid\Screens\Shop\ShopCountriesEdit;
 use App\Orchid\Screens\Shop\ShopCountriesList;
-use App\Orchid\Screens\Shop\ShopOrders;
 use App\Orchid\Screens\Shop\ShopOrderEdit;
+use App\Orchid\Screens\Shop\ShopOrders;
+use App\Orchid\Screens\Shop\ShopProductEdit;
 use App\Orchid\Screens\Shop\ShopProducts;
 use App\Orchid\Screens\Shop\ShopReportList;
 use App\Orchid\Screens\Shop\ShopSales;
@@ -50,8 +47,11 @@ use App\Orchid\Screens\Shop\TaxGroupEdit;
 use App\Orchid\Screens\Shop\TaxGroupList;
 use App\Orchid\Screens\Social\SocialMedia;
 use App\Orchid\Screens\Social\SocialMediaEdit;
-use App\Orchid\Screens\Attachments\AttachmentLists;
-use App\Orchid\Screens\Attachments\AttachmentUpload;
+use App\Orchid\Screens\User\UserEditScreen;
+use App\Orchid\Screens\User\UserListScreen;
+use App\Orchid\Screens\User\UserProfileScreen;
+use Illuminate\Support\Facades\Route;
+use Tabuna\Breadcrumbs\Trail;
 
 /*
 |--------------------------------------------------------------------------

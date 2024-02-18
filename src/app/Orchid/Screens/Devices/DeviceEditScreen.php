@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Orchid\Screens;
+namespace App\Orchid\Screens\Devices;
 
 use App\Models\DeviceAuthorization;
 use Orchid\Platform\Models\User;

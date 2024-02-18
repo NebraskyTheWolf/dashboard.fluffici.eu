@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Orchid\Platform\Models\User;
+use Random\RandomException;
 
 class LoginController extends Controller
 {
@@ -292,6 +293,7 @@ class LoginController extends Controller
      *
      * @param int $length The length of the token (default: 4).
      * @return string The generated numeric token.
+     * @throws RandomException
      */
     private function generateNumericToken(int $length = 4): string
     {

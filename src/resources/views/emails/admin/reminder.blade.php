@@ -7,7 +7,7 @@
                 <table cellpadding="0" cellspacing="0">
                     <tr>
                         <td class="content pb-0" align="center">
-                            <h1 class="text-center m-0">Event confirmation</h1>
+                            <h1 class="text-center m-0">Event planned today!</h1>
                         </td>
                     </tr>
                     <tr>
@@ -30,8 +30,8 @@
                                         </td>
                                         <td class="col-spacer col-spacer-sm"></td>
                                         <td class="col">
-                                            <h3 class="m-0 font-strong">Fluffici event scheduled at</h3>
-                                            <div class="text-muted mb-sm">{{ $dayFull }}, {{ $month }} {{ $day }} at {{ $time }}</div>
+                                            <h3 class="m-0 font-strong">{{ $eventName }}</h3>
+                                            <div class="text-muted mb-sm">{{ $dayFull }}, {{ $monthFull }} {{ $day }} at {{ $time }}</div>
                                             <div>{{ $address }}</div>
                                         </td>
                                     </tr>

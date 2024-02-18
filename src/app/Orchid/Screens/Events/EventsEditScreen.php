@@ -34,16 +34,33 @@ class EventsEditScreen extends Screen
      * Fetch data to be displayed on the screen.
      *
      * @return array
+     * @throws ConnectionErrorException
      */
     public function query(Events $events): iterable
     {
         return [
             'events' => $events,
             'metrics' => [
-                'summary' => [],
-                'temperature' => [],
-                'wind' => [],
-                'precipitation' => [],
+                'summary' => [
+                    'key' => 'summary',
+                    'value' => $this->getSummary(),
+                    'icon' => $this->getSummaryIcon()
+                ],
+                'temperature' => [
+                    'key' => 'temperature',
+                    'value' => $this->getTemperature() . '°C',
+                    'icon' => 'bs.thermometer-half'
+                ],
+                'wind' => [
+                    'key' => 'wind',
+                    'value' => $this->getWindIndex() . '%',
+                    'icon' => $this->getWindIcon()
+                ],
+                'precipitation' => [
+                    'key' => 'precipitation',
+                    'value' => $this->getPrecipitation() . '%',
+                    'icon' => 'bs.cloud-drizzle'
+                ],
             ]
         ];
     }
@@ -183,7 +200,14 @@ class EventsEditScreen extends Screen
                         ->maxHeight(500)
                         ->maxFileSize(200)
                 ],
-                'Weather' => []
+                'Weather' => [
+                    Layout::metrics([
+                        'Summary' => 'metrics.summary',
+                        'Temperature' => 'metrics.temperature',
+                        'Wind' => 'metrics.wind',
+                        'Precipitations' => 'metrics.precipitation',
+                    ])->canSee($this->events->exists),
+                ]
             ])->activeTab('Information')
         ];
     }
@@ -257,6 +281,12 @@ class EventsEditScreen extends Screen
         return redirect()->route('platform.events.list');
     }
 
+    /**
+     * Get the banner attachment ID for a given event ID.
+     *
+     * @param int $id The event ID.
+     * @return int|null The banner attachment ID or NULL if it doesn't exist.
+     */
     private function getBanner($id) {
         if ($this->events->exists) {
             return PlatformAttachments::where('action_id', $id)->firstOrFail()->attachment_id ?: NULL;
@@ -266,13 +296,15 @@ class EventsEditScreen extends Screen
     }
 
     /**
-     * Fetches the temperature from a remote API.
+     * Fetches the current temperature from a weather API.
      *
-     * @return float The temperature in Celsius, or 0.0 if the API request fails.
-     * @throws ConnectionErrorException
+     * @return float The current temperature in Celsius.
      */
     private function getTemperature(): float
     {
+        if (!$this->events->exists)
+            return 0.0;
+
         $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
         if ($response->code === 200) {
             return json_decode($response->body, true)['current']['temperature'];
@@ -281,8 +313,16 @@ class EventsEditScreen extends Screen
         return 0.0;
     }
 
+    /**
+     * Get the summary of the current weather conditions.
+     *
+     * @return string The summary of the current weather conditions.
+     */
     private function getSummary(): string
     {
+        if (!$this->events->exists)
+            return 'Nominal';
+
         $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
         if ($response->code === 200) {
             return json_decode($response->body, true)['current']['summary'];
@@ -292,12 +332,73 @@ class EventsEditScreen extends Screen
     }
 
     /**
-     * Get the wind index for the given latitude and longitude.
+     * Get the icon for the summary based on the icon number.
      *
-     * @return string Returns the wind index as a string.
+     * @return string The icon name.
+     * @throws ConnectionErrorException If there is an error in the connection.
+     */
+    private function getSummaryIcon(): string
+    {
+        if (!$this->events->exists)
+            return 'bs.patch-question';
+
+        $iconMap = [
+            1 => 'bs.patch-question',
+            2 => 'bs.brightness-high',
+            3 => 'bs.cloud-sun',
+            4 => 'bs.cloud-sun',
+            5 => 'bs.clouds',
+            6 => 'bs.clouds',
+            7 => 'bs.cloudy',
+            8 => 'bs.cloud-download',
+            9 => 'bs.cloud-fog2',
+            10 => 'bs.cloud-drizzle',
+            11 => 'bs.cloud-rain',
+            12 => 'bs.cloud-drizzle',
+            13 => 'bs.cloud-rain-heavy',
+            14 => 'bs.cloud-lightning',
+            15 => 'bs.cloud-lightning',
+            16 => 'bs.cloud-snow',
+            17 => 'bs.cloud-snow',
+            18 => 'bs.cloud-snow',
+            19 => 'bs.cloud-snow',
+            20 => 'bs.cloud-hail',
+            21 => 'bs.cloud-hail',
+            22 => 'bs.cloud-hail',
+            23 => 'bs.cloud-hail',
+            24 => 'bs.cloud-hail',
+            25 => 'bs.cloud-hail',
+            26 => 'bs.moon-stars',
+            27 => 'bs.cloud-moon',
+            28 => 'bs.cloud-moon',
+            29 => 'bs.cloud-moon',
+            30 => 'bs.cloud-moon',
+            31 => 'bs.cloud-moon',
+            32 => 'bs.cloud-rain',
+            33 => 'bs.cloud-lightning',
+            34 => 'bs.cloud-snow',
+            35 => 'bs.cloud-snow',
+            36 => 'bs.cloud-snow',
+        ];
+
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] . '&timezone=UTC&language=cs&units=metric');
+        if ($response->code === 200) {
+            $index = json_decode($response->body, true)['current']['icon_num'];
+            return $iconMap[$index] ?? 'bs.patch-question';
+        }
+        return "bs.patch-question";
+    }
+
+    /**
+     * Get the wind index for the current events.
+     *
+     * @return string The wind index, or "Nominal" if there was an error fetching the data.
      */
     private function getWindIndex(): string
     {
+        if (!$this->events->exists)
+            return "Nominal";
+
         $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
         if ($response->code === 200) {
             return json_decode($response->body, true)['current']['wind'];
@@ -315,29 +416,45 @@ class EventsEditScreen extends Screen
      */
     private function getWindIcon(): string
     {
+        if (!$this->events->exists)
+            return "bs.patch-question";
+
         $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
         if ($response->code === 200) {
             $windAngle = json_decode($response->body, true)['current']['wind']['angle'];
             if ($windAngle >= 0 && $windAngle < 45) {
-                return "north_east_wind_icon";
+                return "bs.arrow-up-short";
             } elseif ($windAngle >= 45 && $windAngle < 90) {
-                return "east_wind_icon";
+                return "bs.arrow-up-right";
             } elseif ($windAngle >= 90 && $windAngle < 135) {
-                return "south_east_wind_icon";
+                return "bs.arrow-down-right";
             } elseif ($windAngle >= 135 && $windAngle < 180) {
-                return "south_wind_icon";
+                return "bs.arrow-down-short";
             } elseif ($windAngle >= 180 && $windAngle < 225) {
-                return "south_west_wind_icon";
+                return "bs.arrow-down-left";
             } elseif ($windAngle >= 225 && $windAngle < 270) {
-                return "west_wind_icon";
+                return "bs.arrow-left-short";
             } elseif ($windAngle >= 270 && $windAngle < 315) {
-                return "north_west_wind_icon";
+                return "bs.arrow-up-left";
             } else {
-                return "north_wind_icon";
+                return "bs.arrow-up-short";
             }
         }
 
-        return "none_wind_icon";
+        return "bs.patch-question";
+    }
+
+    private function getPrecipitation(): int
+    {
+        if (!$this->events->exists)
+            return 0;
+
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->events->min['lat'] . '&lon=' . $this->events->min['lng'] .'&timezone=UTC&language=cs&units=metric');
+        if ($response->code === 200) {
+            return json_decode($response->body, true)['current']['precipitation']['total'];
+        }
+
+        return 0;
     }
 
     /**

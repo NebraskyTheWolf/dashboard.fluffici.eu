@@ -74,11 +74,11 @@
 
 <body class="{{ \Orchid\Support\Names::getPageNameClass() }} styled-text" data-controller="pull-to-refresh">
 
-<div data-controller="@yield('controller')" @yield('controller-data') id="loading" class="">
+<div data-controller="@yield('controller')" @yield('controller-data') id="loading">
     <div class="row justify-content-center d-md-flex h-100">
         @yield('aside')
 
-        <div class="col-xxl col-xl-9 col-12 dark:bg-dots-lighter bg-fluffici-dark" id="custom">
+        <div class="col-xxl col-xl-9 col-12 dark:bg-dots-lighter bg-fluffici-dark">
             @yield('body')
         </div>
     </div>
