@@ -21,8 +21,6 @@ class UserEditLayout extends Rows
      */
     public function fields(): array {
 
-        $user = $this->query->get('user');
-
         return [
             Input::make('user.name')
                 ->type('text')
@@ -37,11 +35,6 @@ class UserEditLayout extends Rows
                 ->title(__('user.screen.user.email'))
                 ->placeholder(__('user.screen.user.email.placeholder')),
 
-            Picture::make('user.avatar')
-                ->title("User avatar")
-                ->url('https://autumn.fluffici.eu/avatars/' . ($user->avatar_id === null ? '' : $user->avatar_id))
-                ->canSee($user->avatar == 1),
-
             Cropper::make('user.avatar')
                 ->userId(Auth::id())
                 ->remoteTag('avatars')
@@ -49,13 +42,7 @@ class UserEditLayout extends Rows
                 ->maxWidth(512)
                 ->minHeight(250)
                 ->maxHeight(512)
-                ->maxFileSize(20)
-                ->canSee($this->check($user)),
+                ->maxFileSize(20),
         ];
-    }
-
-    public function check($user): bool
-    {
-        return (Auth::id() == $user->id);
     }
 }
