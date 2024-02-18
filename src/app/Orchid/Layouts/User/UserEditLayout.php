@@ -39,7 +39,7 @@ class UserEditLayout extends Rows
 
             Picture::make('user.avatar')
                 ->title("User avatar")
-                ->url('https://autumn.fluffici.eu/avatars/' . $user->avatar_id)
+                ->url('https://autumn.fluffici.eu/avatars/' . ($user->avatar_id === null ? '' : $user->avatar_id))
                 ->canSee($user->avatar == 1),
 
             Cropper::make('user.avatar')

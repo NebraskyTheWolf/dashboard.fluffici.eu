@@ -63,7 +63,7 @@ class Cropper extends Picture
         'maxSizeValidateMessage' => 'The upload file is too large. Max size: {value} MB',
         'remoteTag' => 'attachments',
         'actionId' => '',
-        'objectId' => null
+        'objectId' => ''
     ];
 
     /**

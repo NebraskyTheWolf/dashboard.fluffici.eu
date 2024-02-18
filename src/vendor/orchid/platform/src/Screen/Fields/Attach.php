@@ -45,7 +45,7 @@ class Attach extends Field
         'actionId' => '',
         'remoteTag' => 'attachments',
         'userId' => '',
-        'objectId' => null
+        'objectId' => ''
     ];
 
     /**
