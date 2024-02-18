@@ -30,14 +30,12 @@ class GenerateTransactionsReport extends Command
     protected $description = 'Command description';
 
     /**
-     * Handle method for processing transaction reports.
-     *
-     * This method generates a transaction report and saves it to the database.
+     * Handles the process of generating and saving a transaction report.
      *
      * @return void
      * @throws \Exception
      */
-    public function handle()
+    public function handle(): void
     {
         $today = Carbon::today()->format(self::DATE_FORMAT);
         $currentMonth = Carbon::now()->month;
@@ -63,7 +61,7 @@ class GenerateTransactionsReport extends Command
     }
 
     /**
-     * Generates a unique ID for a report.
+     * Generates a report ID.
      *
      * @return string The generated report ID.
      */
@@ -72,6 +70,14 @@ class GenerateTransactionsReport extends Command
         return strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
     }
 
+    /**
+     * Calculate the total payments for orders based on the status, month, and year.
+     *
+     * @param string $status The status of the orders.
+     * @param int $month The month of the orders.
+     * @param int $year The year of the orders.
+     * @return float The total payments for the orders matching the specified status, month, and year.
+     */
     private function calculateOrderPayments(string $status, int $month, int $year): float
     {
         return OrderPayment::orderBy('created_at', 'desc')
@@ -81,6 +87,13 @@ class GenerateTransactionsReport extends Command
             ->sum('price');
     }
 
+    /**
+     * Calculates the total fee charged by carriers for orders made in a specific month and year.
+     *
+     * @param int $month The month for which to calculate the fees (1-12).
+     * @param int $year The year for which to calculate the fees.
+     * @return float The total fees charged by carriers for the specified month and year.
+     */
     private function calculateCarrierFees(int $month, int $year): float
     {
         return OrderCarrier::orderBy('created_at', 'desc')

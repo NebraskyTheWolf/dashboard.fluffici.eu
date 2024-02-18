@@ -4,7 +4,6 @@
 namespace App\Models;
 
 use DASPRiD\Enum\Exception\IllegalArgumentException;
-use Exception;
 use InvalidArgumentException;
 use Nette\Schema\ValidationException;
 use Orchid\Metrics\Chartable;
@@ -125,7 +124,7 @@ class ShopProducts extends Model
      * Retrieves a product based on the specified UPC-A code.
      *
      * The method first validates the provided UPC-A code and returns null if it is invalid.
-     * Then, it removes the check digit from the UPC-A and extracts the product ID.
+     * Then, it extracts the product ID from the UPC-A by removing leading zeros and the automatically appended check digit.
      * Finally, it fetches the product with the matching ID and returns it.
      *
      * @param string $upc The UPC-A code of the product.
@@ -135,69 +134,66 @@ class ShopProducts extends Model
      */
     public function getProductFromUpcA(string $upc): ?ShopProducts
     {
-        // Check if UPC-A is valid
-        if (!$this->isValidUPCA($upc)) {
-            return null;
-        }
+        $upc = str_replace('0', '', substr($upc, 0, -1));
 
-        // Remove the check digit
-        $productId = substr($upc, 0, -1);
+        $upc = intval($upc) + 1;
 
-        // Fetch the product by ID
-        return ShopProducts::find($productId);
+        return ShopProducts::find($upc);
+    }
+
+    public function getProductFromUpcADBG(string $upc): int
+    {
+        $upc = str_replace('0', '', $upc);
+        $upc = substr($upc, 0, -1);
+        $upc = intval($upc) + 1;
+
+        return $upc;
     }
 
     /**
-     * Check if a UPC-A (Universal Product Code) is valid.
+     * Retrieve the available quantity of the product.
      *
-     * This method validates a given UPC-A by performing a series of checks on its structure and checksum.
-     * A valid UPC-A must have a total of 12 digits.
-     * It calculates the sum of the digits at odd and even positions separately.
-     * The total sum is multiplied by 3 for the odd digits and added to the sum of even digits.
-     * The result is then subtracted from the nearest greater multiple of 10.
-     * If the calculated checksum is equal to the last digit of the UPC-A, it is considered valid.
+     * This method queries the ProductInventory model to find the available quantity of the product with the specified ID.
+     * If an available quantity exists, the quantity value is returned as an integer.
+     * If no available quantity exists, 0 is returned.
      *
-     * @param string $upc The UPC-A string to be validated.
-     * @return bool True if the UPC-A is valid, false otherwise.
+     * @return int The available quantity of the product, or 0 if no quantity exists.
      */
-    public function isValidUPCA(string $upc): bool
-    {
-        if (strlen($upc) != 12) {
-            return false;
-        }
-
-        $oddSum = 0;
-        $evenSum = 0;
-
-        for ($i = 0; $i < 12; $i++) {
-            if ($i % 2 == 0) {
-                $oddSum .= $upc[$i];
-            } else {
-                $evenSum .= $upc[$i];
-            }
-        }
-
-        $totalSum = $evenSum + (3 * $oddSum);
-        $checksum = 10 - ($totalSum % 10);
-
-        return $checksum == $upc[11];
-    }
-
     public function getAvailableProducts(): int
     {
         return ProductInventory::where('product_id', $this->id)->first()->available ?: 0;
     }
 
+    /**
+     * Increment the available quantity of the product by 1.
+     *
+     * This method fetches the product inventory using the ProductInventory model and finds the record with the specified product ID.
+     * It then increments the 'available' column by 1 for that record.
+     *
+     * Note that the method does not return any value.
+     */
     public function incrementQuantity(): void
     {
         ProductInventory::where('product_id', $this->id)->first()->increment('available', 1);
     }
 
+    /**
+     * Decrement the quantity of the product.
+     *
+     * This method updates the available quantity of the product in the ProductInventory model by subtracting 1.
+     *
+     * @return void
+     */
     public function decrementQuantity(): void
     {
         ProductInventory::where('product_id', $this->id)->first()->decrement('available', 1);
     }
 
+    /**
+     * Creates a new ProductInventory for the current product or retrieves an existing one if already created.
+     *
+     * @return ProductInventory The created or retrieved ProductInventory.
+     */
     public function createOrGetInventory(): ProductInventory
     {
         $inventory = ProductInventory::where('product_id', $this->id);
@@ -232,25 +228,61 @@ class ShopProducts extends Model
             throw new IllegalArgumentException("Product ID is required");
         }
 
-        $code = str_pad($this->id, 12, '0', STR_PAD_LEFT);
+        $code = str_pad($this->id, 11, '0', STR_PAD_LEFT);
         $oddSum = 0;
         $evenSum = 0;
         for ($i = 0; $i < 11; $i++) {
-            if ($i % 2 == 0) {
-                $oddSum += $code[$i];
-            } else {
+            if (($i + 1) % 2 == 0) {
                 $evenSum += $code[$i];
+            } else {
+                $oddSum += $code[$i];
             }
         }
-        $totalSum = $oddSum + (3 * $evenSum);
-        $checksum = 10 - ($totalSum % 10) % 10;
+        $totalSum = $evenSum + (3 * $oddSum);
+        $checksum = (10 - ($totalSum % 10)) % 10;
         $upca = $code . $checksum;
 
         // validate if the length of UPC-A code is not 12
         if(strlen($upca) > 12){
-            throw new ValidationException("UPC-A code should be 12 digits long");
+            throw new ValidationException("UPC-A code should be 12 digits long ( " . strlen($upca) . ' found, checksum : ' . strlen($checksum) . ' / ' . $totalSum . ' <-!-> ' . $oddSum . ' == ' . $code . ' )');
         }
 
         return $upca;
+    }
+
+    /**
+     * Check if a UPC-A (Universal Product Code) is valid.
+     *
+     * This method validates a given UPC-A by performing a series of checks on its structure and checksum.
+     * A valid UPC-A must have a total of 12 digits.
+     * It calculates the sum of the digits at odd and even positions separately.
+     * The total sum is multiplied by 3 for the odd digits and added to the sum of even digits.
+     * The result is then subtracted from the nearest greater multiple of 10.
+     * If the calculated checksum is equal to the last digit of the UPC-A, it is considered valid.
+     *
+     * @param string $upc The UPC-A string to be validated.
+     * @return bool True if the UPC-A is valid, false otherwise.
+     */
+    public function isValidUPCA(string $upc): bool
+    {
+        if (strlen($upc) != 12) {
+            return false;
+        }
+
+        $oddSum = 0;
+        $evenSum = 0;
+
+        for ($i = 0; $i < 11; $i++) {
+            if (($i + 1) % 2 == 0) {
+                $evenSum .= $upc[ $i ];
+            } else {
+                $oddSum .= $upc[ $i ];
+            }
+        }
+
+        $totalSum = $evenSum + (3 * $oddSum);
+        $checksum = (10 - ($totalSum % 10));
+
+        return $checksum == $upc[11];
     }
 }

@@ -132,7 +132,7 @@ class ShopProductEdit extends Screen
                     Picture::make('Barcode')
                         ->title('Barcode')
                         ->help('This is the barcode of this product')
-                        ->url(route('api.shop.barcode') . '?productId=' . $this->products->generateUPCA())
+                        ->url($this->products->exists ? route('api.shop.barcode') . '?productId=' . $this->products->generateUPCA() : '')
                         ->canSee($this->products->exists)
 
                 ])->alignCenter(),

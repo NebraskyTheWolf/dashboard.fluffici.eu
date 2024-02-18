@@ -210,6 +210,7 @@ class DeviceController extends Controller
         }
 
         $product = new ShopProducts();
+        $dbg = $product->getProductFromUpcADBG($ean13Code);
         $product = $product->getProductFromUpcA($ean13Code);
 
         if ($product != null) {
@@ -218,7 +219,8 @@ class DeviceController extends Controller
                 'data' => [
                     'id' => $product->id,
                     'name' => $product->name,
-                    'price' => $product->price
+                    'price' => $product->price,
+                    'quantity' => $product->getAvailableProducts()
                 ],
                 'message' => "Product retrieved successfully."
             ]);
@@ -228,7 +230,7 @@ class DeviceController extends Controller
                 'error' => "PRODUCT_NOT_FOUND",
                 'message' => "Product not found.",
                 'data' => [
-                    'bid' => $ean13Code
+                    'bid' => $dbg
                 ]
             ]);
         }
