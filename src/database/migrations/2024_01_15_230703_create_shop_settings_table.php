@@ -12,10 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::connection('shop')->table('shop_settings')->insert([
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
-        ]);
+
 
         Schema::connection('shop')->create('shop_settings', function (Blueprint $table) {
             $table->id();
