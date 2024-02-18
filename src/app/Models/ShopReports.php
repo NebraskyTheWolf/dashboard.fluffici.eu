@@ -9,4 +9,5 @@ use Orchid\Screen\AsSource;
 class ShopReports extends Model
 {
     use AsSource;
+    public $connection = 'shop';
 }

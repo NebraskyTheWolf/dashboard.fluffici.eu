@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class ShopSupportTickets extends Model
 {
     use AsSource, Chartable;
-
+    public $connection = 'shop';
     protected $fillable = [
         'status'
     ];

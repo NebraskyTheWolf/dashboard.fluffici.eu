@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shop_countries', function (Blueprint $table) {
+        Schema::connection('shop')->create('shop_countries', function (Blueprint $table) {
             $table->id();
             $table->string('country_name');
             $table->string('iso_code');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shop_countries');
+        Schema::connection('shop')->dropIfExists('shop_countries');
     }
 };

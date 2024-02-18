@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shop_settings', function (Blueprint $table) {
+        Schema::connection('shop')->create('shop_settings', function (Blueprint $table) {
             $table->id();
 
             // General
@@ -47,6 +47,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shop_settings');
+        Schema::connection('shop')->dropIfExists('shop_settings');
     }
 };

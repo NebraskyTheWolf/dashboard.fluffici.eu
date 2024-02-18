@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_tax', function (Blueprint $table) {
+        Schema::connection('shop')->create('product_tax', function (Blueprint $table) {
             $table->id();
             $table->integer('product_id')->references('id')->on('shop_products');
             $table->integer('tax_id')->references('id')->on('tax_group');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_tax');
+        Schema::connection('shop')->dropIfExists('product_tax');
     }
 };

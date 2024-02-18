@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounting_document', function (Blueprint $table) {
+        Schema::connection('shop')->create('accounting_document', function (Blueprint $table) {
             $table->id();
             $table->string('attachment_id');
             $table->string('report_id');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('accounting_document');
+        Schema::connection('shop')->dropIfExists('accounting_document');
     }
 };

@@ -10,5 +10,7 @@ class OrderedProduct extends Model
 {
     use HasFactory, Chartable;
 
+    public $connection = 'shop';
+
     protected $table = "ordered_product";
 }

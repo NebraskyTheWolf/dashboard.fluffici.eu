@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('current_reports', function (Blueprint $table) {
+        Schema::connection('shop')->create('current_reports', function (Blueprint $table) {
             $table->id();
 
             $table->string('shop_report_id');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('last_version');
+        Schema::connection('shop')->dropIfExists('last_version');
     }
 };

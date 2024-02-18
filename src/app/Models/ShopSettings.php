@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ShopSettings extends Model
 {
     use HasFactory;
-
+    public $connection = 'shop';
     public $fillable = [
         'enabled',
         'favicon',

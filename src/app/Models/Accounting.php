@@ -12,6 +12,8 @@ class Accounting extends Model
 {
     use AsSource, Filterable, Chartable;
 
+    public $connection = 'shop';
+
     public $table = 'accounting';
 
     protected $fillable = [

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts_likes', function (Blueprint $table) {
+        Schema::connection('blog')->create('posts_likes', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('post_id');
             $table->bigInteger('likes');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts_likes');
+        Schema::connection('blog')->dropIfExists('posts_likes');
     }
 };

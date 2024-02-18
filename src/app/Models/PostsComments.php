@@ -9,4 +9,6 @@ use Orchid\Screen\AsSource;
 class PostsComments extends Model
 {
     use AsSource, Chartable;
+
+    public $connection = 'blog';
 }

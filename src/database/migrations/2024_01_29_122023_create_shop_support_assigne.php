@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shop_support_assignee', function (Blueprint $table) {
+        Schema::connection('shop')->create('shop_support_assignee', function (Blueprint $table) {
             $table->id();
             $table->integer('ticket_id')->references('id')->on('shop_support_tickets');
             $table->integer('assignee')->references('id')->on('users');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shop_support_assigne');
+        Schema::connection('shop')->dropIfExists('shop_support_assigne');
     }
 };

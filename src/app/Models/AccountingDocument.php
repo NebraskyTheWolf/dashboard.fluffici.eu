@@ -10,5 +10,7 @@ class AccountingDocument extends Model
 {
     use AsSource;
 
+    public $connection = 'shop';
+
     public $table = 'accounting_document';
 }

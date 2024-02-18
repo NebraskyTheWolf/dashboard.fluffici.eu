@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_payment', function (Blueprint $table) {
+        Schema::connection('shop')->create('order_payment', function (Blueprint $table) {
             $table->id();
             $table->string('order_id')->references('order_id')->on('shop_orders');
             $table->string('status');
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_payment');
+        Schema::connection('shop')->dropIfExists('order_payment');
     }
 };

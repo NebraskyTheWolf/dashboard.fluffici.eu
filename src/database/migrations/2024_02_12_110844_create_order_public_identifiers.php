@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_public_identifiers', function (Blueprint $table) {
+        Schema::connection('shop')->create('order_public_identifiers', function (Blueprint $table) {
             $table->id();
             $table->string('order_id')->references('order_id')->on('shop_orders');
             $table->string('public_identifier');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_public_identifiers');
+        Schema::connection('shop')->dropIfExists('order_public_identifiers');
     }
 };

@@ -10,6 +10,7 @@ class ProductTax extends Model
     use AsSource;
 
     public $table = 'product_tax';
+    public $connection = 'shop';
 
     public $fillable = [
         'product_id',

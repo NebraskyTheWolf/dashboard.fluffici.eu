@@ -10,5 +10,7 @@ class OrderCarrier extends Model
 {
     use HasFactory, Chartable;
 
+    public $connection = 'shop';
+
     public $table = 'order_carrier';
 }

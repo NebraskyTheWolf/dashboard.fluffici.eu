@@ -7,5 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderSales extends Model
 {
+
     use HasFactory;
+
+    public $connection = 'shop';
+
 }

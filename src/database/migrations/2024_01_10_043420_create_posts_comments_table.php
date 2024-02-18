@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts_comments', function (Blueprint $table) {
+        Schema::connection('blog')->create('posts_comments', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('post_id');
             $table->string('author');
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts_comments');
+        Schema::connection('blog')->dropIfExists('posts_comments');
     }
 };

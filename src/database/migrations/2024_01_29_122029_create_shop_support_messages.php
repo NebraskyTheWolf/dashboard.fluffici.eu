@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shop_support_messages', function (Blueprint $table) {
+        Schema::connection('shop')->create('shop_support_messages', function (Blueprint $table) {
             $table->id();
             $table->string('username');
             $table->text('message');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shop_support_messages');
+        Schema::connection('shop')->dropIfExists('shop_support_messages');
     }
 };

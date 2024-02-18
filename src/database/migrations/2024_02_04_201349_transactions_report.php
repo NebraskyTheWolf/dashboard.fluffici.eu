@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transactions_report', function (Blueprint $table) {
+        Schema::connection('shop')->create('transactions_report', function (Blueprint $table) {
             $table->id();
             $table->string('attachment_id');
             $table->string('report_id');

@@ -11,4 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 class PostsLikes extends Model
 {
     use AsSource, Chartable;
+
+    public $connection = 'blog';
 }

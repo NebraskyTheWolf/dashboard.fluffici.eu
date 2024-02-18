@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class ShopOrders extends Model
 {
     use AsSource, Chartable;
-
+    public $connection = 'shop';
     protected $fillable = [
         'first_name',
         'last_name',

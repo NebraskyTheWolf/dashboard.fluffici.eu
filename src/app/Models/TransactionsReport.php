@@ -11,7 +11,7 @@ class TransactionsReport extends Model
     use AsSource;
 
     public $table = 'transactions_report';
-
+    public $connection = 'shop';
     public $fillable = [
         'attachment_id',
         'report_id'

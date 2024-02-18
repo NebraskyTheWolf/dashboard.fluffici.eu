@@ -8,4 +8,7 @@ use Orchid\Screen\AsSource;
 
 class EventsInteresteds extends Model{
     use AsSource, Chartable;
+
+    public $connection = 'akce';
+
 }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events_interesteds', function (Blueprint $table) {
+        Schema::connection('akce')->create('events_interesteds', function (Blueprint $table) {
             $table->id();
             $table->string('event_id')->references('event_id')->on('events');
             $table->string('username');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events_interesteds');
+        Schema::connection('akce')->dropIfExists('events_interesteds');
     }
 };

@@ -12,6 +12,8 @@ class OrderPayment extends Model
 {
     use AsSource, Chartable, Filterable;
 
+    public $connection = 'shop';
+
     protected $table = "order_payment";
 
     protected $fillable = [

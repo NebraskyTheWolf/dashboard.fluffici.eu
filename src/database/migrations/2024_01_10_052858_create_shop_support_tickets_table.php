@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shop_support_tickets', function (Blueprint $table) {
+        Schema::connection('shop')->create('shop_support_tickets', function (Blueprint $table) {
             $table->id();
             $table->string("title");
             // The first message
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shop_support_tickets');
+        Schema::connection('shop')->dropIfExists('shop_support_tickets');
     }
 };

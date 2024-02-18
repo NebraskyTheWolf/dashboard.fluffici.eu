@@ -9,6 +9,8 @@ class OrderIdentifiers extends Model
 {
     use HasFactory;
 
+    public $connection = 'shop';
+
     public $table = 'order_public_identifiers';
 
     /**

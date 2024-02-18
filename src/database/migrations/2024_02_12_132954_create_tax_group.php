@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tax_group', function (Blueprint $table) {
+        Schema::connection('shop')->create('tax_group', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->integer("percentage")->default(0);
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tax_group');
+        Schema::connection('shop')->dropIfExists('tax_group');
     }
 };

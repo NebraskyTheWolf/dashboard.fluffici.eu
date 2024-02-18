@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 class ShopProducts extends Model
 {
     use AsSource, Chartable;
-
+    public $connection = 'shop';
     protected $fillable = [
         'name',
         'description',

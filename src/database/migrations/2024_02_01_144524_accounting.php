@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounting', function (Blueprint $table) {
+        Schema::connection('shop')->create('accounting', function (Blueprint $table) {
             $table->id();
             // Expense // Income
             $table->string('type')->nullable();

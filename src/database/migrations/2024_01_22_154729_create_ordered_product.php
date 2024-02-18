@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_carrier', function (Blueprint $table) {
+        Schema::connection('shop')->create('order_carrier', function (Blueprint $table) {
             $table->id();
             $table->string('order_id')->references('order_id')->on('shop_orders');
             $table->string('carrier_name');
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('order_sales', function (Blueprint $table) {
+        Schema::connection('shop')->create('order_sales', function (Blueprint $table) {
             $table->id();
             $table->string('order_id')->references('order_id')->on('shop_orders')->unique();
             $table->string('sale_id')->references('id')->on('shop_sales');
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ordered_product');
+        Schema::connection('shop')->dropIfExists('ordered_product');
     }
 };

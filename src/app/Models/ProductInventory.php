@@ -9,6 +9,6 @@ use Orchid\Screen\AsSource;
 class ProductInventory extends Model
 {
     use AsSource;
-
+    public $connection = 'shop';
     public $table = 'product_inventory';
 }

@@ -7,7 +7,7 @@ use Orchid\Screen\AsSource;
 
 class ShopCarriers extends Model {
     use AsSource;
-
+    public $connection = 'shop';
     protected $fillable = [
         'slug',
         'carrierName',

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shop_categories', function (Blueprint $table) {
+        Schema::connection('shop')->create('shop_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 50);
             $table->integer('order')->unsigned();
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('shop_products', function (Blueprint $table) {
+        Schema::connection('shop')->create('shop_products', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 150);
             $table->text('description');
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('shop_sales', function (Blueprint $table) {
+        Schema::connection('shop')->create('shop_sales', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('product_id')->unsigned()->nullable()->default(null);
             $table->string('product_type', 8); // ITEM or CATEGORY
@@ -42,7 +42,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('shop_vouchers', function (Blueprint $table) {
+        Schema::connection('shop')->create('shop_vouchers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 50);
             $table->float('money');
@@ -57,10 +57,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shop_categories');
-        Schema::dropIfExists('shop_products');
-        Schema::dropIfExists('shop_sales');
-        Schema::dropIfExists('shop_vouchers');
-        Schema::dropIfExists('shop_orders');
+        Schema::connection('shop')->dropIfExists('shop_categories');
+        Schema::connection('shop')->dropIfExists('shop_products');
+        Schema::connection('shop')->dropIfExists('shop_sales');
+        Schema::connection('shop')->dropIfExists('shop_vouchers');
+        Schema::connection('shop')->dropIfExists('shop_orders');
     }
 };
