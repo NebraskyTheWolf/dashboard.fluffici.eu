@@ -14,7 +14,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <h1 class="text-center m-0 mt-md">{{ $title }}'s schedule</h1>
+                            <h1 class="text-center m-0 mt-md">Event's schedules</h1>
                         </td>
                     </tr>
                     <tr>
@@ -23,20 +23,26 @@
                                 @forelse($schedules as $schedule)
                                     <tr class="list-item">
                                         <td class="w-1p">
-                                            {{ $schedule->beging }}<br />
-                                            <span class="text-muted">{{ $schedule->end->diffForHumans() }}</span>
+                                            Start at : {{ $schedule->begin }}<br />
+                                            <span class="text-muted">Ending : {{ $schedule->end->diffForHumans() }}</span>
                                         </td>
                                         <td class="w-1p pl-md pr-md">
                                             <img src="{{ url('/icons/checks.png') }}" class=" avatar d-block " width="40" height="40" alt="" />
                                         </td>
                                         <td>
-                                            {{ $schedule->name }}<br>
-                                            <span class="text-muted">Interested : {{ $schedule->interested }}</span>
+                                            {{ $schedule->name }}
                                         </td>
                                         @if($schedule->status == "STARTED")
                                             <td class="text-center d-mobile-none">
                                                 <img src="{{ url('/icons/augmented-reality.png') }}" class=" va-middle" width="24" height="24" alt="star" /><br>
                                                 <span class="text-green text-uppercase">Started</span>
+                                            </td>
+                                        @endif
+
+                                        @if($schedule->status === "FINISHED")
+                                            <td class="text-center d-mobile-none">
+                                                    <img src="{{ url('/icons/check.png') }}" class=" va-middle" width="24" height="24" alt="star" /><br>
+                                                    <span class="text-red text-uppercase">Finished</span>
                                             </td>
                                         @else
                                             <td class="text-center d-mobile-none">
@@ -44,6 +50,7 @@
                                                 <span class="text-blue text-uppercase">On time</span>
                                             </td>
                                         @endif
+
                                     </tr>
 
                                     @empty
@@ -52,7 +59,7 @@
                                                 <img src="{{ url('/icons/circle-minus.png') }}" class=" avatar d-block " width="40" height="40" alt="" />
                                             </td>
                                             <td>
-                                                No {{ $title }} scheduled.
+                                                No events scheduled.
                                             </td>
                                         </tr>
 

@@ -52,7 +52,7 @@
                                                 <td>
                                                     <table class="w-auto" width="80" cellspacing="0" cellpadding="0" align="center">
                                                         <tr>
-                                                            <td width="80" height="80" style="background-image: url('{{ url('/chart-donuts/red') }}/{{ $percentageOrder }}.png'); background-size: 100%;" valign="center" class="text-default text-center">
+                                                            <td width="80" height="80" style="background: url('{{ url('/chart-donuts/red') }}/{{ $percentageOrder }}.png'); background-size: 100%;" valign="center" class="text-default text-center">
                                                                 <div class="h4 m-0 text-green lh-1">
                                                                     {{ $orderCount }}
                                                                     <div class="text-muted font-normal font-sm mt-xs">of 1000</div>

@@ -3,10 +3,13 @@
 namespace App\Orchid\Screens\Events;
 
 use App\Events\UpdateAudit;
+use App\Mail\ScheduleMail;
 use App\Models\Events;
 use App\Models\PlatformAttachments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\DateTimer;
@@ -183,6 +186,15 @@ class EventsEditScreen extends Screen
         Toast::info(__('events.screen.toast.created'));
 
         event(new UpdateAudit("event", $this->events->name . " updated.", Auth::user()->name));
+
+        if (env('APP_TEST_MAIL', false)) {
+            $users = User::all();
+            foreach ($users as $user) {
+                Mail::to($user->email)->send(new ScheduleMail());
+            }
+        } else {
+            Mail::to('vakea@fluffici.eu')->send(new ScheduleMail());
+        }
 
         return redirect()->route('platform.events.list');
     }
