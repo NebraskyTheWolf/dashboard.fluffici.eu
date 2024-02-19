@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens\Events;
 
 use App\Events\UpdateAudit;
+use App\Mail\ApplicationError;
 use App\Mail\ScheduleMail;
 use App\Models\Events;
 use App\Models\PlatformAttachments;
@@ -37,9 +38,17 @@ class EventsEditScreen extends Screen
      *
      * @param Events $events The events object containing event information.
      * @return array The query result containing events and metrics.
+     * @throws ConnectionErrorException
      */
     public function query(Events $events): iterable
     {
+        if ($events->exists) {
+            $min = json_decode(json_encode($events->min, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT), true);
+
+            $this->lon = $min['lat'];
+            $this->lng = $min['lng'];
+        }
+
         return [
             'events' => $events,
             'metrics' => [
@@ -139,13 +148,6 @@ class EventsEditScreen extends Screen
     {
         if ($this->events->event_id == NULL) {
             $this->events->event_id = Uuid::uuid4();
-        }
-
-        if ($this->events->exists) {
-            $min = json_decode($this->events->min, true);
-
-            $this->lon = $min['lat'];
-            $this->lng = $min['lng'];
         }
 
         return [
@@ -313,9 +315,12 @@ class EventsEditScreen extends Screen
      */
     private function getTemperature(): float
     {
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng .'&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng);
         if ($response->code === 200) {
-            return json_decode($response->body, true)['current']['temperature'];
+            $body = json_decode($response->raw_body, true);
+            if (isset($body['current']['temperature'])) {
+                return $body['current']['temperature'];
+            }
         }
 
         return 0.0;
@@ -328,9 +333,12 @@ class EventsEditScreen extends Screen
      */
     private function getSummary(): string
     {
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng .'&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng);
         if ($response->code === 200) {
-            return json_decode($response->body, true)['current']['summary'];
+            $body = json_decode($response->raw_body, true);
+            if (is_array($body) && isset($body['current']['summary'])) {
+                return $body['current']['summary'];
+            }
         }
 
         return "Nominal";
@@ -383,11 +391,16 @@ class EventsEditScreen extends Screen
             36 => 'bs.cloud-snow',
         ];
 
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng . '&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng);
+
         if ($response->code === 200) {
-            $index = json_decode($response->body, true)['current']['icon_num'];
-            return $iconMap[$index] ?? 'bs.patch-question';
+            $body = json_decode($response->raw_body, true);
+            if (is_array($body) && isset($body['current']['icon_num'])) {
+                $index = $body['current']['icon_num'];
+                return $iconMap[$index] ?? 'bs.patch-question';
+            }
         }
+
         return "bs.patch-question";
     }
 
@@ -398,53 +411,76 @@ class EventsEditScreen extends Screen
      */
     private function getWindIndex(): string
     {
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng .'&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng);
         if ($response->code === 200) {
-            return json_decode($response->body, true)['current']['wind'];
+            $body = json_decode($response->raw_body, true);
+            if (isset($body['current']['wind'])) {
+                return $body['current']['wind'];
+            }
         }
-
         return "Nominal";
     }
 
     /**
-     * Get the wind icon based on the current wind angle.
-     * Uses the Meteosource API to fetch wind information.
+     * Retrieves the wind icon based on the wind angle.
      *
-     * @return string The name of the wind icon.
-     * @throws ConnectionErrorException
+     * @return string The wind icon class name.
      */
     private function getWindIcon(): string
     {
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng .'&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng);
         if ($response->code === 200) {
-            $windAngle = json_decode($response->body, true)['current']['wind']['angle'];
-            if ($windAngle >= 0 && $windAngle < 45) {
-                return "bs.arrow-up-short";
-            } elseif ($windAngle >= 45 && $windAngle < 90) {
-                return "bs.arrow-up-right";
-            } elseif ($windAngle >= 90 && $windAngle < 135) {
-                return "bs.arrow-down-right";
-            } elseif ($windAngle >= 135 && $windAngle < 180) {
-                return "bs.arrow-down-short";
-            } elseif ($windAngle >= 180 && $windAngle < 225) {
-                return "bs.arrow-down-left";
-            } elseif ($windAngle >= 225 && $windAngle < 270) {
-                return "bs.arrow-left-short";
-            } elseif ($windAngle >= 270 && $windAngle < 315) {
-                return "bs.arrow-up-left";
+            $body = json_decode($response->raw_body, true);
+            if (isset($body['current']['wind']['angle'])) {
+                $windAngle = $body['current']['wind']['angle'];
+                if ($windAngle >= 0 && $windAngle < 45) {
+                    return "bs.arrow-up-short";
+                } elseif ($windAngle >= 45 && $windAngle < 90) {
+                    return "bs.arrow-up-right";
+                } elseif ($windAngle >= 90 && $windAngle < 135) {
+                    return "bs.arrow-down-right";
+                } elseif ($windAngle >= 135 && $windAngle < 180) {
+                    return "bs.arrow-down-short";
+                } elseif ($windAngle >= 180 && $windAngle < 225) {
+                    return "bs.arrow-down-left";
+                } elseif ($windAngle >= 225 && $windAngle < 270) {
+                    return "bs.arrow-left-short";
+                } elseif ($windAngle >= 270 && $windAngle < 315) {
+                    return "bs.arrow-up-left";
+                } else {
+                    return "bs.arrow-up-short";
+                }
             } else {
-                return "bs.arrow-up-short";
+                Mail::to('vakea@fluffici.eu')->send(new ApplicationError(
+                    "EventsEditScreen",
+                    'Error on weather requests - wind angle not set',
+                    $response->code,
+                    $response->raw_body));
+                return "bs.patch-question";
             }
+        } else {
+            Mail::to('vakea@fluffici.eu')->send(new ApplicationError(
+                "EventsEditScreen",
+                'Error on weather requests.' ,
+                $response->code,
+                $response->raw_body));
+            return "bs.patch-question";
         }
-
-        return "bs.patch-question";
     }
 
+    /**
+     * Get precipitation percentage for the current location.
+     *
+     * @return int The precipitation percentage, or 0 if not available.
+     */
     private function getPrecipitation(): int
     {
-        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng .'&timezone=UTC&language=cs&units=metric');
+        $response = $this->sendRequest('https://www.meteosource.com/api/v1/free/point?lat=' . $this->lon . '&lon=' . $this->lng);
         if ($response->code === 200) {
-            return json_decode($response->body, true)['current']['precipitation']['total'];
+            $body = json_decode($response->raw_body, true);
+            if (is_array($body) && isset($body['current']['precipitation']['total'])) {
+                return $body['current']['precipitation']['total'];
+            }
         }
 
         return 0;
@@ -456,9 +492,20 @@ class EventsEditScreen extends Screen
      * @param string $url The URL to send the request to.
      * @return \Httpful\Response The response from the request.
      * @throws ConnectionErrorException
+     * @throws \Exception
      */
     private function sendRequest(string $url): \Httpful\Response
     {
-        return \Httpful\Request::get($url . '&key=' . env('WEATHER_API_SECRET', ''), "application/json")->expectsJson()->send();
+        try {
+            $apiKey = env('WEATHER_API_SECRET');
+            if (empty($apiKey)) {
+                throw new \InvalidArgumentException('The WEATHER_API_SECRET is not set.');
+            }
+
+            $url = $url . '&timezone=UTC&language=en&units=metric&key=' . $apiKey;
+            return \Httpful\Request::get($url, "application/json")->expectsJson()->send();
+        } catch (\Exception $e) {
+            throw new ConnectionErrorException('Error sending request: ' . $e->getMessage());
+        }
     }
 }
