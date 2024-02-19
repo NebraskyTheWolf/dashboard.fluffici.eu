@@ -29,6 +29,8 @@ class ShopStatistics extends Screen
                 'products' => [
                     'key' => 'products',
                     'value' => $this->sumQuantityOrderedProduct(),
+                    'numeric' => true,
+                    'icon' => 'bs.boxes'
                 ],
                 'overall' => [
                     'key' => 'overall',
@@ -37,13 +39,17 @@ class ShopStatistics extends Screen
                             OrderPayment::where('status', 'UNPAID')->sum('price') -
                             OrderPayment::where('status', 'REFUNDED')->sum('price') -
                             OrderPayment::where('status', 'CANCELLED')->sum('price')) . ' Kč',
-                    'diff' => $this->diff($this->sumPriceOrderPayment(), $this->sumPriceOrderPaymentSubMonth($currentYear, $currentMonth))
+                    'diff' => $this->diff($this->sumPriceOrderPayment(), $this->sumPriceOrderPaymentSubMonth($currentYear, $currentMonth)),
+                    'numeric' => true,
+                    'icon' => 'bs.safe'
                 ],
                 'monthly' => [
                     'key' => 'monthly',
                     'value' => $this->sumPriceOrderPaymentByDate($currentYear, $currentMonth) . ' Kč',
                     'diff' => $this->diff($this->sumPriceOrderPaymentByDate($currentYear, $currentMonth),
-                        $this->sumPriceOrderPaymentByDate($currentYear, $previousMonth))
+                        $this->sumPriceOrderPaymentByDate($currentYear, $previousMonth)),
+                    'numeric' => true,
+                    'icon' => 'bs.safe2'
                 ],
             ],
             'pie' => [

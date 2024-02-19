@@ -14,7 +14,7 @@
 
                     <small class="text-muted d-block mb-1">{{ $key }}</small>
 
-                    @if(is_numeric($metric['value']))
+                    @if(isset($metric['numeric']))
                             @if($metric['value'] < 0)
                                 <a class="h3 fw-light mt-auto text-primary" id="{{  $metric['key'] }}">
                                     {{ $metric['value'] }}

@@ -68,6 +68,8 @@ class AccountingMain extends Screen
                                 ->sum('price'),
                         OrderPayment::all()->sum('price')
                     ),
+                    'numeric' => true,
+                    'icon' => 'bs.piggy-bank'
                 ],
                 'overdue_amount' => [
                     'key' => 'overdue_amount',
@@ -82,6 +84,8 @@ class AccountingMain extends Screen
                             ->sum('price'),
                         OrderPayment::where('status', 'UNPAID')->sum('price')
                     ),
+                    'numeric' => true,
+                    'icon' => 'bs.clock-history'
                 ],
                 'expenses' => [
                     'key' => 'expenses',
@@ -96,6 +100,8 @@ class AccountingMain extends Screen
                             ->sum('amount'),
                         Accounting::where('type', 'EXPENSE')->sum('amount')
                     ),
+                    'numeric' => true,
+                    'icon' => 'bs.graph-down-arrow'
                 ]
             ],
             'income_ratio' => [
