@@ -151,14 +151,14 @@ class EventsEditScreen extends Screen
         }
 
         return [
-            Layout::rows([
-                Layout::metrics([
-                    'Summary' => 'metrics.summary',
-                    'Temperature' => 'metrics.temperature',
-                    'Wind' => 'metrics.wind',
-                    'Precipitations' => 'metrics.precipitation',
-                ])->canSee($this->events->exists),
+            Layout::metrics([
+                'Summary' => 'metrics.summary',
+                'Temperature' => 'metrics.temperature',
+                'Wind' => 'metrics.wind',
+                'Precipitations' => 'metrics.precipitation',
+            ])->canSee($this->events->exists)->title("Weather"),
 
+            Layout::rows([
                 Group::make([
                     Input::make('events.name')
                         ->title(__('events.screen.input.event_name.title'))
@@ -216,7 +216,7 @@ class EventsEditScreen extends Screen
                     ->minHeight(250)
                     ->maxHeight(500)
                     ->maxFileSize(200)
-            ]),
+            ])->title("Information"),
         ];
     }
 
