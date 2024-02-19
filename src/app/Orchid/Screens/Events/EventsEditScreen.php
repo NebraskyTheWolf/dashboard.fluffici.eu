@@ -64,7 +64,7 @@ class EventsEditScreen extends Screen
                 ],
                 'wind' => [
                     'key' => 'wind',
-                    'value' => $this->getWindIndex() . ' Km/h',
+                    'value' => $this->getWindIndex() . ' (Km/h)',
                     'icon' => $this->getWindIcon()
                 ],
                 'precipitation' => [
@@ -151,77 +151,72 @@ class EventsEditScreen extends Screen
         }
 
         return [
-            Layout::tabs([
-                'Information' => [
-                    Layout::rows([
-                        Group::make([
-                            Input::make('events.name')
-                                ->title(__('events.screen.input.event_name.title'))
-                                ->placeholder(__('events.screen.input.event_name.placeholder'))
-                                ->help(__('events.screen.input.event_name.help'))
-                                ->disabled($this->events->status == "CANCELLED"),
+            Layout::rows([
+                Layout::metrics([
+                    'Summary' => 'metrics.summary',
+                    'Temperature' => 'metrics.temperature',
+                    'Wind' => 'metrics.wind',
+                    'Precipitations' => 'metrics.precipitation',
+                ])->canSee($this->events->exists),
 
-                            Quill::make('events.descriptions')
-                                ->title(__('events.screen.input.description.title'))
-                                ->canSee(!$this->events->exists || ($this->events->exists && $this->events->status == "INCOMING")),
+                Group::make([
+                    Input::make('events.name')
+                        ->title(__('events.screen.input.event_name.title'))
+                        ->placeholder(__('events.screen.input.event_name.placeholder'))
+                        ->help(__('events.screen.input.event_name.help'))
+                        ->disabled($this->events->status == "CANCELLED"),
 
-                            Select::make('events.type')
-                                ->options([
-                                    'PHYSICAL'   => __('events.screen.input.type.choice.one'),
-                                    'ONLINE' => __('events.screen.input.type.choice.two'),
-                                ])
-                                ->title(__('events.screen.input.type.title'))
-                                ->help(__('events.screen.input.type.help'))
-                                ->disabled($this->events->status == "CANCELLED")
-                        ]),
+                    Quill::make('events.descriptions')
+                        ->title(__('events.screen.input.description.title'))
+                        ->canSee(!$this->events->exists || ($this->events->exists && $this->events->status == "INCOMING")),
 
-                        Group::make([
-                            DateTimer::make('events.begin')
-                                ->title(__('events.screen.input.begin.title'))
-                                ->disabled($this->events->status == "CANCELLED"),
+                    Select::make('events.type')
+                        ->options([
+                            'PHYSICAL'   => __('events.screen.input.type.choice.one'),
+                            'ONLINE' => __('events.screen.input.type.choice.two'),
+                        ])
+                        ->title(__('events.screen.input.type.title'))
+                        ->help(__('events.screen.input.type.help'))
+                        ->disabled($this->events->status == "CANCELLED")
+                ]),
 
-                            DateTimer::make('events.end')
-                                ->title(__('events.screen.input.end.title'))
-                                ->disabled($this->events->status == "CANCELLED"),
-                        ]),
+                Group::make([
+                    DateTimer::make('events.begin')
+                        ->title(__('events.screen.input.begin.title'))
+                        ->disabled($this->events->status == "CANCELLED"),
 
-                        Group::make([
-                            Map::make('events.min')
-                                ->title(__('events.screen.input.map_min.title'))
-                                ->help(__('events.screen.input.map_min.help')),
-                            Map::make('events.max')
-                                ->title(__('events.screen.input.map_max.title'))
-                                ->help(__('events.screen.input.map_max.help'))
-                        ]),
+                    DateTimer::make('events.end')
+                        ->title(__('events.screen.input.end.title'))
+                        ->disabled($this->events->status == "CANCELLED"),
+                ]),
 
-                        Group::make([
-                            Input::make('events.link')
-                                ->title(__('events.screen.input.link.title'))
-                                ->placeholder(__('events.screen.input.link.placeholder'))
-                                ->help(__('events.screen.input.link.help'))
-                                ->disabled($this->events->status == "CANCELLED"),
-                        ]),
+                Group::make([
+                    Map::make('events.min')
+                        ->title(__('events.screen.input.map_min.title'))
+                        ->help(__('events.screen.input.map_min.help')),
+                    Map::make('events.max')
+                        ->title(__('events.screen.input.map_max.title'))
+                        ->help(__('events.screen.input.map_max.help'))
+                ]),
 
-                        Cropper::make('events.banner')
-                            ->title(__('events.screen.input.banner.title'))
-                            ->actionId($this->events->event_id)
-                            ->remoteTag('banners')
-                            ->minWidth(750)
-                            ->maxWidth(1500)
-                            ->minHeight(250)
-                            ->maxHeight(500)
-                            ->maxFileSize(200)
-                    ])
-                ],
-                'Weather' => [
-                    Layout::metrics([
-                        'Summary' => 'metrics.summary',
-                        'Temperature' => 'metrics.temperature',
-                        'Wind' => 'metrics.wind',
-                        'Precipitations' => 'metrics.precipitation',
-                    ])->canSee($this->events->exists),
-                ]
-            ])->activeTab('Information')
+                Group::make([
+                    Input::make('events.link')
+                        ->title(__('events.screen.input.link.title'))
+                        ->placeholder(__('events.screen.input.link.placeholder'))
+                        ->help(__('events.screen.input.link.help'))
+                        ->disabled($this->events->status == "CANCELLED"),
+                ]),
+
+                Cropper::make('events.banner')
+                    ->title(__('events.screen.input.banner.title'))
+                    ->actionId($this->events->event_id)
+                    ->remoteTag('banners')
+                    ->minWidth(750)
+                    ->maxWidth(1500)
+                    ->minHeight(250)
+                    ->maxHeight(500)
+                    ->maxFileSize(200)
+            ]),
         ];
     }
 
