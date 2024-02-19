@@ -64,7 +64,7 @@ class EventsEditScreen extends Screen
                 ],
                 'wind' => [
                     'key' => 'wind',
-                    'value' => $this->getWindIndex() . '%',
+                    'value' => $this->getWindIndex() . ' Km/h',
                     'icon' => $this->getWindIcon()
                 ],
                 'precipitation' => [
@@ -415,7 +415,7 @@ class EventsEditScreen extends Screen
         if ($response->code === 200) {
             $body = json_decode($response->raw_body, true);
             if (isset($body['current']['wind'])) {
-                return $body['current']['wind'];
+                return $body['current']['wind']['speed'];
             }
         }
         return "Nominal";
