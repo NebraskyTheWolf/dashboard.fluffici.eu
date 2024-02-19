@@ -120,7 +120,7 @@ class DeviceController extends Controller
      *
      * @param Request $request The request object.
      *
-     * @return \Illuminate\Http\JsonResponse The JSON response containing the retrieved customers.
+     * @return JsonResponse The JSON response containing the retrieved customers.
      */
     public function customers(Request $request): JsonResponse
     {
@@ -237,17 +237,16 @@ class DeviceController extends Controller
     }
 
     /**
-     * Increment the quantity of a product.
+     * Increments the quantity of a product based on its EAN13 code.
      *
-     * @param Request $request The request object containing the product ID as a query parameter.
-     *
-     * @return JsonResponse The response JSON containing the updated product information and a success message
-     *                    or an error message if the product ID is missing or the product is not found.
+     * @param Request $request The HTTP request object.
+     * @return JsonResponse The JSON response containing the updated product data.
      */
     public function incrementProduct(Request $request): JsonResponse
     {
         $ean13Code = $request->query('bid');
 
+        // Use a guard clause to handle the condition where ean13Code is missing
         if ($ean13Code == null) {
             return response()->json([
                 'status' => true,
@@ -256,29 +255,30 @@ class DeviceController extends Controller
             ]);
         }
 
-        $product = new ShopProducts();
-        $product = $product->getProductFromUpcA($ean13Code);
-        // In case the inventory was never created
-        $product->createOrGetInventory();
+        $product = (new ShopProducts())->getProductFromUpcA($ean13Code);
 
-        if ($product != null) {
-            $product->incrementQuantity();
-            return response()->json([
-                'status' => true,
-                'data' => [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'price' => $product->price,
-                    'quantity' => $product->getAvailableProducts()
-                ],
-                'message' => "Product quantity incremented successfully."
-            ]);
-        } else {
+        // Use a guard clause to handle the condition where product is null
+        if ($product == null) {
             return response()->json([
                 'status' => false,
                 'error' => "PRODUCT_NOT_FOUND",
                 'message' => "Product not found."
             ]);
         }
+
+        // At this point, we know that product is not null
+        $product->createOrGetInventory();
+        $product->incrementQuantity();
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'quantity' => $product->getAvailableProducts()
+            ],
+            'message' => "Product quantity incremented successfully."
+        ]);
     }
 }

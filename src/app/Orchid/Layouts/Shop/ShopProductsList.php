@@ -39,14 +39,32 @@ class ShopProductsList extends Table
                     $category = ShopCategories::where('id', $product->category_id);
 
                     if ($category->exists()) {
-                        return $category->firstOrFail()->name;
+                        $category = $category->first();
+                        return Link::make($category->name)
+                                ->icon('bs.pencil')
+                                ->route('platform.shop.categories.edit', $category);
                     } else {
                         return __('products.table.category.uncategorized');
                     }
                 }),
             TD::make('price', __('products.table.price'))
                 ->render(function (ShopProducts $product) {
-                    return $product->price . ' Kc';
+                    return $product->getNormalizedPrice() . ' Kc';
+                }),
+            TD::make('stock', 'Available stock')
+                ->render(function (ShopProducts $products) {
+                    $products->createOrGetInventory();
+                    $available =  $products->getAvailableProducts();
+
+                    if ($available <= 0) {
+                        return '<a class="ui red label">Out of stock</a>';
+                    } else {
+                        return $products->getAvailableProducts() . ' (pieces)';
+                    }
+                }),
+            TD::make('inventoryCode', "Inventory Code")
+                ->render(function (ShopProducts $products) {
+                    return $products->generateUPCA();
                 })
         ];
     }
