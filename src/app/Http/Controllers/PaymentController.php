@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\UpdateAudit;
 use App\Models\OrderedProduct;
+use App\Models\OrderPayment;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
 use Illuminate\Http\JsonResponse;
@@ -23,15 +24,6 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
-        $user = User::where('id', $request->input('user_id'))->first();
-        if (!$user->hasAccess('platform.shop.vouchers.read')) {
-            return response()->json([
-                'status' => false,
-                'error' => 'PERMISSION',
-                'message' => 'You do not have the permission to perform this operation.'
-            ]);
-        }
-
         $orderId =  $request->query('orderId');
         $paymentType = $request->query('paymentType');
         $encodedData = $request->query('encodedData');
@@ -179,15 +171,6 @@ class PaymentController extends Controller
      */
     public function fetchOrder(Request $request)
     {
-        $user = User::where('id', $request->input('user_id'))->first();
-        if (!$user->hasAccess('platform.systems.eshop.orders')) {
-            return response()->json([
-                'status' => false,
-                'error' => 'PERMISSION',
-                'message' => 'You do not have the permission to perform this operation.'
-            ]);
-        }
-
         $orderId = $request->query('orderId');
         if ($orderId == null) {
             return response()->json([
@@ -247,4 +230,120 @@ class PaymentController extends Controller
         }
     }
 
+    /**
+     * Refunds an order based on the given order ID.
+     *
+     * @param Request $request The HTTP request object.
+     * @return JsonResponse The JSON response indicating the refund status.
+     */
+    public function refund(Request $request): JsonResponse
+    {
+        $orderId = $request->query('orderId');
+        if($orderId == null) {
+            return response()->json([
+                'status' => false,
+                'error' => 'MISSING_ID',
+                'message' => 'No order ID was found.'
+            ]);
+        }
+
+        $order = ShopOrders::where('order_id', $orderId);
+        if (!$order->exists()) {
+            return response()->json([
+                'status' => false,
+                'error' => 'INVALID_ORDER',
+                'message' => 'This order does not exist.'
+            ]);
+        }
+        $order = $order->first();
+
+        if ($order->status !== 'DELIVERED') {
+            return response()->json([
+                'status' => false,
+                'error' => 'INVALID_STATUS',
+                'message' => 'Only delivered orders can be refunded.'
+            ]);
+        }
+
+        $order->update(['status' => 'REFUNDED']);
+
+        $currentPayment = OrderPayment::where('order_id', $orderId)->where('status', 'PAID');
+        if ($currentPayment->exists()) {
+            $currentPayment = $currentPayment->first();
+
+            if (str_contains($currentPayment->provider, 'Voucher')) {
+                return response()->json([
+                    'status' => false,
+                    'error' => 'NOT_REFUNDABLE',
+                    'message' => 'The order was paid with a voucher code and this order is not refundable.'
+                ]);
+            }
+
+            $payment = new \App\Models\OrderPayment();
+            $payment->order_id = $order->order_id;
+            $payment->status = 'REFUNDED';
+            $payment->transaction_id = $currentPayment->transaction_id;
+            $payment->provider = 'Fluffici';
+            $payment->price = $currentPayment->price;
+            $payment->save();
+
+            event(new UpdateAudit('order_refund', 'Refunded ' . substr($orderId, 0, 8) . ' order.', $request->input('username')));
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Order has been refunded successfully.'
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'error' => 'ORDER_NOT_PAID',
+                'message' => 'The order was not paid yet.'
+            ]);
+        }
+    }
+
+    /**
+     * Cancels an order in the database based on the given order ID.
+     *
+     * @param Request $request The HTTP request object.
+     * @return JsonResponse The JSON response indicating the status and message of the cancellation.
+     */
+    public function cancel(Request $request): JsonResponse
+    {
+        $orderId = $request->query('orderId');
+        if ($orderId == null) {
+            return response()->json([
+                'status' => false,
+                'error' => 'MISSING_ID',
+                'message' => 'No order ID was found.'
+            ]);
+        }
+
+        $order = ShopOrders::where('order_id', $orderId);
+        if (!$order->exists()) {
+            return response()->json([
+                'status' => false,
+                'error' => 'INVALID_ORDER',
+                'message' => 'This order does not exist.'
+            ]);
+        }
+
+        $order = $order->first();
+        if ($order->status !== 'DELIVERED') {
+            return response()->json([
+                'status' => false,
+                'error' => 'INVALID_STATUS',
+                'message' => 'Only delivered orders can be cancelled.'
+            ]);
+        }
+
+        $order->update(['status' => 'CANCELLED']);
+
+        event(new UpdateAudit('order_cancel', 'Cancelled ' . substr($orderId, 0, 8) . ' order.', $request->input('username')));
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Order has been cancelled successfully.'
+        ]);
+    }
 }

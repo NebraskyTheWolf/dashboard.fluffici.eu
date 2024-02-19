@@ -7,6 +7,7 @@ use App\Models\DeviceAuthorization;
 use App\Models\OrderIdentifiers;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
+use App\Models\ShopVouchers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Orchid\Platform\Models\User;
@@ -61,8 +62,6 @@ class DeviceController extends Controller
             $device->update([
                 'status' => "In Use"
             ]);
-
-            event(new UpdateAudit("devices", "Authorized " . $deviceId, "System"));
 
             return response()->json([
                 'status' => true,
@@ -281,4 +280,44 @@ class DeviceController extends Controller
             'message' => "Product quantity incremented successfully."
         ]);
     }
+
+    /**
+     * Retrieves the voucher code information based on the voucherId query.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @return JsonResponse A JSON response with voucher code details.
+     */
+    public function voucherInfo(Request $request): JsonResponse
+    {
+        $voucherCode = $request->query('voucherId');
+
+        if ($voucherCode == null) {
+            return response()->json([
+                'status' => false,
+                'error' => 'MISSING_VOUCHER_ID',
+                'message' => "The voucherId is missing"
+            ]);
+        }
+
+        $voucher = ShopVouchers::where('code', $voucherCode);
+        if ($voucher->exists()) {
+            $voucher = $voucher->first();
+
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'balance' => $voucher->amount
+                ],
+                'message' => "Voucher code details retrieved successfully!"
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'error' => "VOUCHER_NOT_FOUND",
+                'message' => "The voucher code does not exist."
+            ]);
+        }
+    }
+
 }
