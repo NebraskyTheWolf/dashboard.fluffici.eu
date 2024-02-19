@@ -136,7 +136,7 @@ class ShopProducts extends Model
     {
         $upc = str_replace('0', '', substr($upc, 0, -1));
 
-        $upc = intval($upc) + 1;
+        $upc = intval($upc);
 
         return ShopProducts::find($upc);
     }
@@ -145,7 +145,7 @@ class ShopProducts extends Model
     {
         $upc = str_replace('0', '', $upc);
         $upc = substr($upc, 0, -1);
-        $upc = intval($upc) + 1;
+        $upc = intval($upc);
 
         return $upc;
     }
