@@ -497,7 +497,7 @@ class EventsEditScreen extends Screen
                 throw new \InvalidArgumentException('The WEATHER_API_SECRET is not set.');
             }
 
-            $url = $url . '&timezone=UTC&language=cs&units=metric&key=' . $apiKey;
+            $url = $url . '&timezone=UTC&language=en&units=metric&key=' . $apiKey;
             return \Httpful\Request::get($url, "application/json")->expectsJson()->send();
         } catch (\Exception $e) {
             throw new ConnectionErrorException('Error sending request: ' . $e->getMessage());
