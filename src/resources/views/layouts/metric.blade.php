@@ -9,7 +9,7 @@
             <div class="col">
                 <div class="p-4 bg-white rounded shadow-sm h-100 d-flex flex-column">
                     @isset($metric['icon'])
-                        <x-orchid-icon :path="$metric['icon']" class="{{ empty($metric['name']) ?: 'me-2'}}"/>
+                        <x-orchid-icon :path="$metric['icon']" class="text-primary {{ empty($metric['name']) ?: 'me-2'}}"/>
                     @endisset
 
                     <small class="text-muted d-block mb-1">{{ $key }}</small>
