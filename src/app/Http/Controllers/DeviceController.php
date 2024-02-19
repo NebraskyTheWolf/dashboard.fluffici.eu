@@ -267,7 +267,18 @@ class DeviceController extends Controller
 
         // At this point, we know that product is not null
         $product->createOrGetInventory();
+
+        $predict = $product->getAvailableProducts() + 1;
+
         $product->incrementQuantity();
+
+        if ($product->getAvailableProducts() != $predict) {
+            return response()->json([
+                'status' => false,
+                'error' => "INCREMENT_ERROR",
+                'message' => "Product quantity miss-match."
+            ]);
+        }
 
         return response()->json([
             'status' => true,
