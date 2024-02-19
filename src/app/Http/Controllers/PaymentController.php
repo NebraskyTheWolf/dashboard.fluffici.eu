@@ -84,7 +84,7 @@ class PaymentController extends Controller
                                 'money' => $voucherData->money - $product->getNormalizedPrice()
                             ]);
 
-                            $payment = new \App\Models\OrderPayment();
+                            $payment = new OrderPayment();
                             $payment->order_id = $order->order_id;
                             $payment->status = 'PAID';
                             $payment->transaction_id = \Ramsey\Uuid\Uuid::uuid4();
@@ -132,7 +132,7 @@ class PaymentController extends Controller
             }
             case 'CASH':
             {
-                $payment = new \App\Models\OrderPayment();
+                $payment = new OrderPayment();
                 $payment->order_id = $order->order_id;
                 $payment->status = 'PAID';
                 $payment->transaction_id = \Ramsey\Uuid\Uuid::uuid4();
@@ -181,7 +181,7 @@ class PaymentController extends Controller
         }
 
         $order = ShopOrders::where('order_id', $orderId);
-        $payment = \App\Models\OrderPayment::where('order_id', $orderId);
+        $payment = OrderPayment::where('order_id', $orderId);
         $products = OrderedProduct::where('order_id', $orderId);
 
 
@@ -214,8 +214,6 @@ class PaymentController extends Controller
             } else {
                 $data['product'] = false;
             }
-
-            event(new UpdateAudit('order_reading', 'Accessed ' . substr($data['order'], 0, 8) . ' order information.', $request->input('username')));
 
             return response()->json([
                 'status' => true,
@@ -271,7 +269,7 @@ class PaymentController extends Controller
                 ]);
             }
 
-            $payment = new \App\Models\OrderPayment();
+            $payment = new OrderPayment();
             $payment->order_id = $order->order_id;
             $payment->status = 'REFUNDED';
             $payment->transaction_id = $currentPayment->transaction_id;
