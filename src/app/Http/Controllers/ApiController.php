@@ -21,9 +21,12 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
  */
 class ApiController extends Controller
 {
-
-
-    public function __constructor()
+    /**
+     * Constructor for the class.
+     *
+     * @return void
+     */
+    public function __constructor(): void
     {
         $this->middleware('auth.api');
     }

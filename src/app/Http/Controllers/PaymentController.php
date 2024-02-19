@@ -257,14 +257,6 @@ class PaymentController extends Controller
         }
         $order = $order->first();
 
-        if ($order->status !== 'DELIVERED') {
-            return response()->json([
-                'status' => false,
-                'error' => 'INVALID_STATUS',
-                'message' => 'Only delivered orders can be refunded.'
-            ]);
-        }
-
         $order->update(['status' => 'REFUNDED']);
 
         $currentPayment = OrderPayment::where('order_id', $orderId)->where('status', 'PAID');
@@ -329,14 +321,6 @@ class PaymentController extends Controller
         }
 
         $order = $order->first();
-        if ($order->status !== 'DELIVERED') {
-            return response()->json([
-                'status' => false,
-                'error' => 'INVALID_STATUS',
-                'message' => 'Only delivered orders can be cancelled.'
-            ]);
-        }
-
         $order->update(['status' => 'CANCELLED']);
 
         event(new UpdateAudit('order_cancel', 'Cancelled ' . substr($orderId, 0, 8) . ' order.', $request->input('username')));
