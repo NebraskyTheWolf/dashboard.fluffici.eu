@@ -60,28 +60,26 @@ class FirebasePushController extends Controller
      */
     public function notification(Request $request): JsonResponse
     {
-        if ($request->input('user_id') != null) {
-            $user = User::where('id', $request->input('user_id'))->first();
+        $user = User::where('id', $request->input('user_id'))->first();
 
-            if (!$user->is_fcm) {
-                return response()->json([
-                    'status' => false,
-                    'error' => 'NOT_FCM_USER',
-                    'message' => 'This user is not connected on FCM.'
-                ]);
-            }
+        if (!$user->is_fcm) {
+            return response()->json([
+                'status' => false,
+                'error' => 'NOT_FCM_USER',
+                'message' => 'This user is not connected on FCM.'
+            ]);
+        }
 
-            $title = $request->input('title');
-            $body = $request->input('body');
+        $title = $request->input('title');
+        $body = $request->input('body');
 
-            $result = $user->sendFCMNotification($title, $body);
-            if (!$result) {
-                return response()->json([
-                    'status' => false,
-                    'error' => 'FCM_ERROR',
-                    'message' => 'Unable to send the notification.'
-                ]);
-            }
+        $result = $user->sendFCMNotification($title, $body);
+        if (!$result) {
+            return response()->json([
+                'status' => false,
+                'error' => 'FCM_ERROR',
+                'message' => 'Unable to send the notification.'
+            ]);
         }
 
         return response()->json([

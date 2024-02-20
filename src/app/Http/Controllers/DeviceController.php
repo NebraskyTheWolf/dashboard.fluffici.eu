@@ -10,6 +10,7 @@ use App\Models\ShopProducts;
 use App\Models\ShopVouchers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Orchid\Platform\Models\User;
 
 class DeviceController extends Controller
@@ -93,25 +94,33 @@ class DeviceController extends Controller
      */
     public function orders(Request $request): JsonResponse
     {
-        $order = [];
-        $orders = ShopOrders::all();
-
-        foreach ($orders as $order) {
-            $publicData = OrderIdentifiers::where('order_id', $order->order_id)->first();
-
-            $order[] = [
-                'id' => $publicData->public_identifier,
-                'customer' => [
-                    'fullname' => $order->first_name . ' ' . $order->last_name,
-                    'email' => $order->email
-                ]
-            ];
+        $orderList = [];
+        foreach (ShopOrders::all() as $singleOrder) {
+            $orderList[] = $this->formatOrder($singleOrder);
         }
         return response()->json([
             'status' => true,
-            'data' => $order,
+            'data' => $orderList,
             'message' => "Orders retrieved successfully."
         ]);
+    }
+
+    /**
+     * Formats the order data into a specified format.
+     *
+     * @param mixed $order The order data to be formatted.
+     * @return array The formatted order data.
+     */
+    private function formatOrder(ShopOrders $order): array
+    {
+        $publicData = OrderIdentifiers::where('order_id', $order->order_id)->first();
+        return [
+            'id' => $publicData->public_identifier,
+            'customer' => [
+                'fullname' => $order->first_name . ' ' . $order->last_name,
+                'email' => $order->email
+            ]
+        ];
     }
 
     /**
@@ -198,6 +207,14 @@ class DeviceController extends Controller
      */
     public function fetchProduct(Request $request): JsonResponse
     {
+        if (RateLimiter::tooManyAttempts('fetch-product:'. $request->input('user_id'), $perMinute = 1)) {
+            return response()->json([
+                'status' => false,
+                'error' => "RATE_LIMITED",
+                'message' => "Rate Limited."
+            ]);
+        }
+
         $ean13Code = $request->query('bid');
 
         if ($ean13Code == null) {
@@ -213,6 +230,8 @@ class DeviceController extends Controller
         $product = $product->getProductFromUpcA($ean13Code);
 
         if ($product != null) {
+            RateLimiter::hit('fetch-product:'. $request->input('user_id'), 2);
+
             return response()->json([
                 'status' => true,
                 'data' => [
@@ -243,6 +262,14 @@ class DeviceController extends Controller
      */
     public function incrementProduct(Request $request): JsonResponse
     {
+        if (RateLimiter::tooManyAttempts('increment-product:'. $request->input('user_id'), $perMinute = 1)) {
+            return response()->json([
+                'status' => false,
+                'error' => "RATE_LIMITED",
+                'message' => "Rate Limited."
+            ]);
+        }
+
         $ean13Code = $request->query('bid');
 
         // Use a guard clause to handle the condition where ean13Code is missing
@@ -279,6 +306,8 @@ class DeviceController extends Controller
                 'message' => "Product quantity miss-match."
             ]);
         }
+
+        RateLimiter::hit('increment-product:'. $request->input('user_id'), 2);
 
         return response()->json([
             'status' => true,

@@ -7,6 +7,7 @@ use App\Models\OrderedProduct;
 use App\Models\OrderPayment;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
+use App\Models\ShopVouchers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +23,7 @@ class PaymentController extends Controller
      * @return JsonResponse
      *   The JSON response indicating the payment status.
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $orderId =  $request->query('orderId');
         $paymentType = $request->query('paymentType');
@@ -76,7 +77,7 @@ class PaymentController extends Controller
                 $result = openssl_verify($voucherCode, base64_decode(strtr($data['signature'], '-_', '+/')), $key, OPENSSL_ALGO_SHA256);
 
                 if ($result == 1) {
-                    $voucher = \App\Models\ShopVouchers::where('code', $voucherCode);
+                    $voucher = ShopVouchers::where('code', $voucherCode);
                     if ($voucher->exists()) {
                         $voucherData = $voucher->first();
                         if (!($voucherData->money < $product->getNormalizedPrice())) {

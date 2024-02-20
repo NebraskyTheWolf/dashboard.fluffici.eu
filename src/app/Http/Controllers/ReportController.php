@@ -3,24 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\AccountingDocument;
+use App\Models\ShopReports;
+use App\Models\TransactionsReport;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ReportController extends Controller
 {
 
     protected array $reportClasses = [
-        'shop' => \App\Models\ShopReports::class,
-        'transactions' => \App\Models\TransactionsReport::class,
+        'shop' => ShopReports::class,
+        'transactions' => TransactionsReport::class,
         'accounting' => AccountingDocument::class,
     ];
 
     /**
      * Retrieves and extracts a specific report based on the provided report ID.
      *
-     * @param \Illuminate\Http\Request $request The request object containing query parameters.
-     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse The response containing the extracted report or an error message.
+     * @param Request $request The request object containing query parameters.
+     * @return JsonResponse|BinaryFileResponse The response containing the extracted report or an error message.
      */
-    public function index(Request $request)
+    public function index(Request $request): BinaryFileResponse|JsonResponse
     {
         $reportId = $request->query('reportId');
         if ($reportId === null) {
@@ -33,7 +39,7 @@ class ReportController extends Controller
             return response()->json(['error' => 'The report type is not supported.']);
         }
 
-        $storage = \Illuminate\Support\Facades\Storage::disk('public');
+        $storage = Storage::disk('public');
         return $this->extracted($report, $storage, $reportId);
     }
 
@@ -59,11 +65,11 @@ class ReportController extends Controller
      * Extracts a report based on the provided data.
      *
      * @param $report The report object.
-     * @param \Illuminate\Contracts\Filesystem\Filesystem $storage The filesystem instance used for storage.
+     * @param Filesystem $storage The filesystem instance used for storage.
      * @param array|string $reportId The ID of the report.
-     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse The response containing the extracted report or an error message.
+     * @return JsonResponse|BinaryFileResponse The response containing the extracted report or an error message.
      */
-    public function extracted($report, \Illuminate\Contracts\Filesystem\Filesystem $storage, array|string $reportId): \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function extracted($report, Filesystem $storage, array|string $reportId): JsonResponse|BinaryFileResponse
     {
         if ($report->exists()) {
             $data = $report->firstOrFail();
