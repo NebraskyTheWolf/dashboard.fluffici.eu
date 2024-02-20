@@ -20,18 +20,25 @@ class FirebasePushController extends Controller
     public function setToken(Request $request): JsonResponse
     {
         $userId = $request->input('user_id');
-        $token = $request->input('fcm_token');
+        $token = $request->query('fcm_token');
 
-        $user = User::where('id', $userId)->first();
+        if ($token == null) {
+            abort(403, [
+                'status' => false,
+                'error' => 'NO_FCM_TOKEN',
+                'message' => 'The FCM token is currently invalid.'
+            ]);
+        } else {
+            $user = User::where('id', $userId)->first();
+            $user->update([
+                'fcm_token' => $token,
+                'is_fcm' => true
+            ]);
 
-        $user->update([
-            'fcm_token' => $token,
-            'is_fcm' => true
-        ]);
-
-        return response()->json([
-            'message' => 'Successfully Updated FCM Token'
-        ]);
+            return response()->json([
+                'message' => 'Successfully Updated FCM Token'
+            ]);
+        }
     }
 
     /**
