@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\FirebasePushController;
 use App\Http\Controllers\IntegrationsController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReportController;
@@ -39,3 +40,9 @@ Route::middleware(['auth.api:platform.shop.products.write', 'throttle'])->get('/
 
 Route::middleware('auth.api:platform.shop.orders.write')->get('/api/order/payment/refund', [PaymentController::class, 'refund']);
 Route::middleware('auth.api:platform.shop.orders.write')->get('/api/order/cancel', [PaymentController::class, 'cancel']);
+
+Route::middleware('auth.api:platform.firebase.token.write')->post('/api/device/firebase/set-token', [FirebasePushController::class, 'setToken'])
+    ->name('api.firebase.token');
+
+Route::middleware('auth.api:platform.firebase.notification.ack')->post('/api/device/firebase/notification', [FirebasePushController::class, 'notification'])
+    ->name('api.firebase.push');

@@ -12,6 +12,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\MessagingException;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Laravel\Firebase\Facades\Firebase;
 use Orchid\Access\UserAccess;
 use Orchid\Access\UserInterface;
 use Orchid\Filters\Filterable;
@@ -26,6 +30,8 @@ use Ramsey\Uuid\Uuid;
 class User extends Authenticatable implements UserInterface
 {
     use AsSource, Chartable, Filterable, HasFactory, Notifiable, UserAccess;
+
+    protected $notification;
 
     /**
      * The database table used by the model.
@@ -122,6 +128,21 @@ class User extends Authenticatable implements UserInterface
     }
 
     /**
+     * Initialize Firebase Cloud Messaging (FCM) for sending push notifications.
+     *
+     * This method initializes the FCM instance if it has not already been initialized.
+     *
+     * @return void
+     */
+    public function initFCM(): void
+    {
+        if ($this->notification != null)
+            return;
+
+        $this->notification = Firebase::messaging();
+    }
+
+    /**
      * @return UserPresenters
      */
     public function presenter()
@@ -196,5 +217,61 @@ class User extends Authenticatable implements UserInterface
         return $targetUserPermissions > $userPermissions;
     }
 
+
+    /**
+     * Update the Firebase Cloud Messaging (FCM) token for the user.
+     *
+     * @param string $token The new FCM token for the user.
+     *
+     * @return void
+     */
+    public function updateFCMToken(string $token): void
+    {
+        $this->update([
+            'fcm_token' => $token,
+            'is_fcm' => true
+        ]);
+    }
+
+    /**
+     * Sends a FCM (Firebase Cloud Messaging) notification to the user.
+     *
+     * @param string $title The title of the notification. Maximum 65 characters.
+     * @param string $body The body of the notification. Maximum 240 characters.
+     *
+     * @return bool Returns true if the notification is sent successfully, otherwise false.
+     */
+    public function sendFCMNotification(string $title, string $body): bool
+    {
+        if (!$this->is_fcm)
+            return false;
+
+        $this->initFCM();
+
+        // Android notification 'title' and 'body' maximum characters.
+        // title is 65 characters long on maximum
+        // and the body is maximum 240 characters.
+
+        if (strlen($title) >= 65)
+            return false;
+        if (strlen($body) >= 240)
+            return false;
+
+        $message = CloudMessage::fromArray([
+            'token' => $this->fcm_token,
+            'notification' => [
+                'title' => $title,
+                'body' => $body
+            ],
+        ]);
+
+        try {
+            $this->notification->send($message);
+        } catch (MessagingException|FirebaseException $e) {
+            return false;
+        }
+
+        return true;
+    }
 
 }

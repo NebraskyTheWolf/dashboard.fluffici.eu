@@ -281,7 +281,13 @@ class PlatformProvider extends OrchidServiceProvider
 
                 ->addPermission('platform.systems.post.read', "Posts (read)")
                 ->addPermission('platform.systems.post.write', "Posts (write)")
-                ->addPermission('platform.systems.email', "Send Email")
+                ->addPermission('platform.systems.email', "Send Email"),
+
+            ItemPermission::group("Firebase Messaging")
+                ->addPermission('platform.firebase.token.read', 'Token (Read)')
+                ->addPermission('platform.firebase.token.write', 'Token (Write)')
+                ->addPermission('platform.firebase.subscribe', 'Subscribe (Read/Presence)')
+                ->addPermission('platform.firebase.notification.ack', 'Notification (ACK)')
         ];
     }
 
