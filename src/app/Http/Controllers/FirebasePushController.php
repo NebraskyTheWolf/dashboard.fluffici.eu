@@ -30,10 +30,7 @@ class FirebasePushController extends Controller
             ]);
         } else {
             $user = User::where('id', $userId)->first();
-            $user->update([
-                'fcm_token' => $token,
-                'is_fcm' => true
-            ]);
+            $user->updateFCMToken($token);
 
             return response()->json([
                 'message' => 'Successfully Updated FCM Token'
