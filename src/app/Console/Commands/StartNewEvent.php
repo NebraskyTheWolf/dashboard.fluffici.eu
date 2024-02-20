@@ -30,7 +30,7 @@ class StartNewEvent extends Command
         $events = Events::paginate();
         foreach ($events as $event) {
             if ($event->begin != null) {
-                if (Carbon::parse($event->begin)->isPast()) {
+                if (Carbon::parse($event->begin)->isPast() && ($event->status !== "ENDED")) {
                     $event->update(
                         [
                             'status' => 'STARTED'

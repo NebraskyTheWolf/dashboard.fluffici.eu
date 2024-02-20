@@ -34,7 +34,7 @@ class FinishOldEvent extends Command
                 if (Carbon::parse($event->end)->isPast()) {
                     $event->update(
                         [
-                            'status' => 'FINISHED'
+                            'status' => 'ENDED'
                         ]
                     );
                 }
