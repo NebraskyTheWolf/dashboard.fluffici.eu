@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\AkceUpdate;
 use App\Events\OrderUpdateEvent;
+use App\Listeners\AkceChange;
 use App\Listeners\OrderUpdateListeners;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -12,28 +14,31 @@ use App\Events\UpdateAudit;
 class EventServiceProvider extends ServiceProvider
 {
     /**
-     * @var array $listen An associative array that maps event classes to an array of listener classes.
+     * @var array $listen
+     * This array represents a mapping of event classes to their corresponding listeners.
+     * Each event class is associated with an array of listener classes that should handle that event.
+     * The format of the array is as follows:
      *
-     * The key in the array represents the event class, and the value represents an array of listener classes
-     * that are interested in handling that event.
-     *
-     * Example usage:
-     * $listen = [
-     *     UpdateAudit::class => [
-     *         AuditListener::class,
+     * [
+     *     EventClass1::class => [
+     *         ListenerClass1::class,
+     *         ListenerClass2::class,
+     *         ...
      *     ],
-     *     OrderUpdateEvent::class => [
-     *         OrderUpdateListeners::class
-     *     ]
-     * ];
+     *     EventClass2::class => [
+     *         ListenerClass3::class,
+     *         ListenerClass4::class,
+     *         ...
+     *     ],
+     *     ...
+     * ]
      *
-     * In the example above, the event class UpdateAudit is mapped to a single listener class AuditListener.
-     * Similarly, the event class OrderUpdateEvent is mapped to a single listener class OrderUpdateListeners.
-     *
-     * @see UpdateAudit       The event class that triggers the AuditListener.
-     * @see AuditListener     The listener class that handles the AuditEvent.
-     * @see OrderUpdateEvent  The event class that triggers the OrderUpdateListeners.
-     * @see OrderUpdateListeners The listener class that handles the OrderUpdateEvent.
+     * @see UpdateAudit
+     * @see AuditListener
+     * @see OrderUpdateEvent
+     * @see OrderUpdateListeners
+     * @see AkceUpdate
+     * @see AkceChange
      */
     protected $listen = [
         UpdateAudit::class => [
@@ -41,6 +46,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderUpdateEvent::class => [
             OrderUpdateListeners::class
+        ],
+        AkceUpdate::class => [
+            AkceChange::class
         ]
     ];
 

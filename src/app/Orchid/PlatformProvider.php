@@ -293,11 +293,11 @@ class PlatformProvider extends OrchidServiceProvider
 
     private function isSalesEnabled(): bool
     {
-        return ShopSettings::where('id', 1)->firstOrFail()->shop_sales == 1;
+        return ShopSettings::where('id', 1)->first()->shop_sales == 1;
     }
 
     private function isVouchersEnabled(): bool
     {
-        return ShopSettings::where('id', 1)->firstOrFail()->shop_sales == 1;
+        return ShopSettings::where('id', 1)->first()->shop_sales == 1;
     }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Events\UpdateAudit;
+use App\Models\ShopProducts;
 use App\Models\ShopVouchers;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class DeleteUsedVouchers extends Command
@@ -26,6 +29,13 @@ class DeleteUsedVouchers extends Command
      */
     public function handle()
     {
+        $vouchers = ShopVouchers::all();
+        foreach ($vouchers as $voucher) {
+            if ($voucher->money <= 0) {
+                $voucher->delete();
 
+                event(new UpdateAudit('voucher', 'Deleted a used voucher', 'System'));
+            }
+        }
     }
 }

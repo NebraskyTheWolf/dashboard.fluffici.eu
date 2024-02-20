@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Events;
 
+use App\Events\AkceUpdate;
 use App\Events\UpdateAudit;
 use App\Mail\ApplicationError;
 use App\Mail\ScheduleMail;
@@ -253,6 +254,7 @@ class EventsEditScreen extends Screen
 
 
         event(new UpdateAudit("event", $this->events->name . " set a cancelled.", Auth::user()->name));
+        event(new AkceUpdate($this->events));
 
         return redirect()->route('platform.events.list');
     }

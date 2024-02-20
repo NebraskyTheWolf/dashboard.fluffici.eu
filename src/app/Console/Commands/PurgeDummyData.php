@@ -10,6 +10,7 @@ use App\Models\ShopCategories;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
 use App\Models\ShopVouchers;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class PurgeDummyData extends Command
@@ -33,71 +34,77 @@ class PurgeDummyData extends Command
      */
     public function handle()
     {
-        $identifiers = OrderIdentifiers::paginate();
-        $orders = ShopOrders::paginate();
-        $products = ShopProducts::paginate();
-        $orderProducts = OrderedProduct::paginate();
-        $categories = ShopCategories::paginate();
-        $payments = OrderPayment::paginate();
-        $vouchers = ShopVouchers::paginate();
-        $audits = AuditLogs::paginate();
+        if (env('ALLOW_DUMMY_SUPPRESSOR', false)) {
 
-        $deletedValue = 0;
+            $identifiers = OrderIdentifiers::all();
+            $orders = ShopOrders::all();
+            $products = ShopProducts::all();
+            $orderProducts = OrderedProduct::all();
+            $categories = ShopCategories::all();
+            $payments = OrderPayment::all();
+            $vouchers = ShopVouchers::all();
+            $audits = AuditLogs::paginate();
 
-        foreach ($identifiers as $identifier) {
-            $identifier->delete();
+            $deletedValue = 0;
 
-            $deletedValue++;
+            foreach ($identifiers as $identifier) {
+                $identifier->delete();
+
+                $deletedValue++;
+            }
+
+            foreach ($orders as $order) {
+                $order->delete();
+
+                $deletedValue++;
+            }
+
+            foreach ($products as $prd) {
+                $prd->delete();
+
+                $deletedValue++;
+            }
+
+            foreach ($orderProducts as $prdele) {
+                $prdele->delete();
+
+                $deletedValue++;
+            }
+
+            foreach ($categories as $cat) {
+                $cat->delete();
+
+                $deletedValue++;
+            }
+
+            foreach ($payments as $payment) {
+                $payment->delete();
+
+                $deletedValue++;
+            }
+
+            foreach ($vouchers as $voucher) {
+                $voucher->delete();
+
+                $deletedValue++;
+            }
+
+            foreach ($audits as $audit) {
+                if ($audit->name === "Vakea" && Carbon::parse($audit->created_at)->addDays(30)->isPast()) {
+                    $audit->delete();
+                }
+
+                $deletedValue++;
+            }
+
+            $audit = new AuditLogs();
+            $audit->name = "System";
+            $audit->type = "SYSTEM_RESET";
+            $audit->slug = "All dummies has been removed (" . $deletedValue . " deleted entries)";
+            $audit->save();
+
+        } else {
+            printf('This operation is not allowed on production');
         }
-
-        foreach ($orders as $order) {
-            $order->delete();
-
-            $deletedValue++;
-        }
-
-        foreach ($products as $prd) {
-            $prd->delete();
-
-            $deletedValue++;
-        }
-
-        foreach ($orderProducts as $prdele) {
-            $prdele->delete();
-
-            $deletedValue++;
-        }
-
-        foreach ($categories as $cat) {
-            $cat->delete();
-
-            $deletedValue++;
-        }
-
-        foreach ($payments as $payment) {
-            $payment->delete();
-
-            $deletedValue++;
-        }
-
-        foreach ($vouchers as $voucher) {
-            $voucher->delete();
-
-            $deletedValue++;
-        }
-
-        foreach ($audits as $audit) {
-            $audit->delete();
-
-            $deletedValue++;
-        }
-
-        $audit = new AuditLogs();
-        $audit->name = "System";
-        $audit->type = "SYSTEM_RESET";
-        $audit->slug = "All dummies has been removed (" . $deletedValue . " deleted entries)";
-        $audit->save();
-
-        printTitle('All dummies was deleted.');
     }
 }

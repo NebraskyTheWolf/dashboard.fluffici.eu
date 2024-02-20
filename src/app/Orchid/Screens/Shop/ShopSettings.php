@@ -30,9 +30,8 @@ class ShopSettings extends Screen
      */
     public function query(): iterable
     {
-
         return [
-            'settings' => \App\Models\ShopSettings::where('id', 1)->firstOrFail()
+            'settings' => \App\Models\ShopSettings::where('id', 1)->first()
         ];
     }
 

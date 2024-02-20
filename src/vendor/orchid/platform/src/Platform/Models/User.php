@@ -211,6 +211,9 @@ class User extends Authenticatable implements UserInterface
      */
     public function hasUserBiggerPower($targetUser): bool
     {
+        if (!$this->exists)
+            return false;
+
         $userPermissions = count($this->permissions);
         $targetUserPermissions = count($targetUser->permissions);
 
