@@ -52,7 +52,9 @@ class OrderPayment extends Table
                         $missing = $this->isMissing($payment);
                         $over = $this->isOverPaid($payment);
 
-                        if ($missing < 0.01) {
+                        // 0.01 Precision
+
+                        if ($missing > 0.01) {
                             return '<a class="ui red label">Missing ' . $missing . ' Kc</a>';
                         } else if ($over > 0.01) {
                             return '<a class="ui yellow label">Over paid of ' . $over . ' Kc</a>';
