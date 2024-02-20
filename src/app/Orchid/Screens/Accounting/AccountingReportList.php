@@ -4,11 +4,13 @@ namespace App\Orchid\Screens\Accounting;
 
 use App\Models\AccountingDocument;
 use App\Orchid\Layouts\AccountingReportLayout;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use Orchid\Support\Facades\Toast;
 use Symfony\Component\HttpFoundation\Request;
 
 class AccountingReportList extends Screen
@@ -56,9 +58,9 @@ class AccountingReportList extends Screen
     }
 
     /**
-     * The screen's layout elements.
+     * Get the layout for the accounting report.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return array The accounting report layout.
      */
     public function layout(): iterable
     {
@@ -66,25 +68,45 @@ class AccountingReportList extends Screen
             AccountingReportLayout::class
         ];
     }
-    public function refresh()
+
+    /**
+     * Refresh the page and redirect to the accounting reports page.
+     *
+     * @return RedirectResponse
+     */
+    public function refresh(): RedirectResponse
     {
-        \Orchid\Support\Facades\Toast::success('You refreshed the page.')
+        Toast::success('You refreshed the page.')
             ->autoHide();
 
         return redirect()->route('platform.accounting.reports');
     }
 
+    /**
+     * Force the generation of a new monthly accounting report.
+     *
+     * This method triggers the 'app:generate-accounting-report' Artisan command in the background,
+     * generates a new monthly report, and notifies the user with a success toast message.
+     *
+     * @return RedirectResponse
+     */
     public function force()
     {
         Artisan::queue('app:generate-accounting-report', []);
 
-        \Orchid\Support\Facades\Toast::success('You generated a new monthly report.')
+        Toast::success('You generated a new monthly report.')
             ->autoHide();
 
         return redirect()->route('platform.accounting.reports');
     }
 
-    public function delete(Request $request)
+    /**
+     * Delete an accounting document.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return RedirectResponse
+     */
+    public function delete(Request $request): RedirectResponse
     {
         $report = AccountingDocument::where('report_id', $request->get('reportId'));
         if ($report->exists()) {
@@ -93,12 +115,13 @@ class AccountingReportList extends Screen
 
             Storage::disk('public')->delete($data->attachment_id);
 
-            \Orchid\Support\Facades\Toast::error('You deleted ' . $request->get('reportId'))
+            Toast::error('You deleted ' . $request->get('reportId'))
                 ->autoHide();
         } else {
-            \Orchid\Support\Facades\Toast::error('This reportId does not exists.')
+            Toast::error('This reportId does not exists.')
                 ->autoHide();
         }
+
         return redirect()->route('platform.accounting.reports');
     }
 

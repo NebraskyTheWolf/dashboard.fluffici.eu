@@ -25,9 +25,9 @@ class ShopReportLayout extends Table
     protected $target = 'reports';
 
     /**
-     * Get the table cells to be displayed.
+     * Returns an iterable array of columns for the given method.
      *
-     * @return TD[]
+     * @return array The iterable array of columns.
      */
     protected function columns(): iterable
     {
@@ -73,8 +73,6 @@ class ShopReportLayout extends Table
 
     protected function subNotFound(): string
     {
-        return 'The next report will be automatically generated.';
+        return 'The next report will be automatically generated in ' . Carbon::now()->endOfMonth()->diffForHumans();
     }
-
-
 }

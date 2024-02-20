@@ -80,23 +80,38 @@ class OrderPayment extends Table
         return 'No payment has been found yet.';
     }
 
+    /**
+     * Calculate the total price of an order payment.
+     *
+     * This method calculates the total price of an order payment by summing the normalized prices of the ordered products.
+     * It also includes the price of the order carrier, if applicable.
+     *
+     * @param \App\Models\OrderPayment $payment The order payment.
+     * @return float The total price of the order payment.
+     */
     protected function calculate(\App\Models\OrderPayment $payment): float
     {
-        $orderPrds = OrderedProduct::where('order_id', $payment->order_id)->get();
-        $totalPrice = 0;
-        foreach ($orderPrds as $orderPrd) {
-            $product = ShopProducts::where('id', $orderPrd->product_id)->first();
-            $totalPrice += $product->getNormalizedPrice();
-        }
-        $carrier = OrderCarrier::where('order_id', $payment->order_id);
+        // Eager load to optimize database queries
+        $orderedProducts = OrderedProduct::with('product')->where('order_id', $payment->order_id)->get();
+        $totalPrice = $orderedProducts->sum(function ($orderedProduct) {
+            return $orderedProduct->product->getNormalizedPrice();
+        });
 
-        if ($carrier->exists()) {
-            return $totalPrice + $carrier->first()->price;
-        } else {
-            return $totalPrice;
+        $carrier = OrderCarrier::where('order_id', $payment->order_id)->first();
+
+        if ($carrier) {
+            $totalPrice += $carrier->price;
         }
+
+        return $totalPrice;
     }
 
+    /**
+     * Checks if the given OrderPayment has a missing amount.
+     *
+     * @param \App\Models\OrderPayment $payment The OrderPayment object to check.
+     * @return float Returns the missing amount or 0.0 if no amount is missing.
+     */
     protected function isMissing(\App\Models\OrderPayment $payment): float
     {
         $amount = $this->calculate($payment);
@@ -108,6 +123,12 @@ class OrderPayment extends Table
         return 0.0;
     }
 
+    /**
+     * Checks if the given OrderPayment is overpaid.
+     *
+     * @param \App\Models\OrderPayment $payment The OrderPayment object to check.
+     * @return float Returns the overpaid amount or 0.0 if no overpayment is detected.
+     */
     protected function isOverPaid(\App\Models\OrderPayment $payment): float
     {
         $amount = $this->calculate($payment);
