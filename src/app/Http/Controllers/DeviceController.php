@@ -248,7 +248,7 @@ class DeviceController extends Controller
         // Use a guard clause to handle the condition where ean13Code is missing
         if ($ean13Code == null) {
             return response()->json([
-                'status' => true,
+                'status' => false,
                 'error' => "MISSING_PRODUCT_ID",
                 'message' => "The product id is missing in the query parameters."
             ]);

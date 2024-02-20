@@ -5,7 +5,6 @@ namespace App\Orchid\Layouts\Shop;
 use App\Models\OrderCarrier;
 use App\Models\OrderedProduct;
 use App\Models\ShopProducts;
-use App\Models\ShopSales;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -53,9 +52,9 @@ class OrderPayment extends Table
                         $missing = $this->isMissing($payment);
                         $over = $this->isOverPaid($payment);
 
-                        if ($missing > 0.1) {
-                            return '<a class="ui yellow label">Missing ' . $missing . ' Kc</a>';
-                        } else if ($over > 0.1) {
+                        if ($missing < 0.01) {
+                            return '<a class="ui red label">Missing ' . $missing . ' Kc</a>';
+                        } else if ($over > 0.01) {
                             return '<a class="ui yellow label">Over paid of ' . $over . ' Kc</a>';
                         }
                     }
@@ -81,14 +80,18 @@ class OrderPayment extends Table
 
     protected function calculate(\App\Models\OrderPayment $payment): float
     {
-        $orderPrd = OrderedProduct::where('order_id', $payment->order_id)->first();
-        $product = ShopProducts::where('id', $orderPrd->product_id)->first();
+        $orderPrds = OrderedProduct::where('order_id', $payment->order_id)->get();
+        $totalPrice = 0;
+        foreach ($orderPrds as $orderPrd) {
+            $product = ShopProducts::where('id', $orderPrd->product_id)->first();
+            $totalPrice += $product->getNormalizedPrice();
+        }
         $carrier = OrderCarrier::where('order_id', $payment->order_id);
 
         if ($carrier->exists()) {
-            return $product->getNormalizedPrice() + $carrier->first()->price;
+            return $totalPrice + $carrier->first()->price;
         } else {
-            return $product->getNormalizedPrice();
+            return $totalPrice;
         }
     }
 
@@ -96,21 +99,21 @@ class OrderPayment extends Table
     {
         $amount = $this->calculate($payment);
 
-        if ($amount < $payment->price) {
-            return $payment->price - $amount;
+        if ($payment->price < $amount) {
+            return $amount - $payment->price;
         }
 
-        return 0;
+        return 0.0;
     }
 
     protected function isOverPaid(\App\Models\OrderPayment $payment): float
     {
         $amount = $this->calculate($payment);
 
-        if ($amount > $payment->price) {
-            return $amount - $payment->price;
+        if ($payment->price > $amount) {
+            return $payment->price - $amount;
         }
 
-        return 0;
+        return 0.0;
     }
 }

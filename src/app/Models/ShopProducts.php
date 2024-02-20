@@ -174,7 +174,7 @@ class ShopProducts extends Model
      */
     public function incrementQuantity(): void
     {
-        ProductInventory::where('product_id', $this->id)->first()->increment('available', 1);
+        ProductInventory::where('product_id', $this->id)->first()->increment('available');
     }
 
     /**
@@ -186,7 +186,7 @@ class ShopProducts extends Model
      */
     public function decrementQuantity(): void
     {
-        ProductInventory::where('product_id', $this->id)->first()->decrement('available', 1);
+        ProductInventory::where('product_id', $this->id)->first()->decrement('available');
     }
 
     /**
