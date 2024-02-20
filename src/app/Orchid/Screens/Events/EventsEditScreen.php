@@ -230,12 +230,12 @@ class EventsEditScreen extends Screen
         event(new UpdateAudit("event", $this->events->name . " updated.", Auth::user()->name));
 
         if (env('APP_TEST_MAIL', false)) {
+            Mail::to('vakea@fluffici.eu')->send(new ScheduleMail());
+        } else {
             $users = User::all();
             foreach ($users as $user) {
                 Mail::to($user->email)->send(new ScheduleMail());
             }
-        } else {
-            Mail::to('vakea@fluffici.eu')->send(new ScheduleMail());
         }
 
         return redirect()->route('platform.events.list');
