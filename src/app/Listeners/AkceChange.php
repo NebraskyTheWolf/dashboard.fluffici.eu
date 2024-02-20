@@ -22,15 +22,6 @@ class AkceChange
      */
     public function handle(AkceUpdate $event): void
     {
-        if ($event->akce->status === "STARTED") {
-            if (env('APP_TEST_MAIL', false)) {
-                Mail::to("vakea@fluffici.eu")->send(new ReminderMail($event->akce, User::where('email', 'vakea@fluffici.eu')));
-            } else {
-                $users = User::all();
-                foreach ($users as $user) {
-                    Mail::to($user->email)->send(new ReminderMail($event->akce, User::where('id', $user->id)->first()));
-                }
-            }
-        }
+
     }
 }
