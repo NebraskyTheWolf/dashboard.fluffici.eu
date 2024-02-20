@@ -28,7 +28,7 @@ class AkceChange
             } else {
                 $users = User::all();
                 foreach ($users as $user) {
-                    Mail::to($user)->send(new ReminderMail($event->akce, $user));
+                    Mail::to($user->email)->send(new ReminderMail($event->akce, User::where('id', $user->id)->first()));
                 }
             }
         }

@@ -24,7 +24,7 @@ class ReminderMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(Events $event, User $user)
+    public function __construct($event, $user)
     {
         $this->event = $event;
         $this->user = $user;
