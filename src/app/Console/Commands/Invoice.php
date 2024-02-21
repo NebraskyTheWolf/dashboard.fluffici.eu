@@ -2,14 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Accounting;
-use App\Models\AccountingDocument;
 use App\Models\OrderCarrier;
 use App\Models\OrderedProduct;
 use App\Models\OrderIdentifiers;
 use App\Models\OrderInvoice;
 use App\Models\OrderPayment;
-use App\Models\ShopCustomer;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -65,7 +62,7 @@ class Invoice extends Command
         $totalDiscount = 0;
         $subTotal = 0;
         foreach ($products as $product) {
-            $prd = ShopProducts::where('id', $product->id)->first();
+            $prd = ShopProducts::where('id', $product->product_id)->first();
             $subTotal += $prd->getNormalizedPrice();
             $salePercentage += $prd->getProductSale();
             $totalDiscount += $prd->calculate($prd->price, $prd->getProductSale());
