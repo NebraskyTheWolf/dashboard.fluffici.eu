@@ -52,10 +52,11 @@ class CustomerTestConfirmation extends Command
     public function handle(): void
     {
         $order = new ShopOrders();
+        $order->customer_id = "3a37c91d-42fc-429a-828c-e7762ac67018";
         $order->order_id = Uuid::uuid4();
-        $order->first_name = "John";
-        $order->last_name = "Smith";
-        $order->phone_number = "+420 607 100 100";
+        $order->first_name = "Alexej";
+        $order->last_name = "Le Roy";
+        $order->phone_number = "+420 607 168 620";
         $order->email = "alex.leroy8303@gmail.com";
         $order->first_address = "5 valley of foxes";
         $order->second_address = "18 avenue of cookies";
