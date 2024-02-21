@@ -3,7 +3,7 @@
 namespace app\Orchid\Screens\Shop;
 
 use App\Models\ShopCustomer;
-use Faker\Core\DateTime;
+use Illuminate\Http\RedirectResponse;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\CheckBox;
@@ -113,9 +113,19 @@ class ShopVoucherEdit extends Screen
         ];
     }
 
-    public function createOrUpdate(Request $request)
+    /**
+     * Create or update a voucher code.
+     *
+     * @param Request $request The HTTP request containing the voucher data.
+     * @return RedirectResponse The redirect response to the vouchers route.
+     */
+    public function createOrUpdate(Request $request): RedirectResponse
     {
-        $this->voucher->fill($request->get('voucher'))->save();
+        $this->voucher->fill($request->get('voucher'));
+        $this->voucher->restricted = ($this->voucher->restricted == "on") ? 1 : 0;
+        $this->voucher->gift = ($this->voucher->gift == "on") ? 1 : 0;
+
+        $this->voucher->save();
 
         Toast::info('You created a new voucher code.');
 
