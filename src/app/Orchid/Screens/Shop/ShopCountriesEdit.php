@@ -72,10 +72,13 @@ class ShopCountriesEdit extends Screen
                 Input::make('country.iso_code')
                     ->title('ISO Code')
                     ->placeholder('Please enter the country iso-code')
+                    ->required()
                     ->help('Example \'cs\', \'sk\', \'de\''),
+
                 Input::make('country.country_name')
                     ->title('Country name')
                     ->help('Please enter the country name to display.')
+                    ->required()
             ])
         ];
     }

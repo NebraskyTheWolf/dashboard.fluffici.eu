@@ -137,8 +137,8 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; padding: 4px 12px 4px 0;">VAT</td>
-                                        <td class="font-strong text-right" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-weight: 600; padding: 4px 0 4px 12px;" align="right">0%</td>
+                                        <td style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; padding: 4px 12px 4px 0;">Tax</td>
+                                        <td class="font-strong text-right border-top" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-weight: 600; padding: 4px 0 4px 12px;" align="right">0%</td>
                                     </tr>
                                 @endif
 

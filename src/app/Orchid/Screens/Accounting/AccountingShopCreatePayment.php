@@ -75,9 +75,12 @@ class AccountingShopCreatePayment extends Screen
                    ]),
                Relation::make('payment.order_id')
                    ->title('Select the order.')
-                   ->fromModel(ShopOrders::class, 'first_name', 'order_id'),
+                   ->fromModel(ShopOrders::class, 'first_name', 'order_id')
+                   ->required(),
                Input::make('payment.price')
+                   ->type('number')
                    ->title('Price')
+                   ->required()
            ])
         ];
     }

@@ -78,12 +78,15 @@ class TaxGroupEdit extends Screen
                 Input::make('group.name')
                     ->title('Name')
                     ->placeholder('Please enter the Tax group name')
-                    ->help('Example: VAT'),
+                    ->help('Example: VAT')
+                    ->required(),
+
                 Input::make('group.percentage')
                     ->type('number')
                     ->title('Percentage')
                     ->placeholder('Please enter the tax percentage.')
                     ->help('Example : 21, 5, 1.5')
+                    ->required()
             ])
         ];
     }

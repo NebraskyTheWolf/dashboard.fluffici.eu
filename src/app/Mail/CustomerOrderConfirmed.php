@@ -13,6 +13,7 @@ use App\Models\SocialMedia;
 use App\Models\TaxGroup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -87,16 +88,10 @@ class CustomerOrderConfirmed extends Mailable
      * it retrieves the corresponding tax group and assigns it to productTax property.
      * If there isn't one, it assigns an empty array to productTax.
      *
-     * @return void
      */
     protected function fetchProductTax()
     {
-        $tax = ProductTax::where('product_id', $this->product->id);
-        if ($tax->exists()) {
-            $this->productTax = TaxGroup::where('id', $tax->tax_id)->paginate();
-        } else {
-            $this->productTax = array();
-        }
+        return TaxGroup::all();
     }
 
     protected function fetchOrderCarrier(): int

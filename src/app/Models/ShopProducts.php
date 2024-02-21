@@ -42,25 +42,24 @@ class ShopProducts extends Model
     }
 
     /**
-     * Retrieve the tax percentage for the product.
+     * Retrieve the total tax percentage for the product.
      *
-     * This method queries the ProductTax and TaxGroup models to find the tax percentage for the product with the specified ID.
-     * If a tax percentage exists, the percentage value is returned as an integer.
+     * This method queries the ProductTax and TaxGroup models to find all the tax percentages for the product with the specified ID.
+     * If tax percentages exist, the sum of all tax percentages is returned as an integer.
      * If no tax percentage exists, 0 is returned.
      *
-     * @return int The tax percentage for the product, or 0 if no tax percentage exists.
+     * @return int The total tax percentage for the product, or 0 if no tax percentage exists.
      */
     public function getProductTax(): int
     {
-        $productTax = ProductTax::where('product_id', $this->id);
-        if ($productTax->exists()) {
-            $group = $productTax->first();
-            $tax = TaxGroup::where('id', $group->tax_id)->first();
+        $productTaxes = TaxGroup::all();
+        $totalTax = 0;
 
-            return $tax->percentage;
+        foreach ($productTaxes as $productTax) {
+            $totalTax += $productTax->percentage;
         }
 
-        return 0;
+        return $totalTax;
     }
 
     /**
@@ -285,4 +284,30 @@ class ShopProducts extends Model
 
         return $checksum == $upc[11];
     }
+
+    /**
+     * Retrieve the list of tax group of the product.
+     *
+     * This method queries the ProductTax model to find the tax groups for the product with the specified ID.
+     * It constructs an associative array with the tax name as the key and the tax percentage as the value for each tax group.
+     * If no tax groups exist, an empty array is returned.
+     *
+     * @return array The array with tax group names and their percentages for the product.
+     */
+    public function getTaxGroups(): array
+    {
+        $productTaxGroups = TaxGroup::all();
+        $taxGroups = [];
+
+        foreach ($productTaxGroups as $productTax) {
+            $tax = TaxGroup::where('id', $productTax->tax_id)->first();
+
+            if ($tax) {
+                $taxGroups[$tax->name] = $tax->percentage;
+            }
+        }
+
+        return $taxGroups;
+    }
+
 }

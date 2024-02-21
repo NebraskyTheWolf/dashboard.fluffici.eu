@@ -11,6 +11,7 @@ use App\Orchid\Layouts\Shop\ShopVoucherLayout;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
@@ -102,10 +103,10 @@ class CustomerEditScreen extends Screen
                 ])->alignCenter(),
 
                 Group::make([
-                    Input::make('customer.email_verified')
+                    CheckBox::make('customer.email_verified')
                         ->title('Email verified')
                         ->disabled(),
-                    Input::make('customer.phone_verified')
+                    CheckBox::make('customer.phone_verified')
                         ->title('Phone verified')
                         ->disabled()
                 ])->alignEnd()

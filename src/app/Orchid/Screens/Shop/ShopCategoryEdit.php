@@ -75,21 +75,25 @@ class ShopCategoryEdit extends Screen
                     Input::make('category.name')
                         ->title(__('category.screen.edit.input.name.title'))
                         ->placeholder(__('category.screen.edit.input.name.placeholder'))
-                        ->max(50),
+                        ->max(50)
+                        ->required(),
 
                     Input::make('category.order')
                         ->title(__('category.screen.edit.input.order.title'))
                         ->placeholder(__('category.screen.edit.input.order.placeholder'))
                         ->type('number')
+                        ->required()
                 ]),
                 Group::make([
                     CheckBox::make('category.displayed')
                         ->title(__('category.screen.edit.input.displayed.title'))
-                        ->placeholder(__('category.screen.edit.input.displayed.placeholder')),
+                        ->placeholder(__('category.screen.edit.input.displayed.placeholder'))
+                        ->sendTrueOrFalse(),
 
                     DateTimer::make('category.deleted_at')
                         ->title(__('category.screen.edit.input.deleted_at.title'))
                         ->placeholder(__('category.screen.edit.input.deleted_at.placeholder'))
+                        ->required()
                         ->allowInput()
                         ->shorthandCurrentMonth()
                 ])

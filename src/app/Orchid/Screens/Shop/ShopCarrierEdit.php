@@ -76,19 +76,23 @@ class ShopCarrierEdit extends Screen
             \Orchid\Support\Facades\Layout::rows([
                 Input::make('carrier.slug')
                     ->title('Slug')
-                    ->placeholder('Type the name that the system will use.'),
+                    ->placeholder('Type the name that the system will use.')
+                    ->required(),
 
                 Input::make('carrier.carrierName')
                     ->title('Carrier name')
-                    ->placeholder('Type the name of the delivery service.'),
+                    ->placeholder('Type the name of the delivery service.')
+                    ->required(),
 
                 Input::make('carrier.carrierPrice')
                     ->title('Carrier price')
-                    ->placeholder('Enter the average price of the carrier.'),
+                    ->placeholder('Enter the average price of the carrier.')
+                    ->required(),
 
                 Input::make('carrier.carrierDelay')
                     ->title('Carrier delay')
-                    ->placeholder('Enter the average delay of the carrier.'),
+                    ->placeholder('Enter the average delay of the carrier.')
+                    ->required(),
             ])->title('Carrier information')
         ];
     }

@@ -81,17 +81,20 @@ class ShopSalesEdit extends Screen
                     Relation::make('sale.product_id')
                         ->title(__('sales.input.product_id.title'))
                         ->placeholder(__('sales.input.product_id.placeholder'))
-                        ->fromModel(\App\Models\ShopProducts::class, 'name', 'id'),
+                        ->fromModel(\App\Models\ShopProducts::class, 'name', 'id')
+                        ->required(),
 
                      Input::make('sale.reduction')
                          ->title(__('sales.input.reduction.title'))
-                         ->placeholder(__('sales.input.reduction.placeholder')),
+                         ->placeholder(__('sales.input.reduction.placeholder'))
+                         ->required(),
 
                     DateTimer::make('sale.deleted_at')
                         ->title(__('sales.input.deleted_at.title'))
                         ->enableTime()
                         ->format24hr()
                         ->allowInput()
+                        ->required()
                 ])
             ])->title(__('sales.layout.title')),
         ];

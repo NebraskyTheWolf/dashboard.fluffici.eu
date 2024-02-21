@@ -114,23 +114,27 @@ class PostEditScreen extends Screen
                                 ->title(__('posts.screen.input.post_title.title'))
                                 ->placeholder(__('posts.screen.edit.input.post_title.placeholder'))
                                 ->help(__('posts.screen.edit.input.post_title.help'))
-                                ->disabled($this->post->exists),
+                                ->disabled($this->post->exists)
+                                ->required(),
 
                             TextArea::make('post.description')
                                 ->title(__('posts.screen.input.description.title'))
                                 ->rows(3)
                                 ->maxlength(200)
                                 ->placeholder(__('posts.screen.input.description.placeholder'))
-                                ->disabled($this->post->exists),
+                                ->disabled($this->post->exists)
+                                ->required(),
 
                             Relation::make('post.author')
                                 ->title(__('posts.screen.input.author.title'))
                                 ->fromModel(User::class, 'name')
-                                ->disabled($this->post->exists),
+                                ->disabled($this->post->exists)
+                                ->required(),
 
                             Quill::make('post.body')
                                 ->title(__('posts.screen.input.body.title'))
-                                ->disabled($this->post->exists),
+                                ->disabled($this->post->exists)
+                                ->required(),
                         ])
                     ],
                     __('posts.screen.tabs.statistics') => [
@@ -150,20 +154,24 @@ class PostEditScreen extends Screen
                             Input::make('post.title')
                                 ->title(__('posts.screen.input.post_title.title'))
                                 ->placeholder(__('posts.screen.input.post_title.placeholder'))
-                                ->help(__('posts.screen.input.post_title.help')),
+                                ->help(__('posts.screen.input.post_title.help'))
+                                ->required(),
 
                             TextArea::make('post.description')
                                 ->title(__('posts.screen.input.description.title'))
                                 ->rows(3)
                                 ->maxlength(200)
-                                ->placeholder(__('posts.screen.input.description.placeholder')),
+                                ->placeholder(__('posts.screen.input.description.placeholder'))
+                                ->required(),
 
                             Relation::make('post.author')
                                 ->title(__('posts.screen.input.author.title'))
-                                ->fromModel(User::class, 'name'),
+                                ->fromModel(User::class, 'name')
+                                ->required(),
 
                             Quill::make('post.body')
                                 ->title(__('posts.screen.input.body.title'))
+                                ->required()
                         ])
                     ],
                     __('posts.screen.tabs.statistics') => [],

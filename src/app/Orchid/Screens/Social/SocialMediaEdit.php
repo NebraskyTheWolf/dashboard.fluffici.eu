@@ -69,10 +69,12 @@ class SocialMediaEdit extends Screen
                 \Orchid\Screen\Fields\Group::make([
                     Input::make('social.slug')
                         ->title('Slug')
-                        ->placeholder('Enter the name that the system will use.'),
+                        ->placeholder('Enter the name that the system will use.')
+                        ->required(),
                     Input::make('social.url')
                         ->title('URL')
                         ->placeholder('Enter the redirect url to your social media.')
+                        ->required()
                 ])
             ])->title('Information')
         ];

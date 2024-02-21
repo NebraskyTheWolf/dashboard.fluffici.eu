@@ -87,16 +87,19 @@ class PagesEditScreen extends Screen
                     Input::make('pages.page_slug')
                         ->title(__('pages.screen.input.slug.title'))
                         ->placeholder(__('pages.screen.input.slug.placeholder'))
-                        ->help(__('pages.screen.input.slug.help')),
+                        ->help(__('pages.screen.input.slug.help'))
+                        ->required(),
 
                     Input::make('pages.title')
                         ->title(__('pages.screen.input.title.title'))
                         ->placeholder(__('pages.screen.input.title.placeholder'))
-                        ->help(__('pages.screen.input.title.help')),
+                        ->help(__('pages.screen.input.title.help'))
+                        ->required(),
                 ]),
 
                 Quill::make('pages.content')
-                    ->title(__('pages.screen.input.content.title')),
+                    ->title(__('pages.screen.input.content.title'))
+                    ->required(),
             ])->title(__('pages.screen.group.title')),
         ];
     }

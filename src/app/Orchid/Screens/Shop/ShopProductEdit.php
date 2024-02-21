@@ -113,12 +113,14 @@ class ShopProductEdit extends Screen
                 Group::make([
                     Input::make('products.name')
                         ->title(__('products.screen.edit.input.product_name.title'))
-                        ->placeholder(__('products.screen.edit.input.product_name.placeholder')),
+                        ->placeholder(__('products.screen.edit.input.product_name.placeholder'))
+                        ->required(),
 
                     Relation::make('products.category_id')
                         ->title(__('products.screen.edit.input.category_id.title'))
                         ->placeholder(__('products.screen.edit.input.category_id.placeholder'))
                         ->fromModel(ShopCategories::class, 'name', 'id')
+                        ->required()
 
                 ])->alignStart(),
 
@@ -127,7 +129,8 @@ class ShopProductEdit extends Screen
                         ->title(__('products.screen.edit.input.description.title'))
                         ->placeholder(__('products.screen.edit.input.description.placeholder'))
                         ->base64()
-                        ->autofocus(),
+                        ->autofocus()
+                        ->required(),
 
                     Picture::make('Barcode')
                         ->title('Barcode')
@@ -141,18 +144,22 @@ class ShopProductEdit extends Screen
                     Input::make('products.price')
                         ->title(__('products.screen.edit.input.price.title'))
                         ->placeholder(__('products.screen.edit.input.price.placeholder'))
-                        ->type('number'),
+                        ->type('number')
+                        ->required(),
 
                     CheckBox::make('products.displayed')
                         ->title(__('products.screen.edit.input.displayed.title'))
                         ->placeholder(__('products.screen.edit.input.displayed.placeholder'))
-                        ->checked(),
+                        ->checked()
+                        ->sendTrueOrFalse()
+                        ->required(),
 
                     DateTimer::make('products.deleted_at')
                         ->title(__('products.screen.edit.input.deleted_at.title'))
                         ->placeholder(__('products.screen.edit.input.deleted_at.placeholder'))
                         ->format24hr()
                         ->allowInput()
+                        ->required()
 
                 ])->alignEnd(),
 
