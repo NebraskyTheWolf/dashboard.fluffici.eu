@@ -7,8 +7,9 @@ use App\Models\ShopCustomer;
 use App\Models\ShopOrders;
 use App\Models\ShopVouchers;
 use App\Orchid\Layouts\Shop\ShopOrderLayout;
-use app\Orchid\Layouts\Shop\ShopVoucherLayout;
+use App\Orchid\Layouts\Shop\ShopVoucherLayout;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
@@ -126,7 +127,7 @@ class CustomerEditScreen extends Screen
 
         Toast::info("You saved " . $this->customer->username . ' account');
 
-        event(new UpdateAudit('customer', 'Updated ' . $this->customer->username . ' account', \Illuminate\Support\Facades\Auth::user()->name));
+        event(new UpdateAudit('customer', 'Updated ' . $this->customer->username . ' account', Auth::user()->name));
 
         return redirect()->route('platform.shop.customers');
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Orchid\Layouts\Shop;
+namespace App\Orchid\Layouts\Shop;
 
 use App\Models\ShopVouchers;
 use Carbon\Carbon;
