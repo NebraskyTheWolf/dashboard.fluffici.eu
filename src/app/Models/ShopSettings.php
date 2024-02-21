@@ -25,4 +25,11 @@ class ShopSettings extends Model
         'gateway_secret',
         'gateway_key',
     ];
+
+    protected $casts = [
+        'enabled'  => 'boolean',
+        'shop_vouchers'  => 'boolean',
+        'shop_sales'  => 'boolean',
+        'shop_billing'  => 'boolean',
+    ];
 }
