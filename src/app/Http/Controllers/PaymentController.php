@@ -47,6 +47,14 @@ class PaymentController extends Controller
         }
         $order = $order->first();
 
+        if ($order->customer_id === null) {
+            return response()->json([
+                'status' => false,
+                'error' => 'INVALID_ORDER',
+                'message' => 'The customerId is not present.'
+            ]);
+        }
+
         $product = OrderedProduct::where('order_id', $orderId)->first();
         $product = ShopProducts::where('id', $product->product_id)->first();
 
@@ -86,6 +94,22 @@ class PaymentController extends Controller
                                 'status' => false,
                                 'error' => 'VOUCHER_EXPIRED',
                                 'message' => 'The voucher has expired.'
+                            ]);
+                        }
+
+                        if ($voucherData->isRestricted()) {
+                            return response()->json([
+                                'status' => false,
+                                'error' => 'VOUCHER_REJECTION',
+                                'message' => 'The voucher was restricted by a administrator.'
+                            ]);
+                        }
+
+                        if (!$voucher->isCustomerAssigned($order->customer_id)) {
+                            return response()->json([
+                                'status' => false,
+                                'error' => 'VOUCHER_REJECTION',
+                                'message' => 'The voucher is not assigned to the customer.'
                             ]);
                         }
 

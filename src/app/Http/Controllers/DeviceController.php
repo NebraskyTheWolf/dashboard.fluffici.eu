@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Events\UpdateAudit;
 use App\Models\DeviceAuthorization;
 use App\Models\OrderIdentifiers;
+use App\Models\ShopCustomer;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
 use App\Models\ShopVouchers;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Storage;
 use Orchid\Platform\Models\User;
 
 class DeviceController extends Controller
@@ -330,9 +333,9 @@ class DeviceController extends Controller
      */
     public function voucherInfo(Request $request): JsonResponse
     {
-        $voucherCode = $request->query('voucherId');
+        $encodedData = $request->query('encodedData');
 
-        if ($voucherCode == null) {
+        if ($encodedData == null) {
             return response()->json([
                 'status' => false,
                 'error' => 'MISSING_VOUCHER_ID',
@@ -340,22 +343,61 @@ class DeviceController extends Controller
             ]);
         }
 
-        $voucher = ShopVouchers::where('code', $voucherCode);
-        if ($voucher->exists()) {
-            $voucher = $voucher->first();
-
+        $storage = Storage::disk('public');
+        if (!$storage->exists('security.cert')) {
             return response()->json([
-                'status' => true,
-                'data' => [
-                    'balance' => $voucher->amount
-                ],
-                'message' => "Voucher code details retrieved successfully!"
+                'status' => false,
+                'error' => 'SIGNATURE_REJECTION',
+                'message' => 'Unable to check the request signature.'
+            ]);
+        }
+
+        $key = openssl_pkey_get_public($storage->get('security.cert'));
+        $data = json_decode(base64_decode($encodedData), true);
+
+        $voucherCode = base64_decode($data['data']);
+        $result = openssl_verify($voucherCode, base64_decode(strtr($data['signature'], '-_', '+/')), $key, OPENSSL_ALGO_SHA256);
+
+        if ($result === 1) {
+            $voucher = ShopVouchers::where('code', $voucherCode);
+            if ($voucher->exists()) {
+                $voucher = $voucher->first();
+                $customer = ShopCustomer::where('customer_id', $voucher->customer_id)->first();
+
+                return response()->json([
+                    'status' => true,
+                    'data' => [
+                        'balance' => $voucher->amount,
+                        'isExpired' => $voucher->isExpired(),
+                        'isRestricted' => $voucher->isRestricted(),
+                        'customer' => [
+                            'first_name' => $customer->first_name,
+                            'last_name' => $customer->last_name,
+                            'email' => $customer->email,
+                            'restricted' => $customer->restricted
+                        ],
+                        'expireAt' => Carbon::parse($customer->expiration)->diffForHumans()
+                    ],
+                    'message' => "Voucher code details retrieved successfully!"
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'error' => "VOUCHER_NOT_FOUND",
+                    'message' => "The voucher code does not exist."
+                ]);
+            }
+        } else if ($result === 0) {
+            return response()->json([
+                'status' => false,
+                'error' => 'VOUCHER_REJECTION',
+                'message' => 'The voucher is tampered, DO NOT USE!'
             ]);
         } else {
             return response()->json([
                 'status' => false,
-                'error' => "VOUCHER_NOT_FOUND",
-                'message' => "The voucher code does not exist."
+                'error' => 'SIGNATURE_VERIFICATION_ERROR',
+                'message' => 'Error occurred during signature verification.'
             ]);
         }
     }
