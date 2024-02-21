@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AccountingDocument;
+use App\Models\OrderInvoice;
 use App\Models\ShopReports;
 use App\Models\TransactionsReport;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -18,6 +19,7 @@ class ReportController extends Controller
         'shop' => ShopReports::class,
         'transactions' => TransactionsReport::class,
         'accounting' => AccountingDocument::class,
+        'invoice' => OrderInvoice::class
     ];
 
     /**

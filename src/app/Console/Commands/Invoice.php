@@ -113,7 +113,7 @@ class Invoice extends Command
 
         $invoice = new OrderInvoice();
         $invoice->order_id = $orderIdentifier->internal;
-        $invoice->invoice_id = $invoiceId;
+        $invoice->report_id = $invoiceId;
         $invoice->customer_id = $order->customer_id;
         $invoice->attachment_id =  $filename;
         $invoice->save();

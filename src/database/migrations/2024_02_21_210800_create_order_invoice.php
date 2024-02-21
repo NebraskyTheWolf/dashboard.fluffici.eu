@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::connection('shop')->create('order_invoice', function (Blueprint $table) {
             $table->id();
             $table->string('order_id');
-            $table->string('invoice_id');
+            $table->string('report_id');
             $table->string('customer_id');
             $table->string('attachment_id');
             $table->timestamps();

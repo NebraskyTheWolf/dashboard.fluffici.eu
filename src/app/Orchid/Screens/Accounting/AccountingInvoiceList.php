@@ -2,6 +2,8 @@
 
 namespace app\Orchid\Screens\Accounting;
 
+use App\Models\OrderInvoice;
+use App\Orchid\Layouts\InvoiceList;
 use Orchid\Screen\Screen;
 
 class AccountingInvoiceList extends Screen
@@ -13,7 +15,9 @@ class AccountingInvoiceList extends Screen
      */
     public function query(): iterable
     {
-        return [];
+        return [
+            'invoices' => OrderInvoice::paginate()
+        ];
     }
 
     /**
@@ -50,6 +54,8 @@ class AccountingInvoiceList extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            InvoiceList::class
+        ];
     }
 }
