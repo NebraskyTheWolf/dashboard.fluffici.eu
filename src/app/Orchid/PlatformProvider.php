@@ -145,6 +145,9 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.exposure')
                         ->route('tax.group.list')
                         ->permission('platform.shop.taxes.navbar'),
+                    Menu::make('Customers')
+                        ->icon('bs.card-list')
+                        ->route('platform.shop.customers'),
                     Menu::make('Produkty')
                         ->icon('bs.window-sidebar')
                         ->route('platform.shop.products')

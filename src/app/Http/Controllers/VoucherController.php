@@ -45,6 +45,7 @@ class VoucherController extends Controller
 
                 $response = \Httpful\Request::post(env("IMAGER_HOST", 'http://185.188.249.234:3900/voucher/'), [
                     'price' => $voucherData->money,
+                    'expiry' => $voucherData->getExpiration(),
                     'properties' => base64_encode(stripslashes(json_encode([
                         'signature' => base64_encode($signature),
                         'data' => base64_encode($voucherData->code)

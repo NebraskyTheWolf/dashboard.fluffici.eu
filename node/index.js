@@ -70,6 +70,7 @@ app.post('/product', async function (req, res) {
 
 app.post('/voucher', async function (req, res) {
     const price = req.body.price
+    const expiry = req.body.expiry
     const decoded = JSON.parse(nodeBase64.decode(req.body.properties))
     const id = nodeBase64.decode(decoded.data);
 
@@ -91,7 +92,7 @@ app.post('/voucher', async function (req, res) {
 
         ctx.font = '26px "Arial Bold"';
         ctx.fillStyle = "rgb(255,255,255)";
-        ctx.fillText(id, 130,470);
+        ctx.fillText(expiry, 130,470);
         ctx.fillText(price + ' Kc', 368,580);
 
         bwipJs.toBuffer({
@@ -122,7 +123,7 @@ app.post('/voucher', async function (req, res) {
         'status': true,
         'message': 'The was was created.',
         'path': '/workspace/storage/app/public' + id + '-code.png'
-    })
+    }).end()
 });
 
 http.createServer(app).listen(3900)

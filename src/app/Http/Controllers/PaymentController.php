@@ -80,6 +80,15 @@ class PaymentController extends Controller
                     $voucher = ShopVouchers::where('code', $voucherCode);
                     if ($voucher->exists()) {
                         $voucherData = $voucher->first();
+
+                        if ($voucherData->isExpired()) {
+                            return response()->json([
+                                'status' => false,
+                                'error' => 'VOUCHER_EXPIRED',
+                                'message' => 'The voucher has expired.'
+                            ]);
+                        }
+
                         if (!($voucherData->money < $product->getNormalizedPrice())) {
                             $voucherData->update([
                                 'money' => $voucherData->money - $product->getNormalizedPrice()

@@ -25,6 +25,8 @@ use App\Orchid\Screens\Posts\PostEditScreen;
 use App\Orchid\Screens\Posts\PostListScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\Shop\CustomerEditScreen;
+use App\Orchid\Screens\Shop\CustomerListScreen;
 use App\Orchid\Screens\Shop\ShopCarrierEdit;
 use App\Orchid\Screens\Shop\ShopCarrierList;
 use App\Orchid\Screens\Shop\ShopCategories;
@@ -246,6 +248,12 @@ Route::screen('shop/tax/edit/{group?}', TaxGroupEdit::class)
 
 Route::screen('shop/taxes', TaxGroupList::class)
     ->name('tax.group.list');
+
+Route::screen('shop/customers/list', CustomerListScreen::class)
+    ->name('platform.shop.customers');
+
+Route::screen('shop/customers/edit/{customer}', CustomerEditScreen::class)
+    ->name('platform.shop.customers.edit');
 
 Route::screen('email/send', SendEmail::class)
     ->name('platform.admin.sendmail');
