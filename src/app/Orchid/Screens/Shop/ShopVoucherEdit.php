@@ -2,9 +2,16 @@
 
 namespace app\Orchid\Screens\Shop;
 
+use App\Models\ShopCustomer;
+use Faker\Core\DateTime;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Fields\DateTimer;
+use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Quill;
+use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
@@ -66,16 +73,42 @@ class ShopVoucherEdit extends Screen
 
         return [
             Layout::rows([
+                Group::make([
+                    Relation::make('voucher.customer_id')
+                        ->title('Customer')
+                        ->help('Please select the assigned customer to this Voucher code.')
+                        ->fromModel(ShopCustomer::class, 'email', 'customer_id')
+                        ->required(),
 
-                Input::make('voucher.code')
-                    ->title('Voucher Code')
-                    ->disabled()
-                    ->help('This code is automatically generated and cannot be edited.'),
+                    DateTimer::make('voucher.expiration')
+                        ->title('Please select the expiration')
+                        ->allowInput()
+                        ->enableTime()
+                        ->format24hr()
+                        ->required(),
 
-                Input::make('voucher.money')
-                    ->title('Amount in CZK')
-                    ->type('number')
+                    CheckBox::make('voucher.restricted')
+                        ->title('Restricted')
+                        ->help('Is this voucher restricted?'),
 
+                ])->alignStart(),
+
+                Group::make([
+                    Quill::make('voucher.note')
+                        ->title('Note')
+                        ->help('Please enter a note if needed otherwise let it empty.'),
+                ])->alignCenter(),
+
+                Group::make([
+                    Input::make('voucher.money')
+                        ->title('Amount in CZK')
+                        ->type('number')
+                        ->required(),
+
+                    CheckBox::make('voucher.gift')
+                        ->title('Gift')
+                        ->help('Is this a gifted voucher?')
+                ])->alignEnd(),
             ])->title('Voucher Information')
         ];
     }
