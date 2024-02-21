@@ -307,6 +307,6 @@ class PlatformProvider extends OrchidServiceProvider
 
     private function isVouchersEnabled(): bool
     {
-        return ShopSettings::latest()->first()->shop_sales;
+        return ShopSettings::latest()->first()->shop_vouchers;
     }
 }
