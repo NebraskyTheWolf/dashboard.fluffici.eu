@@ -15,7 +15,12 @@ class ShopVouchers extends Model
     public $connection = 'shop';
     protected $fillable = [
         'code',
-        'money'
+        'money',
+        'customer_id',
+        'gift',
+        'expiration',
+        'restricted',
+        'note'
     ];
 
 
