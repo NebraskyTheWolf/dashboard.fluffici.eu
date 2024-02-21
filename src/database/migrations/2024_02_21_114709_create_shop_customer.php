@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('shop_customer');
         Schema::connection('shop')->create('shop_customer', function (Blueprint $table) {
             $table->id();
             $table->string('customer_id');
@@ -23,9 +24,7 @@ return new class extends Migration
             $table->string('last_name');
 
             $table->string('phone')->nullable();
-
             $table->string('email');
-            $table->unique('email');
 
             $table->boolean('email_verified')->default(false);
             $table->boolean('phone_verified')->default(false);
@@ -34,12 +33,12 @@ return new class extends Migration
             $table->string('password', 255);
             $table->boolean('isMFAEnabled')->default(false);
             $table->string('MFASecret')->nullable();
-
             $table->string('account_status')->default("Inactive");
 
             $table->timestamps();
         });
 
+        Schema::dropIfExists('shop_customer_limit');
         Schema::connection('shop')->create('shop_customer_limit', function (Blueprint $table) {
             $table->id();
 
@@ -50,6 +49,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::dropIfExists('shop_customer_address');
         Schema::connection('shop')->create('shop_customer_address', function (Blueprint $table) {
             $table->id();
             $table->string('customer_id')->references('customer_id')->on('shop_customer');
@@ -65,6 +65,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::dropIfExists('shop_customer_contact');
         Schema::connection('shop')->create('shop_customer_contact', function (Blueprint $table) {
             $table->id();
             $table->string('customer_id')->references('customer_id')->on('shop_customer');
@@ -76,6 +77,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::dropIfExists('shop_customer_contract');
         Schema::connection('shop')->create('shop_customer_contract', function (Blueprint $table) {
             $table->id();
             $table->string('customer_id')->references('customer_id')->on('shop_customer');
@@ -89,6 +91,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::dropIfExists('shop_customer_terminated');
         Schema::connection('shop')->create('shop_customer_terminated', function (Blueprint $table) {
             $table->id();
             $table->string('customer_id')->references('customer_id')->on('shop_customer');
