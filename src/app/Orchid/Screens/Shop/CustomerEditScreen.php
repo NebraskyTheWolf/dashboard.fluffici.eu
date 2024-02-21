@@ -33,7 +33,7 @@ class CustomerEditScreen extends Screen
     {
         return [
             'customer' => $customer,
-            'orders' => ShopOrders::where('customer_id', $customer->customer_id)->paginate(),
+            'shop_orders' => ShopOrders::where('customer_id', $customer->customer_id)->paginate(),
             'vouchers' => ShopVouchers::where('customer_id', $customer->customer_id)->paginate()
         ];
     }

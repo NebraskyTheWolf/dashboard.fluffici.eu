@@ -21,7 +21,8 @@ class ShopOrders extends Model
         'phone_number',
         'status',
         'tracking_number',
-        'total_price'
+        'total_price',
+        'customer_id'
     ];
 
     /**
@@ -40,6 +41,7 @@ class ShopOrders extends Model
      */
     protected $allowedFilters = [
         'order_id'         => Where::class,
+        'customer_id'         => Where::class,
         'status'         => Where::class,
         'payment_method'         => Where::class,
         'first_name'       => Like::class,
@@ -56,6 +58,7 @@ class ShopOrders extends Model
      */
     protected $allowedSorts = [
         'order_id',
+        'customer_id',
         'first_name',
         'last_name',
         'email',
