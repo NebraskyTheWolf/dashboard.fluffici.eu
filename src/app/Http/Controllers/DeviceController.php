@@ -373,8 +373,7 @@ class DeviceController extends Controller
                         'customer' => [
                             'first_name' => $customer->first_name,
                             'last_name' => $customer->last_name,
-                            'email' => $customer->email,
-                            'restricted' => $customer->restricted
+                            'email' => $customer->email
                         ],
                         'expireAt' => Carbon::parse($customer->expiration)->diffForHumans()
                     ],
