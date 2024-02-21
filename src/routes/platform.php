@@ -252,8 +252,8 @@ Route::screen('shop/taxes', TaxGroupList::class)
 Route::screen('shop/customers/list', CustomerListScreen::class)
     ->name('platform.shop.customers');
 
-Route::screen('shop/customers/edit/{customer}', CustomerEditScreen::class)
-    ->name('platform.shop.customers.edit');
+Route::screen('shop/customers/edit/{customer?}', CustomerEditScreen::class)
+    ->name('platform.shop.customer.edit');
 
 Route::screen('email/send', SendEmail::class)
     ->name('platform.admin.sendmail');
