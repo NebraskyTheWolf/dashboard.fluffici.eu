@@ -69,7 +69,6 @@ return new class extends Migration
         Schema::connection('shop')->create('shop_customer_contact', function (Blueprint $table) {
             $table->id();
             $table->string('customer_id')->references('customer_id')->on('shop_customer');
-            $table->string('customer_id');
             $table->boolean('email');
             $table->boolean('phone');
             $table->boolean('sms');
@@ -81,7 +80,6 @@ return new class extends Migration
         Schema::connection('shop')->create('shop_customer_contract', function (Blueprint $table) {
             $table->id();
             $table->string('customer_id')->references('customer_id')->on('shop_customer');
-            $table->string('customer_id');
             $table->string('customer_ip');
 
             $table->boolean('gdpr');
@@ -95,7 +93,6 @@ return new class extends Migration
         Schema::connection('shop')->create('shop_customer_terminated', function (Blueprint $table) {
             $table->id();
             $table->string('customer_id')->references('customer_id')->on('shop_customer');
-            $table->string('customer_id');
 
             $table->string('reason')->nullable();
 
