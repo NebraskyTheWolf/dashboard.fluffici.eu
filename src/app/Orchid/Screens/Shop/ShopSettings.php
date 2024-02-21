@@ -71,7 +71,8 @@ class ShopSettings extends Screen
         return [
             Layout::rows([
                 CheckBox::make('settings.enabled')
-                    ->title("Is the shop active?"),
+                    ->title("Is the shop active?")
+                    ->sendTrueOrFalse(),
 
                 Cropper::make('settings.favicon')
                     ->title('Upload the shop favicon.'),
@@ -86,12 +87,16 @@ class ShopSettings extends Screen
 
             Layout::rows([
                 CheckBox::make('settings.shop_sales')
-                    ->title('Do you want the sales module on?'),
+                    ->title('Do you want the sales module on?')
+                    ->sendTrueOrFalse(),
                 CheckBox::make('settings.shop_vouchers')
-                    ->title('Do you want the voucher module on?'),
+                    ->title('Do you want the voucher module on?')
+                    ->sendTrueOrFalse(),
 
                 CheckBox::make('settings.shop_billing')
-                    ->title('Do you want the billing module on?'),
+                    ->title('Do you want the billing module on?')
+                    ->sendTrueOrFalse(),
+
                 Input::make('settings.billing-host')
                     ->title('Please enter the provider host'),
                 Password::make('settings.billing-secret')

@@ -89,7 +89,8 @@ class ShopVoucherEdit extends Screen
 
                     CheckBox::make('voucher.restricted')
                         ->title('Restricted')
-                        ->help('Is this voucher restricted?'),
+                        ->help('Is this voucher restricted?')
+                        ->sendTrueOrFalse(),
 
                 ])->alignStart(),
 
@@ -108,6 +109,7 @@ class ShopVoucherEdit extends Screen
                     CheckBox::make('voucher.gift')
                         ->title('Gift')
                         ->help('Is this a gifted voucher?')
+                        ->sendTrueOrFalse()
                 ])->alignEnd(),
             ])->title('Voucher Information')
         ];
@@ -121,11 +123,7 @@ class ShopVoucherEdit extends Screen
      */
     public function createOrUpdate(Request $request): RedirectResponse
     {
-        $this->voucher->fill($request->get('voucher'));
-        $this->voucher->restricted = ($this->voucher->restricted == "on") ? 1 : 0;
-        $this->voucher->gift = ($this->voucher->gift == "on") ? 1 : 0;
-
-        $this->voucher->save();
+        $this->voucher->fill($request->get('voucher'))->save();
 
         Toast::info('You created a new voucher code.');
 
