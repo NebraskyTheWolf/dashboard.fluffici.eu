@@ -105,7 +105,7 @@ class PaymentController extends Controller
                             ]);
                         }
 
-                        if (!$voucher->isCustomerAssigned($order->customer_id)) {
+                        if (!$voucherData->isCustomerAssigned($order->customer_id)) {
                             return response()->json([
                                 'status' => false,
                                 'error' => 'VOUCHER_REJECTION',

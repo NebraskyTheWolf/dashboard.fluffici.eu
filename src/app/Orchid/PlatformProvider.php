@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Orchid;
 
 use App\Models\Events;
+use App\Models\ShopCustomer;
 use App\Models\ShopOrders;
 use App\Models\ShopSettings;
 use App\Models\ShopSupportTickets;
@@ -89,7 +90,8 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Send Email')
                         ->icon('bs.envelope')
                         ->route('platform.admin.sendmail')
-                        ->permission('platform.systems.email'),
+                        ->permission('platform.systems.email')
+                        ->badge(fn () => "New", Color::SECONDARY),
                     Menu::make('Akce')
                         ->icon('bs.calendar-event')
                         ->route('platform.events.list')
@@ -132,6 +134,7 @@ class PlatformProvider extends OrchidServiceProvider
                         ->route('platform.accounting.invoices'),
                 ])
                 ->divider()
+                ->badge(fn () => "New", Color::SECONDARY)
                 ->permission('platform.accounting.navbar'),
 
             Menu::make('E-Shop')
@@ -147,7 +150,8 @@ class PlatformProvider extends OrchidServiceProvider
                         ->permission('platform.shop.taxes.navbar'),
                     Menu::make('Customers')
                         ->icon('bs.card-list')
-                        ->route('platform.shop.customers'),
+                        ->route('platform.shop.customers')
+                        ->badge(fn () => ShopCustomer::count() ?: 0),
                     Menu::make('Produkty')
                         ->icon('bs.window-sidebar')
                         ->route('platform.shop.products')
@@ -160,11 +164,13 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Prodej')
                         ->icon('bs.credit-card-2-front')
                         ->route('platform.shop.sales')
-                        ->permission('platform.systems.eshop.sales'),
+                        ->permission('platform.systems.eshop.sales')
+                        ->canSee($this->isSalesEnabled()),
                     Menu::make('Poukázky')
                         ->icon('bs.card-list')
                         ->route('platform.shop.vouchers')
-                        ->permission('platform.systems.eshop.vouchers'),
+                        ->permission('platform.systems.eshop.vouchers')
+                        ->canSee($this->isVouchersEnabled()),
                     Menu::make('Dopravci')
                         ->icon('bs.box-seam')
                         ->route('platform.shop.carriers')
@@ -296,11 +302,11 @@ class PlatformProvider extends OrchidServiceProvider
 
     private function isSalesEnabled(): bool
     {
-        return ShopSettings::where('id', 1)->first()->shop_sales == 1;
+        return ShopSettings::where('id', 1)->first()->shop_sales === 1;
     }
 
     private function isVouchersEnabled(): bool
     {
-        return ShopSettings::where('id', 1)->first()->shop_sales == 1;
+        return ShopSettings::where('id', 1)->first()->shop_sales === 1;
     }
 }

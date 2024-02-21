@@ -25,9 +25,10 @@ class CustomerEditScreen extends Screen
     public $customer;
 
     /**
-     * Fetch data to be displayed on the screen.
+     * Retrieves the data related to a given ShopCustomer.
      *
-     * @return array
+     * @param ShopCustomer $customer The ShopCustomer object to retrieve data for.
+     * @return iterable An array containing the customer, shop orders, and vouchers related to the given customer.
      */
     public function query(ShopCustomer $customer): iterable
     {
