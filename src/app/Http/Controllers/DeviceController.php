@@ -367,7 +367,7 @@ class DeviceController extends Controller
                 return response()->json([
                     'status' => true,
                     'data' => [
-                        'balance' => $voucher->amount,
+                        'balance' => $voucher->money,
                         'isExpired' => $voucher->isExpired(),
                         'isRestricted' => $voucher->isRestricted(),
                         'customer' => [
