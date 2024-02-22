@@ -7,6 +7,7 @@ use App\Models\Events;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
+use Orchid\Platform\Models\User;
 
 class ReminderTest extends Command
 {
@@ -43,7 +44,7 @@ class ReminderTest extends Command
         // No need to save.
         // $event->save();
 
-        Mail::to('vakea@fluffici.eu')->send(new ReminderMail($event, 'Vakea'));
+        Mail::to('vakea@fluffici.eu')->send(new ReminderMail($event, User::where('email', 'vakea@fluffici.eu')->first()));
 
         printf("Mail sent.");
     }
