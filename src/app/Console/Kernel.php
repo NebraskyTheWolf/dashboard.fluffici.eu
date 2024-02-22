@@ -13,6 +13,7 @@ use App\Console\Commands\Refresh;
 use App\Console\Commands\SendSchedulesEmail;
 use App\Console\Commands\StartNewEvent;
 use App\Console\Commands\StatisticsMail;
+use App\Console\Commands\SyncAutumnFiles;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -37,6 +38,8 @@ class Kernel extends ConsoleKernel
         $schedule->command(FinishOldEvent::class)->everyTenSeconds();
         $schedule->command(StartNewEvent::class)->everyTenSeconds();
         $schedule->command(DeleteUsedVouchers::class)->everyTenSeconds();
+
+        $schedule->command(SyncAutumnFiles::class)->everyThirtyMinutes();
     }
 
     /**

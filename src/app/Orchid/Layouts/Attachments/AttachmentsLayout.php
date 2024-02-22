@@ -8,12 +8,14 @@ use App\Models\PlatformAttachments;
 use App\Models\ReportedAttachments;
 use App\Orchid\Presenters\AuditPresenter;
 use Carbon\Carbon;
+use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Persona;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
+use Orchid\Support\Color;
 
 class AttachmentsLayout extends Table
 {
@@ -32,10 +34,10 @@ class AttachmentsLayout extends Table
         return [
             TD::make('user_id', __('attachments.table.attached_by'))
                 ->render(function (PlatformAttachments $platformAttachments) {
-                    $user = \Orchid\Platform\Models\User::where('id', $platformAttachments->user_id);
+                    $user = User::where('id', $platformAttachments->user_id);
 
                     if ($user->exists()) {
-                        return new Persona(new AuditPresenter(\Orchid\Platform\Models\User::find($user->first()->id)));
+                        return new Persona(new AuditPresenter(User::find($user->first()->id)));
                     } else {
                         return new Persona(new AuditPresenter((object)[
                             'name' => 'Deleted User',
@@ -49,11 +51,17 @@ class AttachmentsLayout extends Table
                     return DropDown::make('Menu')
                         ->list([
                             Button::make('Lookup')
-                                ->route('platform.attachments.lookup', $platformAttachments),
-                            Button::make('Remove')
-                                ->method('remove'),
-                            Link::make('URL')
-                                ->href('https://autumn.fluffici.eu/' . $platformAttachments->bucket . '/' . $platformAttachments->attachment_id)
+                                ->href('https://autumn.fluffici.eu/' . $platformAttachments->bucket . '/' . $platformAttachments->attachment_id),
+                            Button::make('Delete')
+                                ->method('remove', [
+                                    "attachment_id" => $platformAttachments->attachment_id,
+                                    "tag" => $platformAttachments->bucket
+                                ])->type(Color::BASIC),
+                            Button::make('Take down')
+                                ->method('report', [
+                                    "attachment_id" => $platformAttachments->attachment_id,
+                                    "tag" => $platformAttachments->bucket
+                                ])->type(Color::WARNING),
                         ]);
                 }),
             TD::make('bucket', __('attachments.table.tag'))

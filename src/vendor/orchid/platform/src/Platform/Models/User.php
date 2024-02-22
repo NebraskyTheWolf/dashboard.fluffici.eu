@@ -212,7 +212,7 @@ class User extends Authenticatable implements UserInterface
      *
      * @return bool Returns true if the target user has bigger power, false otherwise.
      */
-    public function hasUserBiggerPower($targetUser): bool
+    public function hasUserBiggerPower(User $targetUser): bool
     {
         if (!$this->exists)
             return false;

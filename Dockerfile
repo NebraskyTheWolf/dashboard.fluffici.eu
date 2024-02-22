@@ -81,3 +81,4 @@ RUN <<EOF
 EOF
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/mongodb.ini

@@ -2,11 +2,13 @@
 
 namespace App\Orchid\Screens\Attachments;
 
+use app\Models\AutumnFile;
 use App\Models\PlatformAttachments;
 use App\Orchid\Layouts\Attachments\AttachmentsLayout;
-use Illuminate\Support\Facades\Request;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Toast;
+use Symfony\Component\HttpFoundation\Request;
 
 class AttachmentLists extends Screen
 {
@@ -58,8 +60,52 @@ class AttachmentLists extends Screen
         ];
     }
 
-    public function upload(Request $request)
+    public function remove(Request $request)
     {
+        $id = $request->get("attachment_id");
+        $tag = $request->get("tag");
 
+        $file = AutumnFile::where('_id', $id)->where('tag', $tag)->get()->first();
+        if ($file->deleted) {
+            Toast::warning('This file was already deleted.');
+        } else {
+            $file->update([
+                'deleted' => true,
+            ]);
+
+            $platform = PlatformAttachments::where('attachment_id', $id)->where('bucket', $tag)->first();
+            $platform->delete();
+
+            Toast::success('File deleted successfully.');
+        }
+
+        return redirect()->route('platform.attachments');
+    }
+
+    public function report(Request $request)
+    {
+        $id = $request->get("attachment_id");
+        $tag = $request->get("tag");
+
+        $file = AutumnFile::where('_id', $id)->where('tag', $tag)->get()->first();
+        if ($file->reported) {
+
+            $file->update([
+                'reported' => false,
+            ]);
+
+            Toast::success('The file was reinstated.');
+        } else {
+            $file->update([
+                'reported' => true,
+            ]);
+
+            $platform = PlatformAttachments::where('attachment_id', $id)->where('bucket', $tag)->first();
+            $platform->delete();
+
+            Toast::success('The file was set has reported.');
+        }
+
+        return redirect()->route('platform.attachments');
     }
 }
