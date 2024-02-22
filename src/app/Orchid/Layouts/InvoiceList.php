@@ -3,7 +3,6 @@
 namespace App\Orchid\Layouts;
 
 use App\Models\OrderInvoice;
-use App\Models\TransactionsReport;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -43,7 +42,7 @@ class InvoiceList extends Table
             TD::make('order_id', 'Order ID'),
 
             TD::make('created_at', 'Created At')
-                ->render(function (TransactionsReport $reports) {
+                ->render(function (OrderInvoice $reports) {
                     return Carbon::parse($reports->created_at)->diffForHumans();
                 }),
         ];
