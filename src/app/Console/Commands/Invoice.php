@@ -88,6 +88,7 @@ class Invoice extends Command
         $payment = OrderPayment::where('order_id', $orderId)->first();
 
         $document = Pdf::loadView('documents.invoice', [
+            'issuedAt' => $today,
             'invoiceId' => $invoiceId,
             'orderId' => $orderIdentifier->public_identifier,
 
