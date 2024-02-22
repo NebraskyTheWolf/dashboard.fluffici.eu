@@ -60,7 +60,15 @@ class Invoice extends Command
 
         $order = ShopOrders::where('order_id', $orderId)->first();
         $orderIdentifier = OrderIdentifiers::where('order_id', $orderId)->first();
-        $carrier = OrderCarrier::where('order_id', $orderId)->first();
+
+        $carrier = OrderCarrier::where('order_id', $orderId);
+        if ($carrier->exists()) {
+            $carrier = $carrier->price;
+        } else {
+            $carrier = 0;
+        }
+
+
         $products = OrderedProduct::where('order_id', $orderId)->paginate();
 
         $taxPercentage = 0;
@@ -95,7 +103,7 @@ class Invoice extends Command
             'paymentMethod' => $payment->provider,
             'paymentPrice' => $payment->price,
 
-            'subTotal' => number_format($subTotal - $totalTax + $totalDiscount - $carrier->price),
+            'subTotal' => number_format($subTotal - $totalTax + $totalDiscount - $carrier),
             'discountPer' => number_format($salePercentage),
             'discount' => number_format($totalDiscount),
             'taxPer' => number_format($taxPercentage),
