@@ -47,6 +47,13 @@ class Invoice extends Command
     public function handle(): void
     {
         $orderId = $this->option('orderId');
+
+        if ($orderId === null) {
+            printf("OrderId is missing.");
+
+            return ;
+        }
+
         $invoiceId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
 
         $today = Carbon::today()->format("Y-m-d");
@@ -70,7 +77,7 @@ class Invoice extends Command
             $totalTax += $prd->calculate($prd->price, $prd->getProductTax());
         }
 
-        $payment = OrderPayment::where('id', $product->id)->first();
+        $payment = OrderPayment::where('order_id', $orderId)->first();
 
         $document = Pdf::loadView('documents.invoice', [
             'invoiceId' => $invoiceId,
