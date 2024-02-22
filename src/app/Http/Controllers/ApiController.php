@@ -91,9 +91,9 @@ class ApiController extends Controller
      *
      * @param string $username The username of the user to be found.
      *
-     * @return \App\Models\User|null The user object if found, null otherwise.
+     * @return User|null The user object if found, null otherwise.
      */
-    private function findByUsername(string $username): ?\App\Models\User
+    private function findByUsername(string $username): ?User
     {
         $user = User::where('name', $username);
 
@@ -116,11 +116,11 @@ class ApiController extends Controller
     /**
      * Sends a notification to the given user's email address.
      *
-     * @param \App\Models\User $user The user to send the notification to.
+     * @param User $user The user to send the notification to.
      *
      * @return void
      */
-    private function sendNotification(\App\Models\User $user): void
+    private function sendNotification(User $user): void
     {
         Mail::to($user->email)->send(new UserApiNotification());
     }
