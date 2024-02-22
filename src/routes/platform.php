@@ -121,16 +121,10 @@ Route::screen('roles', RoleListScreen::class)
 
 
 Route::screen('post/{post?}', PostEditScreen::class)
-    ->name('platform.post.edit')
-    ->breadcrumbs(fn (Trail $trail, $post) => $trail
-        ->parent('index')
-        ->push('Edit', route('platform.post.edit', $post)));
+    ->name('platform.post.edit');
 
 Route::screen('posts', PostListScreen::class)
-    ->name('platform.post.list')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('index')
-        ->push('Posts', route('platform.post.list')));
+    ->name('platform.post.list');
 
 Route::screen('event/{events?}', EventsEditScreen::class)
     ->name('platform.events.edit');

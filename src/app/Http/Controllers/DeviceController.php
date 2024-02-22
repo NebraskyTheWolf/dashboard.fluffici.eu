@@ -375,7 +375,7 @@ class DeviceController extends Controller
                             'last_name' => $customer->last_name,
                             'email' => $customer->email
                         ],
-                        'expireAt' => Carbon::parse($customer->expiration)->diffForHumans()
+                        'expireAt' => Carbon::parse($voucher->expiration)->diffForHumans()
                     ],
                     'message' => "Voucher code details retrieved successfully!"
                 ]);
