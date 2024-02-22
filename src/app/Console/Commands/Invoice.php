@@ -108,7 +108,7 @@ class Invoice extends Command
             'discount' => number_format($totalDiscount),
             'taxPer' => number_format($taxPercentage),
             'tax' => number_format($totalTax),
-            'carrierPrice' => number_format($carrier->price),
+            'carrierPrice' => number_format($carrier),
 
             'grandTotal' => number_format($subTotal),
         ]);
