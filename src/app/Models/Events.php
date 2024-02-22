@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Geocoder\Query\ReverseQuery;
+use GoogleMaps\GoogleMaps;
+use GuzzleHttp\Client;
 use Orchid\Screen\AsSource;
 use Illuminate\Database\Eloquent\Model;
 

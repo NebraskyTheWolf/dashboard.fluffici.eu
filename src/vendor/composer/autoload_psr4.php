@@ -6,7 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'voku\\' => array($vendorDir . '/voku/portable-ascii/src/voku'),
+    'voku\\' => array($vendorDir . '/voku/portable-ascii/src/voku', $vendorDir . '/voku/stop-words/src/voku'),
     'malcanek\\iDoklad\\' => array($vendorDir . '/malcanek/idoklad-v2/src'),
     'jucksearm\\barcode\\' => array($vendorDir . '/jucksearm/php-barcode'),
     'ZipStream\\' => array($vendorDir . '/maennchen/zipstream-php/src'),
@@ -144,6 +144,9 @@ return array(
     'Google\\Api\\' => array($vendorDir . '/google/common-protos/src/Api'),
     'Google\\ApiCore\\LongRunning\\' => array($vendorDir . '/google/longrunning/src/ApiCore/LongRunning'),
     'Google\\ApiCore\\' => array($vendorDir . '/google/gax/src'),
+    'GoogleMaps\\' => array($vendorDir . '/alexpechkarev/google-maps/src'),
+    'GeometryLibrary\\' => array($vendorDir . '/alexpechkarev/geometry-library'),
+    'Geocoder\\' => array($vendorDir . '/willdurand/geocoder'),
     'GPBMetadata\\Google\\Type\\' => array($vendorDir . '/google/common-protos/metadata/Type'),
     'GPBMetadata\\Google\\Rpc\\' => array($vendorDir . '/google/common-protos/metadata/Rpc'),
     'GPBMetadata\\Google\\Protobuf\\' => array($vendorDir . '/google/protobuf/src/GPBMetadata/Google/Protobuf'),

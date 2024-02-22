@@ -32,7 +32,6 @@
                                         <td class="col">
                                             <h3 class="m-0 font-strong">{{ $eventName }}</h3>
                                             <div class="text-muted mb-sm">{{ $dayFull }}, {{ $monthFull }} {{ $day }} at {{ $time }}</div>
-                                            <div>{{ $address }}</div>
                                         </td>
                                     </tr>
                                 </table>
