@@ -9,6 +9,7 @@ use App\Models\OrderInvoice;
 use App\Models\OrderPayment;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
+use App\Models\ShopSettings;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -87,6 +88,9 @@ class Invoice extends Command
 
         $payment = OrderPayment::where('order_id', $orderId)->first();
 
+        $settings = ShopSettings::latest()->first();
+
+
         $document = Pdf::loadView('documents.invoice', [
             'issuedAt' => $today,
             'invoiceId' => $invoiceId,
@@ -112,6 +116,8 @@ class Invoice extends Command
             'carrierPrice' => number_format($carrier),
 
             'grandTotal' => number_format($subTotal),
+
+            'returnPolicy' => $settings->return_policy
         ]);
 
         $document->getOptions()->setIsRemoteEnabled(true);

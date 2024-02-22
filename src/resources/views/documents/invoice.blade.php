@@ -543,8 +543,6 @@
                 <div class="tm_text_center" style="-webkit-box-sizing: border-box; box-sizing: border-box; margin-top: 0; line-height: 1.5em;" align="center">
                     <p class="tm_mb5" style="-webkit-box-sizing: border-box; box-sizing: border-box; margin-top: 0; line-height: 1.5em; margin-bottom: 5px;"><b class="tm_primary_color" style="-webkit-box-sizing: border-box; box-sizing: border-box; font-weight: bold; color: #111;">Return Policy:</b></p>
                     <p class="tm_m0" style="-webkit-box-sizing: border-box; box-sizing: border-box; line-height: 1.5em; margin: 0px;"> {!! $returnPolicy !!} </p>
-                    <p class="tm_mb5" style="-webkit-box-sizing: border-box; box-sizing: border-box; margin-top: 0; line-height: 1.5em; margin-bottom: 5px;"><b class="tm_primary_color" style="-webkit-box-sizing: border-box; box-sizing: border-box; font-weight: bold; color: #111;">Invoice note:</b></p>
-                    <p class="tm_m0" style="-webkit-box-sizing: border-box; box-sizing: border-box; line-height: 1.5em; margin: 0px;"> {!! $note !!} </p>
                 </div>
                 <!-- .tm_note -->
             </div>
