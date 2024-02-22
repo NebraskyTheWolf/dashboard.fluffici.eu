@@ -23,6 +23,7 @@ Route::post('/webhook/kofi', [IntegrationsController::class, "kofiCallback"]);
 Route::post('/api/webhook/github', [Versioning::class, 'index']);
 
 Route::post('/api/login', [ApiController::class, 'index']);
+
 Route::middleware('throttle')->get('/api/device/authorization', [DeviceController::class, 'index']);
 
 // Management Backend
