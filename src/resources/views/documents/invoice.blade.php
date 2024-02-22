@@ -470,12 +470,12 @@
                             {{ $email }}
                         </p>
                     </div>
-                    <div class="tm_invoice_right tm_text_right" style="-webkit-box-sizing: border-box; box-sizing: border-box; margin-top: 0; line-height: 1.5em; -webkit-box-flex: 0; -ms-flex: none; flex: none; width: 60%;" align="right">
+                    <div class="tm_invoice_right" style="-webkit-box-sizing: border-box; box-sizing: border-box; margin-top: 0; line-height: 1.5em; -webkit-box-flex: 0; -ms-flex: none; flex: none; width: 60%;" align="right">
                         <p class="tm_mb2" style="-webkit-box-sizing: border-box; box-sizing: border-box; margin-top: 0; line-height: 1.5em; margin-bottom: 2px;"><b class="tm_primary_color" style="-webkit-box-sizing: border-box; box-sizing: border-box; font-weight: bold; color: #111;">Pay To:</b></p>
                         <p style="-webkit-box-sizing: border-box; box-sizing: border-box; margin-top: 0; line-height: 1.5em; margin-bottom: 15px;">
                             Fluffici z.s <br style="-webkit-box-sizing: border-box; box-sizing: border-box;">
                             Czechia<br style="-webkit-box-sizing: border-box; box-sizing: border-box;">
-                            administrace@fluffici.eu
+                            {{ $contact_address }}
                         </p>
                     </div>
                 </div>
@@ -494,7 +494,7 @@
                                 <tbody style="-webkit-box-sizing: border-box; box-sizing: border-box;">
                                 @foreach($products as $product)
                                     <tr class="tm_table_baseline" style="-webkit-box-sizing: border-box; box-sizing: border-box; vertical-align: baseline;">
-                                        <td class="tm_width_3 tm_primary_color" style="-webkit-box-sizing: border-box; box-sizing: border-box; border-top-width: 1px; border-top-color: #dbdfea; border-top-style: solid; line-height: 1.55em; width: 25%; color: #111; padding: 10px 15px;">{{ $product->name }}</td>
+                                        <td class="tm_width_3 tm_primary_color" style="-webkit-box-sizing: border-box; box-sizing: border-box; border-top-width: 1px; border-top-color: #dbdfea; border-top-style: solid; line-height: 1.55em; width: 25%; color: #111; padding: 10px 15px;">{{ $product->product_name }}</td>
                                         <td class="tm_width_2" style="-webkit-box-sizing: border-box; box-sizing: border-box; border-top-width: 1px; border-top-color: #dbdfea; border-top-style: solid; line-height: 1.55em; width: 16.66666667%; padding: 10px 15px;">{{ $product->price }} Kc</td>
                                         <td class="tm_width_1" style="-webkit-box-sizing: border-box; box-sizing: border-box; border-top-width: 1px; border-top-color: #dbdfea; border-top-style: solid; line-height: 1.55em; width: 8.33333333%; padding: 10px 15px;">{{ $product->quantity }}</td>
                                         <td class="tm_width_2 tm_text_right" style="-webkit-box-sizing: border-box; box-sizing: border-box; border-top-width: 1px; border-top-color: #dbdfea; border-top-style: solid; line-height: 1.55em; width: 16.66666667%; padding: 10px 15px;" align="right">{{ $product->price * $product->quantity }} Kc</td>

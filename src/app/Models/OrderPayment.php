@@ -27,4 +27,9 @@ class OrderPayment extends Model
     protected $allowedFilters = [
         'created_at'
     ];
+
+    public function getOrderId(): string
+    {
+        return OrderIdentifiers::where('order_id', $this->order_id)->first()->public_identifier;
+    }
 }

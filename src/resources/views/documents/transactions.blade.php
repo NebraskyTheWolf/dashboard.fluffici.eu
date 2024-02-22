@@ -58,7 +58,7 @@
                                             <tbody>
                                                 @foreach($transactions as $transaction)
                                                     <tr>
-                                                        <td class="tm_width_3">{{ substr($transaction->order_id, 0, 8) }}</td>
+                                                        <td class="tm_width_3">{{ $transaction->getOrderId() }}</td>
                                                         <td class="tm_width_4">{{ substr($transaction->transaction_id, 0, 8) }}</td>
                                                         <td class="tm_width_2">{{ $transaction->provider }}</td>
                                                         <td class="tm_width_1">{{ $transaction->status }}</td>

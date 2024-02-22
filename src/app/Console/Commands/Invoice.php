@@ -90,11 +90,12 @@ class Invoice extends Command
 
         $settings = ShopSettings::latest()->first();
 
-
         $document = Pdf::loadView('documents.invoice', [
             'issuedAt' => $today,
             'invoiceId' => $invoiceId,
             'orderId' => $orderIdentifier->public_identifier,
+
+            'contact_address' => $settings->email,
 
             'first_name' => $order->first_name,
             'last_name' => $order->last_name,

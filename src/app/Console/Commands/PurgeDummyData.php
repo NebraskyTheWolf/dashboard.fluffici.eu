@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\AuditLogs;
 use App\Models\OrderedProduct;
 use App\Models\OrderIdentifiers;
+use App\Models\OrderInvoice;
 use App\Models\OrderPayment;
 use App\Models\ShopCategories;
 use App\Models\ShopOrders;
@@ -44,6 +45,7 @@ class PurgeDummyData extends Command
             $payments = OrderPayment::all();
             $vouchers = ShopVouchers::all();
             $audits = AuditLogs::paginate();
+            $invoice = OrderInvoice::paginate();
 
             $deletedValue = 0;
 
@@ -97,11 +99,19 @@ class PurgeDummyData extends Command
                 $deletedValue++;
             }
 
+            foreach ($invoice as $invi) {
+                $invi->delete();
+
+                $deletedValue++;
+            }
+
             $audit = new AuditLogs();
             $audit->name = "System";
             $audit->type = "SYSTEM_RESET";
-            $audit->slug = "All dummies has been removed (" . $deletedValue . " deleted entries)";
+            $audit->slug = "All dummy data has been purged from CLI.";
             $audit->save();
+
+            printf($deletedValue . " data has been removed.");
 
         } else {
             printf('This operation is not allowed on production');
