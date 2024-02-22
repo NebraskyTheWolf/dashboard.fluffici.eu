@@ -50,6 +50,8 @@ class User extends Authenticatable implements UserInterface
         'email',
         'password',
         'permissions',
+        'fcm_token',
+        'is_fcm'
     ];
 
     /**
@@ -71,6 +73,7 @@ class User extends Authenticatable implements UserInterface
     protected $casts = [
         'permissions'          => 'array',
         'email_verified_at'    => 'datetime',
+        'is_fcm'               => 'boolean'
     ];
 
     /**
