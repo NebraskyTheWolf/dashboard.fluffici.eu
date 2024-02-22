@@ -28,12 +28,12 @@ class ReminderTest extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $event = new Events();
         $event->name = "Test";
         $event->descriptions = "Test";
-        $event->begin = Carbon::today();
+        $event->begin = Carbon::today()->addHours(12)->addMinute(30);
         $event->end = Carbon::today()->addDays(30);
         $event->status = "STARTED";
         $event->type = "PHYSICAL";

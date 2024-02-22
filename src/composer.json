@@ -26,6 +26,8 @@
         "nesbot/carbon": "^2.72",
         "orchid/platform": "*",
         "picqer/php-barcode-generator": "^2.4",
+        "predis/predis": "^2.2",
+        "prwnr/laravel-streamer": "3.5.0",
         "pusher/pusher-php-server": "^7.2",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-ignition": "^2.4",

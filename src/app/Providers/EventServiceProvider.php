@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Events\AkceUpdate;
 use App\Events\OrderUpdateEvent;
 use App\Listeners\AkceChange;
+use App\Listeners\LockUserForLogin;
 use App\Listeners\OrderUpdateListeners;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 use App\Listeners\AuditListener;
@@ -49,7 +51,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         AkceUpdate::class => [
             AkceChange::class
-        ]
+        ],
+        Login::class => [
+            LockUserForLogin::class,
+        ],
     ];
 
     /**

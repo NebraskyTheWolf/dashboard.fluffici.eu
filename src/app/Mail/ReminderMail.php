@@ -48,7 +48,7 @@ class ReminderMail extends Mailable
         $currentDate = Carbon::parse($this->event->begin);
         $day = $currentDate->day;
         $month = $currentDate->month;
-        $time = $currentDate->hour . ':' . $currentDate->minute;
+        $time =  str_pad($currentDate->hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($currentDate->minute, 2, '0', STR_PAD_LEFT);
 
         return new Content(
             view: 'emails.admin.reminder',

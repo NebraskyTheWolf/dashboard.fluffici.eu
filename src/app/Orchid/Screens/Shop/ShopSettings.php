@@ -10,6 +10,7 @@ use App\Orchid\Layouts\Shop\ShopPaymentSettings;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Fields\Code;
 use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Password;
@@ -81,7 +82,8 @@ class ShopSettings extends Screen
 
                 Input::make('settings.email')
                     ->title('The public contact address.'),
-                Quill::make('settings.return_policy')
+                Code::make('settings.return_policy')
+                    ->language('html')
                     ->title('Please write the Return Policy'),
             ])->title('General Settings'),
 

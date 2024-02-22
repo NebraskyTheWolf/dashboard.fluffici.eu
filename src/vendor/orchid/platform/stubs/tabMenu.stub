@@ -7,11 +7,7 @@ use Orchid\Screen\Layouts\TabMenu;
 
 class DummyClass extends TabMenu
 {
-    /**
-     * Get the menu elements to be displayed.
-     *
-     * @return Menu[]
-     */
+
     protected function navigations(): iterable
     {
         return [

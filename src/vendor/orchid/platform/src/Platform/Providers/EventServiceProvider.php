@@ -16,8 +16,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Login::class => [
-            LockUserForLogin::class,
-        ],
+
     ];
 }
