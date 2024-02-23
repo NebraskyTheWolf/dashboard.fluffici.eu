@@ -11,11 +11,15 @@ class ReportedAttachments extends Model
     use AsSource;
     public $fillable = [
         'type',
-        'message',
+        'messages',
         'username',
         'email',
         'reason',
         'isLegalPurpose',
         'attachment_id'
+    ];
+
+    public $casts = [
+        'messages' => 'string'
     ];
 }
