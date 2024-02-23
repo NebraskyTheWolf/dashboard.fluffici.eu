@@ -35,7 +35,6 @@ class AttachmentReportReview extends Screen
         return [
             'case' => $case,
             'attachment' => PlatformAttachments::where('attachment_id', $case->attachment_id)->first(),
-            'review' => ReportReview::where('attachment_id', $case->attachment_id)->first()
         ];
     }
 
@@ -125,11 +124,12 @@ class AttachmentReportReview extends Screen
         ];
 
         $groupThreeElements = [
-            $this->generateFormField(Select::class, 'review.type', "Reporter", false, 'Select the action to perform on this content.', [
-                'REPORT' => 'Ban content',
-                'DELETE' => 'Delete content',
+            $this->generateFormField(Select::class, 'case.type', "Reporter", false, 'Select the action to perform on this content.', [
+                'NOTHING' => 'Delete report.',
+                'REPORT' => 'Ban content.',
+                'DELETE' => 'Delete content.',
             ]),
-            $this->generateFormField(Quill::class, 'review.message', "Review note", false, "This note will be sent to the reporter via email.")
+            $this->generateFormField(Quill::class, 'case.message', "Review note", false, "This note will be sent to the reporter via email.")
         ];
 
         return [
@@ -151,27 +151,23 @@ class AttachmentReportReview extends Screen
      */
     public function submit(Request $request): RedirectResponse
     {
-        $this->review->attachment_id = $this->case->attachment_id;
-        $this->review->save();
-
+        $this->case->fill($request->get('case'))->save();
         $file = AutumnFile::where('_id', $this->review->attachment_id)->first();
 
-        if ($this->review->type === "REPORT") {
+        if ($this->case->type === "REPORT") {
             $file->update([
                'dmca' => true,
                'report' => true
             ]);
-        } else if ($this->review->type === "DELETE") {
+        } else if ($this->case->type === "DELETE") {
             $file->update([
                 'deleted' => true
             ]);
         }
 
-        $this->case->fill($request->get('case'))->save();
-
         Mail::to($this->case->email)->send(new DefaultEmail(
             "Review of your attachment report",
-            $this->review->message,
+            $this->case->message,
             Auth::user()
         ));
 
