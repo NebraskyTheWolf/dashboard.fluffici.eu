@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
 
-class ReportedAttachments extends Model
+class ReportReview extends Model
 {
     use AsSource;
+
+    public $table = 'report_review';
+    public $fillable = [
+        'attachment_id',
+        'type',
+        'message'
+    ];
 }

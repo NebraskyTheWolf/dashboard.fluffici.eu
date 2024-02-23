@@ -10,6 +10,7 @@ use App\Orchid\Screens\Accounting\AccountingShopCreatePayment;
 use App\Orchid\Screens\Accounting\AccountingTransactionsList;
 use App\Orchid\Screens\Accounting\AccountingTRSReport;
 use App\Orchid\Screens\Attachments\AttachmentLists;
+use App\Orchid\Screens\Attachments\AttachmentReportReview;
 use App\Orchid\Screens\Attachments\AttachmentReports;
 use App\Orchid\Screens\Attachments\AttachmentUpload;
 use App\Orchid\Screens\Audit\AuditLogsListScreen;
@@ -161,6 +162,8 @@ Route::screen('files/lookup/{file}', AttachmentUpload::class)
 
 Route::screen('reports', AttachmentReports::class)
     ->name('platform.reports');
+Route::screen('report/review/{case?}', AttachmentReportReview::class)
+    ->name('platform.attachments.review');
 
 Route::screen('shop/statistics', ShopStatistics::class)
     ->name('platform.shop.statistics');

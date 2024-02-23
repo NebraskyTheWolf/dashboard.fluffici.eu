@@ -4,8 +4,10 @@ namespace App\Orchid\Layouts\Attachments;
 
 use App\Models\DmcaRequest;
 use App\Models\ReportedAttachments;
+use Google\Rpc\Help\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
+use Orchid\Support\Color;
 
 class AttachmentReportLayout extends Table
 {
@@ -27,20 +29,18 @@ class AttachmentReportLayout extends Table
     protected function columns(): iterable
     {
         return [
+            TD::make('review', 'Review')
+                ->render(function (ReportedAttachments $attachments) {
+                    return \Orchid\Screen\Actions\Link::make("Review")
+                        ->type(Color::WARNING)
+                        ->route('platform.attachments.review', $attachments);
+                }),
             TD::make('username', __('report.table.reporter'))
                 ->render(function (ReportedAttachments $attachments) {
                     if ($attachments->username === null) {
                         return "Anonymous";
                     } else {
                         return $attachments->username;
-                    }
-                }),
-            TD::make('reason', __('report.table.reason'))
-                ->render(function (ReportedAttachments $attachments) {
-                    if ($attachments->reason === null) {
-                        return "No reason";
-                    } else {
-                        return $attachments->reason;
                     }
                 }),
             TD::make('isLegalPurpose', __('report.table.dmca'))
