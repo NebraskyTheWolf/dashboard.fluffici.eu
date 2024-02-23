@@ -31,7 +31,7 @@ class SyncAutumnFiles extends Command
         $files = AutumnFile::all();
 
         foreach ($files as $file) {
-            if ($file->deleted)
+            if ($file->deleted != null && $file->deleted )
                 continue;
 
             $platform = PlatformAttachments::where('attachment_id', $file->_id)->where('bucket', $file->tag);

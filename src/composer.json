@@ -23,6 +23,7 @@
         "laravel/tinker": "^2.8",
         "malcanek/idoklad-v2": "dev-master",
         "mongodb/laravel-mongodb": "4.0.0",
+        "mongodb/mongodb": "1.17.0",
         "nategood/httpful": "^0.3.2",
         "nesbot/carbon": "^2.72",
         "orchid/platform": "*",

@@ -50,7 +50,7 @@ class AttachmentsLayout extends Table
                 ->render(function (PlatformAttachments $platformAttachments) {
                     return DropDown::make('Menu')
                         ->list([
-                            Button::make('Lookup')
+                            Link::make('Lookup')
                                 ->href('https://autumn.fluffici.eu/' . $platformAttachments->bucket . '/' . $platformAttachments->attachment_id),
                             Button::make('Delete')
                                 ->method('remove', [

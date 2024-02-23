@@ -66,7 +66,7 @@ class AttachmentLists extends Screen
         $tag = $request->get("tag");
 
         $file = AutumnFile::where('_id', $id)->where('tag', $tag)->get()->first();
-        if ($file->deleted) {
+        if ($file->deleted != null && $file->deleted) {
             Toast::warning('This file was already deleted.');
         } else {
             $file->update([
@@ -88,20 +88,19 @@ class AttachmentLists extends Screen
         $tag = $request->get("tag");
 
         $file = AutumnFile::where('_id', $id)->where('tag', $tag)->get()->first();
-        if ($file->reported) {
+        if ($file->reported != null && $file->reported) {
 
             $file->update([
                 'reported' => false,
+                'dmca' => false,
             ]);
 
             Toast::success('The file was reinstated.');
         } else {
             $file->update([
                 'reported' => true,
+                'dmca' => true,
             ]);
-
-            $platform = PlatformAttachments::where('attachment_id', $id)->where('bucket', $tag)->first();
-            $platform->delete();
 
             Toast::success('The file was set has reported.');
         }

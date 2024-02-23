@@ -11,4 +11,10 @@ class AutumnFile extends Model
 
     public $connection = 'autumn';
     public $collection = 'attachments';
+
+    public $fillable = [
+        'reported',
+        'deleted',
+        'dmca'
+    ];
 }
