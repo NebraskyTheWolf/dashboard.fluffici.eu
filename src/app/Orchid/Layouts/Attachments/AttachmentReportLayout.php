@@ -31,9 +31,17 @@ class AttachmentReportLayout extends Table
         return [
             TD::make('review', 'Review')
                 ->render(function (ReportedAttachments $attachments) {
-                    return \Orchid\Screen\Actions\Link::make("Review")
-                        ->type(Color::WARNING)
-                        ->route('platform.attachments.review', $attachments);
+                    if ($attachments->reviewed) {
+                        return \Orchid\Screen\Actions\Link::make("Reviewed by " . $attachments->reviewed_by)
+                            ->type(Color::SUCCESS)
+                            ->icon('bs.check-all')
+                            ->route('platform.attachments.review', $attachments);
+                    } else {
+                        return \Orchid\Screen\Actions\Link::make("Review")
+                            ->type(Color::WARNING)
+                            ->icon('bs.clock')
+                            ->route('platform.attachments.review', $attachments);
+                    }
                 }),
             TD::make('username', __('report.table.reporter'))
                 ->render(function (ReportedAttachments $attachments) {
@@ -45,12 +53,10 @@ class AttachmentReportLayout extends Table
                 }),
             TD::make('isLegalPurpose', __('report.table.dmca'))
                 ->render(function (ReportedAttachments $attachments) {
-                    $dmca = DmcaRequest::where('attachment_id', $attachments->attachment_id);
-
-                      if ($dmca->exists()) {
+                      if ($attachments->isLegalPurpose) {
                           return '<a class="ui red label">' . __('report.table.isDMCA.yes') . '</a>';
                       } else {
-                          return '<a class="ui teal label">' . __('report.table.isDMCA.no') . '</a>';
+                          return '<a class="ui green label">' . __('report.table.isDMCA.no') . '</a>';
                       }
                 }),
         ];

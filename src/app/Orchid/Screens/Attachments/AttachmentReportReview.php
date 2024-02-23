@@ -151,19 +151,22 @@ class AttachmentReportReview extends Screen
     public function submit(Request $request): RedirectResponse
     {
         $this->case->message = "0";
-        $this->case->fill($request->get('case'))->save();
-        $file = AutumnFile::where('_id', $this->case->attachment_id)->first();
+        $this->case->reviewed_by = Auth::user()->name;
+        $this->case->reviewed = true;
 
-        if ($this->case->type === "REPORT") {
+        $this->case->fill($request->get('case'))->save();
+        $file = AutumnFile::where('_id', $this->case->attachment_id)->where('tag', $this->attachment->bucket)->get()->first();
+
+        if ($this->case->type == "REPORT") {
             $file->update([
                'dmca' => true,
                'report' => true
             ]);
-        } else if ($this->case->type === "DELETE") {
+        } else if ($this->case->type == "DELETE") {
             $file->update([
                 'deleted' => true
             ]);
-        } else if ($this->case->type === "NOTHING") {
+        } else if ($this->case->type == "NOTHING") {
             $this->case->delete();
         }
 

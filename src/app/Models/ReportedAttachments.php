@@ -16,7 +16,9 @@ class ReportedAttachments extends Model
         'email',
         'reason',
         'isLegalPurpose',
-        'attachment_id'
+        'attachment_id',
+        'reviewed_by',
+        'reviewed'
     ];
 
     public $casts = [
