@@ -163,6 +163,8 @@ class AttachmentReportReview extends Screen
             $file->update([
                 'deleted' => true
             ]);
+        } else if ($this->case->type === "NOTHING") {
+            $this->case->delete();
         }
 
         Mail::to($this->case->email)->send(new DefaultEmail(
