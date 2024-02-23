@@ -7,7 +7,6 @@ use App\Mail\DefaultEmail;
 use App\Models\AutumnFile;
 use App\Models\PlatformAttachments;
 use App\Models\ReportedAttachments;
-use App\Models\ReportReview;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -29,7 +28,6 @@ class AttachmentReportReview extends Screen
 
     public $case;
     public $attachment;
-    public $review;
 
     public function query(ReportedAttachments $case): iterable
     {
@@ -154,7 +152,7 @@ class AttachmentReportReview extends Screen
     {
         $this->case->message = "0";
         $this->case->fill($request->get('case'))->save();
-        $file = AutumnFile::where('_id', $this->review->attachment_id)->first();
+        $file = AutumnFile::where('_id', $this->case->attachment_id)->first();
 
         if ($this->case->type === "REPORT") {
             $file->update([
