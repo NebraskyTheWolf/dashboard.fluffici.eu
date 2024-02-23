@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('reported_attachments', function (Blueprint $table) {
-            $table->string('type')->nullable();
-            $table->longText('message')->nullable();
+            $table->longText('messages')->nullable();
         });
     }
 
@@ -22,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('report_review_content');
+        Schema::dropIfExists('report_review_messsage');
     }
 };

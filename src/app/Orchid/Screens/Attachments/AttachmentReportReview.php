@@ -126,11 +126,11 @@ class AttachmentReportReview extends Screen
 
         $groupThreeElements = [
             $this->generateFormField(Select::class, 'case.type', "Reporter", false, 'Select the action to perform on this content.', [
-                'NOTHING' => 'Delete report.',
+                'NOTHING' => 'Nothing to do',
                 'REPORT' => 'Ban content.',
                 'DELETE' => 'Delete content.',
             ]),
-            $this->generateFormField(Quill::class, 'case.message', "Review note", false, "This note will be sent to the reporter via email.")
+            $this->generateFormField(Quill::class, 'case.messages', "Review note", false, "This note will be sent to the reporter via email.")
         ];
 
         return [
@@ -152,6 +152,7 @@ class AttachmentReportReview extends Screen
      */
     public function submit(Request $request): RedirectResponse
     {
+        $this->case->message = "0";
         $this->case->fill($request->get('case'))->save();
         $file = AutumnFile::where('_id', $this->review->attachment_id)->first();
 
@@ -170,7 +171,7 @@ class AttachmentReportReview extends Screen
 
         Mail::to($this->case->email)->send(new DefaultEmail(
             "Review of your attachment report",
-            $this->case->message,
+            $this->case->messages,
             Auth::user()
         ));
 
