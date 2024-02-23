@@ -9,4 +9,13 @@ use Orchid\Screen\AsSource;
 class ReportedAttachments extends Model
 {
     use AsSource;
+    public $fillable = [
+        'type',
+        'message',
+        'username',
+        'email',
+        'reason',
+        'isLegalPurpose',
+        'attachment_id'
+    ];
 }

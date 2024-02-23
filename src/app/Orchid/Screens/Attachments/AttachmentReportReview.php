@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Attachments;
 
+use App\Events\UpdateAudit;
 use App\Mail\DefaultEmail;
 use App\Models\AutumnFile;
 use App\Models\PlatformAttachments;
@@ -174,6 +175,8 @@ class AttachmentReportReview extends Screen
         ));
 
         Toast::success("You reviewed " . $this->attachment->id . " report");
+
+        event(new UpdateAudit("review_report", "Reviewed case N°" . $this->case->id, Auth::user()->name));
 
         return redirect()->route('platform.reports');
     }
