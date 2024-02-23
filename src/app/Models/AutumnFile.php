@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Models;
+namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
 use Orchid\Screen\AsSource;

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use app\Models\AutumnFile;
+use App\Models\AutumnFile;
 use App\Models\PlatformAttachments;
 use Illuminate\Console\Command;
 use Ramsey\Uuid\Uuid;

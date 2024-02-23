@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Attachments;
 
-use app\Models\AutumnFile;
+use App\Models\AutumnFile;
 use App\Models\PlatformAttachments;
 use App\Orchid\Layouts\Attachments\AttachmentsLayout;
 use Orchid\Screen\Actions\Link;
