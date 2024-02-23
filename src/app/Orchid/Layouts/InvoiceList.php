@@ -35,7 +35,7 @@ class InvoiceList extends Table
                         ->icon('bs.caret-down-square')
                         ->type(Color::SUCCESS)
                         ->download()
-                        ->href(route('api.shop.report') . '?reportId=' . $reports->invoiceId . '&type=invoice');
+                        ->href(route('api.shop.report') . '?reportId=' . $reports->report_id . '&type=invoice');
                 }),
 
             TD::make('report_id', 'Invoice ID'),
