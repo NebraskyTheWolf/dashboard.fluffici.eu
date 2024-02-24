@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Orchid\Layouts;
+namespace App\Orchid\Layouts;
 
 use vendor\orchid\platform\src\Screen\Layouts\Calendar;
 

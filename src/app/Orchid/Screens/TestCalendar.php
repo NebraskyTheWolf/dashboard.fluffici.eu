@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens;
 
-use app\Orchid\Layouts\CalendarLayout;
+use App\Orchid\Layouts\CalendarLayout;
 use Orchid\Screen\Screen;
 
 class TestCalendar extends Screen
