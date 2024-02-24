@@ -1,6 +1,3 @@
-const pusher = new Pusher('a4c14476f0cf642e26e1', {
-    cluster: 'eu'
-});
 $(document).ready(function($) {
     axios.get('https://dashboard.fluffici.eu/build/E').then(function (response) {
         if (response.status !== 200) {
@@ -18,7 +15,7 @@ $(document).ready(function($) {
             startTimer(fiveMinutes, display);
         }, 1500)
     }
-    pusher.connection.bind('state_change', function(states) {
+    window.PusherClient.connection.bind('state_change', function(states) {
         const prevState = states.previous;
         const currState = states.current;
         if (prevState === 'connected' && currState === 'disconnected') {
