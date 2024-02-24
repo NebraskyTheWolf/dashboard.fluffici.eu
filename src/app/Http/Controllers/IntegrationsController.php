@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Accounting;
 use GuzzleHttp\Client;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class IntegrationsController extends Controller
@@ -15,11 +16,11 @@ class IntegrationsController extends Controller
     /**
      * Handle the Kofi callback.
      *
-     * @param \Illuminate\Http\Request $request The incoming request.
+     * @param Request $request The incoming request.
      *
-     * @return \Illuminate\Http\JsonResponse The JSON response.
+     * @return JsonResponse The JSON response.
      */
-    public function kofiCallback(Request $request): \Illuminate\Http\JsonResponse
+    public function kofiCallback(Request $request): JsonResponse
     {
         if (!$this->isRequestValid($request)) {
             return $this->generateResponse(false, "Invalid request body.");
@@ -88,9 +89,9 @@ class IntegrationsController extends Controller
      * @param string $status The status of the response.
      * @param string $message The message of the response.
      *
-     * @return \Illuminate\Http\JsonResponse The JSON response with the specified status and message.
+     * @return JsonResponse The JSON response with the specified status and message.
      */
-    private function generateResponse(string $status, string $message): \Illuminate\Http\JsonResponse
+    private function generateResponse(string $status, string $message): JsonResponse
     {
         return response()->json([
             'status' => $status,

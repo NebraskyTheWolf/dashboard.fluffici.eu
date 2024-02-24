@@ -53,7 +53,14 @@ class Versioning extends Controller
         ]);
     }
 
-    private function incrementVersion($version, $message): void
+    /**
+     * Increment the given version based on the provided message.
+     *
+     * @param LastVersion $version The current version string.
+     * @param string $message The message received to determine the type of version incrementation.
+     * @return void
+     */
+    private function incrementVersion(LastVersion $version, string $message): void
     {
         if (str_starts_with($message, self::PREFIX_BREAKING_CHANGES)) {
             $version->increment('major', 1);
