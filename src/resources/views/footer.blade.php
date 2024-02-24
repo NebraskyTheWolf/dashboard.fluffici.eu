@@ -6,7 +6,7 @@
         <br>
         <small style="color: white;" id="rev"> Rev : <i class="loading cog icon"></i></small>
         <br>
-        <small onclick="enableNotifications()"> CLick here to Enable push notifications </small>
+        <small onclick="window.BeamClient.start().then(() => console.log('Registered with beams!'))"> CLick here to Enable push notifications </small>
     </div>
 @else
 @endguest

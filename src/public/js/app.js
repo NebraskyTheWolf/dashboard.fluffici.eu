@@ -29,10 +29,6 @@ $(document).ready(function($) {
     });
 });
 
-function enableNotifications() {
-    beamsClient.start().then(() => console.log("Registered with beams!"));
-}
-
 /**
  * Starts a timer for the given duration and updates the display with the remaining time.
  *
