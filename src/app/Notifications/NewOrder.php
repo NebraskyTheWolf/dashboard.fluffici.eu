@@ -1,19 +1,13 @@
 <?php
 
-namespace App\Notifications;
+namespace app\Notifications;
 
 use Illuminate\Notifications\Notification;
 use NotificationChannels\PusherPushNotifications\PusherChannel;
 use NotificationChannels\PusherPushNotifications\PusherMessage;
 
-/**
- * Class ShopReportError
- *
- * This class represents a notification when there is an error generating the shop report.
- */
-class ShopReportError extends Notification
+class NewOrder extends Notification
 {
-
     public function via(object $notifiable): array
     {
         return [PusherChannel::class];
@@ -31,7 +25,8 @@ class ShopReportError extends Notification
             ->web()
             ->sound('success')
             ->link(env('PUBLIC_URL'))
-            ->body("A error occurred while creating the monthly report.");
+            ->title('New customer order.')
+            ->body("A new order has been placed.");
     }
 
     public function routeNotificationFor($notification): string

@@ -151,6 +151,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         ),
         'P' => 
         array (
+            'Pusher\\PushNotifications\\' => 25,
             'Pusher\\' => 7,
             'Psy\\' => 4,
             'Psr\\SimpleCache\\' => 16,
@@ -184,6 +185,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'N' => 
         array (
             'NunoMaduro\\Collision\\' => 21,
+            'NotificationChannels\\PusherPushNotifications\\' => 45,
         ),
         'M' => 
         array (
@@ -597,6 +599,10 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         array (
             0 => __DIR__ . '/..' . '/ramsey/collection/src',
         ),
+        'Pusher\\PushNotifications\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pusher/pusher-push-notifications/src',
+        ),
         'Pusher\\' => 
         array (
             0 => __DIR__ . '/..' . '/pusher/pusher-php-server/src',
@@ -705,6 +711,10 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'NunoMaduro\\Collision\\' => 
         array (
             0 => __DIR__ . '/..' . '/nunomaduro/collision/src',
+        ),
+        'NotificationChannels\\PusherPushNotifications\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-notification-channels/pusher-push-notifications/src',
         ),
         'Monolog\\' => 
         array (
@@ -6765,6 +6775,10 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+        'NotificationChannels\\PusherPushNotifications\\Exceptions\\CouldNotCreateMessage' => __DIR__ . '/..' . '/laravel-notification-channels/pusher-push-notifications/src/Exceptions/CouldNotCreateMessage.php',
+        'NotificationChannels\\PusherPushNotifications\\PusherChannel' => __DIR__ . '/..' . '/laravel-notification-channels/pusher-push-notifications/src/PusherChannel.php',
+        'NotificationChannels\\PusherPushNotifications\\PusherMessage' => __DIR__ . '/..' . '/laravel-notification-channels/pusher-push-notifications/src/PusherMessage.php',
+        'NotificationChannels\\PusherPushNotifications\\PusherPushNotificationsServiceProvider' => __DIR__ . '/..' . '/laravel-notification-channels/pusher-push-notifications/src/PusherPushNotificationsServiceProvider.php',
         'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Laravel/CollisionServiceProvider.php',
         'NunoMaduro\\Collision\\Adapters\\Laravel\\Commands\\TestCommand' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php',
         'NunoMaduro\\Collision\\Adapters\\Laravel\\ExceptionHandler' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Laravel/ExceptionHandler.php',
@@ -9724,6 +9738,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'Psy\\VersionUpdater\\NoopChecker' => __DIR__ . '/..' . '/psy/psysh/src/VersionUpdater/NoopChecker.php',
         'Psy\\VersionUpdater\\SelfUpdate' => __DIR__ . '/..' . '/psy/psysh/src/VersionUpdater/SelfUpdate.php',
         'Pusher\\ApiErrorException' => __DIR__ . '/..' . '/pusher/pusher-php-server/src/ApiErrorException.php',
+        'Pusher\\PushNotifications\\PushNotifications' => __DIR__ . '/..' . '/pusher/pusher-push-notifications/src/PushNotifications.php',
         'Pusher\\Pusher' => __DIR__ . '/..' . '/pusher/pusher-php-server/src/Pusher.php',
         'Pusher\\PusherCrypto' => __DIR__ . '/..' . '/pusher/pusher-php-server/src/PusherCrypto.php',
         'Pusher\\PusherException' => __DIR__ . '/..' . '/pusher/pusher-php-server/src/PusherException.php',

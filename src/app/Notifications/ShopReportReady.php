@@ -2,13 +2,9 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Orchid\Platform\Notifications\DashboardChannel;
-use Orchid\Platform\Notifications\DashboardMessage;
-use Orchid\Support\Color;
+use NotificationChannels\PusherPushNotifications\PusherChannel;
+use NotificationChannels\PusherPushNotifications\PusherMessage;
 
 /**
  * Class ShopReportReady
@@ -17,54 +13,30 @@ use Orchid\Support\Color;
  */
 class ShopReportReady extends Notification
 {
-    use Queueable;
 
-    public $reportId;
-
-    public function __construct($reportId)
-    {
-        $this->reportId = $reportId;
-    }
-
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
     public function via(object $notifiable): array
     {
-        return [DashboardChannel::class];
+        return [PusherChannel::class];
     }
 
     /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
-
-    public function toDashboard($notifiable)
-    {
-        return (new DashboardMessage())
-            ->title('New monthly report.')
-            ->message('The last shop report is now available. The password is ' . $this->reportId)
-            ->type(Color::SUCCESS)
-            ->action(url('/shop/documents'));
-    }
-
-    /**
-     * Get the array representation of the notification.
+     * Pushes a notification using PusherMessage.
      *
-     * @return array<string, mixed>
+     * @param mixed $notifiable The recipient of the notification.
+     * @return PusherMessage The created PusherMessage instance.
      */
-    public function toArray(object $notifiable): array
+    public function toPushNotification($notifiable)
     {
-        return [
-            $this->toDashboard($notifiable)
-        ];
+        return PusherMessage::create()
+            ->web()
+            ->sound('success')
+            ->link(env('PUBLIC_URL'))
+            ->title('New monthly reports')
+            ->body("The monthly report has been created and available.");
+    }
+
+    public function routeNotificationFor($notification): string
+    {
+        return 'dashboard';
     }
 }
