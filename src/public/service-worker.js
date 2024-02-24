@@ -11,7 +11,7 @@ window.navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
         console.error('Error starting Beams client:', error);
     });
 
-    beamsClient.onNotificationReceived = ({ pushEvent, payload }) => {
+    PusherPushNotifications.onNotificationReceived = ({ pushEvent, payload }) => {
         pushEvent.waitUntil(
             self.registration.showNotification(payload.notification.title, {
                 body: payload.notification.body,

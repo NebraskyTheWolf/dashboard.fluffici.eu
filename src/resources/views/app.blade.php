@@ -91,5 +91,12 @@
 @stack('scripts')
 @yield('script')
 
+<script>
+    const beamsClient = new PusherPushNotifications.Client({
+        instanceId: "63e32cff-b20c-4c92-bb49-0e40cfd1dbe3",
+    });
+    beamsClient.start().then(() => {});
+</script>
+
 </body>
 </html>
