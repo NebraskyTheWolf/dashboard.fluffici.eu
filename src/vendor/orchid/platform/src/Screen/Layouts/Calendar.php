@@ -13,8 +13,6 @@ abstract class Calendar extends Layout
 
     protected $template = 'layouts.calendar';
 
-    protected string $description;
-
     protected string $title = 'My Calendar';
 
     protected string $slug = 'calendar-0';
@@ -188,7 +186,6 @@ abstract class Calendar extends Layout
 
         return view($this->template, [
             'title'                 => __($this->title),
-            'description'           => __($this->description),
             'slug'                  => $this->slug,
             'initialView'           => $this->initialView,
             'export'                => $this->export,

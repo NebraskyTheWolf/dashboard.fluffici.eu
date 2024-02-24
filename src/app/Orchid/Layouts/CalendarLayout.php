@@ -7,7 +7,8 @@ use Orchid\Screen\Layouts\Calendar;
 class CalendarLayout extends Calendar
 {
     public string $title = "Test";
-    public string $description = "This is a test calendar.";
+
+    public string $slug = "test";
 
     public bool $editable = true;
 
