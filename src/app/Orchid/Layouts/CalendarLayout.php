@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
-use vendor\orchid\platform\src\Screen\Layouts\Calendar;
+use Orchid\Screen\Layouts\Calendar;
 
 class CalendarLayout extends Calendar
 {

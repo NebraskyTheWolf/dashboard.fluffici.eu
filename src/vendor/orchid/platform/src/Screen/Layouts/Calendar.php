@@ -1,6 +1,6 @@
 <?php
 
-namespace vendor\orchid\platform\src\Screen\Layouts;
+namespace Orchid\Screen\Layouts;
 
 use Orchid\Screen\Layout;
 use Orchid\Screen\Repository;
