@@ -50,6 +50,7 @@ use App\Orchid\Screens\Shop\TaxGroupEdit;
 use App\Orchid\Screens\Shop\TaxGroupList;
 use App\Orchid\Screens\Social\SocialMedia;
 use App\Orchid\Screens\Social\SocialMediaEdit;
+use App\Orchid\Screens\TestCalendar;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -260,3 +261,5 @@ Route::screen('devices', DeviceScreen::class)
 
 Route::screen('devices/new/{device?}', DeviceEditScreen::class)
     ->name('platform.device.new');
+
+Route::screen('test/calendar', TestCalendar::class);
