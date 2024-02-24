@@ -52,6 +52,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="{{ url('/js/app.js') }}"></script>
     <script src="https://js.pusher.com/8.0.1/pusher.min.js"></script>
+    <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
 
     <link rel="stylesheet" href="{{ url('/css/app.css')}}">
     <link rel="stylesheet" href="{{ url('/css/fluffici.css')}}">
