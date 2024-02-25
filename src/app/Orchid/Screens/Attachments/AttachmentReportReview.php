@@ -77,9 +77,13 @@ class AttachmentReportReview extends Screen
      *
      * @return object A form field instance with the specified attributes.
      */
-    private function generateFormField(string $class, string $name, string $title, bool $disabled = false, string $help = '', array $options = [ ]): object
+    private function generateFormField(string $class, string $name, string $title, bool $disabled = false, string $help = '', array $options = [ ], string $slug = null, bool $isCollaborative = false): object
     {
-        return $class::make($name)->title($title)->disabled($disabled)->help($help)->options($options);
+        if ($class === Quill::class)
+                return $class::make($name)->title($title)->disabled($disabled)->help($help)->options($options)
+                    ->roomId($slug)->collaborative($isCollaborative);
+            else
+                return $class::make($name)->title($title)->disabled($disabled)->help($help)->options($options);
     }
 
 
@@ -128,7 +132,7 @@ class AttachmentReportReview extends Screen
                 'REPORT' => 'Ban content.',
                 'DELETE' => 'Delete content.',
             ]),
-            $this->generateFormField(Quill::class, 'case.messages', "Review note", false, "This note will be sent to the reporter via email.")
+            $this->generateFormField(Quill::class, 'case.messages', "Review note", false, "This note will be sent to the reporter via email.", [], "attachmentReview", true)
         ];
 
         return [

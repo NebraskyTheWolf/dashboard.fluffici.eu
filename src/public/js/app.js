@@ -15,15 +15,6 @@ $(document).ready(function($) {
             startTimer(fiveMinutes, display);
         }, 1500)
     }
-    window.PusherClient.connection.bind('state_change', function(states) {
-        const prevState = states.previous;
-        const currState = states.current;
-        if (prevState === 'connected' && currState === 'disconnected') {
-            console.log('Connection lost');
-        } else if (prevState === 'disconnected' && currState === 'connected') {
-            console.log('Connection established');
-        }
-    });
 });
 
 /**

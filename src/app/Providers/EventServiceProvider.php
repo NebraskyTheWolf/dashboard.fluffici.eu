@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Events\AkceUpdate;
 use App\Events\OrderUpdateEvent;
+use App\Events\PresenceEditor;
 use App\Listeners\AkceChange;
 use App\Listeners\LockUserForLogin;
 use App\Listeners\OrderUpdateListeners;
+use App\Listeners\PresenceEditorListener;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -55,6 +57,9 @@ class EventServiceProvider extends ServiceProvider
         Login::class => [
             LockUserForLogin::class,
         ],
+        PresenceEditor::class => [
+            PresenceEditorListener::class
+        ]
     ];
 
     /**

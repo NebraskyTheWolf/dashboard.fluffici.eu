@@ -61,9 +61,9 @@ class SendEmail extends Screen
     }
 
     /**
-     * Set up the layout for the email composition page.
+     * Generate the layout for the email creation form.
      *
-     * @return array An array containing the layout elements.
+     * @return iterable
      */
     public function layout(): iterable
     {
@@ -89,7 +89,9 @@ class SendEmail extends Screen
                     ->title('Please enter the email content')
                     ->help('If you need to use CSS please refer to the documentation.')
                     ->required()
-                    ->slug('send-email')
+                    // Using the collaborative space
+                    ->collaborative()
+                    ->roomId('sendemail')
             ])
         ];
     }

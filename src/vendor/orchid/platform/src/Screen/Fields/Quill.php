@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Orchid\Screen\Fields;
 
 use Orchid\Screen\Field;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class Quill.
@@ -26,10 +27,11 @@ use Orchid\Screen\Field;
  * @method Quill help(string $value = null)
  * @method Quill height($value = '300px')
  * @method Quill title(string $value = null)
- * @method Quill slug(string $value = null)
+ * @method Quill roomId(string $value = null)
  * @method Quill popover(string $value = null)
  * @method Quill toolbar(array $options)
  * @method Quill base64(bool $value = true)
+ * @method Quill collaborative(bool $value = true)
  * @method Quill groups(string $value = null)
  */
 class Quill extends Field
@@ -49,7 +51,8 @@ class Quill extends Field
         'toolbar' => ['text', 'color', 'quote', 'header', 'list', 'format', 'media'],
         'height'  => '300px',
         'base64'  => false,
-        'slug'
+        'roomId' => Uuid::NIL,
+        'collaborative' => false
     ];
 
     /**

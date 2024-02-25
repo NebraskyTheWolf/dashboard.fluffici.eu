@@ -1,6 +1,7 @@
 @component($typeForm, get_defined_vars())
     <div data-controller="quill"
-         data-quill-slug='{{$slug}}'
+         data-quill-slug="{{$roomId}}"
+         data-quill-collaborative="{{$collaborative}}"
          data-quill-toolbar='@json($toolbar)'
          data-quill-base64='@json($base64)'
          data-quill-value='@json($value)'
