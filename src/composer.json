@@ -32,6 +32,7 @@
         "predis/predis": "^2.2",
         "prwnr/laravel-streamer": "3.5.0",
         "pusher/pusher-php-server": "^7.2",
+        "shipu/themevel": "^1.5",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-ignition": "^2.4",
         "webpatser/laravel-uuid": "^4.0",

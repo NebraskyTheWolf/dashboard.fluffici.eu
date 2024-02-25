@@ -169,6 +169,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Shipu\Themevel\Providers\ThemevelServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -184,6 +185,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
+        'Theme' => Shipu\Themevel\Facades\Theme::class,
     ])->toArray(),
 
 ];

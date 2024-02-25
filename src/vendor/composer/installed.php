@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '9064dbffa721faded14a1ff64899fd8f14992934',
+        'reference' => '1094b15664fb2a975ac572333e707a62196b0344',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -454,6 +454,15 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
+        'hassankhan/config' => array(
+            'pretty_version' => '0.10.0',
+            'version' => '0.10.0.0',
+            'reference' => '06ac500348af033f1a2e44dc357ca86282626d4a',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../hassankhan/config',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'illuminate/auth' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -757,7 +766,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '9064dbffa721faded14a1ff64899fd8f14992934',
+            'reference' => '1094b15664fb2a975ac572333e707a62196b0344',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1686,6 +1695,15 @@
             'install_path' => __DIR__ . '/../sebastian/version',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'shipu/themevel' => array(
+            'pretty_version' => 'v1.5',
+            'version' => '1.5.0.0',
+            'reference' => '4a5d3b7168745b2b5a91b017be164cf1d26f9079',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../shipu/themevel',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'simplesoftwareio/simple-qrcode' => array(
             'pretty_version' => '4.2.0',

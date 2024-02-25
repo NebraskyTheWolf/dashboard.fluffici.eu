@@ -11,7 +11,7 @@
 >
     <div class="bg-white rounded shadow-sm mb-3 pt-3">
         <div class="position-relative w-100">
-            <div id='calendar' class=".calendar w-100 h-full m-0 p-0 d-flex"></div>
+            <div id='calendar' class="w-100 h-full m-0 p-0 d-flex"></div>
         </div>
     </div>
 </div>
