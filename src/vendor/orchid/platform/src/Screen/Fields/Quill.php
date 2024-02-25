@@ -26,6 +26,7 @@ use Orchid\Screen\Field;
  * @method Quill help(string $value = null)
  * @method Quill height($value = '300px')
  * @method Quill title(string $value = null)
+ * @method Quill slug(string $value = null)
  * @method Quill popover(string $value = null)
  * @method Quill toolbar(array $options)
  * @method Quill base64(bool $value = true)
@@ -48,6 +49,7 @@ class Quill extends Field
         'toolbar' => ['text', 'color', 'quote', 'header', 'list', 'format', 'media'],
         'height'  => '300px',
         'base64'  => false,
+        'slug'
     ];
 
     /**

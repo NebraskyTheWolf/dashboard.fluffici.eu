@@ -89,6 +89,7 @@ class SendEmail extends Screen
                     ->title('Please enter the email content')
                     ->help('If you need to use CSS please refer to the documentation.')
                     ->required()
+                    ->slug('send-email')
             ])
         ];
     }

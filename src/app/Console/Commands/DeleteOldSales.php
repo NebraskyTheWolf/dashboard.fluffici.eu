@@ -38,8 +38,7 @@ class DeleteOldSales extends Command
                 if (Carbon::parse($sale->deleted_at)->isPast()) {
                     $sale->update(
                         [
-                            'reduction' => 0,
-                            'deleted_at' => null
+                            'reduction' => 0
                         ]
                     );
                 }
