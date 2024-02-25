@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use Orchid\Platform\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,17 @@ Broadcast::channel('user.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('presence-user.{id}', function ($user, $id) {
-   return true;
+Broadcast::channel('presence-editor.{id}', function ($user, $id) {
+    $dataUser = User::where('id', $user->id);
+    if ($dataUser->exists()) {
+        $dataUser = $dataUser->first();
+
+        if ($dataUser->isTerminated()) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    }
 });
