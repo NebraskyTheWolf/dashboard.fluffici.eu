@@ -151,15 +151,14 @@ class ShopProductEdit extends Screen
                         ->title(__('products.screen.edit.input.displayed.title'))
                         ->placeholder(__('products.screen.edit.input.displayed.placeholder'))
                         ->checked()
-                        ->sendTrueOrFalse()
-                        ->required(),
+                        ->sendTrueOrFalse(),
 
                     DateTimer::make('products.deleted_at')
                         ->title(__('products.screen.edit.input.deleted_at.title'))
                         ->placeholder(__('products.screen.edit.input.deleted_at.placeholder'))
                         ->format24hr()
                         ->allowInput()
-                        ->required()
+
 
                 ])->alignEnd(),
 

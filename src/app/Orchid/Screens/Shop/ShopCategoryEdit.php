@@ -93,7 +93,6 @@ class ShopCategoryEdit extends Screen
                     DateTimer::make('category.deleted_at')
                         ->title(__('category.screen.edit.input.deleted_at.title'))
                         ->placeholder(__('category.screen.edit.input.deleted_at.placeholder'))
-                        ->required()
                         ->allowInput()
                         ->shorthandCurrentMonth()
                 ])
