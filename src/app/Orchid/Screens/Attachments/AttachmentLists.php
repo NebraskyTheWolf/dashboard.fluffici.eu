@@ -3,10 +3,12 @@
 namespace App\Orchid\Screens\Attachments;
 
 use App\Models\AutumnFile;
+use App\Models\OrderPayment;
 use App\Models\PlatformAttachments;
 use App\Orchid\Layouts\Attachments\AttachmentsLayout;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -20,7 +22,27 @@ class AttachmentLists extends Screen
     public function query(): iterable
     {
         return [
-            'platform_attachments' => PlatformAttachments::paginate()
+            'platform_attachments' => PlatformAttachments::paginate(),
+            'metrics' => [
+                'count' => [
+                    'key' => 'count',
+                    'value' => number_format(count(AutumnFile::all())),
+                    'numeric' => true,
+                    'icon' => 'bs.file-binary'
+                ],
+                'storage' => [
+                    'key' => 'storage',
+                    'value' => $this->human_readable_bytes((new AutumnFile)->totalSize()),
+                    'numeric' => false,
+                    'icon' => 'bs.hdd-stack'
+                ],
+                'storage_max' => [
+                    'key' => 'storage_max',
+                    'value' => $this->human_readable_bytes(disk_total_space("/")),
+                    'numeric' => false,
+                    'icon' => 'bs.hdd-network'
+                ],
+            ],
         ];
     }
 
@@ -56,6 +78,12 @@ class AttachmentLists extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::metrics([
+                'Files' => 'metrics.count',
+                'Used space' => 'metrics.storage',
+                'Free space' => 'metrics.storage_max',
+            ]),
+
             AttachmentsLayout::class
         ];
     }
@@ -106,5 +134,21 @@ class AttachmentLists extends Screen
         }
 
         return redirect()->route('platform.attachments');
+    }
+
+    /**
+     * Converts bytes into a human-readable string representation.
+     *
+     * @param int $bytes The number of bytes.
+     * @param int $decimals The number of decimal places to round the result to. Default is 2.
+     * @param string $system The unit system to use. Can be either 'binary' or 'metric'. Default is 'binary'.
+     * @return string A human-readable string representation of the bytes.
+     */
+    function human_readable_bytes(int $bytes, int $decimals = 2, string $system = 'binary'): string
+    {
+        $mod = ($system === 'binary') ? 1024 : 1000;
+        $units = array('binary' => BINARY_UNITS, 'metric' => METRIC_UNITS);
+        $factor = floor((strlen($bytes) - 1) / 3);
+        return sprintf("%.{$decimals}f%s", $bytes / pow($mod, $factor), $units[$system][$factor]);
     }
 }

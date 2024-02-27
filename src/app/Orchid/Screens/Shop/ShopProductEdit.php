@@ -21,6 +21,7 @@ use Orchid\Screen\Fields\Picture;
 use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -108,7 +109,7 @@ class ShopProductEdit extends Screen
     public function layout(): iterable
     {
         return [
-            \Orchid\Support\Facades\Layout::rows([
+            Layout::rows([
 
                 Group::make([
                     Input::make('products.name')
@@ -129,8 +130,7 @@ class ShopProductEdit extends Screen
                         ->title(__('products.screen.edit.input.description.title'))
                         ->placeholder(__('products.screen.edit.input.description.placeholder'))
                         ->base64()
-                        ->autofocus()
-                        ->required(),
+                        ->autofocus(),
 
                     Picture::make('Barcode')
                         ->title('Barcode')

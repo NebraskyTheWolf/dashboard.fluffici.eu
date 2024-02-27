@@ -132,7 +132,7 @@ class AttachmentReportReview extends Screen
                 'REPORT' => 'Ban content.',
                 'DELETE' => 'Delete content.',
             ]),
-            $this->generateFormField(Quill::class, 'case.messages', "Review note", false, "This note will be sent to the reporter via email.", [], "attachmentReview", true)
+            $this->generateFormField(Quill::class, 'case.messages', "Review note", false, "This note will be sent to the reporter via email.")
         ];
 
         return [

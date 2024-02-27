@@ -17,4 +17,16 @@ class AutumnFile extends Model
         'deleted',
         'dmca'
     ];
+
+    public function totalSize(): int
+    {
+        $files = $this::all();
+
+        $totalSize = 0;
+        foreach ($files as $file) {
+            $totalSize += $file->size;
+        }
+
+        return $totalSize;
+    }
 }
