@@ -12,6 +12,9 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Symfony\Component\HttpFoundation\Request;
 
+define('BINARY_UNITS', array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'));
+define('METRIC_UNITS', array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'));
+
 class AttachmentLists extends Screen
 {
     /**

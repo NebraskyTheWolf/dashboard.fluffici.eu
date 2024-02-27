@@ -74,8 +74,6 @@ app.post('/voucher', async function (req, res) {
     const decoded = JSON.parse(nodeBase64.decode(req.body.properties))
     const id = nodeBase64.decode(decoded.data);
 
-    console.log(id)
-
     if (decoded.signature === undefined || decoded.data === undefined) {
         return res.status(404).json({
             'status': false,
