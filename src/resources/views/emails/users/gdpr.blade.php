@@ -15,15 +15,15 @@
                     </tr>
                     <tr>
                         <td class="content pt-0" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; padding: 0 48px 40px;">
-                            <p style="margin: 0 0 1em;">We are contacting you as the billing contact or technical contact for fluffici product.</p>
-                            <p style="margin: 0 0 1em;">We want to let you know that we are retiring the fluffici Customer Agreement and replacing it with new
+                            <p style="margin: 0 0 1em;">We are contacting you as the billing contact or technical contact for Fluffici z.s product.</p>
+                            <p style="margin: 0 0 1em;">We want to let you know that we are retiring the Fluffici z.s Customer Agreement and replacing it with new
                                 legal
                                 terms that are specific to deployment type.</p>
                             <p style="margin: 0 0 1em;">Here are some of the key changes:</p>
                             <ul style="margin: 0 0 1em;">
                                 {!! $content !!}
                             </ul>
-                            <p style="margin: 0 0 1em;">Thank you for being Fluffici customer!</p>
+                            <p style="margin: 0 0 1em;">Thank you for being Fluffici z.s customer!</p>
                         </td>
                     </tr>
                     <tr>

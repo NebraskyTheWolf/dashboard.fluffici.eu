@@ -27,7 +27,7 @@
                             <table cellspacing="0" cellpadding="0" class="w-auto" align="center" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; border-collapse: collapse; width: auto;">
                                 <tr>
                                     <td class="border-dashed border-wide border-dark text-center rounded px-lg py-md" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; border-radius: 4px; padding: 16px 24px; border: 2px dashed #d1d1d1;" align="center">
-                                        <div class="h1 font-strong m-0" style="font-weight: 600; color: #232b42; font-size: 28px; line-height: 130%; margin: 0;">{{ $promoCode }}</div>
+                                        <div class="h1 font-strong m-0" style="font-weight: 600; color: #232b42; font-size: 28px; line-height: 130%; margin: 0;">This sale is already applied on all purchase!</div>
                                         <div class="text-muted" style="color: #667382;">Expires on {{ $expiry->diffForHumans() }}</div>
                                     </td>
                                 </tr>

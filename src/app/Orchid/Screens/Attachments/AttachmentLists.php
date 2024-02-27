@@ -30,19 +30,16 @@ class AttachmentLists extends Screen
                 'count' => [
                     'key' => 'count',
                     'value' => number_format(count(AutumnFile::all())),
-                    'numeric' => false,
                     'icon' => 'bs.file-binary'
                 ],
                 'storage' => [
                     'key' => 'storage',
                     'value' => $this->human_readable_bytes((new AutumnFile)->totalSize()),
-                    'numeric' => false,
                     'icon' => 'bs.hdd-stack'
                 ],
                 'storage_max' => [
                     'key' => 'storage_max',
                     'value' => $this->human_readable_bytes(disk_total_space("/")),
-                    'numeric' => false,
                     'icon' => 'bs.hdd-network'
                 ],
             ],

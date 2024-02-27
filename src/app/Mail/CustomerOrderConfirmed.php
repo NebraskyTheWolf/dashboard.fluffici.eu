@@ -67,7 +67,7 @@ class CustomerOrderConfirmed extends Mailable
         $this->order = $order;
         $this->fetchOrderedProduct();
         $this->publicData = $orderIdentifiers->fetchOrder($this->order->order_id);
-        $this->fetchProductTax();
+        $this->productTax = $this->fetchProductTax();
     }
 
     /**
