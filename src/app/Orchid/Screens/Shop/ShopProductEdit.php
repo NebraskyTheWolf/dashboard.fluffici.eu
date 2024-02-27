@@ -126,11 +126,10 @@ class ShopProductEdit extends Screen
                 ])->alignStart(),
 
                 Group::make([
-                    Quill::make('products.description')
+                    Input::make('products.description')
+                        ->type('textarea')
                         ->title(__('products.screen.edit.input.description.title'))
-                        ->placeholder(__('products.screen.edit.input.description.placeholder'))
-                        ->base64()
-                        ->autofocus(),
+                        ->placeholder(__('products.screen.edit.input.description.placeholder')),
 
                     Picture::make('Barcode')
                         ->title('Barcode')

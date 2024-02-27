@@ -296,7 +296,12 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.firebase.token.read', 'Token (Read)')
                 ->addPermission('platform.firebase.token.write', 'Token (Write)')
                 ->addPermission('platform.firebase.subscribe', 'Subscribe (Read/Presence)')
-                ->addPermission('platform.firebase.notification.ack', 'Notification (ACK)')
+                ->addPermission('platform.firebase.notification.ack', 'Notification (ACK)'),
+
+            ItemPermission::group('Calendar & Agenda')
+                ->addPermission('api.calendar.add', 'Add event (API)')
+                ->addPermission('api.calendar.update', 'Update event (API)')
+                ->addPermission('api.calendar.remove', 'Remove event (API)')
         ];
     }
 
