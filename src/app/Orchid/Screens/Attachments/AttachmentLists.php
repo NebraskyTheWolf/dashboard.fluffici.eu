@@ -30,7 +30,7 @@ class AttachmentLists extends Screen
                 'count' => [
                     'key' => 'count',
                     'value' => number_format(count(AutumnFile::all())),
-                    'numeric' => true,
+                    'numeric' => false,
                     'icon' => 'bs.file-binary'
                 ],
                 'storage' => [
