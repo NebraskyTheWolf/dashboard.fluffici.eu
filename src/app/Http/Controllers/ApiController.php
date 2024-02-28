@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\UserApiNotification;
+use App\Models\UserOtp;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -38,16 +39,16 @@ class ApiController extends Controller
     {
         $data = $this->validateInput($request);
         if ($data === false) {
-            return $this->createErrorResponse('CREDENTIALS', 'Username or password is invalid.');
+            return $this->createErrorResponse('CREDENTIALS', 'Email or password is invalid.');
         }
 
-        $user = $this->findByUsername($data['username']);
+        $user = $this->findByUsername($data['email']);
         if ($user === null) {
-            return $this->createErrorResponse('CREDENTIALS', 'Username or password is invalid.');
+            return $this->createErrorResponse('CREDENTIALS', 'Email or password is invalid.');
         }
 
         if (!$this->validatePassword($data['password'], $user->password)) {
-            return $this->createErrorResponse('CREDENTIALS', 'Username or password is invalid.');
+            return $this->createErrorResponse('CREDENTIALS', 'Email or password is invalid.');
         }
 
         if ($user->isTerminated()) {
@@ -56,7 +57,49 @@ class ApiController extends Controller
 
         $this->sendNotification($user);
 
-        return $this->createSuccessResponse($user->createUserToken());
+        return response()->json([
+            'status' => true,
+            'type' => 'OTP_REQUIRED'
+        ]);
+    }
+
+    /**
+     * Validates the OTP (One-Time Password) code provided by the user.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @return JsonResponse The response indicating the result of the OTP validation.
+     *                      If the provided OTP code is valid, the response will contain
+     *                      a success status and a user token.
+     *                      If the provided OTP code is invalid, the response will contain
+     *                      an error status and an error message.
+     *                      The error message will be "Your OTP code is invalid.".
+     *                      The error status will be "CREDENTIALS".
+     *                      If an error occurred during the OTP validation process,
+     *                      an error response with status "INVALID_REQUEST" and message
+     *                      "Unable to verify the OTP code." will be returned.
+     */
+    public function validateOtp(Request $request): JsonResponse
+    {
+        $data = $this->validateOtpInput($request);
+        if ($data === false) {
+            return $this->createErrorResponse('CREDENTIALS', 'Your OTP code is invalid.');
+        }
+
+        $otp = UserOtp::where('token', $data['code']);
+
+        if ($otp->exists()) {
+            $data = $otp->first();
+            $user = User::where('id', $data->user_id)->first();
+
+            return $this->createSuccessResponse($user->createUserToken(), $user);
+        }
+
+        return response()->json([
+            'status' => false,
+            'error' => 'INVALID_REQUEST',
+            'message' => 'Unable to verify the OTP code.'
+        ]);
     }
 
     /**
@@ -70,7 +113,31 @@ class ApiController extends Controller
     {
         $data = json_decode(json_encode($request->all()), true);
 
-        if (empty($data['username']) || empty($data['password'])) {
+        if (empty($data['email']) || empty($data['password'])) {
+            return false;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Validates the OTP input from the request.
+     *
+     * @param Request $request The HTTP request object.
+     *                         The request object is used to get the input data.
+     *
+     * @return bool|array Returns either a boolean value or an associative array.
+     *                    - If the 'code' field is empty in the request data,
+     *                      returns false to indicate that the OTP input is invalid.
+     *                    - Otherwise, returns the request data as an associative array.
+     *                      The array contains the input data from the request.
+     *                      The array format is the same as the original request data.
+     */
+    private function validateOtpInput(Request $request): bool|array
+    {
+        $data = json_decode(json_encode($request->all()), true);
+
+        if (empty($data['code'])) {
             return false;
         }
 
@@ -140,11 +207,17 @@ class ApiController extends Controller
      *
      * @return JsonResponse The JSON response indicating a successful login.
      */
-    private function createSuccessResponse(string $token): JsonResponse
+    private function createSuccessResponse(string $token, User $user): JsonResponse
     {
         return response()->json([
             'status' => true,
             'token' => $token,
+            'user' => [
+                'username' => $user->name,
+                'email' => $user->email,
+                'avatar' => $user->avatar,
+                'avatarId' => $user->avatar_id
+            ],
             'message' => 'Login successful.'
         ]);
     }
