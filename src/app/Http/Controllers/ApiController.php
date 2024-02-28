@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Mail\UserApiNotification;
+use App\Mail\UserOtpMail;
 use App\Models\UserOtp;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Orchid\Platform\Models\User;
+use Random\RandomException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
@@ -55,7 +58,13 @@ class ApiController extends Controller
             return $this->createErrorResponse('ACCOUNT_RESTRICTED', 'Your account is terminated.');
         }
 
-        $this->sendNotification($user);
+        $otp = new UserOtp();
+        $otp->user_id = $user->id;
+        $otp->token = $this->generateNumericToken(8);
+        $otp->expiry = Carbon::now()->addMinutes(30);
+        $otp->save();
+
+        Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
 
         return response()->json([
             'status' => true,
@@ -91,6 +100,8 @@ class ApiController extends Controller
         if ($otp->exists()) {
             $data = $otp->first();
             $user = User::where('id', $data->user_id)->first();
+
+            $this->sendNotification($user);
 
             return $this->createSuccessResponse($user->createUserToken(), $user);
         }
@@ -274,5 +285,25 @@ class ApiController extends Controller
         } else {
             return $this->createErrorResponse("FILE_NOT_FOUND", "Not found in the storage.");
         }
+    }
+
+    /**
+     * Generate a numeric token.
+     *
+     * @param int $length The length of the token (default: 4).
+     * @return string The generated numeric token.
+     * @throws RandomException
+     */
+    private function generateNumericToken(int $length = 4): string
+    {
+        $i = 0;
+        $token = "";
+
+        while ($i < $length) {
+            $token .= random_int(0, 9);
+            $i++;
+        }
+
+        return $token;
     }
 }
