@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\ApiAuthentication;
 use App\Http\Middleware\KofiCors;
+use app\Http\Middleware\VisitTracker;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -41,11 +42,13 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            VisitTracker::class,
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class
         ],
 
         'backend' => [
+            VisitTracker::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class
         ],
@@ -58,9 +61,15 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class
         ],
         'integrations' => [
+            VisitTracker::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class
         ],
+        'legal' => [
+            VisitTracker::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class
+        ]
     ];
 
     /**

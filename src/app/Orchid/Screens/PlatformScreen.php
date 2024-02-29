@@ -8,6 +8,7 @@ use App\Models\EventsInteresteds;
 use App\Models\Pages;
 use App\Models\ShopOrders;
 use App\Models\ShopSupportTickets;
+use app\Models\VisitsStatistics;
 use App\Orchid\Layouts\Shop\ShopProfit;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Screen;
