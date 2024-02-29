@@ -4,7 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\ApiAuthentication;
 use App\Http\Middleware\KofiCors;
-use app\Http\Middleware\VisitTracker;
+use App\Http\Middleware\VisitTracker;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
