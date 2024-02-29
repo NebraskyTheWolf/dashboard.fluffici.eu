@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
@@ -59,6 +60,13 @@ class AccountingTRSReportLayout extends Table
                         ])
                         ->download(true)
                         ->icon('bs.trash');
+                }),
+            TD::make('created_at', 'Created at')
+                ->render(function (TransactionsReport $report) {
+                    return Input::make('created_at')
+                        ->relativeTime()
+                        ->timestamp(Carbon::parse($report->created_at)->toDateTimeString())
+                        ->parsedTime(Carbon::parse($report->created_at)->format("D, d M Y H:i:s"));
                 })
         ];
     }

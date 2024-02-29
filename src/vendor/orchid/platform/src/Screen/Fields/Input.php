@@ -42,6 +42,10 @@ use Orchid\Screen\Field;
  * @method Input mask($value = true)
  * @method Input title(string $value = null)
  * @method Input inputmode(string $value = null)
+ *
+ * @method Input relativeTime(bool $value = true)
+ * @method Input timestamp(string $value = null)
+ * @method Input parsedTime(string $value = null)
  */
 class Input extends Field
 {
@@ -60,6 +64,9 @@ class Input extends Field
     protected $attributes = [
         'class'    => 'form-control',
         'datalist' => [],
+        'relativeTime' => false,
+        'timestamp' => null,
+        'parsedTime' => null
     ];
 
     /**
