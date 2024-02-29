@@ -2,39 +2,6 @@
 
 @section('head')
     <!-- Support google header start -->
-    <div itemscope itemtype="https://schema.org/Order">
-        <div itemprop="merchant" itemscope itemtype="https://schema.org/Organization">
-            <meta itemprop="name" content="Fluffici z.s"/>
-        </div>
-        <meta itemprop="orderNumber" content="{{ $publicData->public_identifier }}"/>
-        <meta itemprop="priceCurrency" content="CZK"/>
-        <meta itemprop="price" content="{{ $product->getNormalizedPrice() }}"/>
-        <div itemprop="acceptedOffer" itemscope itemtype="https://schema.org/Offer">
-            <div itemprop="itemOffered" itemscope itemtype="https://schema.org/Product">
-                <meta itemprop="name" content="{{ $product->name }}"/>
-                <meta itemprop="sku" content="{{ $product->id }}"/>
-                <link itemprop="url" href="https://shop.fluffici.eu/checkout/{{ $product->id }}"/>
-                <link itemprop="image" href="{{ $product->getImage() }}"/>
-            </div>
-            <meta itemprop="price" content="{{ $product->getNormalizedPrice() }}"/>
-            <meta itemprop="priceCurrency" content="CZK"/>
-            <div itemprop="eligibleQuantity" itemscope itemtype="https://schema.org/QuantitativeValue">
-                <meta itemprop="value" content="1"/>
-            </div>
-            <div itemprop="seller" itemscope itemtype="https://schema.org/Organization">
-                <meta itemprop="name" content="Fluffici z.s"/>
-            </div>
-        </div>
-        <link itemprop="orderStatus" href="https://schema.org/OrderProcessing"/>
-        <meta itemprop="orderDate" content="2027-11-07T23:30:00-08:00"/>
-        <meta itemprop="isGift" content="false"/>
-        <meta itemprop="discount" content="{{ $product->getProductSale() }}"/>
-        <meta itemprop="discountCurrency" content="CZK"/>
-        <div itemprop="customer" itemscope itemtype="https://schema.org/Person">
-            <meta itemprop="name" content="{{ $order->first_name }} {{ $order->last_name }}"/>
-        </div>
-    </div>
-
     <script type="application/ld+json">
         {
           "@context": "http://schema.org",
@@ -47,10 +14,6 @@
           "orderStatus": "http://schema.org/OrderProcessing",
           "priceCurrency": "CZK",
           "price": "{{ $product->getNormalizedPrice() }}",
-          "priceSpecification": {
-            "@type": "PriceSpecification",
-            "validFrom": "2037-12-07T23:30:00-08:00"
-          },
           "acceptedOffer": {
             "@type": "Offer",
             "itemOffered": {
@@ -67,15 +30,13 @@
               "value": "1"
             }
           },
-          "url": "",
+          "url": "https://shop.rsiniya.uk/order/track/{{ $publicData->internal }}",
           "potentialAction": {
             "@type": "ViewAction",
             "url": "https://shop.fluffici.eu/"
           }
         }
     </script>
-
-
     <!-- Support google header end -->
 @endsection
 
@@ -128,19 +89,12 @@
                                     <td class="font-strong text-right" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-weight: 600; padding: 4px 0 4px 12px;" align="right">{{ $order->email }}</td>
                                 </tr>
 
-                                @if(!empty($productTax))
-                                    @foreach($productTax as $tax)
-                                        <tr>
-                                            <td style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; padding: 4px 12px 4px 0;">{{ $tax->name }}</td>
-                                            <td class="font-strong text-right" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-weight: 600; padding: 4px 0 4px 12px;" align="right">+{{ $tax->percentage }}%</td>
-                                        </tr>
-                                    @endforeach
-                                @else
+                                @foreach($productTax as $tax)
                                     <tr>
-                                        <td style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; padding: 4px 12px 4px 0;">Tax</td>
-                                        <td class="font-strong text-right border-top" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-weight: 600; padding: 4px 0 4px 12px;" align="right">0%</td>
+                                        <td style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; padding: 4px 12px 4px 0;">{{ $tax->name }}</td>
+                                        <td class="font-strong text-right" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-weight: 600; padding: 4px 0 4px 12px;" align="right">+{{ $tax->percentage }}%</td>
                                     </tr>
-                                @endif
+                                @endforeach
 
                                 @if($product->getProductSale() != 0)
                                     <tr>
@@ -175,19 +129,19 @@
                                             </td>
                                             <td class="col-spacer" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; width: 24px;" valign="top"></td>
                                             <td class="col" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;" valign="top">
-                                                <h4 class="text-green text-uppercase" style="font-weight: 600; color: #2fb344; font-size: 16px; text-transform: uppercase; margin: 0 0 0.5em;">The order has to be paid</h4>
+                                                <h4 class="text-green text-uppercase" style="font-weight: 600; color: #2fb344; font-size: 16px; text-transform: uppercase; margin: 0 0 0.5em;"></h4>
                                                 <div>
                                                     Amount: {{ $product->getNormalizedPrice() }} Kc
                                                 </div>
-                                                <div class="text-muted mt-md" style="color: #667382; margin-top: 16px;">Show this confirmation at the Fluffici z.s staff.</div>
+                                                <div class="text-muted mt-md" style="color: #667382; margin-top: 16px;">Show this confirmation at the Fluffici z.s staff outing's</div>
                                             </td>
                                         @else
                                             <td class="col" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;" valign="top">
-                                                <h4 class="text-green text-uppercase" style="font-weight: 600; color: #2fb344; font-size: 16px; text-transform: uppercase; margin: 0 0 0.5em;">The order was paid</h4>
+                                                <h4 class="text-green text-uppercase" style="font-weight: 600; color: #2fb344; font-size: 16px; text-transform: uppercase; margin: 0 0 0.5em;">The order was already paid</h4>
                                                 <div>
                                                     Amount: {{ $product->getNormalizedPrice() }} Kc
                                                 </div>
-                                                <div class="text-muted mt-md" style="color: #667382; margin-top: 16px;">Show this confirmation at the Fluffici z.s staff.</div>
+                                                <div class="text-muted mt-md" style="color: #667382; margin-top: 16px;">You will soon receive an email with your tracking order.</div>
                                             </td>
                                         @endif
                                     </tr>

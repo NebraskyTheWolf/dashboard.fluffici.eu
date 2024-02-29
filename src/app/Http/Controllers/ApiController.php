@@ -100,6 +100,7 @@ class ApiController extends Controller
         if ($otp->exists()) {
             $data = $otp->first();
             $user = User::where('id', $data->user_id)->first();
+            $data->delete();
 
             $this->sendNotification($user);
 
@@ -158,13 +159,13 @@ class ApiController extends Controller
     /**
      * Finds a user by the given username.
      *
-     * @param string $username The username of the user to be found.
+     * @param string $email The username of the user to be found.
      *
      * @return User|null The user object if found, null otherwise.
      */
-    private function findByUsername(string $username): ?User
+    private function findByUsername(string $email): ?User
     {
-        $user = User::where('name', $username);
+        $user = User::where('email', $email);
 
         return $user->exists() ? $user->first() : null;
     }

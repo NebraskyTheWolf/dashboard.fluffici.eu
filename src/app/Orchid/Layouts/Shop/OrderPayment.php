@@ -27,6 +27,8 @@ class OrderPayment extends Table
                         return '<a class="ui yellow label">'.__('orders.table.payment_status.refunded').'</a>';
                     } else if ($shopOrders->status == "DISPUTED") {
                         return '<a class="ui yellow label">'.__('orders.table.payment_status.disputed').'</a>';
+                    } else if ($shopOrders->status == "PARTIALLY_PAID") {
+                        return '<a class="ui yellow label">'.__('orders.table.payment_status.partially_paid').'</a>';
                     }
 
                     return '<a class="ui blue label">'.__('orders.table.payment_status.await').' <i class="loading cog icon"></i></a>';

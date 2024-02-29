@@ -25,13 +25,14 @@ class ShopVouchers extends Model
 
 
     /**
-     * Retrieves the expiration date in the specified format.
+     * Retrieves the expiration date and time as a formatted string.
      *
-     * @return string The expiration date formatted as "Y-m-d".
+     * @return string The expiration date and time formatted as "Y-m-d at H:i:s".
      */
     public function getExpiration(): string
     {
-        return Carbon::parse($this->expiration)->format("Y-m-d");
+        $date = Carbon::parse($this->expiration);
+        return $date->format("Y-m-d") . ' at ' . $date->format("H:i:s");
     }
 
     /**

@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Orchid\Platform\Models\User;
+use Ramsey\Uuid\Uuid;
 
 class PaymentController extends Controller
 {
@@ -121,7 +122,7 @@ class PaymentController extends Controller
                             $payment = new OrderPayment();
                             $payment->order_id = $order->order_id;
                             $payment->status = 'PAID';
-                            $payment->transaction_id = \Ramsey\Uuid\Uuid::uuid4();
+                            $payment->transaction_id = Uuid::uuid4();
                             $payment->provider = 'Voucher #' . $voucherData->id;
                             $payment->price = $product->getNormalizedPrice();
                             $payment->save();
@@ -137,11 +138,32 @@ class PaymentController extends Controller
                                 'message' => "Remaining balance " . number_format(($voucherData->money - $product->price)) . " Kc"
                             ]);
                         } else {
-                            return response()->json([
-                                'status' => false,
-                                'error' => 'VOUCHER_REJECTION',
-                                'message' => 'The voucher does not have enough money.'
-                            ]);
+                            if (!$voucherData->money <= 0) {
+                                $calculatedPrice = $product->getNormalizedPrice() - $voucherData->money;
+                                $voucherData->update([
+                                    'money' => -$voucherData->money,
+                                    'restricted' => true
+                                ]);
+
+                                $payment = new OrderPayment();
+                                $payment->order_id = $order->order_id;
+                                $payment->status = 'PARTIALLY_PAID';
+                                $payment->transaction_id = Uuid::uuid4();
+                                $payment->provider = '#1 Voucher #' . $voucherData->id;
+                                $payment->price = $voucherData->money ;
+                                $payment->save();
+
+                                return response()->json([
+                                    'status' => true,
+                                    'message' => "Remaining amount to pay " . number_format(($calculatedPrice)) . " Kc ( Partially Paid )"
+                                ]);
+                            } else {
+                                return response()->json([
+                                    'status' => false,
+                                    'error' => 'VOUCHER_REJECTION',
+                                    'message' => 'The voucher has no remaining balance.'
+                                ]);
+                            }
                         }
                     } else {
                         return response()->json([
@@ -166,12 +188,28 @@ class PaymentController extends Controller
             }
             case 'CASH':
             {
-                $payment = new OrderPayment();
-                $payment->order_id = $order->order_id;
-                $payment->status = 'PAID';
-                $payment->transaction_id = \Ramsey\Uuid\Uuid::uuid4();
-                $payment->provider = 'Cash';
-                $payment->price = $product->getNormalizedPrice();
+                $partialPayment = OrderPayment::where('order_id',  $order->order_id)->where('status', 'PARTIALLY_PAID');
+                if ($partialPayment->exists()) {
+                    $partialPayment = $partialPayment->first();
+
+                    $price = $product->getNormalizedPrice() - $partialPayment->price;
+
+                    $payment = new OrderPayment();
+                    $payment->order_id = $order->order_id;
+                    $payment->status = 'PAID';
+                    $payment->transaction_id = $partialPayment->transaction_id;
+                    $payment->provider = '#2 Cash (' . $price . ' Kc)';
+                    $payment->price = $price;
+
+                } else {
+                    $payment = new OrderPayment();
+                    $payment->order_id = $order->order_id;
+                    $payment->status = 'PAID';
+                    $payment->transaction_id = Uuid::uuid4();
+                    $payment->provider = 'Cash';
+                    $payment->price = $product->getNormalizedPrice();
+                }
+
                 $payment->save();
 
                 $order->update([
@@ -203,7 +241,7 @@ class PaymentController extends Controller
      * @param Request $request The HTTP request object.
      * @return JsonResponse The JSON response containing the order details.
      */
-    public function fetchOrder(Request $request)
+    public function fetchOrder(Request $request): JsonResponse
     {
         $orderId = $request->query('orderId');
         if ($orderId == null) {
@@ -289,6 +327,14 @@ class PaymentController extends Controller
         }
         $order = $order->first();
 
+        if ($order->status === "REFUNDED") {
+            return response()->json([
+                'status' => false,
+                'error' => 'INVALID_ORDER',
+                'message' => 'This order was already refunded.'
+            ]);
+        }
+
         $order->update(['status' => 'REFUNDED']);
 
         $currentPayment = OrderPayment::where('order_id', $orderId)->where('status', 'PAID');
@@ -353,6 +399,15 @@ class PaymentController extends Controller
         }
 
         $order = $order->first();
+
+        if ($order->status === "CANCELLED") {
+            return response()->json([
+                'status' => false,
+                'error' => 'INVALID_ORDER',
+                'message' => 'This order was already cancelled.'
+            ]);
+        }
+
         $order->update(['status' => 'CANCELLED']);
 
         event(new UpdateAudit('order_cancel', 'Cancelled ' . substr($orderId, 0, 8) . ' order.', $request->input('username')));
@@ -361,5 +416,34 @@ class PaymentController extends Controller
             'status' => true,
             'message' => 'Order has been cancelled successfully.'
         ]);
+    }
+
+    /**
+     * Checks if the given order is fully paid.
+     *
+     * @param string $orderId The order ID.
+     * @return bool
+     */
+    public function isOrderFullyPaid(string $orderId): bool
+    {
+        $orderPayments = OrderPayment::where('order_id', $orderId)->get();
+        $orderProducts = OrderedProduct::where('order_id', $orderId)->get();
+
+        // No payments means order is obviously not fully paid.
+        if($orderPayments->isEmpty())
+            return false;
+
+        $totalPrice = 0;
+        foreach($orderPayments as $payment)
+            if($payment->status === 'PAID' || $payment->status === 'PARTIALLY_PAID')
+                $totalPrice += $payment->price;
+
+        $totalProductPrice = 0;
+        foreach($orderProducts as $product)
+            $totalProductPrice += $product->getNormalizedPrice();
+
+        if ($totalPrice < $totalProductPrice)
+            return false;
+        return true;
     }
 }

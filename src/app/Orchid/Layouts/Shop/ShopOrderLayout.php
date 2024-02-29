@@ -85,6 +85,8 @@ class ShopOrderLayout extends Table
                             return '<a class="ui green label">'.__('orders.table.payment_status.paid').'</a>';
                         } else if ($status == "PAID") {
                             return '<a class="ui green label">'.__('orders.table.payment_status.paid').'</a>';
+                        } else if ($status == "PARTIALLY_PAID") {
+                            return '<a class="ui yellow label">'.__('orders.table.payment_status.partially_paid').'</a>';
                         } else if ($status == "UNPAID") {
                             return '<a class="ui red label">'.__('orders.table.payment_status.unpaid').'</a>';
                         }

@@ -4,6 +4,7 @@ namespace App\Orchid\Layouts\Shop;
 
 use App\Models\ShopVouchers;
 use Carbon\Carbon;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
@@ -31,11 +32,19 @@ class ShopVoucherLayout extends Table
         return [
             TD::make('code', 'Code')
                 ->render(function (ShopVouchers $reports) {
-                    return Link::make('Download')
-                        ->icon('bs.caret-down-square')
-                        ->type(Color::SUCCESS)
-                        ->download()
-                        ->href(route('api.shop.voucher') . '?voucherCode=' . $reports->code);
+
+                    if (Carbon::parse($reports->expiration)->isPast()) {
+                        return Button::make('Download')
+                            ->icon('bs.caret-down-square')
+                            ->type(Color::PRIMARY)
+                            ->disabled();
+                    } else {
+                        return Link::make('Download')
+                            ->icon('bs.caret-down-square')
+                            ->type(Color::SUCCESS)
+                            ->download()
+                            ->href(route('api.shop.voucher') . '?voucherCode=' . $reports->code);
+                    }
                 }),
             TD::make('money', 'Amount')
                 ->render(function (ShopVouchers $vouchers) {

@@ -16,7 +16,7 @@ return [
     'docs'        => [
         'route'   => '/docs',
         'path'    => '/resources/docs',
-        'landing' => 'overview',
+        'landing' => 'api',
         'middleware' => ['web'],
     ],
 
@@ -33,9 +33,9 @@ return [
     */
 
     'versions'      => [
-        'default'   => '1.0',
+        'default'   => '1.1',
         'published' => [
-            '1.0'
+            '1.1'
         ]
     ],
 
@@ -77,7 +77,7 @@ return [
     */
 
     'cache'       => [
-        'enabled' => false,
+        'enabled' => true,
         'period'  => 5
     ],
 
@@ -130,7 +130,7 @@ return [
             'secondary'  => '#0A4FFF'
         ],
 
-        'theme_order'    => null // ['LaRecipeDarkTheme', 'customTheme']
+        'theme_order'    => 'LaRecipeDarkTheme' // ['LaRecipeDarkTheme', 'customTheme']
     ],
 
     /*

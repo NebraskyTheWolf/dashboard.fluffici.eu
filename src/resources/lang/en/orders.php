@@ -20,6 +20,7 @@ return [
     'table.status.delivered' => 'Delivered',
     'table.status.archived' => 'Archived',
     'table.status.completed' => 'Completed',
+    'table.status.partially_paid' => 'Partially Paid (1/2)',
 
     'screen.title' => 'Orders',
     'screen.button.refresh' => 'Refresh',
