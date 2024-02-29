@@ -47,10 +47,6 @@ class AccountingTRSReportLayout extends Table
                 ->render(function (TransactionsReport $reports) {
                     return $reports->report_id;
                 }),
-            TD::make('created_at', 'Created At')
-                ->render(function (TransactionsReport $reports) {
-                    return Carbon::parse($reports->created_at)->diffForHumans();
-                }),
             TD::make('delete', 'Delete')
                 ->render(function (TransactionsReport $reports) {
                     return Button::make('Delete')
@@ -64,7 +60,7 @@ class AccountingTRSReportLayout extends Table
             TD::make('created_at', 'Created at')
                 ->render(function (TransactionsReport $report) {
                     return Input::make('created_at')
-                        ->relativeTime()
+                        ->relativeTime(true)
                         ->timestamp(Carbon::parse($report->created_at)->toDateTimeString())
                         ->parsedTime(Carbon::parse($report->created_at)->format("D, d M Y H:i:s"));
                 })

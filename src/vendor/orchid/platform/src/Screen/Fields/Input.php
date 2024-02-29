@@ -43,9 +43,6 @@ use Orchid\Screen\Field;
  * @method Input title(string $value = null)
  * @method Input inputmode(string $value = null)
  *
- * @method Input relativeTime(bool $value = true)
- * @method Input timestamp(string $value = null)
- * @method Input parsedTime(string $value = null)
  */
 class Input extends Field
 {
@@ -131,6 +128,30 @@ class Input extends Field
 
         return $this->addBeforeRender(function () {
             $this->set('list', 'datalist-'.$this->get('name'));
+        });
+    }
+
+    /**
+     * Sets whether to enable relative time.
+     *
+     * @param bool $enabled (optional) Whether to enable relative time. Default is false.
+     * @return self The instance of the current class.
+     */
+    public function relativeTime(bool $enabled = false): self {
+        return $this->addBeforeRender(function () use ($enabled) {
+            $this->set('relativeTime', $enabled);
+        });
+    }
+
+    public function timestamp(string $timestamp = null): self {
+        return $this->addBeforeRender(function () use ($timestamp) {
+            $this->set('timestamp', $timestamp);
+        });
+    }
+
+    public function parsedTime(string $parsedTime = null): self {
+        return $this->addBeforeRender(function () use ($parsedTime) {
+            $this->set('parsedTime', $parsedTime);
         });
     }
 }
