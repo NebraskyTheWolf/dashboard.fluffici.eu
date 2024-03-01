@@ -10,8 +10,8 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 
-define('BINARY_UNITS', array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'));
-define('METRIC_UNITS', array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'));
+define('BINARY_UNITSS', array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'));
+define('METRIC_UNITSS', array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'));
 
 /**
  * Class ShopReportReady
@@ -154,7 +154,7 @@ class ShopReportReady extends Mailable
     function human_readable_bytes(int $bytes, int $decimals = 2, string $system = 'binary'): string
     {
         $mod = ($system === 'binary') ? 1024 : 1000;
-        $units = array('binary' => BINARY_UNITS, 'metric' => METRIC_UNITS);
+        $units = array('binary' => BINARY_UNITSS, 'metric' => METRIC_UNITSS);
         $factor = floor((strlen($bytes) - 1) / 3);
         return sprintf("%.{$decimals}f%s", $bytes / pow($mod, $factor), $units[$system][$factor]);
     }
