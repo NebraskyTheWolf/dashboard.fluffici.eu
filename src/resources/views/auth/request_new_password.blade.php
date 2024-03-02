@@ -42,8 +42,8 @@
             </label>
 
             <x-turnstile-widget
-                theme="light"
-                language="pl"
+                theme="auto"
+                language="auto"
                 size="normal"
             />
         </div>

@@ -272,7 +272,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Contracts\View\View Pohled na formulář pro výzvu k obnovení.
      */
-    public function recoveryChallenge(Request $request): \Illuminate\Contracts\View\View
+    public function recoveryChallenge(Request $request)
     {
         $request->validate([
             'cf-turnstile-response' => ['required', new TurnstileCheck()],

@@ -102,11 +102,10 @@ class Handler extends ExceptionHandler
 
     private function sendAlert(Throwable $e)
     {
-       /* Mail::to('vakea@fluffici.eu')->send(new ApplicationError(
+       Mail::to('vakea@fluffici.eu')->send(new ApplicationError(
             $e->getFile(),
             $e->getMessage(),
             $e->getLine(),
             $e->getTraceAsString()));
-       */
     }
 }
