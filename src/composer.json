@@ -14,6 +14,7 @@
         "beyondcode/laravel-websockets": "^1.14",
         "binarytorch/larecipe": "^2.6",
         "binarytorch/larecipe-swagger": "^0.2.0",
+        "coderflex/laravel-turnstile": "^1.0",
         "guzzlehttp/guzzle": "^7.8",
         "intervention/image": "^3.2",
         "jucksearm/php-barcode": "^1.0",

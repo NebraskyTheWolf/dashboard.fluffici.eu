@@ -28,6 +28,18 @@
     !!}
 </div>
 
+<div class="mb-3">
+    <label class="form-label w-100 text-white">
+        Captcha
+    </label>
+
+    <x-turnstile-widget
+        theme="light"
+        language="pl"
+        size="normal"
+    />
+</div>
+
 <div class="row align-items-center">
     <div class="col-md-6 col-xs-12">
         <label class="form-check">

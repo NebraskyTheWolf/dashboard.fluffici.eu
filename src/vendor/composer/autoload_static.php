@@ -126,6 +126,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
             'Symfony\\Component\\Cache\\' => 24,
             'Symfony\\Bridge\\PsrHttpMessage\\' => 30,
             'Svg\\' => 4,
+            'Spatie\\LaravelPackageTools\\' => 27,
             'Spatie\\LaravelIgnition\\' => 23,
             'Spatie\\Ignition\\' => 16,
             'Spatie\\FlareClient\\' => 19,
@@ -298,6 +299,8 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         array (
             'Cron\\' => 5,
             'Complex\\' => 8,
+            'Coderflex\\LaravelTurnstile\\Database\\Factories\\' => 46,
+            'Coderflex\\LaravelTurnstile\\' => 27,
             'Carbon\\Doctrine\\' => 16,
             'Carbon\\' => 7,
         ),
@@ -524,6 +527,10 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'Svg\\' => 
         array (
             0 => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg',
+        ),
+        'Spatie\\LaravelPackageTools\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/laravel-package-tools/src',
         ),
         'Spatie\\LaravelIgnition\\' => 
         array (
@@ -1050,6 +1057,14 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
         ),
+        'Coderflex\\LaravelTurnstile\\Database\\Factories\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/coderflex/laravel-turnstile/database/factories',
+        ),
+        'Coderflex\\LaravelTurnstile\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/coderflex/laravel-turnstile/src',
+        ),
         'Carbon\\Doctrine\\' => 
         array (
             0 => __DIR__ . '/..' . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine',
@@ -1157,6 +1172,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'AmrShawky\\LaravelCurrency\\Facade\\Currency' => __DIR__ . '/..' . '/amrshawky/laravel-currency/src/Facade/Currency.php',
         'AmrShawky\\Traits\\HttpRequest' => __DIR__ . '/..' . '/amrshawky/currency/src/Traits/HttpRequest.php',
         'AmrShawky\\Traits\\ParamsOverload' => __DIR__ . '/..' . '/amrshawky/currency/src/Traits/ParamsOverload.php',
+        'App\\Broadcasting\\PresenceEditor' => __DIR__ . '/../..' . '/app/Broadcasting/PresenceEditor.php',
         'App\\Compoenents\\FileReportViewComponent' => __DIR__ . '/../..' . '/app/Compoenents/FileReportViewComponent.php',
         'App\\Compoenents\\FilesViewComponent' => __DIR__ . '/../..' . '/app/Compoenents/FilesViewComponent.php',
         'App\\Console\\Commands\\AdminCommand' => __DIR__ . '/../..' . '/app/Console/Commands/AdminCommand.php',
@@ -1193,6 +1209,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Events\\AkceUpdate' => __DIR__ . '/../..' . '/app/Events/AkceUpdate.php',
         'App\\Events\\GenerateReport' => __DIR__ . '/../..' . '/app/Events/GenerateReport.php',
         'App\\Events\\OrderUpdateEvent' => __DIR__ . '/../..' . '/app/Events/OrderUpdateEvent.php',
+        'App\\Events\\PresenceEditor' => __DIR__ . '/../..' . '/app/Events/PresenceEditor.php',
         'App\\Events\\Statistics' => __DIR__ . '/../..' . '/app/Events/Statistics.php',
         'App\\Events\\UpdateAudit' => __DIR__ . '/../..' . '/app/Events/UpdateAudit.php',
         'App\\Events\\UserUpdated' => __DIR__ . '/../..' . '/app/Events/UserUpdated.php',
@@ -1221,10 +1238,12 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Http\\Middleware\\VisitTracker' => __DIR__ . '/../..' . '/app/Http/Middleware/VisitTracker.php',
         'App\\Listeners\\AkceChange' => __DIR__ . '/../..' . '/app/Listeners/AkceChange.php',
         'App\\Listeners\\AuditListener' => __DIR__ . '/../..' . '/app/Listeners/AuditListener.php',
         'App\\Listeners\\LockUserForLogin' => __DIR__ . '/../..' . '/app/Listeners/LockUserForLogin.php',
         'App\\Listeners\\OrderUpdateListeners' => __DIR__ . '/../..' . '/app/Listeners/OrderUpdateListeners.php',
+        'App\\Listeners\\PresenceEditorListener' => __DIR__ . '/../..' . '/app/Listeners/PresenceEditorListener.php',
         'App\\Listeners\\StatisticsListener' => __DIR__ . '/../..' . '/app/Listeners/StatisticsListener.php',
         'App\\Mail\\ApplicationError' => __DIR__ . '/../..' . '/app/Mail/ApplicationError.php',
         'App\\Mail\\CustomerOrderConfirmed' => __DIR__ . '/../..' . '/app/Mail/CustomerOrderConfirmed.php',
@@ -1245,6 +1264,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Models\\AccountingDocument' => __DIR__ . '/../..' . '/app/Models/AccountingDocument.php',
         'App\\Models\\AuditLogs' => __DIR__ . '/../..' . '/app/Models/AuditLogs.php',
         'App\\Models\\AutumnFile' => __DIR__ . '/../..' . '/app/Models/AutumnFile.php',
+        'App\\Models\\CalendarEvent' => __DIR__ . '/../..' . '/app/Models/CalendarEvent.php',
         'App\\Models\\CreateSendEmail' => __DIR__ . '/../..' . '/app/Models/CreateSendEmail.php',
         'App\\Models\\CurrentReports' => __DIR__ . '/../..' . '/app/Models/CurrentReports.php',
         'App\\Models\\DeviceAuthorization' => __DIR__ . '/../..' . '/app/Models/DeviceAuthorization.php',
@@ -1291,7 +1311,9 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Models\\UserApiToken' => __DIR__ . '/../..' . '/app/Models/UserApiToken.php',
         'App\\Models\\UserOtp' => __DIR__ . '/../..' . '/app/Models/UserOtp.php',
         'App\\Models\\UserRestrictions' => __DIR__ . '/../..' . '/app/Models/UserRestrictions.php',
+        'App\\Models\\UserTheme' => __DIR__ . '/../..' . '/app/Models/UserTheme.php',
         'App\\Models\\UsersInvites' => __DIR__ . '/../..' . '/app/Models/UsersInvites.php',
+        'App\\Models\\VisitsStatistics' => __DIR__ . '/../..' . '/app/Models/VisitsStatistics.php',
         'App\\Notifications\\ShopReportError' => __DIR__ . '/../..' . '/app/Notifications/ShopReportError.php',
         'App\\Notifications\\ShopReportReady' => __DIR__ . '/../..' . '/app/Notifications/ShopReportReady.php',
         'App\\Orchid\\Filters\\FilterByDate' => __DIR__ . '/../..' . '/app/Orchid/Filters/FilterByDate.php',
@@ -1665,6 +1687,13 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'Carbon\\Translator' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Translator.php',
         'Carbon\\TranslatorImmutable' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/TranslatorImmutable.php',
         'Carbon\\TranslatorStrongTypeInterface' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/TranslatorStrongTypeInterface.php',
+        'Coderflex\\LaravelTurnstile\\Components\\TurnstileWidget' => __DIR__ . '/..' . '/coderflex/laravel-turnstile/src/Components/TurnstileWidget.php',
+        'Coderflex\\LaravelTurnstile\\Exceptions\\SecretKeyNotFoundException' => __DIR__ . '/..' . '/coderflex/laravel-turnstile/src/Exceptions/SecretKeyNotFoundException.php',
+        'Coderflex\\LaravelTurnstile\\Exceptions\\UnkownErrorOccuredException' => __DIR__ . '/..' . '/coderflex/laravel-turnstile/src/Exceptions/UnkownErrorOccuredException.php',
+        'Coderflex\\LaravelTurnstile\\Facades\\LaravelTurnstile' => __DIR__ . '/..' . '/coderflex/laravel-turnstile/src/Facades/LaravelTurnstile.php',
+        'Coderflex\\LaravelTurnstile\\LaravelTurnstile' => __DIR__ . '/..' . '/coderflex/laravel-turnstile/src/LaravelTurnstile.php',
+        'Coderflex\\LaravelTurnstile\\LaravelTurnstileServiceProvider' => __DIR__ . '/..' . '/coderflex/laravel-turnstile/src/LaravelTurnstileServiceProvider.php',
+        'Coderflex\\LaravelTurnstile\\Rules\\TurnstileCheck' => __DIR__ . '/..' . '/coderflex/laravel-turnstile/src/Rules/TurnstileCheck.php',
         'Complex\\Complex' => __DIR__ . '/..' . '/markbaker/complex/classes/src/Complex.php',
         'Complex\\Exception' => __DIR__ . '/..' . '/markbaker/complex/classes/src/Exception.php',
         'Complex\\Functions' => __DIR__ . '/..' . '/markbaker/complex/classes/src/Functions.php',
@@ -10550,6 +10579,10 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'Spatie\\LaravelIgnition\\Support\\StringComparator' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Support/StringComparator.php',
         'Spatie\\LaravelIgnition\\Views\\BladeSourceMapCompiler' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Views/BladeSourceMapCompiler.php',
         'Spatie\\LaravelIgnition\\Views\\ViewExceptionMapper' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Views/ViewExceptionMapper.php',
+        'Spatie\\LaravelPackageTools\\Commands\\InstallCommand' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/InstallCommand.php',
+        'Spatie\\LaravelPackageTools\\Exceptions\\InvalidPackage' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Exceptions/InvalidPackage.php',
+        'Spatie\\LaravelPackageTools\\Package' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Package.php',
+        'Spatie\\LaravelPackageTools\\PackageServiceProvider' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/PackageServiceProvider.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'Svg\\CssLength' => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg/CssLength.php',
         'Svg\\DefaultStyle' => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg/DefaultStyle.php',

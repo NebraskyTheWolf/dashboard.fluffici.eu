@@ -8,6 +8,7 @@ use App\Mail\PasswordRecovery;
 use App\Mail\UserOtpMail;
 use App\Models\UserOtp;
 use Carbon\Carbon;
+use Coderflex\LaravelTurnstile\Rules\TurnstileCheck;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Contracts\Auth\Guard;
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Orchid\Platform\Models\User;
+use Orchid\Support\Facades\Toast;
+use Ramsey\Uuid\Uuid;
 use Random\RandomException;
 
 class LoginController extends Controller
@@ -72,6 +75,7 @@ class LoginController extends Controller
         $request->validate([
             'email'    => 'required|string',
             'password' => 'required|string',
+            'cf-turnstile-response' => ['required', new TurnstileCheck()],
         ]);
 
         $user = User::where('email', $request->input('email'));
@@ -250,12 +254,74 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Contracts\View\View The password recovery form view.
      */
-    public function password(Request $request)
+    public function password(Request $request): \Illuminate\Contracts\View\View
     {
+        $request->validate([
+            'cf-turnstile-response' => ['required', new TurnstileCheck()],
+        ]);
+
         return view('auth.recovery', [
             'token' => $request->token
         ]);
+    }
 
+    /**
+     * Show the recovery challenge form.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @return \Illuminate\Contracts\View\View The recovery challenge form view.
+     */
+    public function recoveryChallenge(Request $request): \Illuminate\Contracts\View\View
+    {
+        $request->validate([
+            'cf-turnstile-response' => ['required', new TurnstileCheck()],
+        ]);
+
+        return view('auth.request_new_password')
+            ->with('email', $request->query('email'));
+    }
+
+    public function recoveryChallengePost(Request $request): RedirectResponse
+    {
+        if ($request->has('email')) {
+            $user = User::where('email', $request->input('email'));
+
+            if ($user->exists()) {
+                $user = $user->first();
+                $this->generatePasswordResetCode($user);
+            }
+
+            Toast::success("If this email is linked to our database, you will receive a email soon.")
+                ->disableAutoHide();
+
+            return redirect()->route('login');
+        }
+
+        throw ValidationException::withMessages([
+            'email' => "Please enter a valid email.",
+        ]);
+    }
+
+    /**
+     * Generate password reset code
+     *
+     * @param \App\Models\User $user
+     *
+     * @return void
+     */
+    public function generatePasswordResetCode(User $user): void
+    {
+        $token = Uuid::uuid4()->toString();
+
+        // Save the token to database linked with the user.
+        $passwordRecovery = new \App\Models\PasswordRecovery();
+        $passwordRecovery->user_id = $user->id;
+        $passwordRecovery->token = $token;
+        $passwordRecovery->save();
+
+        // Send the reset code to the user's email.
+        Mail::to($user->email)->send(new PasswordRecovery($token));
     }
 
     /**
@@ -272,9 +338,17 @@ class LoginController extends Controller
             'token' => 'required|string'
         ]);
 
-        $token = PasswordRecovery::where('token', $request->input('token'));
+        $token = \App\Models\PasswordRecovery::where('token', $request->input('token'));
         if ($token->exists()) {
             $data = $token->first();
+            $user = User::where('id', $data->user_id)->first();
+
+            if ($user->isTerminated()) {
+                throw ValidationException::withMessages([
+                    'new_password' => 'Your account was terminated.',
+                ]);
+            }
+
             User::where('id', $data->user_id)->update([
                 'password' => Hash::make($request->input('new_password'))
             ]);

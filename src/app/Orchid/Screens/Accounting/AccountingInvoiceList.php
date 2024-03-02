@@ -4,6 +4,7 @@ namespace app\Orchid\Screens\Accounting;
 
 use App\Models\OrderInvoice;
 use App\Orchid\Layouts\InvoiceList;
+use Orchid\Screen\Action;
 use Orchid\Screen\Screen;
 
 class AccountingInvoiceList extends Screen
@@ -40,7 +41,7 @@ class AccountingInvoiceList extends Screen
     /**
      * The screen's action buttons.
      *
-     * @return \Orchid\Screen\Action[]
+     * @return Action[]
      */
     public function commandBar(): iterable
     {

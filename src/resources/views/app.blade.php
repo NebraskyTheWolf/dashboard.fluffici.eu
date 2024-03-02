@@ -91,6 +91,12 @@
 @stack('scripts')
 @yield('script')
 
+@if (\Illuminate\Support\Facades\Auth::check())
+    <input id="userId" type="number" value="{{ \Illuminate\Support\Facades\Auth::id() }}" hidden="">
+@else
+    <input id="userId" type="number" value="0" hidden="">
+@endif
+
 <script>
     const beamsClient = new PusherPushNotifications.Client({
         instanceId: "63e32cff-b20c-4c92-bb49-0e40cfd1dbe3",

@@ -19,7 +19,7 @@
                     </tr>
                     <tr>
                         <td class="content text-center">
-                            <p>You recently requested to reset a password for your on your {{ env('APP_NAME') }} account. Use the button below to reset it. This message will expire in 24 hours.</p>
+                            <p>You recently requested to reset a password for your on your Fluffici account. Use the button below to reset it. This message will expire in 24 hours.</p>
                         </td>
                     </tr>
                     <tr>
@@ -30,7 +30,7 @@
                                         <table cellpadding="0" cellspacing="0" border="0" class="bg-blue rounded w-auto">
                                             <tr>
                                                 <td align="center" valign="top" class="lh-1">
-                                                    <a href="{{ url(route('api.login.recovery', $token)) }}" class="btn bg-blue border-blue">
+                                                    <a href="{{ url(route('api.login.recovery')) }}?token={{ $token }}" class="btn bg-blue border-blue">
                                                         <span class="btn-span">Reset&nbsp;password</span>
                                                     </a>
                                                 </td>
@@ -43,7 +43,7 @@
                     </tr>
                     <tr>
                         <td class="content text-muted pt-0 text-center">
-                            Having trouble with the button above? Please copy this URL: <a href="{{ url(route('api.login.recovery', $token)) }}">{{ url(route('api.login.recovery', $token)) }}</a> and paste it into your browser. If you didn't request a password reset, please ignore this message.
+                            Having trouble with the button above? Please copy this URL: <a href="{{ url(route('api.login.recovery')) }}?token={{ $token }}">{{ url(route('api.login.recovery')) }}?token={{ $token }}</a> and paste it into your browser. If you didn't request a password reset, please ignore this message.
                         </td>
                     </tr>
                 </table>

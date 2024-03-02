@@ -8,13 +8,27 @@ $(document).ready(function($) {
         }
     })
 
-    const fiveMinutes = 60 * 30;
-    const display = document.getElementById('otp-expiration');
-    if (display !== null) {
-        setTimeout(() => {
-            startTimer(fiveMinutes, display);
-        }, 1500)
-    }
+
+    /**
+     * Represents a channel that listens for whisper 'ping' event and triggers a timer when received.
+     *
+     * @property {string} channel - The channel name to join.
+     * @property {function} listenForWhisper - A function to listen for the 'ping' whisper event
+     *                                         and execute the provided callback function.
+     * @property {function} startTimer - A function to start the timer.
+     * @property {function} display - The display element.
+     *
+     */
+    const channel = window.Echo.join(`countdown`).listenForWhisper('ping', (data) => {
+        const display = document.getElementById('otp-expiration');
+
+        if (display !== null) {
+            startTimer(data.pong, display);
+        }
+        console.log('Ping triggered! (foxing around giggles)')
+    })
+
+    setTimeout(() => channel.trigger('ping', { pong: 60 * 30 }), 1500)
 });
 
 /**

@@ -24,3 +24,7 @@ Broadcast::channel('presence-editor.{id}', function ($user, $slug) {
         'name' => $user->name
     ];
 });
+
+Broadcast::channel('countdown', function ($user) {
+    return true;
+});
