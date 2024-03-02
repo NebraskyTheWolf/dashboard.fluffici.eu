@@ -30,12 +30,12 @@ class LoginController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
-    | Login Controller
+    | Řadič Přihlášení
     |--------------------------------------------------------------------------
     |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
+    | Tento řadič zajišťuje ověřování uživatelů pro aplikaci a
+    | přesměrování je na domovskou obrazovku. Řadič používá trait
+    | pro pohodlné poskytnutí svých funkcí vašim aplikacím.
     |
     */
 
@@ -45,7 +45,7 @@ class LoginController extends Controller
     protected $guard;
 
     /**
-     * Create a new controller instance.
+     * Vytvoření nové instance řadiče.
      */
     public function __construct(Auth $auth)
     {
@@ -60,15 +60,15 @@ class LoginController extends Controller
     }
 
     /**
-     * Login user and redirect to appropriate route
+     * Přihlásit uživatele a přesměrovat na vhodnou trasu
      *
      * @param Request $request
-     * The incoming request
+     * Příchozí požadavek
      *
      * @return RedirectResponse|void
-     * A redirect response or void
+     * Přesměrování nebo void
      * @throws ValidationException
-     * If validation fails
+     * Pokud validace selže
      */
     public function login(Request $request)
     {
@@ -83,7 +83,7 @@ class LoginController extends Controller
             $data = $user->first();
             if ($data->isTerminated()) {
                 throw ValidationException::withMessages([
-                    'email' => 'Your account was terminated.',
+                    'email' => 'Váš účet byl ukončen.',
                 ]);
             }
         }
@@ -115,16 +115,16 @@ class LoginController extends Controller
         }
 
         throw ValidationException::withMessages([
-            'email' => 'The details you entered did not match our records. Please double-check and try again.',
+            'email' => 'Zadané údaje se neshodovaly s našimi záznamy. Zkontrolujte je a zkuste to znovu.',
         ]);
     }
 
     /**
-     * Generate and show one-time password (OTP) view.
+     * Generovat a zobrazit zobrazení jednorázového hesla (OTP).
      *
-     * @param Request $request The HTTP request object.
+     * @param Request $request HTTP požadavek.
      *
-     * @return Factory|View The generated view object.
+     * @return Factory|View Generovaný objekt zobrazení.
      */
     public function challenge(Request $request)
     {
@@ -132,13 +132,13 @@ class LoginController extends Controller
     }
 
     /**
-     * Validate and process the OTP token.
+     * Ověřit a zpracovat token OTP.
      *
-     * @param Request $request The HTTP request instance.
+     * @param Request $request Instance HTTP požadavku.
      *
-     * @return JsonResponse|RedirectResponse The response containing JSON data or a redirect response.
+     * @return JsonResponse|RedirectResponse Odpověď obsahující data JSON nebo přesměrování.
      *
-     * @throws ValidationException If the OTP token is invalid.
+     * @throws ValidationException Pokud je token OTP neplatný.
      */
     public function otp(Request $request)
     {
@@ -163,12 +163,12 @@ class LoginController extends Controller
         }
 
         throw ValidationException::withMessages([
-            'otp' => "The OTP token you entered is invalid.",
+            'otp' => "Zadaný token OTP je neplatný.",
         ]);
     }
 
     /**
-     * Send the login response.
+     * Odeslat přihlašovací odpověď.
      *
      * @param \Illuminate\Http\Request $request
      *
@@ -184,11 +184,11 @@ class LoginController extends Controller
     }
 
     /**
-     * Show the login form.
+     * Zobrazit formulář pro přihlášení.
      *
-     * @param Request $request The HTTP request object.
+     * @param Request $request HTTP požadavek.
      *
-     * @return \Illuminate\Contracts\View\View The login form view.
+     * @return \Illuminate\Contracts\View\View Formulář pro přihlášení.
      */
     public function showLoginForm(Request $request)
     {
@@ -206,11 +206,11 @@ class LoginController extends Controller
     }
 
     /**
-     * Reset the LockMe cookie.
+     * Obnovte cookie LockMe.
      *
-     * @param CookieJar $cookieJar The CookieJar instance for managing cookies.
+     * @param CookieJar $cookieJar Instance CookieJar pro správu cookie.
      *
-     * @return \Illuminate\Http\RedirectResponse The redirect response to the login page with the updated cookie.
+     * @return \Illuminate\Http\RedirectResponse Přesměrování na stránku přihlášení s aktualizovanou cookie.
      */
     public function resetCookieLockMe(CookieJar $cookieJar)
     {
@@ -228,11 +228,11 @@ class LoginController extends Controller
     }
 
     /**
-     * Logout the authenticated user.
+     * Odhlašte ověřeného uživatele.
      *
-     * @param Request $request The HTTP request object.
+     * @param Request $request HTTP požadavek.
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse The JSON response if the request wants JSON, otherwise the redirect response to the homepage.
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse JSON odpověď, pokud požadavek chce JSON, jinak přesměrování na hlavní stránku.
      */
     public function logout(Request $request)
     {
@@ -248,11 +248,11 @@ class LoginController extends Controller
     }
 
     /**
-     * Display the password recovery form.
+     * Zobrazte formulář pro obnovení hesla.
      *
-     * @param Request $request The HTTP request object.
+     * @param Request $request Objekt HTTP požadavku.
      *
-     * @return \Illuminate\Contracts\View\View The password recovery form view.
+     * @return \Illuminate\Contracts\View\View Pohled na formulář pro obnovení hesla.
      */
     public function password(Request $request): \Illuminate\Contracts\View\View
     {
@@ -266,11 +266,11 @@ class LoginController extends Controller
     }
 
     /**
-     * Show the recovery challenge form.
+     * Zobrazte formulář pro výzvu k obnovení.
      *
-     * @param Request $request The HTTP request object.
+     * @param Request $request Objekt HTTP požadavku.
      *
-     * @return \Illuminate\Contracts\View\View The recovery challenge form view.
+     * @return \Illuminate\Contracts\View\View Pohled na formulář pro výzvu k obnovení.
      */
     public function recoveryChallenge(Request $request): \Illuminate\Contracts\View\View
     {
@@ -292,19 +292,19 @@ class LoginController extends Controller
                 $this->generatePasswordResetCode($user);
             }
 
-            Toast::success("If this email is linked to our database, you will receive a email soon.")
+            Toast::success("Pokud je tento e-mail spojen s naší databází, brzy obdržíte e-mail.")
                 ->disableAutoHide();
 
             return redirect()->route('login');
         }
 
         throw ValidationException::withMessages([
-            'email' => "Please enter a valid email.",
+            'email' => "Zadejte prosím platný e-mail.",
         ]);
     }
 
     /**
-     * Generate password reset code
+     * Generování kódu pro obnovení hesla
      *
      * @param \App\Models\User $user
      *
@@ -314,22 +314,22 @@ class LoginController extends Controller
     {
         $token = Uuid::uuid4()->toString();
 
-        // Save the token to database linked with the user.
+        // Uložte token do databáze spojené s uživatelem.
         $passwordRecovery = new \App\Models\PasswordRecovery();
         $passwordRecovery->user_id = $user->id;
         $passwordRecovery->token = $token;
         $passwordRecovery->save();
 
-        // Send the reset code to the user's email.
+        // Odešlete uživateli resetovací kód e-mailem.
         Mail::to($user->email)->send(new PasswordRecovery($token));
     }
 
     /**
-     * Perform password recovery.
+     * Proveďte obnovení hesla.
      *
-     * @param Request $request The HTTP request object.
+     * @param Request $request Objekt HTTP požadavku.
      *
-     * @return \Illuminate\Http\RedirectResponse The login form redirect response on success, or throws a ValidationException on failure.
+     * @return \Illuminate\Http\RedirectResponse Přesměrování na formulář pro přihlášení v případě úspěchu, v případě selhání dojde k vyhození ValidationException.
      */
     public function recovery(Request $request)
     {
@@ -345,7 +345,7 @@ class LoginController extends Controller
 
             if ($user->isTerminated()) {
                 throw ValidationException::withMessages([
-                    'new_password' => 'Your account was terminated.',
+                    'new_password' => 'Váš účet byl ukončen.',
                 ]);
             }
 
@@ -358,15 +358,15 @@ class LoginController extends Controller
         }
 
         throw ValidationException::withMessages([
-            'new_password' => "Your password recovery token is invalid.",
+            'new_password' => "Váš token pro obnovení hesla je neplatný.",
         ]);
     }
 
     /**
-     * Generate a numeric token.
+     * Generovat číselný token.
      *
-     * @param int $length The length of the token (default: 4).
-     * @return string The generated numeric token.
+     * @param int $length Délka tokenu (ve výchozím nastavení: 4).
+     * @return string Vygenerovaný číselný token.
      * @throws RandomException
      */
     private function generateNumericToken(int $length = 4): string

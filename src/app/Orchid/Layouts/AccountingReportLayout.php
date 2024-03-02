@@ -30,25 +30,25 @@ class AccountingReportLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('download', 'Action')
+            TD::make('download', 'Akce')
                 ->render(function (AccountingDocument $reports) {
-                    return Link::make('Download')
+                    return Link::make('Stáhnout')
                         ->icon('bs.caret-down-square')
                         ->type(Color::SUCCESS)
                         ->download()
                         ->href(route('api.shop.report') . '?reportId=' . $reports->report_id . '&type=accounting');
                 }),
-            TD::make('report_id', 'Report ID')
+            TD::make('report_id', 'ID zprávy')
                 ->render(function (AccountingDocument $reports) {
                     return $reports->report_id;
                 }),
-            TD::make('created_at', 'Created At')
+            TD::make('created_at', 'Vytvořeno dne')
                 ->render(function (AccountingDocument $reports) {
                     return Carbon::parse($reports->created_at)->diffForHumans();
                 }),
-            TD::make('delete', 'Delete')
+            TD::make('delete', 'Smazat')
                 ->render(function (AccountingDocument $reports) {
-                    return Button::make('Delete')
+                    return Button::make('Smazat')
                         ->confirm(__('common.modal.confirm'))
                         ->method('delete', [
                             'reportId' => $reports->report_id
@@ -66,11 +66,11 @@ class AccountingReportLayout extends Table
 
     protected function textNotFound(): string
     {
-        return 'No monthly accounting report yet.';
+        return 'Dosud nebyla vytvořena žádná měsíční účetní zpráva.';
     }
 
     protected function subNotFound(): string
     {
-        return 'The next report will be automatically generated in ' . Carbon::now()->endOfMonth()->diffForHumans();
+        return 'Příští zpráva bude automaticky vygenerována ' . Carbon::now()->endOfMonth()->diffForHumans();
     }
 }

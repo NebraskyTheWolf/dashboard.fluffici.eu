@@ -2,11 +2,12 @@
 
 return [
 
-    'modal.confirm' => 'Are you sure to delete this? After you won\'t be able to access this resource.',
+    'modal.confirm' => 'Jste si jisti, že to chcete smazat? Poté nebudete mít přístup k tomuto zdroji.',
 
-    'modal.event.cancel' => 'Are you sure to cancel this event? You won\'t be able to undo this change!',
+    'modal.event.cancel' => 'Jste si jisti, že chcete zrušit tuto akci? Tuto změnu nebudete moci vrátit!',
 
-    'modal.order.type' => 'Are you sure to set this order as :type ?',
-    'modal.order.refund' => 'Are you sure to refund this order?',
+    'modal.order.type' => 'Jste si jisti, že chcete nastavit tuto objednávku jako :type ?',
+
+    'modal.order.refund' => 'Jste si jisti, že chcete vrátit tuto objednávku?',
 
 ];

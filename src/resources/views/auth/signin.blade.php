@@ -1,7 +1,7 @@
 <div class="mb-3">
 
     <label class="form-label text-white">
-        Email address
+        E-mailová adresa
     </label>
 
     {!!  \Orchid\Screen\Fields\Input::make('email')
@@ -11,20 +11,20 @@
         ->autofocus()
         ->autocomplete('email')
         ->inputmode('email')
-        ->placeholder('Enter your email')
+        ->placeholder('Zadejte svůj e-mail')
     !!}
 </div>
 
 <div class="mb-3">
     <label class="form-label w-100 text-white">
-        Password
+        Heslo
     </label>
 
     {!!  \Orchid\Screen\Fields\Password::make('password')
         ->required()
         ->autocomplete('current-password')
         ->tabindex(2)
-        ->placeholder('Enter your password')
+        ->placeholder('Zadejte své heslo')
     !!}
 </div>
 
@@ -46,13 +46,13 @@
             <input type="hidden" name="remember">
             <input type="checkbox" name="remember" value="true"
                    class="form-check-input" {{ !old('remember') || old('remember') === 'true'  ? 'checked' : '' }}>
-            <span class="form-check-label text-white"> Remember Me</span>
+            <span class="form-check-label text-white"> Zapamatuj si mě</span>
         </label>
     </div>
     <div class="col-md-6 col-xs-12">
         <button id="button-login" type="submit" class="btn btn-primary btn-block" tabindex="3">
             <x-orchid-icon path="bs.box-arrow-in-right" class="small me-2"/>
-            Login
+            Přihlásit se
         </button>
     </div>
 </div>

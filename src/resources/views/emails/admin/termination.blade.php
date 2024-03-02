@@ -14,12 +14,12 @@
                                     </td>
                                 </tr>
                             </table>
-                            <h1 class="text-center m-0 mt-md">Account termination</h1>
+                            <h1 class="text-center m-0 mt-md">Zrušení účtu</h1>
                         </td>
                     </tr>
                     <tr>
                         <td class="content text-center">
-                            <p>Your account got terminated because you was not respecting our <strong>Policies</strong>, Please refer to your superior admin.</p>
+                            <p>Váš účet byl zrušen, protože jste nedodržoval(a) naše <strong>Pravidla</strong>. Obraťte se prosím na svého vyššího administrátora.</p>
                         </td>
                     </tr>
                 </table>

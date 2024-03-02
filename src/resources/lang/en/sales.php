@@ -1,26 +1,26 @@
 <?php
 
 return [
-    'screen.title' => 'Sales Management',
-    'screen.button.add' => 'Add',
+    'screen.title' => 'Správa prodeje',
+    'screen.button.add' => 'Přidat',
 
-    'screen.edit.title' => 'Edit sale',
-    'screen.create.title' => 'Create new sale',
+    'screen.edit.title' => 'Upravit prodej',
+    'screen.create.title' => 'Vytvořit nový prodej',
 
-    'layout.title' => 'Sales Information',
+    'layout.title' => 'Informace o prodeji',
 
-    'input.product_id.title' => 'Select a product',
-    'input.product_id.placeholder' => 'Type the name of the product.',
+    'input.product_id.title' => 'Vyberte produkt',
+    'input.product_id.placeholder' => 'Zadejte název produktu.',
 
-    'input.reduction.title' => 'Reduction',
-    'input.reduction.placeholder' => 'Please set a percent 1% to :limit',
+    'input.reduction.title' => 'Sleva',
+    'input.reduction.placeholder' => 'Prosím nastavte procentuální slevu 1% do :limit',
 
-    'input.deleted_at.title' => 'Expiration',
+    'input.deleted_at.title' => 'Expirace',
 
-    'screen.button.create' => 'Create',
-    'screen.button.update' => 'Update',
-    'screen.button.delete' => 'Delete',
+    'screen.button.create' => 'Vytvořit',
+    'screen.button.update' => 'Aktualizovat',
+    'screen.button.delete' => 'Smazat',
 
-    'toast.created' => 'You created a sale',
-    'toast.removed' => 'You created a sale',
+    'toast.created' => 'Vytvořili jste prodej',
+    'toast.removed' => 'Vytvořili jste prodej',
 ];

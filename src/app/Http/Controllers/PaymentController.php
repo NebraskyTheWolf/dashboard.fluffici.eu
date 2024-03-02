@@ -16,13 +16,12 @@ use Ramsey\Uuid\Uuid;
 
 class PaymentController extends Controller
 {
-
     /**
-     * Process the payment for an order.
+     * Zpracuje platbu za objednávku.
      *
-     * @param Request $request The HTTP request object.
+     * @param Request $request Objekt HTTP požadavku.
      * @return JsonResponse
-     *   The JSON response indicating the payment status.
+     *   JSON odpověď indikující stav platby.
      */
     public function index(Request $request): JsonResponse
     {
@@ -33,8 +32,8 @@ class PaymentController extends Controller
         if ($orderId == null || $paymentType == null) {
             return response()->json([
                 'status' => false,
-                'error' => 'MISSING_ID',
-                'message' => 'No order ID was found.'
+                'error' => 'CHYBEJICI_ID',
+                'message' => 'Nebylo nalezeno žádné ID objednávky.'
             ]);
         }
 
@@ -42,8 +41,8 @@ class PaymentController extends Controller
         if (!$order->exists()) {
             return response()->json([
                 'status' => false,
-                'error' => 'INVALID_ORDER',
-                'message' => 'This order does not exists.'
+                'error' => 'NEPLATNA_OBJEDNAVKa',
+                'message' => 'Tato objednávka neexistuje.'
             ]);
         }
         $order = $order->first();
@@ -51,8 +50,8 @@ class PaymentController extends Controller
         if ($order->customer_id === null) {
             return response()->json([
                 'status' => false,
-                'error' => 'INVALID_ORDER',
-                'message' => 'The customerId is not present.'
+                'error' => 'NEPLATNA_OBJEDNAVKa',
+                'message' => 'Zákaznické ID není přítomno.'
             ]);
         }
 
@@ -65,8 +64,8 @@ class PaymentController extends Controller
                 if ($encodedData == null) {
                     return response()->json([
                         'status' => false,
-                        'error' => 'MISSING_VOUCHER',
-                        'message' => 'No voucher body was found.'
+                        'error' => 'CHYBEJICI_POUKAZ',
+                        'message' => 'Nebylo nalezeno tělo poukazu.'
                     ]);
                 }
 
@@ -74,8 +73,8 @@ class PaymentController extends Controller
                 if (!$storage->exists('security.cert')) {
                     return response()->json([
                         'status' => false,
-                        'error' => 'SIGNATURE_REJECTION',
-                        'message' => 'Unable to check the request signature.'
+                        'error' => 'ODMITNUTI_PODPISU',
+                        'message' => 'Nelze ověřit podpis požadavku.'
                     ]);
                 }
 
@@ -93,24 +92,24 @@ class PaymentController extends Controller
                         if ($voucherData->isExpired()) {
                             return response()->json([
                                 'status' => false,
-                                'error' => 'VOUCHER_EXPIRED',
-                                'message' => 'The voucher has expired.'
+                                'error' => 'POUKAZ_VYEXPIROVAN',
+                                'message' => 'Poukaz vypršel.'
                             ]);
                         }
 
                         if ($voucherData->isRestricted()) {
                             return response()->json([
                                 'status' => false,
-                                'error' => 'VOUCHER_REJECTION',
-                                'message' => 'The voucher was restricted by a administrator.'
+                                'error' => 'ODMITNUTI_POUKAZU',
+                                'message' => 'Poukaz byl zablokován administrátorem.'
                             ]);
                         }
 
                         if (!$voucherData->isCustomerAssigned($order->customer_id)) {
                             return response()->json([
                                 'status' => false,
-                                'error' => 'VOUCHER_REJECTION',
-                                'message' => 'The voucher is not assigned to the customer.'
+                                'error' => 'ODMITNUTI_POUKAZU',
+                                'message' => 'Poukaz není přiřazen zákazníkovi.'
                             ]);
                         }
 
@@ -123,7 +122,7 @@ class PaymentController extends Controller
                             $payment->order_id = $order->order_id;
                             $payment->status = 'PAID';
                             $payment->transaction_id = Uuid::uuid4();
-                            $payment->provider = 'Voucher #' . $voucherData->id;
+                            $payment->provider = 'Poukaz #' . $voucherData->id;
                             $payment->price = $product->getNormalizedPrice();
                             $payment->save();
 
@@ -131,11 +130,11 @@ class PaymentController extends Controller
                                 'status' => 'DELIVERED'
                             ]);
 
-                            event(new UpdateAudit('order_payment', 'Validated ' . substr($orderId, 0, 8) . ' payment with a voucher.', $request->input('username')));
+                            event(new UpdateAudit('order_payment', 'Ověřena ' . substr($orderId, 0, 8) . ' platba pomocí poukazu.', $request->input('username')));
 
                             return response()->json([
                                 'status' => true,
-                                'message' => "Remaining balance " . number_format(($voucherData->money - $product->price)) . " Kc"
+                                'message' => "Zbývající zůstatek " . number_format(($voucherData->money - $product->price)) . " Kc"
                             ]);
                         } else {
                             if (!$voucherData->money <= 0) {
@@ -149,40 +148,40 @@ class PaymentController extends Controller
                                 $payment->order_id = $order->order_id;
                                 $payment->status = 'PARTIALLY_PAID';
                                 $payment->transaction_id = Uuid::uuid4();
-                                $payment->provider = '#1 Voucher #' . $voucherData->id;
+                                $payment->provider = '#1 Poukaz #' . $voucherData->id;
                                 $payment->price = $voucherData->money ;
                                 $payment->save();
 
                                 return response()->json([
                                     'status' => true,
-                                    'message' => "Remaining amount to pay " . number_format(($calculatedPrice)) . " Kc ( Partially Paid )"
+                                    'message' => "Zbývající částka k úhradě " . number_format(($calculatedPrice)) . " Kc (Částečně zaplaceno)"
                                 ]);
                             } else {
                                 return response()->json([
                                     'status' => false,
-                                    'error' => 'VOUCHER_REJECTION',
-                                    'message' => 'The voucher has no remaining balance.'
+                                    'error' => 'ODMITNUTI_POUKAZU',
+                                    'message' => 'Poukaz nemá žádný zbývající zůstatek.'
                                 ]);
                             }
                         }
                     } else {
                         return response()->json([
                             'status' => false,
-                            'error' => 'VOUCHER_REJECTION',
-                            'message' => 'The voucher is invalid.'
+                            'error' => 'ODMITNUTI_POUKAZU',
+                            'message' => 'Poukaz je neplatný.'
                         ]);
                     }
                 } else if ($result == 0) {
                     return response()->json([
                         'status' => false,
-                        'error' => 'VOUCHER_REJECTION',
-                        'message' => 'The voucher is tampered, DO NOT USE!'
+                        'error' => 'ODMITNUTI_POUKAZU',
+                        'message' => 'Bylo manipulováno s poukazem, NEPOUŽÍVEJTE!'
                     ]);
                 } else {
                     return response()->json([
                         'status' => false,
-                        'error' => 'VOUCHER_REJECTION',
-                        'message' => 'Unable to verify the signature.'
+                        'error' => 'ODMITNUTI_POUKAZU',
+                        'message' => 'Nelze ověřit podpis.'
                     ]);
                 }
             }
@@ -198,7 +197,7 @@ class PaymentController extends Controller
                     $payment->order_id = $order->order_id;
                     $payment->status = 'PAID';
                     $payment->transaction_id = $partialPayment->transaction_id;
-                    $payment->provider = '#2 Cash (' . $price . ' Kc)';
+                    $payment->provider = '#2 Hotovost (' . $price . ' Kc)';
                     $payment->price = $price;
 
                 } else {
@@ -206,7 +205,7 @@ class PaymentController extends Controller
                     $payment->order_id = $order->order_id;
                     $payment->status = 'PAID';
                     $payment->transaction_id = Uuid::uuid4();
-                    $payment->provider = 'Cash';
+                    $payment->provider = 'Hotovost';
                     $payment->price = $product->getNormalizedPrice();
                 }
 
@@ -216,30 +215,29 @@ class PaymentController extends Controller
                     'status' => 'DELIVERED'
                 ]);
 
-                event(new UpdateAudit('order_payment', 'Validated ' . substr($orderId, 0, 8) . ' payment with cash.', $request->input('username')));
+                event(new UpdateAudit('order_payment', 'Ověřena ' . substr($orderId, 0, 8) . ' platba hotově.', $request->input('username')));
 
                 return response()->json([
                     'status' => true,
-                    'message' => 'The payment was successful'
+                    'message' => 'Platba byla úspěšná'
                 ]);
             }
             default:
             {
                 return response()->json([
                     'status' => false,
-                    'error' => 'BAD_REQUEST',
-                    'message' => 'The payment request is denied.'
+                    'error' => 'ŠPATNÝ_POŽADAVEK',
+                    'message' => 'Platba je zamítnuta.'
                 ]);
             }
         }
     }
 
-
     /**
-     * Fetches an order from the database based on the given order ID.
+     * Získává objednávku z databáze na základě daného ID objednávky.
      *
-     * @param Request $request The HTTP request object.
-     * @return JsonResponse The JSON response containing the order details.
+     * @param Request $request Objekt HTTP požadavku.
+     * @return JsonResponse JSON odpověď obsahující detaily objednávky.
      */
     public function fetchOrder(Request $request): JsonResponse
     {
@@ -247,8 +245,8 @@ class PaymentController extends Controller
         if ($orderId == null) {
             return response()->json([
                 'status' => false,
-                'error' => 'MISSING_ID',
-                'message' => 'No order ID was found.'
+                'error' => 'CHYBEJICI_ID',
+                'message' => 'Nebylo nalezeno žádné ID objednávky.'
             ]);
         }
 
@@ -264,8 +262,8 @@ class PaymentController extends Controller
                 || $orderData->status == "DELIVERED") {
                 return response()->json([
                     'status' => false,
-                    'error' => 'ORDER_ALREADY_PROCESSED',
-                    'message' => 'This order has been already ' . strtolower($orderData->status) .' ' . \Carbon\Carbon::parse($orderData->updated_at)->diffForHumans() . '.'
+                    'error' => 'OBJEDNAVKa_JIZ_ZPRACOVANA',
+                    'message' => 'Tato objednávka byla již ' . strtolower($orderData->status) .' ' . \Carbon\Carbon::parse($orderData->updated_at)->diffForHumans() . '.'
                 ]);
             }
 
@@ -294,17 +292,17 @@ class PaymentController extends Controller
         } else {
             return response()->json([
                 'status' => false,
-                'error' => 'ORDER_NOT_FOUND',
-                'message' => 'This order does not exists in our records.'
+                'error' => 'OBJEDNAVKa_NEBYLA_NALEZENA',
+                'message' => 'Tato objednávka neexistuje v našich záznamech.'
             ]);
         }
     }
 
     /**
-     * Refunds an order based on the given order ID.
+     * Vrátí objednávku na základě daného ID objednávky.
      *
-     * @param Request $request The HTTP request object.
-     * @return JsonResponse The JSON response indicating the refund status.
+     * @param Request $request Objekt HTTP požadavku.
+     * @return JsonResponse JSON odpověď indikující stav vrácení.
      */
     public function refund(Request $request): JsonResponse
     {
@@ -312,8 +310,8 @@ class PaymentController extends Controller
         if($orderId == null) {
             return response()->json([
                 'status' => false,
-                'error' => 'MISSING_ID',
-                'message' => 'No order ID was found.'
+                'error' => 'CHYBEJICI_ID',
+                'message' => 'Nebylo nalezeno žádné ID objednávky.'
             ]);
         }
 
@@ -321,8 +319,8 @@ class PaymentController extends Controller
         if (!$order->exists()) {
             return response()->json([
                 'status' => false,
-                'error' => 'INVALID_ORDER',
-                'message' => 'This order does not exist.'
+                'error' => 'NEPLATNA_OBJEDNAVKA',
+                'message' => 'Tato objednávka neexistuje.'
             ]);
         }
         $order = $order->first();
@@ -330,22 +328,20 @@ class PaymentController extends Controller
         if ($order->status === "REFUNDED") {
             return response()->json([
                 'status' => false,
-                'error' => 'INVALID_ORDER',
-                'message' => 'This order was already refunded.'
+                'error' => 'NEPLATNA_OBJEDNAVKA',
+                'message' => 'Tato objednávka byla již vrácena.'
             ]);
         }
-
-        $order->update(['status' => 'REFUNDED']);
 
         $currentPayment = OrderPayment::where('order_id', $orderId)->where('status', 'PAID');
         if ($currentPayment->exists()) {
             $currentPayment = $currentPayment->first();
 
-            if (str_contains($currentPayment->provider, 'Voucher')) {
+            if (str_contains($currentPayment->provider, 'Poukaz')) {
                 return response()->json([
                     'status' => false,
-                    'error' => 'NOT_REFUNDABLE',
-                    'message' => 'The order was paid with a voucher code and this order is not refundable.'
+                    'error' => 'NENI_VRATITELNE',
+                    'message' => 'Objednávka byla zaplacena pomocí kódu poukazu a tato objednávka není vratitelná.'
                 ]);
             }
 
@@ -357,26 +353,28 @@ class PaymentController extends Controller
             $payment->price = $currentPayment->price;
             $payment->save();
 
-            event(new UpdateAudit('order_refund', 'Refunded ' . substr($orderId, 0, 8) . ' order.', $request->input('username')));
+            event(new UpdateAudit('order_refund', 'Vrácena ' . substr($orderId, 0, 8) . ' objednávka.', $request->input('username')));
+
+            $order->update(['status' => 'REFUNDED']);
 
             return response()->json([
                 'status' => true,
-                'message' => 'Order has been refunded successfully.'
+                'message' => 'Objednávka byla úspěšně vrácena.'
             ]);
         } else {
             return response()->json([
                 'status' => false,
-                'error' => 'ORDER_NOT_PAID',
-                'message' => 'The order was not paid yet.'
+                'error' => 'OBJEDNAVKA_NEPLACENA',
+                'message' => 'Tato objednávka nebyla ještě zaplacena.'
             ]);
         }
     }
 
     /**
-     * Cancels an order in the database based on the given order ID.
+     * Zruší objednávku v databázi na základě daného ID objednávky.
      *
-     * @param Request $request The HTTP request object.
-     * @return JsonResponse The JSON response indicating the status and message of the cancellation.
+     * @param Request $request Objekt HTTP požadavku.
+     * @return JsonResponse JSON odpověď indikující stav a zprávu o zrušení.
      */
     public function cancel(Request $request): JsonResponse
     {
@@ -384,8 +382,8 @@ class PaymentController extends Controller
         if ($orderId == null) {
             return response()->json([
                 'status' => false,
-                'error' => 'MISSING_ID',
-                'message' => 'No order ID was found.'
+                'error' => 'CHYBEJICI_ID',
+                'message' => 'Nebylo nalezeno žádné ID objednávky.'
             ]);
         }
 
@@ -393,8 +391,8 @@ class PaymentController extends Controller
         if (!$order->exists()) {
             return response()->json([
                 'status' => false,
-                'error' => 'INVALID_ORDER',
-                'message' => 'This order does not exist.'
+                'error' => 'NEPLATNA_OBJEDNAVKA',
+                'message' => 'Tato objednávka neexistuje.'
             ]);
         }
 
@@ -403,25 +401,25 @@ class PaymentController extends Controller
         if ($order->status === "CANCELLED") {
             return response()->json([
                 'status' => false,
-                'error' => 'INVALID_ORDER',
-                'message' => 'This order was already cancelled.'
+                'error' => 'NEPLATNA_OBJEDNAVKA',
+                'message' => 'Tato objednávka byla již zrušena.'
             ]);
         }
 
         $order->update(['status' => 'CANCELLED']);
 
-        event(new UpdateAudit('order_cancel', 'Cancelled ' . substr($orderId, 0, 8) . ' order.', $request->input('username')));
+        event(new UpdateAudit('order_cancel', 'Zrušena ' . substr($orderId, 0, 8) . ' objednávka.', $request->input('username')));
 
         return response()->json([
             'status' => true,
-            'message' => 'Order has been cancelled successfully.'
+            'message' => 'Objednávka byla úspěšně zrušena.'
         ]);
     }
 
     /**
-     * Checks if the given order is fully paid.
+     * Zkontroluje, zda je daná objednávka plně zaplacena.
      *
-     * @param string $orderId The order ID.
+     * @param string $orderId ID objednávky.
      * @return bool
      */
     public function isOrderFullyPaid(string $orderId): bool
@@ -429,7 +427,7 @@ class PaymentController extends Controller
         $orderPayments = OrderPayment::where('order_id', $orderId)->get();
         $orderProducts = OrderedProduct::where('order_id', $orderId)->get();
 
-        // No payments means order is obviously not fully paid.
+        // Žádné platby znamenají, že objednávka je zřejmě nezaplacena.
         if($orderPayments->isEmpty())
             return false;
 

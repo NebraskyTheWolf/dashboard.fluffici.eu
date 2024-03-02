@@ -2,83 +2,83 @@
 
 return [
     // UserListLayout.php
-    'screen.user.name' => 'Username',
+    'screen.user.name' => 'Uživatelské jméno',
     'screen.user.email' => 'Email',
-    'screen.user.email.placeholder' => 'example@fluffici.eu',
-    'screen.user.created' => 'Created at',
-    'screen.user.updated_at' => 'Last update',
-    'screen.user.actions.title' => 'Actions',
-    'screen.user.actions.submenu.edit' => 'Edit',
-    'screen.user.actions.submenu.delete' => 'Delete',
-    'screen.user.actions.submenu.delete.confirm' => 'Once the account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.',
+    'screen.user.email.placeholder' => 'priklad@fluffici.eu',
+    'screen.user.created' => 'Vytvořeno',
+    'screen.user.updated_at' => 'Poslední aktualizace',
+    'screen.user.actions.title' => 'Akce',
+    'screen.user.actions.submenu.edit' => 'Upravit',
+    'screen.user.actions.submenu.delete' => 'Smazat',
+    'screen.user.actions.submenu.delete.confirm' => 'Jakmile je účet smazán, všechny jeho zdroje a data budou trvale smazány. Před smazáním účtu si stáhněte jakákoliv data nebo informace, které chcete zachovat.',
 
     // UserPasswordLayout.php
-    'screen.user.password.title' => 'Password',
-    'screen.user.password.placeholder.one' => 'Leave empty to keep current password',
-    'screen.user.password.placeholder.two' => 'Enter the password to be set',
+    'screen.user.password.title' => 'Heslo',
+    'screen.user.password.placeholder.one' => 'Ponechte prázdné pro zachování současného hesla',
+    'screen.user.password.placeholder.two' => 'Zadejte heslo, které má být nastaveno',
 
     // UserRoleLayout.php
-    'screen.user.roles.title' => 'Roles',
-    'screen.user.roles.help' => 'Specify which groups this account should belong to',
+    'screen.user.roles.title' => 'Role',
+    'screen.user.roles.help' => 'Určete, ke kterým skupinám by tento účet měl patřit',
 
     // ProfilePasswordLayout.php
-    'screen.user.old_password.title' => 'Current password',
-    'screen.user.old_password.help' => 'This is your password set at the moment.',
-    'screen.user.old_password.placeholder' => 'Enter the old password',
+    'screen.user.old_password.title' => 'Současné heslo',
+    'screen.user.old_password.help' => 'To je vaše heslo nastavené v tuto chvíli.',
+    'screen.user.old_password.placeholder' => 'Zadejte staré heslo',
 
-    'screen.user.new_password.title' => 'New password',
-    'screen.user.new_password.placeholder' => 'Enter the current password',
+    'screen.user.new_password.title' => 'Nové heslo',
+    'screen.user.new_password.placeholder' => 'Zadejte současné heslo',
 
-    'screen.user.confirm_password.title' => 'Confirm new password',
-    'screen.user.confirm_password.help' => 'A good password is at least 15 characters or at least 8 characters long, including a number and a lowercase letter.',
+    'screen.user.confirm_password.title' => 'Potvrzení nového hesla',
+    'screen.user.confirm_password.help' => 'Dobré heslo má alespoň 15 znaků nebo alespoň 8 znaků, včetně čísla a malého písmena.',
 
-    'screen.user.common_password.placeholder' => 'Enter the current password',
+    'screen.user.common_password.placeholder' => 'Zadejte současné heslo',
 
     // UserEditScreen
-    'screen.edit.title' => 'Edit User',
-    'screen.edit.title.create' => 'Create User',
-    'screen.edit.descriptions' => 'User profile and privileges, including their associated role.',
+    'screen.edit.title' => 'Upravit uživatele',
+    'screen.edit.title.create' => 'Vytvořit uživatele',
+    'screen.edit.descriptions' => 'Profil a oprávnění uživatele, včetně přidružené role.',
 
-    'screen.edit.button.remove' => 'Remove',
-    'screen.edit.button.save' => 'Save',
+    'screen.edit.button.remove' => 'Odebrat',
+    'screen.edit.button.save' => 'Uložit',
 
-    'screen.edit.layout.information.title' => 'Profile Information',
-    'screen.edit.layout.information.descriptions' => 'Update your account\'s profile information and email address.',
+    'screen.edit.layout.information.title' => 'Informace o profilu',
+    'screen.edit.layout.information.descriptions' => 'Aktualizujte informace o profilu a e-mailové adrese vašeho účtu.',
 
-    'screen.edit.layout.password.title' => 'Password',
-    'screen.edit.layout.password.descriptions' => 'Ensure your account is using a long, random password to stay secure.',
+    'screen.edit.layout.password.title' => 'Heslo',
+    'screen.edit.layout.password.descriptions' => 'Ujistěte se, že váš účet používá dlouhé, náhodné heslo pro udržení bezpečnosti.',
 
-    'screen.edit.layout.roles.title' => 'Roles',
-    'screen.edit.layout.roles.descriptions' => 'A Role defines a set of tasks a user assigned the role is allowed to perform.',
+    'screen.edit.layout.roles.title' => 'Role',
+    'screen.edit.layout.roles.descriptions' => 'Role definuje soubor úkolů, které uživatel přiřazený roli smí provádět.',
 
-    'screen.edit.layout.permissions.title' => 'Permissions',
-    'screen.edit.layout.permissions.descriptions' => 'Allow the user to perform some actions that are not provided for by his roles',
+    'screen.edit.layout.permissions.title' => 'Oprávnění',
+    'screen.edit.layout.permissions.descriptions' => 'Povolte uživateli provádět některé akce, které nejsou poskytnuty jeho rolemi',
 
-    'screen.edit.toast.updated' => 'User was saved.',
-    'screen.edit.toast.removed' => 'User was removed.',
+    'screen.edit.toast.updated' => 'Uživatel byl uložen.',
+    'screen.edit.toast.removed' => 'Uživatel byl odstraněn.',
 
     // UserListScreen
-    'screen.list.title' => 'User Management',
-    'screen.list.descriptions' => 'A comprehensive list of all registered users, including their profiles and privileges.',
-    'screen.list.button.invite' => 'Invite',
+    'screen.list.title' => 'Správa uživatelů',
+    'screen.list.descriptions' => 'Komplexní seznam všech registrovaných uživatelů, včetně jejich profilů a oprávnění.',
+    'screen.list.button.invite' => 'Pozvat',
 
-    'screen.list.toast.save' => 'User was saved',
-    'screen.list.toast.remove' => 'User was removed',
+    'screen.list.toast.save' => 'Uživatel byl uložen',
+    'screen.list.toast.remove' => 'Uživatel byl odstraněn',
 
     // UserProfileScreen
-    'screen.profile.title' => 'My Account',
-    'screen.profile.descriptions' => 'Update your account details such as name, email address and password',
+    'screen.profile.title' => 'Můj účet',
+    'screen.profile.descriptions' => 'Aktualizujte podrobnosti o vašem účtu, jako je jméno, e-mailová adresa a heslo',
 
-    'screen.profile.button.back' => 'Back to my account',
-    'screen.profile.button.logout' => 'Logout',
-    'screen.profile.button.save' => 'Save',
+    'screen.profile.button.back' => 'Zpět na můj účet',
+    'screen.profile.button.logout' => 'Odhlásit se',
+    'screen.profile.button.save' => 'Uložit',
 
-    'screen.profile.layout.information.title' => 'Profile Information',
-    'screen.profile.layout.information.descriptions' => 'Update your account\'s profile information and email address.',
+    'screen.profile.layout.information.title' => 'Informace o profilu',
+    'screen.profile.layout.information.descriptions' => 'Aktualizujte informace o profilu a e-mailové adrese vašeho účtu.',
 
-    'screen.profile.layout.password.title' => 'Update Password',
-    'screen.profile.layout.password.descriptions' => 'Ensure your account is using a long, random password to stay secure.',
+    'screen.profile.layout.password.title' => 'Aktualizovat heslo',
+    'screen.profile.layout.password.descriptions' => 'Ujistěte se, že váš účet používá dlouhé, náhodné heslo pro udržení bezpečnosti.',
 
-    'screen.profile.toast.saved' => 'Profile updated.',
-    'screen.profile.toast.password_changed' => 'Password changed.',
+    'screen.profile.toast.saved' => 'Profil byl aktualizován.',
+    'screen.profile.toast.password_changed' => 'Heslo bylo změněno.',
 ];

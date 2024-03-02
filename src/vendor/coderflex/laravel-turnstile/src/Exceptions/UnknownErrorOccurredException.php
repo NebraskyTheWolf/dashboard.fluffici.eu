@@ -4,7 +4,7 @@ namespace Coderflex\LaravelTurnstile\Exceptions;
 
 use Exception;
 
-class UnkownErrorOccuredException extends Exception
+class UnknownErrorOccurredException extends Exception
 {
     protected int $status = 500;
 }

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="cs">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport"
@@ -7,14 +7,14 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
-        <title>404 Not Found</title>
+        <title>404 Nenalezeno</title>
     </head>
     <body style="user-select: none; -moz-user-select: none; -ms-user-select: none; -webkit-user-select: none;">
         <div class="empty">
             <div class="empty-header">403</div>
-            <p class="empty-title">Oops… You just found an error page</p>
+            <p class="empty-title">Jejda… Našli jste chybovou stránku</p>
             <p class="empty-subtitle text-secondary">
-                You don't have the permission to access this resource.
+                Nemáte oprávnění přistupovat k tomuto zdroji.
             </p>
             <div class="empty-action">
                 <a href="https://dashboard.fluffici.eu/" class="btn btn-primary">
@@ -24,7 +24,7 @@
                         <path d="M5 12l6 6" />
                         <path d="M5 12l6 -6" />
                     </svg>
-                    Take me home
+                    Vraťte mě domů
                 </a>
             </div>
         </div>

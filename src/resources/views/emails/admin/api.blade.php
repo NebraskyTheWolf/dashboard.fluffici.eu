@@ -10,16 +10,16 @@
                             <table class="icon-lg" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td valign="middle" align="center">
-                                        <img src="{{ url('/icons/api.png') }}" class=" va-middle" width="40" height="40" alt="lock-open" />
+                                        <img src="{{ url('/icons/api.png') }}" class=" va-middle" width="40" height="40" alt="zamknění-otevřeno" />
                                     </td>
                                 </tr>
                             </table>
-                            <h1 class="text-center m-0 mt-md">API Login</h1>
+                            <h1 class="text-center m-0 mt-md">API Přihlášení</h1>
                         </td>
                     </tr>
                     <tr>
                         <td class="content text-center">
-                            <p>You receive this email because you logged on via the API at {{ \Carbon\Carbon::now() }} if this was made on your behalf please lock down the API access on your account settings!</p>
+                            <p>Tento email dostáváte, protože jste se přihlásili prostřednictvím API v {{ \Carbon\Carbon::now() }} pokud to bylo provedeno za vás, prosím zablokujte přístup k API ve vašem nastavení účtu!</p>
                         </td>
                     </tr>
                 </table>

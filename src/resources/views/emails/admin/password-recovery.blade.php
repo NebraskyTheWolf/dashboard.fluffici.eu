@@ -14,12 +14,12 @@
                                     </td>
                                 </tr>
                             </table>
-                            <h1 class="text-center m-0 mt-md">Reset Password Instruction</h1>
+                            <h1 class="text-center m-0 mt-md">Instrukce pro Obnovení Hesla</h1>
                         </td>
                     </tr>
                     <tr>
                         <td class="content text-center">
-                            <p>You recently requested to reset a password for your on your Fluffici account. Use the button below to reset it. This message will expire in 24 hours.</p>
+                            <p>Na účtu Fluffici jste nedávno požadovali resetování hesla. Použijte tlačítko níže k jeho resetování. Tato zpráva vyprší za 24 hodin.</p>
                         </td>
                     </tr>
                     <tr>
@@ -31,7 +31,7 @@
                                             <tr>
                                                 <td align="center" valign="top" class="lh-1">
                                                     <a href="{{ url(route('api.login.recovery')) }}?token={{ $token }}" class="btn bg-blue border-blue">
-                                                        <span class="btn-span">Reset&nbsp;password</span>
+                                                        <span class="btn-span">Resetovat&nbsp;heslo</span>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -43,7 +43,7 @@
                     </tr>
                     <tr>
                         <td class="content text-muted pt-0 text-center">
-                            Having trouble with the button above? Please copy this URL: <a href="{{ url(route('api.login.recovery')) }}?token={{ $token }}">{{ url(route('api.login.recovery')) }}?token={{ $token }}</a> and paste it into your browser. If you didn't request a password reset, please ignore this message.
+                            Máte potíže s výše uvedeným tlačítkem? Zkopírujte prosím tuto URL: <a href="{{ url(route('api.login.recovery')) }}?token={{ $token }}">{{ url(route('api.login.recovery')) }}?token={{ $token }}</a> a vložte ji do svého prohlížeče. Pokud jste nežádali o resetování hesla, ignorujte prosím tuto zprávu.
                         </td>
                     </tr>
                 </table>

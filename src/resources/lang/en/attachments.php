@@ -1,14 +1,14 @@
 <?php
 
 return [
-    'table.attached_by' => 'Attached by',
-    'table.tag' => 'Tag',
-    'table.reported' => 'Reported',
-    'table.reported.no_records' => 'No records',
-    'table.reported.one' => 'Reported',
-    'table.reported.two' => 'Reported + EUCD',
-    'table.created_at' => 'Created at',
+    'table.attached_by' => 'Přiložil',
+    'table.tag' => 'Štítek',
+    'table.reported' => 'Nahlášeno',
+    'table.reported.no_records' => 'Žádné záznamy',
+    'table.reported.one' => 'Nahlášeno',
+    'table.reported.two' => 'Nahlášeno + EUCD',
+    'table.created_at' => 'Vytvořeno dne',
 
-    'screen.title' => 'Attachments',
-    'screen.button.new' => 'New'
+    'screen.title' => 'Přílohy',
+    'screen.button.new' => 'Nový'
 ];

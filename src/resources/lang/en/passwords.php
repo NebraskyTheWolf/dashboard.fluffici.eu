@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'reset' => 'Your password has been reset.',
-    'sent' => 'We have emailed your password reset link.',
-    'throttled' => 'Please wait before retrying.',
-    'token' => 'This password reset token is invalid.',
-    'user' => "We can't find a user with that email address.",
+    'reset' => 'Vaše heslo bylo resetováno.',
+    'sent' => 'Odkaz pro resetování hesla jsme vám poslali e-mailem.',
+    'throttled' => 'Prosím, vyčkejte než zkuste znovu.',
+    'token' => 'Tento token pro resetování hesla je neplatný.',
+    'user' => "Nemůžeme najít uživatele s touto emailovou adresou.",
 
 ];

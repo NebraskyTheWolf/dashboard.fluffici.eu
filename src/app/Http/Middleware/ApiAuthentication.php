@@ -10,17 +10,17 @@ use Symfony\Component\HttpFoundation\Response;
 class ApiAuthentication
 {
     /**
-     * Handle the request.
+     * Zpracujte požadavek.
      *
-     * This method handles the incoming request by performing the necessary checks for authentication
-     * and permission access. If the authentication fails or the user does not have the required permission,
-     * an appropriate response is returned. Otherwise, the request is processed and passed on to the next
-     * middleware or route handler.
+     * Tato metoda zpracovává příchozí požadavek provedením nezbytných kontrol pro ověření pravosti
+     * a přístup k oprávnění. Pokud ověření selže nebo uživatel nemá požadované oprávnění,
+     * vrátí se příslušná odpověď. V opačném případě je požadavek zpracován a předán dalšímu
+     * middleware nebo obsluze trasy.
      *
-     * @param Request $request The incoming request object.
-     * @param \Closure $next The closure representing the next middleware or route handler.
-     * @param string $permission The required permission for the operation.
-     * @return \Illuminate\Http\Response The response object.
+     * @param Request $request Příchozí objekt požadavku.
+     * @param \Closure $next Uzavření reprezentující další middleware nebo obsluhu trasy.
+     * @param string $permission Vyžadované oprávnění pro operaci.
+     * @return \Illuminate\Http\Response Objekt odpovědi.
      */
     public function handle(Request $request, Closure $next, string $permission): Response
     {
@@ -29,7 +29,7 @@ class ApiAuthentication
             return response()->json([
                 'status' => false,
                 'error' => 'AUTHENTICATION_TOKEN',
-                'message' => 'No bearer token found.'
+                'message' => 'Nenalezen žádný bearer token.'
             ]);
         }
 
@@ -38,7 +38,7 @@ class ApiAuthentication
             return response()->json([
                 'status' => false,
                 'error' => 'AUTHENTICATION_TOKEN',
-                'message' => 'Invalid bearer token.'
+                'message' => 'Neplatný bearer token.'
             ]);
         }
 
@@ -47,16 +47,16 @@ class ApiAuthentication
             return response()->json([
                 'status' => false,
                 'error' => 'AUTHENTICATION_TOKEN',
-                'message' => 'Your account is terminated.'
+                'message' => 'Váš účet je ukončen.'
             ]);
         }
 
-        // Permission blocked
+        // Oprávnění zablokováno
         if (!$token->getUser()->hasAccess($permission)) {
             return response()->json([
                 'status' => false,
                 'error' => 'PERMISSION_DENIED',
-                'message' => 'You don\'t have the permission to perform this operation.'
+                'message' => 'Nemáte oprávnění provést tuto operaci.'
             ]);
         }
 

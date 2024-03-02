@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="cs">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport"
@@ -7,14 +7,14 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
-        <title>404 Not Found</title>
+        <title>404 Nenalezeno</title>
     </head>
     <body style="user-select: none; -moz-user-select: none; -ms-user-select: none; -webkit-user-select: none;">
         <div class="empty">
             <div class="empty-header">500</div>
-            <p class="empty-title">Oops… You just found an error page</p>
+            <p class="empty-title">Ach jo… Našli jste právě stránku s chybou</p>
             <p class="empty-subtitle text-secondary">
-                The server got a internal error.
+                Server zaznamenal interní chybu.
             </p>
 
             <div class="empty-action">
@@ -25,7 +25,7 @@
                         <path d="M5 12l6 6" />
                         <path d="M5 12l6 -6" />
                     </svg>
-                    Take me home
+                    Vezměte mě domů
                 </a>
             </div>
         </div>

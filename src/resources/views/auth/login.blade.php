@@ -1,8 +1,8 @@
 @extends('auth')
-@section('title', 'Sign in to your account')
+@section('title', 'Přihlaste se do svého účtu')
 
 @section('content')
-    <h1 class="h4 text-white mb-4">Sign in to your account</h1>
+    <h1 class="h4 text-white mb-4">Přihlaste se do svého účtu</h1>
 
     <form class="m-t-md"
           role="form"

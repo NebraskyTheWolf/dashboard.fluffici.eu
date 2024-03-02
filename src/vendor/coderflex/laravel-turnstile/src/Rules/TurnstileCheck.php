@@ -9,7 +9,12 @@ use Illuminate\Contracts\Validation\ValidationRule;
 class TurnstileCheck implements ValidationRule
 {
     /**
-     * Run the validation rule.
+     * Validate the given attribute value using LaravelTurnstile.
+     *
+     * @param string $attribute The name of the attribute being validated.
+     * @param mixed $value The value being validated.
+     * @param Closure $fail The callback function to be executed if the validation fails.
+     * @return void
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {

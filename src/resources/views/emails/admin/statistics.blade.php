@@ -10,7 +10,7 @@
                             <table class="row row-flex" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td class="col text-mobile-center text-right pl-md">
-                                        <span class="font-strong font-lg">Weekly Update for Fluffici</span><br />
+                                        <span class="font-strong font-lg">Týdenní aktualizace pro Fluffici</span><br />
                                         <span class="text-muted">{{ $range }}</span>
                                     </td>
                                 </tr>
@@ -19,7 +19,7 @@
                     </tr>
                     <tr>
                         <td class="content">
-                            <h4 class="mb-xl">Statistics</h4>
+                            <h4 class="mb-xl">Statistiky</h4>
                             <table class="row" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td class="col text-center va-top">
@@ -31,7 +31,7 @@
                                                             <td width="80" height="80" style="background: url('https://dashboard.fluffici.eu/chart-donuts/red/{{ $percentage }}.png'); background-size: 100%;" valign="center" class="text-default text-center">
                                                                 <div class="h4 m-0 text-blue lh-1">
                                                                     {{ $vists }}
-                                                                    <div class="text-muted font-normal font-sm mt-xs">of {{ $vistsPrevious }}</div>
+                                                                    <div class="text-muted font-normal font-sm mt-xs">z {{ $vistsPrevious }}</div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -40,7 +40,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="pt-sm text-center">
-                                                    Visits over a month
+                                                   Návštěvy za měsíc
                                                 </td>
                                             </tr>
                                         </table>
@@ -55,7 +55,7 @@
                                                             <td width="80" height="80" style="background: url('https://dashboard.fluffici.eu/chart-donuts/red/{{ $percentageOrder }}.png'); background-size: 100%;" valign="center" class="text-default text-center">
                                                                 <div class="h4 m-0 text-green lh-1">
                                                                     {{ $orderCount }}
-                                                                    <div class="text-muted font-normal font-sm mt-xs">of 1000</div>
+                                                                    <div class="text-muted font-normal font-sm mt-xs">z 1000</div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -64,7 +64,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="pt-sm text-center">
-                                                    Order completed
+                                                   Dokončené objednávky
                                                 </td>
                                             </tr>
                                         </table>
@@ -79,7 +79,7 @@
                                                             <td width="80" height="80" style="background: url('https://dashboard.fluffici.eu/chart-donuts/red/{{ $percentageOverdue }}.png'); background-size: 100%;" valign="center" class="text-default text-center">
                                                                 <div class="h4 m-0 text-red lh-1">
                                                                     {{ $percentageOverdue }}%
-                                                                    <div class="text-muted font-normal font-sm mt-xs">of 100%</div>
+                                                                    <div class="text-muted font-normal font-sm mt-xs">z 100%</div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -88,7 +88,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="pt-sm text-center">
-                                                    Overdue percentage
+                                                    Procento zpoždění
                                                 </td>
                                             </tr>
                                         </table>
@@ -98,13 +98,13 @@
 
                                 </tr>
                             </table>
-                            <h4 class="mt-xl">Shop orders stats</h4>
+                            <h4 class="mt-xl">Statistiky objednávek obchodu</h4>
                             <table class="row" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td class="col text-center va-top">
                                         <table cellspacing="0" cellpadding="0">
                                             <tr>
-                                                <td class="text-left pb-xs">Delivered</td>
+                                                <td class="text-left pb-xs">Dodáno</td>
                                                 <td class="text-right pb-xs text-muted">{{ $delivered }}%</td>
                                             </tr>
                                             <tr>
@@ -128,7 +128,7 @@
                                     <td class="col text-center va-top">
                                         <table cellspacing="0" cellpadding="0">
                                             <tr>
-                                                <td class="text-left pb-xs">On the way</td>
+                                                <td class="text-left pb-xs">Na cestě</td>
                                                 <td class="text-right pb-xs text-muted">{{ $shipping }}%</td>
                                             </tr>
                                             <tr>
@@ -153,7 +153,7 @@
                                     <td class="col text-center va-top">
                                         <table cellspacing="0" cellpadding="0">
                                             <tr>
-                                                <td class="text-left pb-xs">Cancelled</td>
+                                                <td class="text-left pb-xs">Zrušeno</td>
                                                 <td class="text-right pb-xs text-muted">{{ $cancelled }}%</td>
                                             </tr>
                                             <tr>
@@ -187,7 +187,7 @@
                                             <tr>
                                                 <td align="center" valign="top" class="lh-1">
                                                     <a href="https://dashboard.fluffici.eu/shop/statistics" class="btn bg-blue border-blue">
-                                                        <span class="btn-span">See&nbsp;my&nbsp;full&nbsp;report</span>
+                                                        <span class="btn-span">Zobrazit&nbsp;můj&nbsp;úplný&nbsp;report</span>
                                                     </a>
                                                 </td>
                                             </tr>

@@ -1,28 +1,28 @@
 <?php
 
 return [
-    'table.name' => 'Category',
-    'table.position' => 'Position',
-    'table.displayed' => 'Public',
+    'table.name' => 'Kategorie',
+    'table.position' => 'Pozice',
+    'table.displayed' => 'Veřejné',
 
-    'screen.title' => 'Categories',
-    'screen.button.new' => 'New',
+    'screen.title' => 'Kategorie',
+    'screen.button.new' => 'Nový',
 
-    'screen.edit.title' => 'Edit category',
-    'screen.edit.title.create' => 'Create category',
+    'screen.edit.title' => 'Upravit kategorii',
+    'screen.edit.title.create' => 'Vytvořit kategorii',
 
-    'screen.edit.button.save' => 'Save',
-    'screen.edit.button.remove' => 'Remove',
+    'screen.edit.button.save' => 'Uložit',
+    'screen.edit.button.remove' => 'Odstranit',
 
-    'screen.edit.input.name.title' => 'Name',
-    'screen.edit.input.name.placeholder' => 'Enter the category name',
+    'screen.edit.input.name.title' => 'Název',
+    'screen.edit.input.name.placeholder' => 'Zadejte název kategorie',
 
-    'screen.edit.input.order.title' => 'Position',
-    'screen.edit.input.order.placeholder' => 'Please enter the position.',
+    'screen.edit.input.order.title' => 'Pozice',
+    'screen.edit.input.order.placeholder' => 'Zadejte prosím pozici.',
 
-    'screen.edit.input.displayed.title' => 'Displayed',
-    'screen.edit.input.displayed.placeholder' => 'Is this category public?',
+    'screen.edit.input.displayed.title' => 'Zobrazeno',
+    'screen.edit.input.displayed.placeholder' => 'Je tato kategorie veřejná?',
 
-    'screen.edit.input.deleted_at.title' => 'Expiration',
-    'screen.edit.input.deleted_at.placeholder' => 'Select a date (optional)',
+    'screen.edit.input.deleted_at.title' => 'Expirace',
+    'screen.edit.input.deleted_at.placeholder' => 'Vyberte datum (volitelné)',
 ];

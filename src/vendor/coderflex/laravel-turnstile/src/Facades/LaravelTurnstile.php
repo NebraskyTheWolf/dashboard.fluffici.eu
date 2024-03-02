@@ -9,7 +9,12 @@ use Illuminate\Support\Facades\Facade;
  */
 class LaravelTurnstile extends Facade
 {
-    protected static function getFacadeAccessor()
+    /**
+     * Get the service container binding key for the facade.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor(): string
     {
         return \Coderflex\LaravelTurnstile\LaravelTurnstile::class;
     }

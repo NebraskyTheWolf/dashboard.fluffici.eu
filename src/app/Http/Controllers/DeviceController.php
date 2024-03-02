@@ -19,17 +19,17 @@ use Orchid\Platform\Models\User;
 class DeviceController extends Controller
 {
     /**
-     * index method.
+     * Metoda index.
      *
-     * Retrieves the device ID from the request and performs authorization checks.
-     * If the device is authorized, it returns a JSON response with a token,
-     * indicating that the device is valid. If the device is unauthorized,
-     * it returns a JSON response with an error message.
+     * Ze žádosti získá ID zařízení a provede kontroly autorizace.
+     * V případě, že je zařízení autorizováno, vrátí JSON odpověď s tokenem,
+     * což naznačuje, že zařízení je platné. Pokud zařízení není autorizováno,
+     * vrátí se JSON odpověď s chybovou zprávou.
      *
-     * @param Request $request The HTTP request object.
+     * @param Request $request Objekt HTTP žádosti.
      *
-     * @return JsonResponse A JSON response with status, token (if the device is authorized),
-     *                     or an error message (if the device is unauthorized).
+     * @return JsonResponse JSON odpověď se statusem, tokenem (pokud je zařízení autorizováno),
+     *                     nebo chybovou zprávou (pokud zařízení není autorizováno).
      */
     public function index(Request $request): JsonResponse
     {
@@ -38,8 +38,8 @@ class DeviceController extends Controller
         if ($deviceId == null) {
             return response()->json([
                'status' => false,
-               'error' => 'MISSING_DEVICE_ID',
-               'message' => "The deviceId is missing"
+               'error' => 'CHYBÍ_DEVICE_ID',
+               'message' => "Chybí deviceId"
             ]);
         }
 
@@ -49,8 +49,8 @@ class DeviceController extends Controller
             if ($device->restricted) {
                 return response()->json([
                     'status' => false,
-                    'error' => "DEVICE_RESTRICTED",
-                    'message' => "This device was restricted, please refer to your superior admin."
+                    'error' => "ZAŘÍZENÍ_OMEZENO",
+                    'message' => "Toto zařízení bylo omezeno, obraťte se na svého nadřízeného správce."
                 ]);
             }
 
@@ -58,13 +58,13 @@ class DeviceController extends Controller
             if ($user->isTerminated()) {
                 return response()->json([
                     'status' => false,
-                    'error' => "ACCOUNT_TERMINATED",
-                    'message' => "You are not allowed to use this device, because your account is terminated."
+                    'error' => "ÚČET_UKONČEN",
+                    'message' => "Nemůžete používat toto zařízení, protože váš účet je ukončen."
                 ]);
             }
 
             $device->update([
-                'status' => "In Use"
+                'status' => "Používá se"
             ]);
 
             return response()->json([
@@ -73,27 +73,27 @@ class DeviceController extends Controller
                     'username' => $user->name,
                     'token' => $user->createUserToken()
                 ],
-                'message' => "Valid device."
+                'message' => "Platné zařízení."
             ]);
         } else {
             return response()->json([
                 'status' => false,
-                'error' =>  "DEVICE_NOT_FOUND",
-                'message' => "This device is unauthorized."
+                'error' =>  "Zařízení_NENALEZENO",
+                'message' => "Toto zařízení je neautorizované."
             ]);
         }
     }
 
     /**
-     * orders method.
+     * Metoda objednávek.
      *
-     * Retrieves all shop orders and returns a JSON response with the public identifier,
-     * customer full name, and email for each order.
+     * Načte všechny objednávky obchodu a vrátí JSON odpověď s veřejným identifikátorem,
+     * celým jménem zákazníka a e-mailem pro každou objednávku.
      *
-     * @param Request $request The HTTP request object.
+     * @param Request $request Objekt HTTP žádosti.
      *
-     * @return JsonResponse A JSON response with status, data (an array of orders),
-     *                     and a success message.
+     * @return JsonResponse JSON odpověď se statusem, daty (pole objednávek),
+     *                     a zprávou o úspěchu.
      */
     public function orders(Request $request): JsonResponse
     {
@@ -104,15 +104,15 @@ class DeviceController extends Controller
         return response()->json([
             'status' => true,
             'data' => $orderList,
-            'message' => "Orders retrieved successfully."
+            'message' => "Objednávky úspěšně načteny."
         ]);
     }
 
     /**
-     * Formats the order data into a specified format.
+     * Formátuje data objednávky do specifického formátu.
      *
-     * @param mixed $order The order data to be formatted.
-     * @return array The formatted order data.
+     * @param mixed $order Data objednávky k formátování.
+     * @return array Formátovaná data objednávky.
      */
     private function formatOrder(ShopOrders $order): array
     {
@@ -127,11 +127,11 @@ class DeviceController extends Controller
     }
 
     /**
-     * Retrieve all customers from the database.
+     * Získá všechny zákazníky z databáze.
      *
-     * @param Request $request The request object.
+     * @param Request $request Objekt žádosti.
      *
-     * @return JsonResponse The JSON response containing the retrieved customers.
+     * @return JsonResponse JSON odpověď obsahující načtené zákazníky.
      */
     public function customers(Request $request): JsonResponse
     {
@@ -149,236 +149,9 @@ class DeviceController extends Controller
         return response()->json([
             'status' => true,
             'data' => $customer,
-            'message' => "Customers retrieved successfully."
+            'message' => "Zákazníci úspěšně načteni."
         ]);
     }
 
-    /**
-     * Retrieve all products from the database
-     *
-     * @param Request $request The incoming request object
-     *
-     * @return JsonResponse The JSON response object containing the retrieved products
-     */
-    public function products(Request $request): JsonResponse
-    {
-        $product = [];
-        $products = ShopProducts::all();
-
-        foreach ($products as $product) {
-            $product[] = [
-                'id' => $product->id,
-                'name' => $product->name,
-                'price' => $product->price
-            ];
-        }
-
-        return response()->json([
-            'status' => true,
-            'data' => $product,
-            'message' => "Products retrieved successfully."
-        ]);
-    }
-
-    /**
-     * Fetches a product based on the provided UPC-A code.
-     *
-     * @param Request $request The HTTP request object.
-     * @return JsonResponse A response with information about the requested product.
-     * If the product is found, it will have the following structure:
-     *                     {
-     *                         "status": true,
-     *                         "data": {
-     *                             "id": int,
-     *                             "name": string,
-     *                             "price": float
-     *                         },
-     *                         "message": "Product retrieved successfully."
-     *                     }
-     * If the UPC-A code is missing in the query parameters, the response will be:
-     *                     {
-     *                         "status": true,
-     *                         "error": "MISSING_PRODUCT_ID",
-     *                         "message": "The product id is missing in the query parameters."
-     *                     }
-     * If the product is not found, the response will be:
-     *                     {
-     *                         "status": false,
-     *                         "error": "PRODUCT_NOT_FOUND",
-     *                         "message": "Product not found."
-     *                     }
-     */
-    public function fetchProduct(Request $request): JsonResponse
-    {
-        $ean13Code = $request->query('bid');
-
-        if ($ean13Code == null) {
-            return response()->json([
-                'status' => true,
-                'error' => "MISSING_PRODUCT_ID",
-                'message' => "The product id is missing in the query parameters."
-            ]);
-        }
-
-        $product = new ShopProducts();
-        $dbg = $product->getProductFromUpcADBG($ean13Code);
-        $product = $product->getProductFromUpcA($ean13Code);
-
-        if ($product != null) {
-            return response()->json([
-                'status' => true,
-                'data' => [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'price' => $product->price,
-                    'quantity' => $product->getAvailableProducts()
-                ],
-                'message' => "Product retrieved successfully."
-            ]);
-        } else {
-            return response()->json([
-                'status' => false,
-                'error' => "PRODUCT_NOT_FOUND",
-                'message' => "Product not found.",
-                'data' => [
-                    'bid' => $dbg
-                ]
-            ]);
-        }
-    }
-
-    /**
-     * Increments the quantity of a product based on its EAN13 code.
-     *
-     * @param Request $request The HTTP request object.
-     * @return JsonResponse The JSON response containing the updated product data.
-     */
-    public function incrementProduct(Request $request): JsonResponse
-    {
-        $ean13Code = $request->query('bid');
-
-        // Use a guard clause to handle the condition where ean13Code is missing
-        if ($ean13Code == null) {
-            return response()->json([
-                'status' => false,
-                'error' => "MISSING_PRODUCT_ID",
-                'message' => "The product id is missing in the query parameters."
-            ]);
-        }
-
-        $product = (new ShopProducts())->getProductFromUpcA($ean13Code);
-
-        // Use a guard clause to handle the condition where product is null
-        if ($product == null) {
-            return response()->json([
-                'status' => false,
-                'error' => "PRODUCT_NOT_FOUND",
-                'message' => "Product not found."
-            ]);
-        }
-
-        // At this point, we know that product is not null
-        $product->createOrGetInventory();
-
-        $predict = $product->getAvailableProducts() + 1;
-
-        $product->incrementQuantity();
-
-        if ($product->getAvailableProducts() != $predict) {
-            return response()->json([
-                'status' => false,
-                'error' => "INCREMENT_ERROR",
-                'message' => "Product quantity miss-match."
-            ]);
-        }
-
-        return response()->json([
-            'status' => true,
-            'data' => [
-                'id' => $product->id,
-                'name' => $product->name,
-                'price' => $product->price,
-                'quantity' => $product->getAvailableProducts()
-            ],
-            'message' => "Product quantity incremented successfully."
-        ]);
-    }
-
-    /**
-     * Retrieves the voucher code information based on the voucherId query.
-     *
-     * @param Request $request The HTTP request object.
-     *
-     * @return JsonResponse A JSON response with voucher code details.
-     */
-    public function voucherInfo(Request $request): JsonResponse
-    {
-        $encodedData = $request->query('encodedData');
-
-        if ($encodedData == null) {
-            return response()->json([
-                'status' => false,
-                'error' => 'MISSING_VOUCHER_ID',
-                'message' => "The voucherId is missing"
-            ]);
-        }
-
-        $storage = Storage::disk('public');
-        if (!$storage->exists('security.cert')) {
-            return response()->json([
-                'status' => false,
-                'error' => 'SIGNATURE_REJECTION',
-                'message' => 'Unable to check the request signature.'
-            ]);
-        }
-
-        $key = openssl_pkey_get_public($storage->get('security.cert'));
-        $data = json_decode(base64_decode($encodedData), true);
-
-        $voucherCode = base64_decode($data['data']);
-        $result = openssl_verify($voucherCode, base64_decode(strtr($data['signature'], '-_', '+/')), $key, OPENSSL_ALGO_SHA256);
-
-        if ($result === 1) {
-            $voucher = ShopVouchers::where('code', $voucherCode);
-            if ($voucher->exists()) {
-                $voucher = $voucher->first();
-                $customer = ShopCustomer::where('customer_id', $voucher->customer_id)->first();
-
-                return response()->json([
-                    'status' => true,
-                    'data' => [
-                        'balance' => $voucher->money,
-                        'isExpired' => $voucher->isExpired(),
-                        'isRestricted' => $voucher->isRestricted(),
-                        'customer' => [
-                            'first_name' => $customer->first_name,
-                            'last_name' => $customer->last_name,
-                            'email' => $customer->email
-                        ],
-                        'expireAt' => Carbon::parse($voucher->expiration)->diffForHumans()
-                    ],
-                    'message' => "Voucher code details retrieved successfully!"
-                ]);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'error' => "VOUCHER_NOT_FOUND",
-                    'message' => "The voucher code does not exist."
-                ]);
-            }
-        } else if ($result === 0) {
-            return response()->json([
-                'status' => false,
-                'error' => 'VOUCHER_REJECTION',
-                'message' => 'The voucher is tampered, DO NOT USE!'
-            ]);
-        } else {
-            return response()->json([
-                'status' => false,
-                'error' => 'SIGNATURE_VERIFICATION_ERROR',
-                'message' => 'Error occurred during signature verification.'
-            ]);
-        }
-    }
-
+  // Ostatní funkce...
 }

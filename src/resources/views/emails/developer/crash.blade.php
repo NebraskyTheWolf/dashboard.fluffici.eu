@@ -14,12 +14,12 @@
                                     </td>
                                 </tr>
                             </table>
-                            <h1 class="text-center m-0 mt-md">Application error</h1>
+                            <h1 class="text-center m-0 mt-md">Chyba aplikace</h1>
                         </td>
                     </tr>
                     <tr>
                         <td class="content">
-                            <h4>New alert from {{ $currentService }}</h4>
+                            <h4>Nové upozornění od {{ $currentService }}</h4>
                             <p class="text-muted">{{ $currentDate }}</p>
                             <h4 class="mt-lg">{{ $className }}</h4>
                             <pre>{{ $contents }}</pre>

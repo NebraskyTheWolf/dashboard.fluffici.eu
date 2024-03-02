@@ -538,7 +538,7 @@ return array(
     'Carbon\\TranslatorStrongTypeInterface' => $vendorDir . '/nesbot/carbon/src/Carbon/TranslatorStrongTypeInterface.php',
     'Coderflex\\LaravelTurnstile\\Components\\TurnstileWidget' => $vendorDir . '/coderflex/laravel-turnstile/src/Components/TurnstileWidget.php',
     'Coderflex\\LaravelTurnstile\\Exceptions\\SecretKeyNotFoundException' => $vendorDir . '/coderflex/laravel-turnstile/src/Exceptions/SecretKeyNotFoundException.php',
-    'Coderflex\\LaravelTurnstile\\Exceptions\\UnkownErrorOccuredException' => $vendorDir . '/coderflex/laravel-turnstile/src/Exceptions/UnkownErrorOccuredException.php',
+    'Coderflex\\LaravelTurnstile\\Exceptions\\UnknownErrorOccurredException' => $vendorDir . '/coderflex/laravel-turnstile/src/Exceptions/UnknownErrorOccurredException.php',
     'Coderflex\\LaravelTurnstile\\Facades\\LaravelTurnstile' => $vendorDir . '/coderflex/laravel-turnstile/src/Facades/LaravelTurnstile.php',
     'Coderflex\\LaravelTurnstile\\LaravelTurnstile' => $vendorDir . '/coderflex/laravel-turnstile/src/LaravelTurnstile.php',
     'Coderflex\\LaravelTurnstile\\LaravelTurnstileServiceProvider' => $vendorDir . '/coderflex/laravel-turnstile/src/LaravelTurnstileServiceProvider.php',
@@ -10784,5 +10784,5 @@ return array(
     'voku\\helper\\ASCII' => $vendorDir . '/voku/portable-ascii/src/voku/helper/ASCII.php',
     'voku\\helper\\StopWords' => $vendorDir . '/voku/stop-words/src/voku/helper/StopWords.php',
     'voku\\helper\\StopWordsLanguageNotExists' => $vendorDir . '/voku/stop-words/src/voku/helper/StopWordsLanguageNotExists.php',
-    '©' => $vendorDir . '/symfony/cache/Traits/ValueWrapper.php',
+    'ï¿½' => $vendorDir . '/symfony/cache/Traits/ValueWrapper.php',
 );

@@ -1,41 +1,41 @@
 <?php
 
 return [
-    'table.title' => 'Title',
-    'table.author' => 'Author',
-    'table.likes' => 'Likes',
-    'table.comments' => 'Comments',
-    'table.created_at' => 'Created at',
-    'table.updated_at' => 'Last edit',
+    'table.title' => 'Název',
+    'table.author' => 'Autor',
+    'table.likes' => 'Líbí se',
+    'table.comments' => 'Komentáře',
+    'table.created_at' => 'Vytvořeno',
+    'table.updated_at' => 'Poslední úprava',
 
-    'screen.title' => 'News post',
-    'screen.descriptions' => 'All news posts',
-    'screen.button.create_new' => 'New',
+    'screen.title' => 'Novinkový příspěvek',
+    'screen.descriptions' => 'Všechny novinkové příspěvky',
+    'screen.button.create_new' => 'Nový',
 
-    'screen.edit.title' => 'Edit post',
-    'screen.edit.title.create' => 'Creating a new post',
-    'screen.edit.descriptions' => 'News',
+    'screen.edit.title' => 'Upravit příspěvek',
+    'screen.edit.title.create' => 'Vytváření nového příspěvku',
+    'screen.edit.descriptions' => 'Novinky',
 
-    'screen.edit.button.create' => 'Save',
-    'screen.edit.button.update' => 'Update',
-    'screen.edit.button.remove' => 'Remove',
+    'screen.edit.button.create' => 'Uložit',
+    'screen.edit.button.update' => 'Aktualizovat',
+    'screen.edit.button.remove' => 'Odstranit',
 
-    'screen.input.post_title.title' => 'Title',
-    'screen.input.post_title.placeholder' => 'Attractive but mysterious title',
-    'screen.input.post_title.help' => 'Specify a short descriptive title for this post.',
+    'screen.input.post_title.title' => 'Název',
+    'screen.input.post_title.placeholder' => 'Atraktivní, ale záhadný název',
+    'screen.input.post_title.help' => 'Zadejte krátký popisný název pro tento příspěvek.',
 
-    'screen.input.description.title' => 'Description',
-    'screen.input.description.placeholder' => 'Brief description for preview',
+    'screen.input.description.title' => 'Popis',
+    'screen.input.description.placeholder' => 'Stručný popis pro náhled',
 
-    'screen.input.author.title' => 'Author',
-    'screen.input.body.title' => 'Content',
+    'screen.input.author.title' => 'Autor',
+    'screen.input.body.title' => 'Obsah',
 
-    'screen.tabs.post_information' => 'Post Information',
-    'screen.tabs.statistics' => 'Statistics',
-    'screen.tabs.comments' => 'Comments',
+    'screen.tabs.post_information' => 'Informace o příspěvku',
+    'screen.tabs.statistics' => 'Statistiky',
+    'screen.tabs.comments' => 'Komentáře',
 
-    'screen.chart.likes.title' => 'Overall statistics until now',
+    'screen.chart.likes.title' => 'Celková statistika do nynějška',
 
-    'screen.toast.created' => 'You have successfully created a post.',
-    'screen.toast.removed' => 'You have successfully deleted the post :title'
+    'screen.toast.created' => 'Úspěšně jste vytvořili příspěvek.',
+    'screen.toast.removed' => 'Úspěšně jste odstranili příspěvek :title'
 ];

@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'screen.title' => 'Voucher Management',
-    'screen.button.refresh' => 'New'
+    'screen.title' => 'Správa poukazů',
+    'screen.button.refresh' => 'Nový'
 ];

@@ -7,7 +7,7 @@
                 <table cellpadding="0" cellspacing="0">
                     <tr>
                         <td class="content pb-0" align="center">
-                            <h1 class="text-center m-0">Event planned today!</h1>
+                            <h1 class="text-center m-0">Plánovaná událost dnes!</h1>
                         </td>
                     </tr>
                     <tr>
@@ -31,15 +31,15 @@
                                         <td class="col-spacer col-spacer-sm"></td>
                                         <td class="col">
                                             <h3 class="m-0 font-strong">{{ $eventName }}</h3>
-                                            <div class="text-muted mb-sm">{{ $dayFull }}, {{ $monthFull }} {{ $day }} at {{ $time }}</div>
+                                            <div class="text-muted mb-sm">{{ $dayFull }}, {{ $monthFull }} {{ $day }} v {{ $time }}</div>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
-                            <h4 class="mt-xl">Details</h4>
-                            <p>There is {{ $interested }} interested peoples for this event.</p>
-                            <p>There is {{ $orders }} orders to be processed during this event.</p>
-                            <small>Have a nice day during this event {{ $name }}.</small>
+                            <h4 class="mt-xl">Detaily</h4>
+                            <p>Je zde {{ $interested }} lidí, kteří mají zájem o tuto událost.</p>
+                            <p>Je zde {{ $orders }} objednavek, které je třeba zpracovat během této události.</p>
+                            <small>Přejeme vám hezký den během této eventu {{ $name }}.</small>
                         </td>
                     </tr>
                 </table>

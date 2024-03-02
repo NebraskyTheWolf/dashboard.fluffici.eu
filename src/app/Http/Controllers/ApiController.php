@@ -16,46 +16,43 @@ use Random\RandomException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
- * Class ApiController
+ * Třída ApiController
  *
- * This class represents the controller for API-related actions.
- * It extends the Controller class.
- *
- * @package App\Http\Controllers
+ * Tato třída zpracovává požadavky API pro ověření uživatele.
+ * Poskytuje metody pro přihlášení uživatele, ověření OTP a získání informací o produktech.
  */
 class ApiController extends Controller
 {
-
     /**
-     * Index method
+     * Metoda Index
      *
-     * Retrieves user information based on the provided username and password.
-     * If the user exists and the password is correct, a login is successful
-     * and a response with a token and success message is returned.
-     * If the user account is terminated, a response with an account restricted error message is returned.
-     * If the user does not exist or the password is incorrect, a response with a credentials error message is returned.
+     * Na základě poskytnutého uživatelského jména a hesla získává informace o uživateli.
+     * Pokud uživatel existuje a heslo je správné, přihlášení je úspěšné
+     * a je vrácena odpověď s tokenem a zprávou o úspěchu.
+     * Pokud je účet uživatele ukončen, je vrácena odpověď s chybovou zprávou o omezení účtu.
+     * Pokud uživatel neexistuje nebo je heslo nesprávné, je vrácena chybová zpráva o chybných přihlašovacích údajích.
      *
-     * @param Request $request The request object containing the JSON data with the username and password.
-     * @return JsonResponse The response JSON object containing the login status, token, error (if any), and message.
+     * @param Request $request Objekt požadavku obsahující JSON data s uživatelským jménem a heslem.
+     * @return JsonResponse JSON objekt odpovědi obsahující stav přihlášení, token, chybu (pokud existuje) a zprávu.
      */
     public function index(Request $request): JsonResponse
     {
         $data = $this->validateInput($request);
         if ($data === false) {
-            return $this->createErrorResponse('CREDENTIALS', 'Email or password is invalid.');
+            return $this->createErrorResponse('CREDENTIALS', 'Email nebo heslo je neplatné.');
         }
 
         $user = $this->findByUsername($data['email']);
         if ($user === null) {
-            return $this->createErrorResponse('CREDENTIALS', 'Email or password is invalid.');
+            return $this->createErrorResponse('CREDENTIALS', 'Email nebo heslo je neplatné.');
         }
 
         if (!$this->validatePassword($data['password'], $user->password)) {
-            return $this->createErrorResponse('CREDENTIALS', 'Email or password is invalid.');
+            return $this->createErrorResponse('CREDENTIALS', 'Email nebo heslo je neplatné.');
         }
 
         if ($user->isTerminated()) {
-            return $this->createErrorResponse('ACCOUNT_RESTRICTED', 'Your account is terminated.');
+            return $this->createErrorResponse('ACCOUNT_RESTRICTED', 'Váš účet je zrušeni.');
         }
 
         $otp = new UserOtp();
@@ -73,26 +70,25 @@ class ApiController extends Controller
     }
 
     /**
-     * Validates the OTP (One-Time Password) code provided by the user.
+     * Ověřuje kód OTP (One-Time Password) poskytnutý uživatelem.
      *
-     * @param Request $request The HTTP request object.
-     *
-     * @return JsonResponse The response indicating the result of the OTP validation.
-     *                      If the provided OTP code is valid, the response will contain
-     *                      a success status and a user token.
-     *                      If the provided OTP code is invalid, the response will contain
-     *                      an error status and an error message.
-     *                      The error message will be "Your OTP code is invalid.".
-     *                      The error status will be "CREDENTIALS".
-     *                      If an error occurred during the OTP validation process,
-     *                      an error response with status "INVALID_REQUEST" and message
-     *                      "Unable to verify the OTP code." will be returned.
+     * @param Request $request Objekt HTTP požadavku.
+     * @return JsonResponse Odpověď indikující výsledek ověření OTP.
+     *                       Pokud je poskytnutý kód OTP platný, odpověď bude obsahovat
+     *                       stav úspěchu a uživatelský token.
+     *                       Pokud je poskytnutý kód OTP neplatný, odpověď bude obsahovat
+     *                       stav chyby a chybovou zprávu.
+     *                       Chybová zpráva bude "Váš OTP kód je neplatný.".
+     *                       Stav chyby bude "CREDENTIALS".
+     *                       Pokud se během procesu ověření OTP vyskytne chyba,
+     *                       bude vrácena chybová odpověď se stavem "INVALID_REQUEST" a zprávou
+     *                       "Ověření OTP kódu se nezdařilo.".
      */
     public function validateOtp(Request $request): JsonResponse
     {
         $data = $this->validateOtpInput($request);
         if ($data === false) {
-            return $this->createErrorResponse('CREDENTIALS', 'Your OTP code is invalid.');
+            return $this->createErrorResponse('CREDENTIALS', 'Váš OTP kód je neplatný.');
         }
 
         $otp = UserOtp::where('token', $data['code']);
@@ -110,16 +106,17 @@ class ApiController extends Controller
         return response()->json([
             'status' => false,
             'error' => 'INVALID_REQUEST',
-            'message' => 'Unable to verify the OTP code.'
+            'message' => 'Ověření OTP kódu se nezdařilo.'
         ]);
     }
 
+
     /**
-     * Validates the input from the request.
+     * Ověřuje vstup z požadavku.
      *
-     * @param Request $request The request object containing the input data.
+     * @param Request $request Objekt požadavku obsahující vstupní data.
      *
-     * @return array|bool The validated input data if it passes the validation, or false if any required fields are missing.
+     * @return array|bool Ověřená vstupní data, pokud projdou ověřením, nebo false, pokud některé požadované položky chybí.
      */
     private function validateInput(Request $request): bool|array
     {
@@ -133,17 +130,17 @@ class ApiController extends Controller
     }
 
     /**
-     * Validates the OTP input from the request.
+     * Ověřuje vstup OTP z požadavku.
      *
-     * @param Request $request The HTTP request object.
-     *                         The request object is used to get the input data.
+     * @param Request $request HTTP objekt požadavku.
+     *                         Objekt požadavku se používá ke získání vstupních dat.
      *
-     * @return bool|array Returns either a boolean value or an associative array.
-     *                    - If the 'code' field is empty in the request data,
-     *                      returns false to indicate that the OTP input is invalid.
-     *                    - Otherwise, returns the request data as an associative array.
-     *                      The array contains the input data from the request.
-     *                      The array format is the same as the original request data.
+     * @return bool|array  Vrací buď boolean hodnotu nebo asociativní pole.
+     *                      Ketliže v datech požadavku je pole 'code' prázdné,
+     *                      vrátí se false k indikaci, že vstup OTP je neplatný.
+     *                     Jinak se vrací data požadavku jako asociativní pole.
+     *                     Pole obsahuje vstupní data z požadavku.
+     *                     Formát pole je stejný jako původní data požadavku.
      */
     private function validateOtpInput(Request $request): bool|array
     {
@@ -157,11 +154,11 @@ class ApiController extends Controller
     }
 
     /**
-     * Finds a user by the given username.
+     * Najde uživatele podle daného uživatelského jména.
      *
-     * @param string $email The username of the user to be found.
+     * @param string $email Uživatelské jméno uživatele k nalezení.
      *
-     * @return User|null The user object if found, null otherwise.
+     * @return User|null Uživatelský objekt, pokud byl nalezen, jinak null.
      */
     private function findByUsername(string $email): ?User
     {
@@ -171,12 +168,12 @@ class ApiController extends Controller
     }
 
     /**
-     * Validates a password against a hashed user password.
+     * Ověří heslo proti heslu uživatele.
      *
-     * @param string $inputPassword The password to be validated.
-     * @param string $userPassword The hashed user password to compare against.
+     * @param string $inputPassword Heslo, které se má ověřit.
+     * @param string $userPassword Uživatelské heslo, se kterým se má porovnat.
      *
-     * @return bool True if the password is valid, false otherwise.
+     * @return bool True, pokud je heslo platné, jinak false.
      */
     private function validatePassword(string $inputPassword, string $userPassword): bool
     {
@@ -184,9 +181,9 @@ class ApiController extends Controller
     }
 
     /**
-     * Sends a notification to the given user's email address.
+     * Pošle notifikaci na daný email uživatele.
      *
-     * @param User $user The user to send the notification to.
+     * @param User $user Uživatel, kterému se má notifikace poslat.
      *
      * @return void
      */
@@ -196,12 +193,12 @@ class ApiController extends Controller
     }
 
     /**
-     * Creates an error response with the given error and message.
+     * Vytváří odpověď s chybou s danou chybou a zprávou.
      *
-     * @param string $error The error code or message to be included in the response.
-     * @param string $message The error description or additional message to be included in the response.
+     * @param string $error Kód chyby nebo zprávy, který má být zahrnut do odpovědi.
+     * @param string $message Popis chyby nebo další zpráva, která má být zahrnuta do odpovědi.
      *
-     * @return JsonResponse The JSON response indicating an error occurred.
+     * @return JsonResponse JSON odpověď indikující, že došlo k chybě.
      */
     private function createErrorResponse(string $error, string $message): JsonResponse
     {
@@ -213,11 +210,11 @@ class ApiController extends Controller
     }
 
     /**
-     * Creates a success response with the given token.
+     * Vytvoří odpověď s úspěchem s daným tokenem.
      *
-     * @param string $token The token to be included in the response.
+     * @param string $token Token, který má být zahrnut do odpovědi.
      *
-     * @return JsonResponse The JSON response indicating a successful login.
+     * @return JsonResponse  JSON odpověď indikující úspěšné přihlášení.
      */
     private function createSuccessResponse(string $token, User $user): JsonResponse
     {
@@ -230,28 +227,28 @@ class ApiController extends Controller
                 'avatar' => $user->avatar,
                 'avatarId' => $user->avatar_id
             ],
-            'message' => 'Login successful.'
+            'message' => 'Přihlášení bylo úspěšné.'
         ]);
     }
 
     /**
-     * Fetches the EAN code for a given product ID.
+     * Získá kód EAN pro dané ID produktu.
      *
-     * @param Request $request The HTTP request object.
-     *                        Use the query() method to retrieve parameters from the request.
-     *                        The 'productId' parameter is required.
+     * @param Request $request HTTP objekt požadavku.
+     *                         METODA query() se používá k získání parametrů z požadavku.
+     *                         Parametr 'productId' je vyžadován.
      *
-     * @return JsonResponse|BinaryFileResponse The EAN code for the given product ID, or an error response if the product ID is missing.
-     *               The error response is in the form of an associative array with keys 'error_code' and 'error_message'.
-     *               If the product ID is missing, the error code will be "MISSING_PRODUCT_ID" and the error message
-     *               will be "The productId is missing".
-     *               If the product ID is found, the EAN code will be returned as a string.
+     * @return JsonResponse|BinaryFileResponse  Kód EAN pro dané ID produktu, nebo chybová odpověď pokud je ID produktu chybí.
+     *               Chybová odpověď je ve formě asociativního pole s klíči 'error_code' a 'error_message'.
+     *               Pokud je ID produktu chybí, kód chyby bude "MISSING_PRODUCT_ID" a chybová zpráva
+     *               bude "Chybí productId".
+     *               Pokud je ID produktu nalezeno, kód EAN bude vrácen jako řetězec.
      */
     public function fetchEANCode(Request $request): JsonResponse|BinaryFileResponse
     {
         $productId = $request->query('productId');
         if ($productId == null) {
-            return $this->createErrorResponse("MISSING_PRODUCT_ID", "The productId is missing");
+            return $this->createErrorResponse("MISSING_PRODUCT_ID", "Chybí productId");
         }
 
 
@@ -263,20 +260,20 @@ class ApiController extends Controller
             return $this->fetchProductImage($productId);
         } else {
             return response()->json([
-                'error' => 'The server was not responding correctly.'
+                'error' => 'Server neodpovídal správně.'
             ]);
         }
     }
 
     /**
-     * Fetches the product image for a given product.
+     * Získá obrázek produktu pro daný produkt.
      *
-     * @param string $productId The ID of the product.
+     * @param string $productId ID produktu.
      *
-     * @return JsonResponse|BinaryFileResponse The product image in case it exists, or a JSON response with an error message if it does not.
-     *   - If the product image file exists in the storage, it will be downloaded.
-     *   - If the product image file does not exist in the storage, a JSON response will be returned:
-     *     - error: Not found in the storage.
+     * @return JsonResponse|BinaryFileResponse Obrázek produktu v případě, že existuje, nebo JSON odpověď s chybovou zprávou pokud neexistuje.
+     *   - Pokud soubor obrázku produktu existuje v úložišti, bude stažen.
+     *   - Pokud soubor obrázku produktu neexistuje v úložišti, vrátí se JSON odpověď:
+     *     - chyba: Nenalezeno v úložišti.
      */
     private function fetchProductImage(string $productId): JsonResponse|BinaryFileResponse
     {
@@ -284,15 +281,15 @@ class ApiController extends Controller
         if ($storage->exists($productId . '-code128.png')) {
             return response()->download(storage_path('app/public/' . $productId . '-code128.png'));
         } else {
-            return $this->createErrorResponse("FILE_NOT_FOUND", "Not found in the storage.");
+            return $this->createErrorResponse("FILE_NOT_FOUND", "Nenalezeno v úložišti.");
         }
     }
 
     /**
-     * Generate a numeric token.
+     * Vygeneruje číselný token.
      *
-     * @param int $length The length of the token (default: 4).
-     * @return string The generated numeric token.
+     * @param int $length Délka tokenu (výchozí: 4).
+     * @return string Vygenerovaný číselný token.
      * @throws RandomException
      */
     private function generateNumericToken(int $length = 4): string

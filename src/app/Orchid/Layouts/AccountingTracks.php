@@ -11,24 +11,23 @@ use Orchid\Screen\TD;
 class AccountingTracks extends Table
 {
     /**
-     * Data source.
+     * Zdroj dat.
      *
-     * The name of the key to fetch it from the query.
-     * The results of which will be elements of the table.
+     * Název klíče, ze kterého se získává z dotazu.
+     * Výsledky, které budou prvky tabulky.
      *
      * @var string
      */
     protected $target = 'accounting';
-
     /**
-     * Get the table cells to be displayed.
+     * Získejte buňky tabulky, které mají být zobrazeny.
      *
      * @return TD[]
      */
     protected function columns(): iterable
     {
         return [
-            TD::make('type', 'Type')
+            TD::make('type', 'Typ')
                 ->render(function (Accounting $accounting) {
                     $link =  Link::make($accounting->type);
                     if ($accounting->type == 'INCOME') {
@@ -39,8 +38,8 @@ class AccountingTracks extends Table
                     $link->href(route('platform.accounting.new', $accounting));
                     return $link;
                 }),
-            TD::make('source', 'Source'),
-            TD::make('amount', 'Amount')
+            TD::make('source', 'Zdroj'),
+            TD::make('amount', 'Částka')
                 ->render(function (Accounting $accounting) {
                     return number_format($accounting->amount) . ' Kč';
                 }),
@@ -58,11 +57,11 @@ class AccountingTracks extends Table
 
     protected function textNotFound(): string
     {
-        return 'No activity yet.';
+        return 'Zatím žádná aktivita.';
     }
 
     protected function subNotFound(): string
     {
-        return 'You can create a new operation.';
+        return 'Můžete vytvořit novou operaci.';
     }
 }

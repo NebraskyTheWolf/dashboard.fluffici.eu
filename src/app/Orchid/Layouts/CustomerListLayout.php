@@ -10,36 +10,36 @@ use Orchid\Screen\TD;
 class CustomerListLayout extends Table
 {
     /**
-     * Data source.
+     * Zdroj dat.
      *
-     * The name of the key to fetch it from the query.
-     * The results of which will be elements of the table.
+     * Jméno klíče, z kterého se získává z dotazu.
+     * Výsledky, které budou prvky tabulky.
      *
      * @var string
      */
-    protected $target = 'customers';
+    protected $target = 'zákazníci';
 
     /**
-     * Get the table cells to be displayed.
+     * Získejte buňky tabulky, které se mají zobrazit.
      *
      * @return TD[]
      */
     protected function columns(): iterable
     {
         return [
-            TD::make('first_name', 'First Name')
+            TD::make('first_name', 'Křestní jméno')
                 ->render(function (ShopCustomer $customer) {
                     return Link::make($customer->first_name)
                         ->route('platform.shop.customer.edit', $customer)
                         ->icon('bs.pencil');
                 }),
-            TD::make('last_name', 'Last Name'),
-            TD::make('username', 'Username')
+            TD::make('last_name', 'Příjmení'),
+            TD::make('username', 'Uživatelské jméno')
                 ->render(function (ShopCustomer $customer) {
                     return '@' . $customer->username;
                 }),
-            TD::make('email', 'Email'),
-            TD::make('account_status', 'Account Status'),
+            TD::make('email', 'E-mail'),
+            TD::make('account_status', 'Stav účtu'),
         ];
     }
 
@@ -50,6 +50,6 @@ class CustomerListLayout extends Table
 
     protected function textNotFound(): string
     {
-        return 'There is no customer(s) at the moment.';
+        return 'V současné době nejsou žádní zákazníci.';
     }
 }

@@ -14,15 +14,15 @@
                                     </td>
                                 </tr>
                             </table>
-                            <h1 class="text-center m-0 mt-md">OTP Instruction</h1>
+                            <h1 class="text-center m-0 mt-md">Instrukce pro OTP</h1>
                         </td>
                     </tr>
                     <tr>
                         <td class="content">
-                            <p>Hi, <strong>{{ $user->name }}</strong>!</p>
-                            <p>It looks like you are trying to log in to {{ env('APP_NAME') }} using your username and password. As an additional security measure you are requested to enter the OTP code (one-time password) provided in this email.</p>
-                            <p>If you did not intend to log in to {{ env('APP_NAME') }}, please ignore this email.</p>
-                            <p class="mb-0">The OTP code is:</p>
+                            <p>Ahoj, <strong>{{ $user->name }}</strong>!</p>
+                            <p>Zdá se, že se snažíte přihlásit do {{ env('APP_NAME') }} pomocí svého uživatelského jména a hesla. Jako dodatečné bezpečnostní opatření se od vás požaduje, abyste zadali kód OTP (jednorázové heslo) uvedené v tomto e-mailu.</p>
+                            <p>Pokud jste neměli v úmyslu přihlásit se k {{ env('APP_NAME') }}, prosím, ignorujte tento e-mail.</p>
+                            <p class="mb-0">Kód OTP je:</p>
                             <table>
                                 <tr>
                                     <td class="py-lg">
@@ -36,8 +36,8 @@
                                     </td>
                                 </tr>
                             </table>
-                            <p>If you enable two-factor authentication (2FA) with a trusted device you will not be asked for an OTP over email anymore.</p>
-                            <p>2FA is an extra layer of security used when logging into websites or apps. With 2FA, you have to log in with your username and password and provide another form of authentication that only you know or have access to.</p>
+                            <p>Pokud aktivujete ověření ve dvou fázové (2FA) s důvěryhodným zařízením, již vám nebude zasílán e-mail s OTP.</p>
+                            <p>2FA je další vrstva zabezpečení používaná při přihlašování na webové stránky nebo do aplikací. S 2FA musíte zadat své uživatelské jméno a heslo a poskytnout další formu ověření, kterou jen vy znáte nebo k ní máte přístup.</p>
                         </td>
                     </tr>
                 </table>

@@ -35,21 +35,21 @@ class AccountingTRSReportLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('download', 'Action')
+            TD::make('download', 'Akce')
                 ->render(function (TransactionsReport $reports) {
-                    return Link::make('Download')
+                    return Link::make('Stáhnout')
                         ->icon('bs.caret-down-square')
                         ->type(Color::SUCCESS)
                         ->download()
                         ->href(route('api.shop.report') . '?reportId=' . $reports->report_id . '&type=transactions');
                 }),
-            TD::make('report_id', 'Report ID')
+            TD::make('report_id', 'ID zprávy')
                 ->render(function (TransactionsReport $reports) {
                     return $reports->report_id;
                 }),
-            TD::make('delete', 'Delete')
+            TD::make('delete', 'Smazat')
                 ->render(function (TransactionsReport $reports) {
-                    return Button::make('Delete')
+                    return Button::make('Smazat')
                         ->confirm(__('common.modal.confirm'))
                         ->method('delete', [
                             'reportId' => $reports->report_id
@@ -57,7 +57,7 @@ class AccountingTRSReportLayout extends Table
                         ->download(true)
                         ->icon('bs.trash');
                 }),
-            TD::make('created_at', 'Created at')
+            TD::make('created_at', 'Vytvořeno')
                 ->render(function (TransactionsReport $report) {
                     return Input::make('created_at')
                         ->relativeTime(true)
@@ -74,11 +74,11 @@ class AccountingTRSReportLayout extends Table
 
     protected function textNotFound(): string
     {
-        return 'No monthly report yet.';
+        return 'Zatím nebyla vytvořena žádná měsíční zpráva.';
     }
 
     protected function subNotFound(): string
     {
-        return 'The next report will be automatically generated in ' . Carbon::now()->endOfMonth()->diffForHumans();
+        return 'Další zpráva bude automaticky vygenerována ' . Carbon::now()->endOfMonth()->diffForHumans();
     }
 }

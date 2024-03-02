@@ -1,8 +1,8 @@
 @extends('auth')
-@section('title', 'Sign in to your account')
+@section('title', 'Přihlaste se na svůj účet')
 
 @section('content')
-    <h1 class="h4 text-white mb-4">Please check your email.</h1>
+    <h1 class="h4 text-white mb-4">Zkontrolujte prosím svůj email.</h1>
 
     <form class="m-t-md"
           role="form"
@@ -15,7 +15,7 @@
 
         <div class="mb-3">
             <label class="form-label text-white">
-                OTP Code
+                OTP Kód
             </label>
 
             {!!  \Orchid\Screen\Fields\Input::make('otp')
@@ -24,19 +24,19 @@
                 ->tabindex(1)
                 ->autofocus()
                 ->inputmode('otp')
-                ->placeholder('Enter your otp token')
-                ->help('You received a email with your authentication code.')
+                ->placeholder('Zadejte svůj OTP token')
+                ->help('Na váš email byl zaslán autentizační kód.')
             !!}
         </div>
 
         <div class="row align-items-center">
             <div class="col-md-6 col-xs-12">
-                <a class="small"> The code will expire in : <div class="small" id="otp-expiration">30:00</div></a>
+                <a class="small"> Kód vyprší za: <div class="small" id="otp-expiration">30:00</div></a>
             </div>
             <div class="col-md-6 col-xs-12">
                 <button id="button-login" type="submit" class="btn btn-primary btn-block" tabindex="3">
                     <x-orchid-icon path="bs.box-arrow-in-right" class="small me-2"/>
-                    Continue
+                    Pokračovat
                 </button>
             </div>
         </div>

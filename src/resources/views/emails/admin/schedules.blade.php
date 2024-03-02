@@ -1,5 +1,7 @@
 @extends('emails.base')
 
+// Can you translate all English strings to Czech, please be as much as possible accurate and careful about the bendings
+
 @section('content')
     <table class="box" cellpadding="0" cellspacing="0">
         <tr>
@@ -14,7 +16,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <h1 class="text-center m-0 mt-md">Event's schedules</h1>
+                            <h1 class="text-center m-0 mt-md">Rozvrh eventu</h1>
                         </td>
                     </tr>
                     <tr>
@@ -23,7 +25,7 @@
                                 @forelse($schedules as $schedule)
                                     <tr class="list-item">
                                         <td class="w-1p">
-                                            Start in : {{ \Carbon\Carbon::parse($schedule->begin)->diffForHumans() }}
+                                            Začíná za: {{ \Carbon\Carbon::parse($schedule->begin)->diffForHumans() }}
                                         </td>
                                         <td class="w-1p pl-md pr-md">
                                             <img src="{{ url('/icons/checks.png') }}" class=" avatar d-block " width="40" height="40" alt="" />
@@ -34,24 +36,24 @@
                                         @if($schedule->status == "STARTED")
                                             <td class="text-center d-mobile-none">
                                                 <img src="{{ url('/icons/augmented-reality.png') }}" class=" va-middle" width="24" height="24" alt="star" /><br>
-                                                <span class="text-green text-uppercase">Started</span>
+                                                <span class="text-green text-uppercase">Začal</span>
                                             </td>
                                         @else
                                             @if($schedule->status == "FINISHED")
                                                 <td class="text-center d-mobile-none">
                                                     <img src="{{ url('/icons/check.png') }}" class=" va-middle" width="24" height="24" alt="star" /><br>
-                                                    <span class="text-red text-uppercase">Finished</span>
+                                                    <span class="text-red text-uppercase">Dokončen</span>
                                                 </td>
                                             @else
                                                 @if($schedule->status == "CANCELLED")
                                                     <td class="text-center d-mobile-none">
                                                         <img src="{{ url('/icons/check.png') }}" class=" va-middle" width="24" height="24" alt="star" /><br>
-                                                        <span class="text-red text-uppercase">Cancelled</span>
+                                                        <span class="text-red text-uppercase">Zrušen</span>
                                                     </td>
                                                 @else
                                                     <td class="text-center d-mobile-none">
                                                         <img src="{{ url('/icons/clock.png') }}" class=" va-middle" width="24" height="24" alt="star" /><br>
-                                                        <span class="text-blue text-uppercase">On time</span>
+                                                        <span class="text-blue text-uppercase">Včas</span>
                                                     </td>
                                                 @endif
                                             @endif
@@ -64,7 +66,7 @@
                                                 <img src="{{ url('/icons/circle-minus.png') }}" class=" avatar d-block " width="40" height="40" alt="" />
                                             </td>
                                             <td>
-                                                No events scheduled.
+                                                Žádné naplánované události.
                                             </td>
                                         </tr>
 

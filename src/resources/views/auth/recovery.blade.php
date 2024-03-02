@@ -1,8 +1,8 @@
 @extends('auth')
-@section('title', 'Password recovery')
+@section('title', 'Obnova hesla')
 
 @section('content')
-    <h1 class="h4 text-white mb-4">Make a new password</h1>
+    <h1 class="h4 text-white mb-4">Vytvořte nové heslo</h1>
 
     <form class="m-t-md"
           role="form"
@@ -15,14 +15,14 @@
 
         <div class="mb-3">
             <label class="form-label text-white">
-                New password
+                Nové heslo
             </label>
 
             {!!  \Orchid\Screen\Fields\Password::make('new_password')
                     ->required()
                     ->tabindex(1)
                     ->autofocus()
-                    ->placeholder('Enter a new password')
+                    ->placeholder('Zadejte nové heslo')
             !!}
 
             <input name="token" id="token" value="{{ $token }}" hidden="" required>
@@ -39,12 +39,11 @@
                 size="normal"
             />
         </div>
-
         <div class="row align-items-center">
             <div class="col-md-6 col-xs-12">
                 <button id="button-login" type="submit" class="btn btn-primary btn-block" tabindex="3">
                     <x-orchid-icon path="bs.box-arrow-in-right" class="small me-2"/>
-                    Change password
+                    Změnit heslo
                 </button>
             </div>
         </div>

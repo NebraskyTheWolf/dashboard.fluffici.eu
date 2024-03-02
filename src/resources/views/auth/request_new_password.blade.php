@@ -1,8 +1,8 @@
 @extends('auth')
-@section('title', 'Password recovery')
+@section('title', 'Obnova hesla')
 
 @section('content')
-    <h1 class="h4 text-white mb-4">Recover your password</h1>
+    <h1 class="h4 text-white mb-4">Obnovte své heslo</h1>
 
     <form class="m-t-md"
           role="form"
@@ -15,7 +15,7 @@
 
         <div class="mb-3">
             <label class="form-label text-white">
-                Please enter your email
+                Prosím, zadejte svůj email
             </label>
 
             @if(isset($email))
@@ -24,14 +24,14 @@
                       ->tabindex(1)
                       ->autofocus()
                       ->value($email)
-                      ->placeholder('Enter your email.')
+                      ->placeholder('Zadejte svůj email.')
                !!}
             @else
                 {!!  \Orchid\Screen\Fields\Input::make('email')
                        ->required()
                        ->tabindex(1)
                        ->autofocus()
-                       ->placeholder('Enter your email.')
+                       ->placeholder('Zadejte svůj email.')
                 !!}
             @endif
         </div>
@@ -52,7 +52,7 @@
             <div class="col-md-6 col-xs-12">
                 <button id="button-login" type="submit" class="btn btn-primary btn-block" tabindex="3">
                     <x-orchid-icon path="bs.box-arrow-in-right" class="small me-2"/>
-                    Continue
+                    Pokračovat
                 </button>
             </div>
         </div>

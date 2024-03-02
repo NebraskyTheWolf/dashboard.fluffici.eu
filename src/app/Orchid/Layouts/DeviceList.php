@@ -13,26 +13,25 @@ use Orchid\Support\Color;
 class DeviceList extends Table
 {
     /**
-     * Data source.
+     * Zdroj dat.
      *
-     * The name of the key to fetch it from the query.
-     * The results of which will be elements of the table.
+     * Název klíče, ze kterého ho vytáhneme z dotazu.
+     * Výsledky, které budou prvkami tabulky.
      *
      * @var string
      */
     protected $target = 'devices';
-
     /**
-     * Get the table cells to be displayed.
+     * Získání buněk tabulky ke zobrazení.
      *
      * @return TD[]
      */
     protected function columns(): iterable
     {
         return [
-            TD::make('id', "Action")
+            TD::make('id', "Akce")
                 ->render(function (DeviceAuthorization $authorization) {
-                    return Button::make($authorization->restricted == 1 ? "Reinstate" : "Restrict")
+                    return Button::make($authorization->restricted == 1 ? "Obnovit" : "Omezit")
                         ->icon('bs.trash')
                         ->method("restrictDevice",  [
                                 'id' => $authorization->id
@@ -40,7 +39,7 @@ class DeviceList extends Table
                         ->download(true)
                         ->type(Color::PRIMARY);
                 }),
-            TD::make('linked_user', "Assigned User")
+            TD::make('linked_user', "Přiřazený uživatel")
                 ->render(function (DeviceAuthorization $authorization) {
                     $user = User::where('id', $authorization->linked_user)->first();
                     if ($user) {
@@ -48,11 +47,11 @@ class DeviceList extends Table
                             ->icon('bs.caret-down')
                             ->route('platform.device.new', $authorization);
                     } else {
-                        return 'Unknown';
+                        return 'Neznámý';
                     }
                 }),
-            TD::make('deviceId', "Device Identifier"),
-            TD::make('status', "Device Status")
+            TD::make('deviceId', "Identifikátor zařízení"),
+            TD::make('status', "Stav zařízení")
         ];
     }
 }
