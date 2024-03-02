@@ -24,7 +24,7 @@ class OrderPayment extends Table
                     } else if ($shopOrders->status == "UNPAID") {
                         return '<a class="ui red label">' . __('orders.table.payment_status.unpaid') . '</a>';
                     } else if ($shopOrders->status == "REFUNDED") {
-                        return '<a class="ui yellow label">' . __('orders.table.payment_status.refunded') . '</a>';
+                        return '<a class="ui yellow label">' . __('orders.table.status.refunded') . '</a>';
                     } else if ($shopOrders->status == "DISPUTED") {
                         return '<a class="ui yellow label">' . __('orders.table.payment_status.disputed') . '</a>';
                     } else if ($shopOrders->status == "PARTIALLY_PAID") {
