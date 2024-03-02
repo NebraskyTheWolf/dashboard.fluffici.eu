@@ -1,7 +1,5 @@
 @extends('emails.base')
 
-// Can you translate all English strings to Czech, please be as much as possible accurate and careful about the bendings
-
 @section('content')
     <table class="box" cellpadding="0" cellspacing="0">
         <tr>

@@ -17,7 +17,7 @@ class CustomerListLayout extends Table
      *
      * @var string
      */
-    protected $target = 'zákazníci';
+    protected $target = 'customers';
 
     /**
      * Získejte buňky tabulky, které se mají zobrazit.

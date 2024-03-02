@@ -13,11 +13,6 @@ use Orchid\Support\Facades\Layout;
 
 class AccountingMain extends Screen
 {
-    /**
-     * Retrieves metrics and data related to financial transactions.
-     *
-     * @return iterable Returns an iterable data structure containing various financial metrics and data.
-     */
     public function query(): iterable
     {
         $lastMonth = Carbon::now();
@@ -103,34 +98,23 @@ class AccountingMain extends Screen
                 ]
             ],
             'income_ratio' => [
-                OrderPayment::where('status', 'PAID')->sumByDays('price')->toChart('Shop Income'),
-                Accounting::where('type', 'INCOME')->sumByDays('amount')->toChart('External Income')
+                OrderPayment::where('status', 'PAID')->sumByDays('price')->toChart('Příjem z obchodu'),
+                Accounting::where('type', 'INCOME')->sumByDays('amount')->toChart('Externí příjem')
             ],
             'external_expense' => [
-                OrderPayment::where('status', 'REFUNDED')->sumByDays('price')->toChart('Shop Refund'),
-                OrderPayment::where('status', 'UNPAID')->sumByDays('price')->toChart('Shop Overdue'),
-                Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart("External Expense")
+                OrderPayment::where('status', 'REFUNDED')->sumByDays('price')->toChart('Vrátky z obchodu'),
+                OrderPayment::where('status', 'UNPAID')->sumByDays('price')->toChart('Dlužná částka z obchodu'),
+                Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart("Externí výdaje")
             ],
             'accounting' => Accounting::orderBy('created_at', 'desc')->paginate()
         ];
     }
 
-    /**
-     * Retrieves the name of the accounting entity, if available.
-     *
-     * @return string|null The name of the accounting entity, or null if the name is not available.
-     */
     public function name(): ?string
     {
-        return 'Accounting';
+        return 'Účetnictví';
     }
 
-    /**
-     * Retrieves the permissions for a user.
-     *
-     * @return iterable|null A list of permissions assigned to the user.
-     *   If no permissions are assigned, the function returns null.
-     */
     public function permission(): ?iterable
     {
         return [
@@ -138,65 +122,33 @@ class AccountingMain extends Screen
         ];
     }
 
-    /**
-     * Generates an iterable array of command bar links.
-     * Each link includes an icon and a href to a specific route.
-     *
-     * @return iterable An iterable array of command bar links.
-     */
     public function commandBar(): iterable
     {
         return [
-            Link::make('New Operation')
+            Link::make('Nová operace')
                 ->icon('bs.piggy-bank')
                 ->href(route('platform.accounting.new')),
         ];
     }
 
-    /**
-     * Generates the layout for a report.
-     *
-     * @return iterable The layout of the report.
-     *
-     * The layout is an iterable containing the following elements:
-     * 1. An array of metrics related to standing balance and overdue amounts.
-     *    Each metric is represented by an associative array with the following key-value pairs:
-     *     - 'Standing Balance': The metric for outstanding amount. The value is retrieved from 'metrics.outstanding_amount'.
-     *     - 'Overdue': The metric for overdue amount. The value is retrieved from 'metrics.overdue_amount'.
-     * 2. A ShopProfit instance representing the 'Net Income Ratio'. This instance is exported.
-     * 3. A ShopProfit instance representing the 'Expenses'. This instance is exported.
-     * 4. An instance of the AccountingTracks class.
-     */
     public function layout(): iterable
     {
         return [
             Layout::metrics([
-                'Standing Balance' => 'metrics.outstanding_amount',
-                'Overdue' => 'metrics.overdue_amount'
+                'Čistý zůstatek' => 'metrics.outstanding_amount',
+                'Prodlení' => 'metrics.overdue_amount'
             ]),
 
-            ShopProfit::make('income_ratio' ,'Net Income Ratio')
+            ShopProfit::make('income_ratio' ,'Poměr čistého příjmu')
                 ->export(),
 
-            ShopProfit::make('external_expense' ,'Expenses')
+            ShopProfit::make('external_expense' ,'Výdaje')
                 ->export(),
 
             AccountingTracks::class
         ];
     }
 
-
-
-
-    /**
-     * Calculates the difference in percentage between two values.
-     *
-     * @param float|int $recent The recent value.
-     * @param float|int $previous The previous value.
-     *
-     * @return float The difference in percentage between the recent and previous values.
-     *   If either the recent or previous value is less than or equal to zero, the function returns 0.0.
-     */
     public function diff($recent,$previous): float
     {
         if ($recent <= 0 || $previous <= 0)
