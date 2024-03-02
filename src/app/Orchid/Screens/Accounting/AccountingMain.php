@@ -98,13 +98,13 @@ class AccountingMain extends Screen
                 ]
             ],
             'income_ratio' => [
-                OrderPayment::where('status', 'PAID')->sumByDays('price')->toChart('Příjem z obchodu'),
-                Accounting::where('type', 'INCOME')->sumByDays('amount')->toChart('Externí příjem')
+                OrderPayment::where('status', 'PAID')->sumByDays('price')->toChart('Shop Income'),
+                Accounting::where('type', 'INCOME')->sumByDays('amount')->toChart('External Income')
             ],
             'external_expense' => [
-                OrderPayment::where('status', 'REFUNDED')->sumByDays('price')->toChart('Vrátky z obchodu'),
-                OrderPayment::where('status', 'UNPAID')->sumByDays('price')->toChart('Dlužná částka z obchodu'),
-                Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart("Externí výdaje")
+                OrderPayment::where('status', 'REFUNDED')->sumByDays('price')->toChart('Refund'),
+                OrderPayment::where('status', 'UNPAID')->sumByDays('price')->toChart('Unpaid'),
+                Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart("External expense")
             ],
             'accounting' => Accounting::orderBy('created_at', 'desc')->paginate()
         ];
