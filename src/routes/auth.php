@@ -35,8 +35,7 @@ Route::get('switch-logout', [LoginController::class, 'switchLogout']);
 Route::post('switch-logout', [LoginController::class, 'switchLogout'])->name('switch.logout');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::middleware('throttle:60,1')
-    ->get('post-recovery', [LoginController::class, 'recoveryChallenge'])
+Route::get('post-recovery', [LoginController::class, 'recoveryChallenge'])
     ->name('login.post-recovery');
 Route::middleware('throttle:60,1')
     ->post('request-new-password', [LoginController::class, 'recoveryChallengePost'])

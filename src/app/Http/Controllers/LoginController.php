@@ -256,10 +256,6 @@ class LoginController extends Controller
      */
     public function password(Request $request): \Illuminate\Contracts\View\View
     {
-        $request->validate([
-            'cf-turnstile-response' => ['required', new TurnstileCheck()],
-        ]);
-
         return view('auth.recovery', [
             'token' => $request->token
         ]);
@@ -270,20 +266,19 @@ class LoginController extends Controller
      *
      * @param Request $request Objekt HTTP požadavku.
      *
-     * @return \Illuminate\Contracts\View\View Pohled na formulář pro výzvu k obnovení.
      */
-    public function recoveryChallenge(Request $request)
+    public function recoveryChallenge(Request $request) {
+        return view('auth.request_new_password', [
+            'email', $request->query('email')
+        ]);
+    }
+
+    public function recoveryChallengePost(Request $request): RedirectResponse
     {
         $request->validate([
             'cf-turnstile-response' => ['required', new TurnstileCheck()],
         ]);
 
-        return view('auth.request_new_password')
-            ->with('email', $request->query('email'));
-    }
-
-    public function recoveryChallengePost(Request $request): RedirectResponse
-    {
         if ($request->has('email')) {
             $user = User::where('email', $request->input('email'));
 
@@ -335,7 +330,8 @@ class LoginController extends Controller
     {
         $request->validate([
             'new_password'    => 'required|string',
-            'token' => 'required|string'
+            'token' => 'required|string',
+            'cf-turnstile-response' => ['required', new TurnstileCheck()],
         ]);
 
         $token = \App\Models\PasswordRecovery::where('token', $request->input('token'));
