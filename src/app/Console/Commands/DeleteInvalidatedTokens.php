@@ -33,8 +33,15 @@ class DeleteInvalidatedTokens extends Command
         $otp = UserOtp::paginate();
 
         foreach ($otp as $auth) {
-            if (Carbon::parse($auth->created_at)->addMinutes(30)->isPast()) {
+            if (Carbon::parse($auth->expiry)->isPast()) {
                 $auth->delete();
+            }
+        }
+
+        $recovery = PasswordRecovery::paginate();
+        foreach ($recovery as $item) {
+            if (Carbon::parse($item->recovery_expiration)->isPast()) {
+                $item->delete();
             }
         }
     }

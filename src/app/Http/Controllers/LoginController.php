@@ -312,7 +312,9 @@ class LoginController extends Controller
         // Uložte token do databáze spojené s uživatelem.
         $passwordRecovery = new \App\Models\PasswordRecovery();
         $passwordRecovery->user_id = $user->id;
-        $passwordRecovery->token = $token;
+        $passwordRecovery->token = 1;
+        $passwordRecovery->recovery_token = $token;
+        $passwordRecovery->recovery_expiration = Carbon::now()->addHours(24)->timestamp;
         $passwordRecovery->save();
 
         // Odešlete uživateli resetovací kód e-mailem.
@@ -334,7 +336,7 @@ class LoginController extends Controller
             'cf-turnstile-response' => ['required', new TurnstileCheck()],
         ]);
 
-        $token = \App\Models\PasswordRecovery::where('token', $request->input('token'));
+        $token = \App\Models\PasswordRecovery::where('recovery_token', $request->input('token'));
         if ($token->exists()) {
             $data = $token->first();
             $user = User::where('id', $data->user_id)->first();
