@@ -8,6 +8,7 @@ use App\Models\OrderPayment;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
 use App\Models\ShopVouchers;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -220,9 +221,11 @@ class PaymentController extends Controller
 
                 $payment->save();
 
-                $order->update([
-                    'status' => 'DELIVERED'
-                ]);
+                if ($this->isOrderFullyPaid($orderId)) {
+                    $order->update([
+                        'status' => 'DELIVERED'
+                    ]);
+                }
 
                 event(new UpdateAudit('order_payment', 'Ověřena ' . substr($orderId, 0, 8) . ' platba hotově.', $request->input('username')));
 
@@ -268,11 +271,13 @@ class PaymentController extends Controller
             $orderData = $order->first();
 
             if ($orderData->status == "COMPLETED"
-                || $orderData->status == "DELIVERED") {
+                || $orderData->status == "DELIVERED"
+                || $orderData->status == "CANCELLED"
+                || $orderData->status == "REFUNDED") {
                 return response()->json([
                     'status' => false,
                     'error' => 'OBJEDNAVKa_JIZ_ZPRACOVANA',
-                    'message' => 'Tato objednávka byla již ' . strtolower($orderData->status) .' ' . \Carbon\Carbon::parse($orderData->updated_at)->diffForHumans() . '.'
+                    'message' => 'Tato objednávka byla již ' . strtolower($orderData->status) .' ' . Carbon::parse($orderData->updated_at)->diffForHumans() . '.'
                 ]);
             }
 
@@ -280,7 +285,7 @@ class PaymentController extends Controller
             $data['order'] = $order->first();
 
             if ($payment->exists()) {
-                $data['payment'] = $payment->first();
+                $data['payment'] = $payment->latest();
             } else {
                 $data['payment'] = false;
             }

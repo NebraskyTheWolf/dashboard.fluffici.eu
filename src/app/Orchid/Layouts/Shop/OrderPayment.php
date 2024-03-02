@@ -57,7 +57,7 @@ class OrderPayment extends Table
                         $partialPayment = \App\Models\OrderPayment::where('order_id', $payment->order_id)
                             ->where('status', 'PARTIALLY_PAID');
                         if ($partialPayment->exists()) {
-                            return '<a class="ui green label">+ ' . $this->calculate($payment) .' Kc</a>';
+                            return '<a class="ui green label">+ ' . $payment->price .' Kc</a>';
                         }
 
                         // 0.01 Precision
@@ -77,7 +77,7 @@ class OrderPayment extends Table
                         $remainingBalance = $this->calculate($payment) - $payment->price;
                         return '<a class="ui green label">To Pay ' . $remainingBalance . ' Kc</a>';
                     } else {
-                        return '<a class="ui blue label">To Pay ' . $this->calculate($payment) .' Kc</i></a>';
+                        return '<a class="ui blue label">To Pay 0 Kc</i></a>';
                     }
                 })
         ];
@@ -134,7 +134,7 @@ class OrderPayment extends Table
         $amount = $this->calculate($payment);
 
         if ($payment->price < $amount) {
-            return $amount - $payment->price;
+            return $amount - $this->getTotalPaid($payment->order_id);
         }
 
         return 0.0;
@@ -151,9 +151,29 @@ class OrderPayment extends Table
         $amount = $this->calculate($payment);
 
         if ($payment->price > $amount) {
-            return $payment->price - $amount;
+            return $this->getTotalPaid($payment->order_id) - $amount;
         }
 
         return 0.0;
+    }
+
+    /**
+     * Calculates the total amount paid for a given order.
+     *
+     * @param string $orderId The ID of the order.
+     * @return float The total amount paid for the order.
+     */
+    protected function getTotalPaid(string $orderId): float
+    {
+        $payments = \App\Models\OrderPayment::where('order_id', $orderId)
+            ->where('status', 'PAID')
+            ->where('status', 'PARTIALLY_PAID')->get();
+
+        $total = 0.0;
+        foreach ($payments as $payment) {
+            $total += $payment->price;
+        }
+
+        return $total;
     }
 }
