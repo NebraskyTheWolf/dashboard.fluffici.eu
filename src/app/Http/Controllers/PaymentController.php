@@ -158,7 +158,7 @@ class PaymentController extends Controller
                                     'message' => "Zbývající částka k úhradě " . number_format(($calculatedPrice)) . " Kc (Částečně zaplaceno)",
                                     'data' => [
                                         // Android PDA app internal.
-                                        'intent_redirect' => 'eu.flufffici.pda.ui.activities.PartialPayment',
+                                        'intent_redirect' => 'PartialPayment',
                                         'payment' => [
                                             'type' => 'PARTIAL',
                                             'payment' => $payment
