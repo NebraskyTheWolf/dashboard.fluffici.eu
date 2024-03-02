@@ -10,7 +10,7 @@
           data-controller="form"
           data-form-need-prevents-form-abandonment-value="false"
           data-action="form#submit"
-          action="{{ route('login.recovery') }}">
+          action="{{ route('login.recoveryChallengePost') }}">
         @csrf
 
         <div class="mb-3">
