@@ -46,6 +46,7 @@ class OrderPayment extends Table
                     if ($payment->provider === null) {
                         return 'Dodavatel nebyl detekován.';
                     }
+
                     return $payment->provider;
                 }),
             TD::make('price')
