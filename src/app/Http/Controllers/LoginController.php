@@ -314,7 +314,7 @@ class LoginController extends Controller
         $passwordRecovery->user_id = $user->id;
         $passwordRecovery->token = 1;
         $passwordRecovery->recovery_token = $token;
-        $passwordRecovery->recovery_expiration = Carbon::now()->addHours(24)->timestamp;
+        $passwordRecovery->recovery_expiration = Carbon::now()->addHours(24)->toDateTime();
         $passwordRecovery->save();
 
         // Odešlete uživateli resetovací kód e-mailem.
