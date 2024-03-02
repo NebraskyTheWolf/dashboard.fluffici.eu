@@ -28,7 +28,7 @@ class OrderPayment extends Table
                     } else if ($shopOrders->status == "DISPUTED") {
                         return '<a class="ui yellow label">'.__('orders.table.payment_status.disputed').'</a>';
                     } else if ($shopOrders->status == "PARTIALLY_PAID") {
-                        return '<a class="ui yellow label">'.__('orders.table.payment_status.partially_paid').'</a>';
+                        return '<a class="ui yellow label">'.__('orders.table.status.partially_paid').'</a>';
                     }
 
                     return '<a class="ui blue label">'.__('orders.table.payment_status.await').' <i class="loading cog icon"></i></a>';
@@ -64,6 +64,15 @@ class OrderPayment extends Table
                     }
 
                     return $payment->price . ' Kc';
+                }),
+            TD::make('remaining_balance', 'To Pay')
+                ->render(function (\App\Models\OrderPayment $payment) {
+                    if ($payment->status == "PAID" || $payment->status == "PARTIALLY_PAID") {
+                        $remainingBalance = $this->calculate($payment) - $payment->price;
+                        return '<a class="ui green label">To Pay ' . $remainingBalance . ' Kc</a>';
+                    } else {
+                        return '<a class="ui blue label">To Pay ' . $this->calculate($payment) .' Kc</i></a>';
+                    }
                 })
         ];
     }

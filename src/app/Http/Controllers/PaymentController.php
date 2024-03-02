@@ -139,10 +139,6 @@ class PaymentController extends Controller
                         } else {
                             if (!$voucherData->money <= 0) {
                                 $calculatedPrice = $product->getNormalizedPrice() - $voucherData->money;
-                                $voucherData->update([
-                                    'money' => -$voucherData->money,
-                                    'restricted' => true
-                                ]);
 
                                 $payment = new OrderPayment();
                                 $payment->order_id = $order->order_id;
@@ -152,9 +148,22 @@ class PaymentController extends Controller
                                 $payment->price = $voucherData->money ;
                                 $payment->save();
 
+                                $voucherData->update([
+                                    'money' => 0,
+                                    'restricted' => true
+                                ]);
+
                                 return response()->json([
                                     'status' => true,
-                                    'message' => "Zbývající částka k úhradě " . number_format(($calculatedPrice)) . " Kc (Částečně zaplaceno)"
+                                    'message' => "Zbývající částka k úhradě " . number_format(($calculatedPrice)) . " Kc (Částečně zaplaceno)",
+                                    'data' => [
+                                        // Android PDA app internal.
+                                        'intent_redirect' => 'eu.flufffici.pda.ui.activities.PartialPayment',
+                                        'payment' => [
+                                            'type' => 'PARTIAL',
+                                            'payment' => $payment
+                                        ]
+                                    ]
                                 ]);
                             } else {
                                 return response()->json([
