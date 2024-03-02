@@ -16,6 +16,9 @@ class VerifyCsrfToken extends Middleware
         '/api/*',
         '/login',
         '/otp',
-        '/recovery'
+        '/recovery',
+        '/request-new-password',
+        'switch-logout',
+        'logout'
     ];
 }
