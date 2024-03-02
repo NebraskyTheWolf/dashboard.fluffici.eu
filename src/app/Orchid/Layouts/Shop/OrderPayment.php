@@ -67,12 +67,8 @@ class OrderPayment extends Table
                 }),
             TD::make('remaining_balance', 'To Pay')
                 ->render(function (\App\Models\OrderPayment $payment) {
-                    if ($payment->status == "PARTIALLY_PAID") {
-                        $remainingBalance = $this->calculate($payment) - $this->getTotalPaid($payment->order_id);
-                        return '<a class="ui green label">To Pay ' . $remainingBalance . ' Kc</a>';
-                    } else {
-                        return '<a class="ui blue label">To Pay 0 Kc</i></a>';
-                    }
+                    $remainingBalance = $this->calculate($payment) - $this->getTotalPaid($payment->order_id);
+                    return '<a class="ui green label">To Pay ' . $remainingBalance . ' Kc</a>';
                 })
         ];
     }
