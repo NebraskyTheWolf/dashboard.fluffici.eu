@@ -15,36 +15,36 @@ class OrderPayment extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('status',  __('orders.table.payment_status'))
+            TD::make('status', __('orders.table.payment_status'))
                 ->render(function (\App\Models\OrderPayment $shopOrders) {
                     if ($shopOrders->status == "CANCELLED") {
-                        return '<a class="ui teal label">'.__('orders.table.payment_status.cancelled').'</a>';
+                        return '<a class="ui teal label">' . __('orders.table.payment_status.cancelled') . '</a>';
                     } else if ($shopOrders->status == "PAID") {
-                        return '<a class="ui green label">'.__('orders.table.payment_status.paid').'</a>';
+                        return '<a class="ui green label">' . __('orders.table.payment_status.paid') . '</a>';
                     } else if ($shopOrders->status == "UNPAID") {
-                        return '<a class="ui red label">'.__('orders.table.payment_status.unpaid').'</a>';
+                        return '<a class="ui red label">' . __('orders.table.payment_status.unpaid') . '</a>';
                     } else if ($shopOrders->status == "REFUNDED") {
-                        return '<a class="ui yellow label">'.__('orders.table.payment_status.refunded').'</a>';
+                        return '<a class="ui yellow label">' . __('orders.table.payment_status.refunded') . '</a>';
                     } else if ($shopOrders->status == "DISPUTED") {
-                        return '<a class="ui yellow label">'.__('orders.table.payment_status.disputed').'</a>';
+                        return '<a class="ui yellow label">' . __('orders.table.payment_status.disputed') . '</a>';
                     } else if ($shopOrders->status == "PARTIALLY_PAID") {
-                        return '<a class="ui yellow label">'.__('orders.table.status.partially_paid').'</a>';
+                        return '<a class="ui yellow label">' . __('orders.table.status.partially_paid') . '</a>';
                     }
 
-                    return '<a class="ui blue label">'.__('orders.table.payment_status.await').' <i class="loading cog icon"></i></a>';
+                    return '<a class="ui blue label">' . __('orders.table.payment_status.await') . ' <i class="loading cog icon"></i></a>';
                 }),
-            TD::make('transaction_id', 'Transaction ID')
+            TD::make('transaction_id', 'ID transakce')
                 ->render(function (\App\Models\OrderPayment $payment) {
                     if ($payment->transaction_id === null) {
-                        return '<a><i class="exclamation triangle icon"></i> This payment need to be checked on the provider!</a>';
+                        return '<a><i class="exclamation triangle icon"></i> Tuto platbu je třeba zkontrolovat u dodavatele!</a>';
                     }
 
-                    return "<a href=\"https://provider.com/transactions/" . $payment->transaction_id . "\"> <i class=\"caret square right outline icon\"></i> Check </a>";
+                    return '<a href=\"https://provider.com/transactions/' . $payment->transaction_id . '\> Kontrola </a>';
                 }),
             TD::make('provider')
                 ->render(function (\App\Models\OrderPayment $payment) {
                     if ($payment->provider === null) {
-                        return 'No provider detected.';
+                        return 'Dodavatel nebyl detekován.';
                     }
                     return $payment->provider;
                 }),
@@ -57,22 +57,18 @@ class OrderPayment extends Table
                         // 0.01 Precision
 
                         if ($missing > 0.01) {
-                            return '<a class="ui red label">Missing ' . $missing . ' Kc</a>';
+                            return '<a class="ui red label">Chybí ' . $missing . ' Kc</a>';
                         } else if ($over > 0.01) {
-                            return '<a class="ui yellow label">Over paid of ' . $over . ' Kc</a>';
+                            return '<a class="ui yellow label">Přeplatek o ' . $over . ' Kc</a>';
                         }
                     }
 
                     return $payment->price . ' Kc';
                 }),
-            TD::make('remaining_balance', 'To Pay')
+            TD::make('remaining_balance', 'K zaplacení')
                 ->render(function (\App\Models\OrderPayment $payment) {
-                    if ($payment->status == "PARTIALLY_PAID") {
-                        $remainingBalance = $this->calculate($payment) - $this->getTotalPaid($payment->order_id);
-                        return '<a class="ui green label">To Pay ' . $remainingBalance . ' Kc</a>';
-                    } else {
-                        return '<a class="ui blue label">To Pay 0 Kc</i></a>';
-                    }
+                    $remainingBalance = $this->calculate($payment) - $this->getTotalPaid($payment->order_id);
+                    return '<a class="ui green label">K zaplacení ' . $remainingBalance . ' Kc</a>';
                 })
         ];
     }
@@ -83,14 +79,13 @@ class OrderPayment extends Table
     }
 
     protected function textNotFound(): string {
-        return '<a class="ui teal label">Awaiting payment... <i class="loading cog icon"></i></a>';
+        return '<a class="ui teal label">Čekání na platbu... <i class="loading cog icon"></i></a>';
     }
 
     protected function subNotFound(): string
     {
-        return 'No payment has been found yet.';
+        return 'Zatím nebyla nalezena žádná platba.';
     }
-
     /**
      * Calculate the total price of an order payment.
      *
