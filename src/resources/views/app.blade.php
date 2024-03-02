@@ -13,7 +13,7 @@
             - Fluffici
         @endif
     </title>
-    <meta name="csrf_token" content="{{  csrf_token() }}" id="csrf_token">
+    <meta name="csrf_token" content="{{ csrf_token() }}" id="csrf_token">
     <meta name="auth" content="{{  Auth::check() }}" id="auth">
     <link rel="stylesheet" type="text/css" href="{{  mix('/css/dashy.css','vendor/fluffici') }}">
 
