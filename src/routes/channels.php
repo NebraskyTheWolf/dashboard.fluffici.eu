@@ -25,6 +25,9 @@ Broadcast::channel('presence-editor.{id}', function ($user, $slug) {
     ];
 });
 
-Broadcast::channel('countdown', function ($user) {
-    return true;
+Broadcast::channel('presence-countdown.bap', function ($user) {
+    return [
+        'id' => random_int(1, 200),
+        'name' => \Ramsey\Uuid\Uuid::uuid4()
+    ];
 });

@@ -32,18 +32,19 @@ class GenerateAccountingReport extends Command
     {
         $today = Carbon::today()->format("Y-m-d");
         $currentYear = Carbon::now()->year;
+        $currentMonth = Carbon::now()->subMonth()->month;
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
         $income = Accounting::orderBy('created_at', 'desc')
             ->where('type', 'INCOME')
             ->whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', Carbon::now())
+            ->whereMonth('created_at', $currentMonth)
             ->sum('amount');
 
         $expense = Accounting::orderBy('created_at', 'desc')
             ->where('type', 'EXPENSE')
             ->whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', Carbon::now())
+            ->whereMonth('created_at', $currentMonth)
             ->sum('amount');
 
         $grandTotal = $income - $expense;
@@ -51,7 +52,7 @@ class GenerateAccountingReport extends Command
         $document = Pdf::loadView('documents.accounting', [
             'reportId' => $reportId,
             'reportDate' => $today,
-            'transactions' => Accounting::whereMonth('created_at', Carbon::now())->whereYear('created_at', $currentYear)->get(),
+            'transactions' => Accounting::whereMonth('created_at', $currentMonth)->whereYear('created_at', $currentYear)->get(),
 
             'incomes' => number_format($income),
             'expenses' => number_format($expense),

@@ -24,29 +24,30 @@ class GenerateMonthlyReport extends Command
     public function handle() {
         $today = Carbon::today()->format("Y-m-d");
         $currentYear = Carbon::now()->year;
+        $currentMonth = Carbon::now()->subMonth()->month;
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
 
         $total = OrderedProduct::orderBy('created_at', 'desc')
             ->whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', Carbon::now())
+            ->whereMonth('created_at', $currentMonth)
             ->sum('price');
 
         $paidPrice = OrderPayment::orderBy('created_at', 'desc')
             ->whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', Carbon::now())
+            ->whereMonth('created_at', $currentMonth)
             ->where('status', 'PAID')
             ->sum('price');
 
         $refunded = OrderPayment::orderBy('created_at', 'desc')
             ->whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', Carbon::now())
+            ->whereMonth('created_at', $currentMonth)
             ->where('status', 'REFUNDED')
             ->sum('price');
 
         $carrierFees = OrderCarrier::orderBy('created_at', 'desc')
             ->whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', Carbon::now())
+            ->whereMonth('created_at', $currentMonth)
             ->sum('price');
 
         $loss = $total - $paidPrice + $refunded + $carrierFees;
@@ -61,7 +62,7 @@ class GenerateMonthlyReport extends Command
             'reportId' => $reportId,
             'reportDate' => $today,
             'reportExportDate' => $today,
-            'reportProducts' => OrderedProduct::whereMonth('created_at', Carbon::now())
+            'reportProducts' => OrderedProduct::whereMonth('created_at', $currentMonth)
                 ->whereYear('created_at', $currentYear)
                 ->get(),
             'fees' => number_format(abs($carrierFees)),

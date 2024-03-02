@@ -129,7 +129,7 @@
                                             </td>
                                             <td class="col-spacer" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; width: 24px;" valign="top"></td>
                                             <td class="col" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;" valign="top">
-                                                <h4 class="text-green text-uppercase" style="font-weight: 600; color: #2fb344; font-size: 16px; text-transform: uppercase; margin: 0 0 0.5em;"></h4>
+                                                <h4 class="text-green text-uppercase" style="font-weight: 600; color: #2fb344; font-size: 16px; text-transform: uppercase; margin: 0 0 0.5em;">The order has to be paid</h4>
                                                 <div>
                                                     Amount: {{ $product->getNormalizedPrice() }} Kc
                                                 </div>

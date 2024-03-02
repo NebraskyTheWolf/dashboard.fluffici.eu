@@ -285,7 +285,7 @@ class PaymentController extends Controller
             $data['order'] = $order->first();
 
             if ($payment->exists()) {
-                $data['payment'] = $payment->latest();
+                $data['payment'] = $payment->latest()->first();
             } else {
                 $data['payment'] = false;
             }

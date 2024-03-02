@@ -24,7 +24,7 @@ Route::middleware('throttle:60,1')
     ->post('recovery', [LoginController::class, 'recovery'])
     ->name('login.recovery');
 
-Route::get('password-recovery/{token}', [LoginController::class, 'password'])
+Route::get('password-recovery', [LoginController::class, 'password'])
     ->name('api.login.recovery');
 
 Route::get('password-new', [LoginController::class, 'password'])

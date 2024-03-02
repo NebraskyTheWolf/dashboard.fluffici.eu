@@ -19,7 +19,7 @@ $(document).ready(function($) {
      * @property {function} display - The display element.
      *
      */
-    const channel = window.Echo.join(`countdown`).listenForWhisper('ping', (data) => {
+    const channel = window.Echo.join(`presence-countdown.bap`).listenForWhisper('ping', (data) => {
         const display = document.getElementById('otp-expiration');
 
         if (display !== null) {
@@ -28,7 +28,7 @@ $(document).ready(function($) {
         console.log('Ping triggered! (foxing around giggles)')
     })
 
-    setTimeout(() => channel.trigger('ping', { pong: 60 * 30 }), 1500)
+    setTimeout(() => channel.whisper('ping', { pong: 60 * 30 }), 1500)
 });
 
 /**

@@ -38,7 +38,7 @@ class GenerateTransactionsReport extends Command
     public function handle(): void
     {
         $today = Carbon::today()->format(self::DATE_FORMAT);
-        $currentMonth = Carbon::now()->month;
+        $currentMonth = Carbon::now()->subMonth()->month;
         $currentYear = Carbon::now()->year;
         $reportId = $this->generateReportId();
 
@@ -118,7 +118,7 @@ class GenerateTransactionsReport extends Command
         $document = Pdf::loadView('documents.transactions', [
             'reportId' => $reportId,
             'reportDate' => $today,
-            'transactions' => OrderPayment::whereMonth('created_at', Carbon::now())->get(),
+            'transactions' => OrderPayment::whereMonth('created_at', Carbon::now()->subMonth()->month)->get(),
             'overdueAmount' => $overdueAmount,
             'fees' => number_format($fees),
             'overallProfit' => number_format($profit),

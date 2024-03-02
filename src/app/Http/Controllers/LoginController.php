@@ -257,7 +257,7 @@ class LoginController extends Controller
     public function password(Request $request): \Illuminate\Contracts\View\View
     {
         return view('auth.recovery', [
-            'token' => $request->token
+            'token' => $request->query('token') ?? ''
         ]);
     }
 

@@ -55,6 +55,11 @@ class OrderPayment extends Table
                         $missing = $this->isMissing($payment);
                         $over = $this->isOverPaid($payment);
 
+                        $partialPayment = \App\Models\OrderPayment::where('order_id', $payment->order_id);
+                        if ($partialPayment->exists()) {
+                            return $payment->price . ' Kc';
+                        }
+
                         // 0.01 Precision
 
                         if ($missing > 0.01) {
@@ -68,7 +73,7 @@ class OrderPayment extends Table
                 }),
             TD::make('remaining_balance', 'K zaplacení')
                 ->render(function (\App\Models\OrderPayment $payment) {
-                    $remainingBalance = $this->calculate($payment) - $this->getTotalPaid($payment->order_id);
+                    $remainingBalance = number_format($this->calculate($payment) - $this->getTotalPaid($payment->order_id));
                     return '<a class="ui green label">K zaplacení ' . $remainingBalance . ' Kc</a>';
                 })
         ];
@@ -157,7 +162,8 @@ class OrderPayment extends Table
     {
         $payments = \App\Models\OrderPayment::where('order_id', $orderId)
             ->where('status', 'PAID')
-            ->where('status', 'PARTIALLY_PAID')->get();
+            ->where('status', 'PARTIALLY_PAID')
+            ->paginate();
 
         $total = 0.0;
         foreach ($payments as $payment) {
