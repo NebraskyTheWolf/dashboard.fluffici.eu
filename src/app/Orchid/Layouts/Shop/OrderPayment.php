@@ -54,6 +54,12 @@ class OrderPayment extends Table
                         $missing = $this->isMissing($payment);
                         $over = $this->isOverPaid($payment);
 
+                        $partialPayment = \App\Models\OrderPayment::where('order_id', $payment->order_id)
+                            ->where('status', 'PARTIALLY_PAID');
+                        if ($partialPayment->exists()) {
+                            return '<a class="ui green label">+ ' . $this->calculate($payment) .' Kc</a>';
+                        }
+
                         // 0.01 Precision
 
                         if ($missing > 0.01) {
@@ -67,7 +73,7 @@ class OrderPayment extends Table
                 }),
             TD::make('remaining_balance', 'To Pay')
                 ->render(function (\App\Models\OrderPayment $payment) {
-                    if ($payment->status == "PAID" || $payment->status == "PARTIALLY_PAID") {
+                    if ($payment->status == "PARTIALLY_PAID") {
                         $remainingBalance = $this->calculate($payment) - $payment->price;
                         return '<a class="ui green label">To Pay ' . $remainingBalance . ' Kc</a>';
                     } else {
