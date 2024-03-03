@@ -217,6 +217,11 @@ class User extends Authenticatable implements UserInterface
         if (!$this->exists)
             return false;
 
+        if ($this->permissions === null
+            || empty($this->permissions)
+            || count($this->permissions) <= 0)
+            return false;
+
         $userPermissions = count($this->permissions);
         $targetUserPermissions = count($targetUser->permissions);
 

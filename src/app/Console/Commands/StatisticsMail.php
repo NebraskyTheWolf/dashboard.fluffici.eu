@@ -41,7 +41,9 @@ class StatisticsMail extends Command
         } else {
             $users = User::paginate();
             foreach ($users as $user) {
-                Mail::to($user->email)->send(new WeeklyStatistic());
+                if ($user->hasAccess('platform.systems.eshop')) {
+                    Mail::to($user->email)->send(new WeeklyStatistic());
+                }
             }
             printf('Sending as email globally.');
         }

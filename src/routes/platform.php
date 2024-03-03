@@ -9,6 +9,12 @@ use App\Orchid\Screens\Accounting\AccountingReportList;
 use App\Orchid\Screens\Accounting\AccountingShopCreatePayment;
 use App\Orchid\Screens\Accounting\AccountingTransactionsList;
 use App\Orchid\Screens\Accounting\AccountingTRSReport;
+use App\Orchid\Screens\Application\ApplicationEditScreen;
+use App\Orchid\Screens\Application\ApplicationScreen;
+use App\Orchid\Screens\Application\Scopes\ScopeEdit;
+use App\Orchid\Screens\Application\Scopes\ScopeGroupEdit;
+use App\Orchid\Screens\Application\Scopes\ScopeGroupList;
+use App\Orchid\Screens\Application\Scopes\ScopeList;
 use App\Orchid\Screens\Attachments\AttachmentLists;
 use App\Orchid\Screens\Attachments\AttachmentReportReview;
 use App\Orchid\Screens\Attachments\AttachmentReports;
@@ -121,6 +127,24 @@ Route::screen('roles', RoleListScreen::class)
         ->parent('index')
         ->push('Roles', route('platform.systems.roles')));
 
+
+Route::screen('application', ApplicationScreen::class)
+    ->name('platform.application.list');
+
+Route::screen('application/edit/{application?}', ApplicationEditScreen::class)
+    ->name('platform.application.edit');
+
+Route::screen('scopes', ScopeList::class)
+    ->name('platform.scope.list');
+
+Route::screen('scopes/edit/{scope?}', ScopeEdit::class)
+    ->name('platform.scope.edit');
+
+Route::screen('scope-groups', ScopeGroupList::class)
+    ->name('platform.scope_group.list');
+
+Route::screen('scope-groups/edit/{group?}', ScopeGroupEdit::class)
+    ->name('platform.scope_group.edit');
 
 Route::screen('post/{post?}', PostEditScreen::class)
     ->name('platform.post.edit');

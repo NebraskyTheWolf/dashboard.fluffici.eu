@@ -10784,5 +10784,5 @@ return array(
     'voku\\helper\\ASCII' => $vendorDir . '/voku/portable-ascii/src/voku/helper/ASCII.php',
     'voku\\helper\\StopWords' => $vendorDir . '/voku/stop-words/src/voku/helper/StopWords.php',
     'voku\\helper\\StopWordsLanguageNotExists' => $vendorDir . '/voku/stop-words/src/voku/helper/StopWordsLanguageNotExists.php',
-    'ï¿½' => $vendorDir . '/symfony/cache/Traits/ValueWrapper.php',
+    '©' => $vendorDir . '/symfony/cache/Traits/ValueWrapper.php',
 );

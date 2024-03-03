@@ -28,6 +28,11 @@ use Random\RandomException;
 
 class LoginController extends Controller
 {
+
+    public array $allowed = [
+        'fluffici.eu'
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | Řadič Přihlášení
@@ -78,40 +83,47 @@ class LoginController extends Controller
             'cf-turnstile-response' => ['required', new TurnstileCheck()],
         ]);
 
-        $user = User::where('email', $request->input('email'));
-        if ($user->exists()) {
-            $data = $user->first();
-            if ($data->isTerminated()) {
-                throw ValidationException::withMessages([
-                    'email' => 'Váš účet byl ukončen.',
+        // List of allowed domains
+
+
+        if (filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
+            $parts = explode('@', $request->input('email'));
+            $domain = array_pop($parts);
+
+            if (!in_array($domain, $this->allowed)) {
+                return throw ValidationException::withMessages([
+                    'email' => 'Zadané údaje se neshodovaly s našimi záznamy. Zkontrolujte je a zkuste to znovu.',
                 ]);
             }
         }
 
-        if (env('APP_OTP', false)) {
-            if ($user->exists()) {
-                $data = $user->first();
+        $user = User::where('email', $request->input('email'));
+        if ($user->exists()) {
+            $user = $user->first();
+            if ($user->isTerminated()) {
+                return throw ValidationException::withMessages([
+                    'email' => 'Váš účet byl ukončen.',
+                ]);
+            }
 
-                if (Hash::check($request->input('password'), $data->password)) {
+            if ($user->hasAccess('platform.systems.dashboard')) {
+                if (Hash::check($request->input('password'), $user->password)) {
 
                     $otp = new UserOtp();
-                    $otp->user_id = $data->id;
+                    $otp->user_id = $user->id;
                     $otp->token = $this->generateNumericToken(8);
                     $otp->expiry = Carbon::now()->addMinutes(30);
                     $otp->save();
 
-                    Mail::to($data->email)->send(new UserOtpMail($data, $otp->token));
+                    Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
 
                     return redirect()->route('login.challenge');
                 }
+            } else {
+                throw ValidationException::withMessages([
+                    'email' => 'Permission denied.',
+                ]);
             }
-        } else {
-            $auth = $this->guard->attempt(
-                $request->only(['email', 'password']),
-                $request->filled('remember')
-            );
-
-            $this->sendLoginResponse($auth);
         }
 
         throw ValidationException::withMessages([

@@ -59,10 +59,28 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make("Auditové protokoly")
                         ->icon('bs.clipboard2')
                         ->route('platform.audit')
-                        ->permission('platform.audit.read')
+                        ->permission('platform.audit.read'),
                 ])
                 ->divider()
                 ->permission('platform.systems.settings'),
+
+            Menu::make('OAuth')
+                ->icon('bs.gear')
+                ->badge(fn () => "Nové", Color::SECONDARY)
+                ->title('Autentizace')
+                ->list([
+                    Menu::make('Aplikace')
+                        ->icon('bs.boxes')
+                        ->route('platform.application.list'),
+                    Menu::make('Scope')
+                        ->icon('bs.bounding-box-circles')
+                        ->route('platform.scope.list')
+                        ->permission('auth.scope.read'),
+                    Menu::make('Scope Groups')
+                        ->icon('bs.bookmark-star')
+                        ->route('platform.scope_group.list')
+                        ->permission('auth.scope_group.read'),
+                ])->divider(),
 
             Menu::make('Přílohy')
                 ->icon('bs.archive')
@@ -211,7 +229,8 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.users', "Uživatelé")
                 ->addPermission('platform.systems.settings', "Nastavení (Navbar)")
                 ->addPermission('platform.audit.read', "Auditové protokoly (čtení)")
-                ->addPermission('platform.systems.social', "Správa sociálních médií (čtení/zápis)"),
+                ->addPermission('platform.systems.social', "Správa sociálních médií (čtení/zápis)")
+                ->addPermission('platform.systems.dashboard', "Dashboard access (login)"),
 
             ItemPermission::group("Správa obchodu")
                 ->addPermission('platform.systems.eshop', 'EObchod (Navbar)')
@@ -295,7 +314,17 @@ class PlatformProvider extends OrchidServiceProvider
             ItemPermission::group('Kalendář & Agenda')
                 ->addPermission('api.calendar.add', 'Přidat událost (API)')
                 ->addPermission('api.calendar.update', 'Aktualizovat událost (API)')
-                ->addPermission('api.calendar.remove', 'Odstranit událost (API)')
+                ->addPermission('api.calendar.remove', 'Odstranit událost (API)'),
+
+            ItemPermission::group('OAuth platform')
+                ->addPermission('auth.scope.read', 'Scope (Read)')
+                ->addPermission('auth.scope.write', 'Scope (Write)')
+
+                ->addPermission('auth.scope_group.read', 'Scope Group (Read)')
+                ->addPermission('auth.scope_group.write', 'Scope Group (Write)')
+
+                ->addPermission('auth.application.read', 'Application (Read)')
+                ->addPermission('auth.application.write', 'Application (Write)')
         ];
     }
     private function isSalesEnabled(): bool
