@@ -41,9 +41,6 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('legal')
                 ->group(base_path('routes/legal.php'));
 
-            Route::middleware('device')
-                ->group(base_path('routes/device.php'));
-
             Route::middleware('integrations')
                 ->group(base_path('routes/integrations.php'));
 

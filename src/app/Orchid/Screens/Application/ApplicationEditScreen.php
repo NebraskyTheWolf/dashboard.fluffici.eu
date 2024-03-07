@@ -90,6 +90,7 @@ class ApplicationEditScreen extends Screen
                         ->title('Scopes')
                         ->multiple()
                         ->allowAdd()
+                        ->options($this->fetchOption())
                         ->taggable()
                         ->help('Select the scopes for this application.')
                         ->fromModel(Scopes::class, 'name', 'name'),
@@ -116,11 +117,29 @@ class ApplicationEditScreen extends Screen
     public function createOrUpdate(Request $request): RedirectResponse
     {
         $this->application->fill($request->get('application'));
-        $this->application->scope = explode(',', $this->application->scope);
+        $this->application->scope = implode(',', $this->application->scope);
         $this->application->save();
 
         event(new UpdateAudit('new_application', 'Updated ' . $this->application->displayName . ' app.', Auth::user()->name));
 
         return redirect()->route('platform.application.list');
+    }
+
+    /**
+     * Fetch the options of an application.
+     *
+     * @return array The list of options for the application.
+     */
+    public function fetchOption(): array
+    {
+        if (!$this->application->exists)
+            return array();
+
+        $options = array();
+        $data = explode(',', $this->application->scope);
+
+        foreach ($data as $option)
+            $options[] = $option;
+        return $options;
     }
 }

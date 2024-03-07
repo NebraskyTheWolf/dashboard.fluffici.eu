@@ -16,6 +16,7 @@
     <meta name="csrf_token" content="{{ csrf_token() }}" id="csrf_token">
     <meta name="auth" content="{{  Auth::check() }}" id="auth">
     <link rel="stylesheet" type="text/css" href="{{  mix('/css/dashy.css','vendor/fluffici') }}">
+    <script type="module" src="https://unpkg.com/@github/relative-time-element@latest/dist/bundle.js"></script>
 
     @stack('head')
 

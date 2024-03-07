@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts\Audit;
 
+use app\Fields\RelativeTime;
 use App\Models\AuditLogs;
 use App\Orchid\Presenters\AuditPresenter;
 use Orchid\Screen\Fields\Input;
@@ -67,7 +68,7 @@ class AuditLogsListLayout extends Table
 
             TD::make('created_at', __('audit.table.create_at'))
                 ->render(function (AuditLogs $auditLogs) {
-                    return $auditLogs->created_at->diffForHumans();
+                    return RelativeTime::make('created_at')->setTime($auditLogs->created_at);
                 }),
         ];
     }

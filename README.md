@@ -6,7 +6,7 @@
 
 - Name : Dashboard
 - Type : Web Application
-- État : Continuous progression
+- State : Continuous progression
 - Developer(s) : Vakea
 - COC : [Code of Conduct](https://github.com/NebraskyTheWolf/www.fluffici.eu/blob/master/docs/CODE_OF_CONDUCT.md)
 

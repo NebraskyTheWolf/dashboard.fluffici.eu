@@ -1,11 +1,7 @@
 <?php
 
-use App\Http\Controllers\ApiController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
-
-Route::post('/api/login', [ApiController::class, 'index']);
-Route::post('/api/login/otp-challenge', [ApiController::class, 'validateOtp']);
 
 // Authentication Routes...
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');

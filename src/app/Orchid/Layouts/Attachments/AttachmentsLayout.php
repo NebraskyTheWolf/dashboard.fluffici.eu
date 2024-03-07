@@ -3,6 +3,7 @@
 
 namespace App\Orchid\Layouts\Attachments;
 
+use app\Fields\RelativeTime;
 use App\Models\DmcaRequest;
 use App\Models\PlatformAttachments;
 use App\Models\ReportedAttachments;
@@ -91,7 +92,7 @@ class AttachmentsLayout extends Table
 
             TD::make('created_at', __('attachments.table.created_at'))
                 ->render(function (PlatformAttachments $platformAttachments) {
-                    return Carbon::parse($platformAttachments->created_at)->diffForHumans();
+                    return RelativeTime::make('created_at')->setTime($platformAttachments->created_at);
                 }),
         ];
     }

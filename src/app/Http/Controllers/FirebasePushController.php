@@ -9,35 +9,6 @@ use Orchid\Platform\Models\User;
 class FirebasePushController extends Controller
 {
 
-
-    /**
-     * Sets the FCM token for the user and sends a notification
-     *
-     * @param Request $request The request object containing the fcm_token
-     *
-     * @return JsonResponse The JSON response containing the message indicating the successful token update
-     */
-    public function setToken(Request $request): JsonResponse
-    {
-        $userId = $request->input('user_id');
-        $token = $request->query('fcm_token');
-
-        if ($token == null) {
-            abort(403, [
-                'status' => false,
-                'error' => 'NO_FCM_TOKEN',
-                'message' => 'The FCM token is currently invalid.'
-            ]);
-        } else {
-            $user = User::where('id', $userId)->first();
-            $user->updateFCMToken($token);
-
-            return response()->json([
-                'message' => 'Successfully Updated FCM Token'
-            ]);
-        }
-    }
-
     /**
      * Sends a notification to a user using FCM (Firebase Cloud Messaging).
      *

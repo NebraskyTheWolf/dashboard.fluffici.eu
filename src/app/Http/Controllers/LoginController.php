@@ -180,22 +180,6 @@ class LoginController extends Controller
     }
 
     /**
-     * Odeslat přihlašovací odpověď.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
-     */
-    protected function sendLoginResponse(Request $request)
-    {
-        $request->session()->regenerate();
-
-        return $request->wantsJson()
-            ? new JsonResponse([], 204)
-            : redirect()->intended("main");
-    }
-
-    /**
      * Zobrazit formulář pro přihlášení.
      *
      * @param Request $request HTTP požadavek.

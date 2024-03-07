@@ -8,6 +8,7 @@ use App\Models\ShopCustomer;
 use App\Models\ShopOrders;
 use App\Models\ShopSettings;
 use App\Models\ShopSupportTickets;
+use Google\Auth\Cache\Item;
 use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
 use Orchid\Platform\OrchidServiceProvider;
@@ -324,7 +325,10 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('auth.scope_group.write', 'Scope Group (Write)')
 
                 ->addPermission('auth.application.read', 'Application (Read)')
-                ->addPermission('auth.application.write', 'Application (Write)')
+                ->addPermission('auth.application.write', 'Application (Write)'),
+
+            ItemPermission::group('Bot management')
+                ->addPermission('platform.navbar', 'Navbar (View)')
         ];
     }
     private function isSalesEnabled(): bool
