@@ -134,7 +134,7 @@ class ShopProductEdit extends Screen
                     Picture::make('Barcode')
                         ->title('Barcode')
                         ->help('This is the barcode of this product')
-                        ->url($this->products->exists ? route('api.shop.barcode') . '?productId=' . $this->products->generateUPCA() : '')
+                        ->url($this->products->exists ? 'https://api.fluffici.eu/api/product/ean?productId=' . $this->products->generateUPCA() : '')
                         ->canSee($this->products->exists)
 
                 ])->alignCenter(),

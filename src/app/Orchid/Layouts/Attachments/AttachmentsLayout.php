@@ -13,6 +13,7 @@ use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Persona;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
@@ -92,7 +93,7 @@ class AttachmentsLayout extends Table
 
             TD::make('created_at', __('attachments.table.created_at'))
                 ->render(function (PlatformAttachments $platformAttachments) {
-                    return RelativeTime::make('created_at')->setTime($platformAttachments->created_at);
+                    return Input::make('created_at')->timestamp($platformAttachments->created_at)->relativeTime(true);
                 }),
         ];
     }

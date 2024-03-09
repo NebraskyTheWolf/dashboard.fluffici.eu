@@ -2,20 +2,20 @@
     <div data-controller="input"
          data-input-mask="{{$mask ?? ''}}"
     >
-        <input {{ $attributes }}>
+
+        @if($relativeTime)
+            <relative-time format="elapsed" datetime="{{ $timestamp }}" title="{{ $timestamp }}"></relative-time>
+        @else
+            <input {{ $attributes }}>
+        @endif
     </div>
 
-    @if($relativeTime)
-        <relative-time format="elapsed" datetime="{{ $timestamp }}" title="{{ $parsedTime }}"></relative-time>
-    @else
-        @empty(!$datalist)
-            <datalist id="datalist-{{$name}}">
-                @foreach($datalist as $item)
-                    <option value="{{ $item }}">
-                @endforeach
-            </datalist>
-        @endempty
-    @endif
-
+    @empty(!$datalist)
+        <datalist id="datalist-{{$name}}">
+            @foreach($datalist as $item)
+                <option value="{{ $item }}">
+            @endforeach
+        </datalist>
+    @endempty
 
 @endcomponent

@@ -68,7 +68,7 @@ class AuditLogsListLayout extends Table
 
             TD::make('created_at', __('audit.table.create_at'))
                 ->render(function (AuditLogs $auditLogs) {
-                    return RelativeTime::make('created_at')->setTime($auditLogs->created_at);
+                    return Input::make('created_at')->timestamp($auditLogs->created_at)->relativeTime(true);
                 }),
         ];
     }
