@@ -1,4 +1,4 @@
-@extends("emails.base-gmail")
+@extends("emails.base")
 
 @section('content')
     <table class="box" cellpadding="0" cellspacing="0">
