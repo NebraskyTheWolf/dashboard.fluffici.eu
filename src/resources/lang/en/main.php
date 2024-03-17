@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'screen.title' => 'Administrační panel Fluffici.',
-    'screen.descriptions' => 'Vítejte na své nástěnce :name :)',
+    'screen.title' => 'Fluffici Admin Panel.',
+    'screen.descriptions' => 'Welcome to your dashboard :name :)',
 
-    'screen.metrics.order' => 'Čekající objednávky',
-    'screen.metrics.tickets' => 'Čekající lístky',
-    'screen.metrics.visitors' => 'Návštěvníci',
+    'screen.metrics.order' => 'Pending Orders',
+    'screen.metrics.tickets' => 'Pending Tickets',
+    'screen.metrics.visitors' => 'Visitors',
 
-    'screen.chart.visitors' => 'Celkový počet návštěvníků dosud.',
-    'screen.chart.events' => 'Celková aktivita událostí dosud.'
+    'screen.chart.visitors' => 'Overall visitors until now.',
+    'screen.chart.events' => 'Overall events activity until now.'
 ];

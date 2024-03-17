@@ -5,8 +5,6 @@
         <small style="color: white;" id="version"> Verze : <i class="loading cog icon"></i></small>
         <br>
         <small style="color: white;" id="rev"> Rev : <i class="loading cog icon"></i></small>
-        <br>
-        <small onclick="window.BeamClient.start().then(() => console.log('Registered with beams!'))"> Klikněte zde pro povolení push notifikací </small>
     </div>
 @else
 @endguest

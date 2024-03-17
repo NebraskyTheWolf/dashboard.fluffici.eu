@@ -285,4 +285,8 @@ class User extends Authenticatable implements UserInterface
         return true;
     }
 
+    public function getLanguage(): string
+    {
+        return $this->language ?? 'en';
+    }
 }

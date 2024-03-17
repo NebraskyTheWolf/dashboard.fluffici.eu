@@ -101,7 +101,9 @@ class GenerateMonthlyReport extends Command
         $users = User::all();
         foreach ($users as $user) {
             if ($user->hasAccess('platform.accounting.monthly_report')) {
-                Mail::to($user->email)->send(new \App\Mail\ShopReportReady());
+                Mail::to($user->email)
+                    ->locale($user->getLanguage())
+                    ->send(new \App\Mail\ShopReportReady());
             }
         }
     }

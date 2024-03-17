@@ -10,7 +10,7 @@
                 <span class="ms-2">@yield('title')</span>
             </a>
 
-            <a class="header-brand order-last" href="https://www.fluffici.eu/">
+            <a class="header-brand order-last" href="{{ route('main') }}">
                 @include('header')
             </a>
         </header>

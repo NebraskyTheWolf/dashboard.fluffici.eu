@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'screen.title' => 'Podpora',
-    'screen.button.refresh' => 'Obnovit'
+    'screen.title' => 'Support',
+    'screen.button.refresh' => 'Refresh'
 ];

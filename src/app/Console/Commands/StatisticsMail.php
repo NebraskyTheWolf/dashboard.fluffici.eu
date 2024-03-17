@@ -42,7 +42,9 @@ class StatisticsMail extends Command
             $users = User::paginate();
             foreach ($users as $user) {
                 if ($user->hasAccess('platform.systems.eshop')) {
-                    Mail::to($user->email)->send(new WeeklyStatistic());
+                    Mail::to($user->email)
+                        ->locale($user->getLanguage())
+                        ->send(new WeeklyStatistic());
                 }
             }
             printf('Sending as email globally.');

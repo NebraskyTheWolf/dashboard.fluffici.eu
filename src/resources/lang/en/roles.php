@@ -2,37 +2,37 @@
 
 return [
     // RoleEditScreen
-    'screen.edit.title' => 'Upravit roli',
-    'screen.edit.descriptions' => 'Upravte oprávnění a povolení spojená s konkrétní rolí.',
+    'screen.edit.title' => 'Edit Role',
+    'screen.edit.descriptions' => 'Modify the privileges and permissions associated with a specific role.',
 
-    'screen.button.save' => 'Uložit',
-    'screen.button.remove' => 'Odstranit',
+    'screen.button.save' => 'Save',
+    'screen.button.remove' => 'Remove',
 
     'screen.layout.role.title' => 'Role',
-    'screen.layout.role.description' => 'Role je soubor oprávnění (možná různých služeb, jako je služba Uživatelé, Moderátor atd.), která uživatelům s touto rolí umožňuje provádět určité úkoly nebo operace.',
+    'screen.layout.role.description' => 'A role is a collection of privileges (of possibly different services like the Users service, Moderator, and so on) that grants users with that role the ability to perform certain tasks or operations.',
 
-    'screen.layout.permissions.title' => 'Povolení/Oprávnění',
-    'screen.layout.permissions.description' => 'Oprávnění je nezbytné pro provádění určitých úkolů a operací v oblasti.',
+    'screen.layout.permissions.title' => 'Permission/Privilege',
+    'screen.layout.permissions.description' => 'A privilege is necessary to perform certain tasks and operations in an area.',
 
-    'screen.toast.saved' => 'Role byla uložena',
-    'screen.toast.removed' => 'Role byla odstraněna',
+    'screen.toast.saved' => 'Role was saved',
+    'screen.toast.removed' => 'Role was removed',
 
     // RoleListScreen
-    'screen.title' => 'Správa rolí',
-    'screen.descriptions' => 'Komplexní seznam všech rolí, včetně jejich povolení a přidružených uživatelů.',
+    'screen.title' => 'Role Management',
+    'screen.descriptions' => 'A comprehensive list of all roles, including their permissions and associated users.',
 
-    'screen.button.add' => 'Přidat',
+    'screen.button.add' => 'Add',
 
     // RoleEditLayout
     // RoleListLayout
-    'layout.role_name.title' => 'Jméno',
-    'layout.role_name.placeholder' => 'Jméno',
-    'layout.role_name.help' => 'Zobrazované jméno role',
+    'layout.role_name.title' => 'Name',
+    'layout.role_name.placeholder' => 'Name',
+    'layout.role_name.help' => 'Role display name',
 
     'layout.slug.title' => 'Slug',
     'layout.slug.placeholder' => 'Slug',
-    'layout.slug.help' => 'Skutečné jméno v systému',
+    'layout.slug.help' => 'Actual name in the system',
 
-    'layout.created_at' => 'Vytvořeno',
-    'layout.updated_at' => 'Poslední úprava',
+    'layout.created_at' => 'Created',
+    'layout.updated_at' => 'Last edit',
 ];

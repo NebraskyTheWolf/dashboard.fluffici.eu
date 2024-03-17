@@ -1,28 +1,27 @@
 <?php
 
 return [
-    'table.first_name' => 'Jméno',
-    'table.last_name' => 'Příjmení',
-    'table.email' => 'E-mail',
-    'table.status' => 'Stav',
-    'table.paid' => 'Zaplaceno',
-    'table.payment_status' => 'Stav platby',
+    'table.first_name' => 'First name',
+    'table.last_name' => 'Last name',
+    'table.email' => 'Email',
+    'table.status' => 'Status',
+    'table.paid' => 'Paid',
+    'table.payment_status' => 'Payment status',
 
-    'table.payment_status.cancelled' => 'Zrušeno',
-    'table.payment_status.paid' => 'Zaplaceno',
-    'table.payment_status.unpaid' => 'Nezaplaceno',
-    'table.payment_status.await' => 'Čeká na potvrzení...',
+    'table.payment_status.cancelled' => 'Cancelled',
+    'table.payment_status.paid' => 'Paid',
+    'table.payment_status.unpaid' => 'Unpaid',
+    'table.payment_status.await' => 'Awaiting confirmation...',
 
-    'table.status.processing' => 'Zpracovává se',
-    'table.status.cancelled' => 'Zrušeno',
-    'table.status.refunded' => 'Vráceno',
-    'table.status.disputed' => 'Sporné',
-    'table.status.delivered' => 'Doručeno',
-    'table.status.archived' => 'Archivováno',
-    'table.status.completed' => 'Dokončeno',
-    'table.status.partially_paid' => 'Částečně zaplaceno (1/2)',
+    'table.status.processing' => 'Processing',
+    'table.status.cancelled' => 'Cancelled',
+    'table.status.refunded' => 'Refunded',
+    'table.status.disputed' => 'Disputed',
+    'table.status.delivered' => 'Delivered',
+    'table.status.archived' => 'Archived',
+    'table.status.completed' => 'Completed',
 
-    'screen.title' => 'Objednávky',
-    'screen.button.refresh' => 'Obnovit',
-    'screen.toast.refresh' => 'Data byla obnovena.'
+    'screen.title' => 'Orders',
+    'screen.button.refresh' => 'Refresh',
+    'screen.toast.refresh' => 'The data has been refreshed.'
 ];

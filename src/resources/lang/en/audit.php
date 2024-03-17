@@ -1,21 +1,21 @@
 <?php
 
 return [
-    'table.user' => 'Autor',
-    'table.action' => 'Akce',
-    'table.operation' => 'Operace',
-    'table.created_at' => 'Vytvořeno v',
+    'table.user' => 'Author',
+    'table.action' => 'Action',
+    'table.operation' => 'Operation',
+    'table.created_at' => 'Created at',
 
-    'type.deleted' => 'Smazáno',
-    'type.changed' => 'Změněno',
-    'type.added' => 'Přidáno',
+    'type.deleted' => 'Deleted',
+    'type.changed' => 'Changed',
+    'type.added' => 'Added',
 
-    'type.cancelled' => 'Zrušeno',
-    'type.finished' => 'Dokončeno',
+    'type.cancelled' => 'Cancelled',
+    'type.finished' => 'Finished',
 
-    'screen.title' => 'Auditové záznamy',
-    'screen.description' => 'Všechny uživatelské záznamy.',
+    'screen.title' => 'Audit Logs',
+    'screen.description' => 'All users logs.',
 
-    'screen.button.refresh' => 'Obnovit',
-    'screen.toast.refresh' => 'Data byla obnovena.',
+    'screen.button.refresh' => 'Refresh',
+    'screen.toast.refresh' => 'The data has been refreshed.',
 ];

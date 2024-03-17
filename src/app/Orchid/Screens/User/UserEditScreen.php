@@ -198,7 +198,7 @@ class UserEditScreen extends Screen
             return redirect()->route('platform.systems.users');
         }
 
-        if (!$this->user->hasUserBiggerPower(Auth::user())) {
+        if ($this->user->hasUserBiggerPower(Auth::user())) {
             Toast::info("You cannot terminate this user, this user have bigger power than yours.");
 
             return redirect()->route('platform.systems.users');
@@ -211,7 +211,9 @@ class UserEditScreen extends Screen
 
             Toast::info("You terminated " . $user->name . " account.");
 
-            Mail::to($user)->send(new UserTermination($user->email));
+            Mail::to($user)
+                ->locale($user->getLanguage())
+                ->send(new UserTermination($user->email));
 
             // Laravel trick to logout a distant user..
             $user->update([

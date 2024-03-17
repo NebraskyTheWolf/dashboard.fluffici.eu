@@ -52,8 +52,6 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="{{ url('/js/app.js') }}"></script>
-    <script src="https://js.pusher.com/8.0.1/pusher.min.js"></script>
-    <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
 
     <link rel="stylesheet" href="{{ url('/css/app.css')}}">
     <link rel="stylesheet" href="{{ url('/css/fluffici.css')}}">
@@ -97,23 +95,6 @@
 @else
     <input id="userId" type="number" value="0" hidden="">
 @endif
-
-<script>
-    const beamsClient = new PusherPushNotifications.Client({
-        instanceId: "63e32cff-b20c-4c92-bb49-0e40cfd1dbe3",
-    });
-
-    beamsClient
-        .start()
-        .then((beamsClient) => beamsClient.getDeviceId())
-        .then((deviceId) =>
-            console.log("Successfully registered with Beams. Device ID:", deviceId)
-        )
-        .then(() => beamsClient.addDeviceInterest("dashboard"))
-        .then(() => beamsClient.getDeviceInterests())
-        .then((interests) => console.log("Current interests:", interests))
-        .catch(console.error);
-</script>
 
 </body>
 </html>

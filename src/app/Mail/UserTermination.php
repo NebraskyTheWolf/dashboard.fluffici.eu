@@ -42,7 +42,6 @@ class UserTermination extends Mailable
         return new Content(
             view: 'emails.admin.termination',
             with: [
-                'provider' => str_ends_with($this->email, "@gmail.com") ? 'base-gmail' : 'base',
                 'socials' => SocialMedia::all()
             ]
         );

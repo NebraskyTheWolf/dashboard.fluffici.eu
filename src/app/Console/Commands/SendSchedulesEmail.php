@@ -33,7 +33,9 @@ class SendSchedulesEmail extends Command
         $users = User::all();
         foreach ($users as $user) {
             if ($user->hasAccess('platform.systems.events')) {
-                Mail::to($user->email)->send(new ScheduleMail());
+                Mail::to($user->email)
+                    ->locale($user->getLanguage())
+                    ->send(new ScheduleMail());
             }
         }
     }
