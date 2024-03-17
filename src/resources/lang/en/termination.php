@@ -12,5 +12,5 @@ return [
     'desc.two' => 'You can click on <a href="https://support.fluffici.eu/appeal-punishment" style="color: #206bc4; text-decoration: none;">Appeal</a>.',
 
     'greetings.title' => 'Sincerely,',
-    'greetings.signature' => 'Fluffíci, z.s. team.'
+    'greetings.signature' => 'Fluffici, z.s. team.'
 ];

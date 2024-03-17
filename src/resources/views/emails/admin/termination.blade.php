@@ -18,7 +18,7 @@
                             <p style="margin: 0 0 1em;">{{ __('termination.hello') }}</p>
                             <ul style="margin: 0 0 1em;">
                                 <li><strong style="font-weight: 600;">Fluffici</strong> {{ __('termination.synopsis.one') }}
-                                    {{ __('termination.synopsis.two') }}
+                                    {!! __('termination.synopsis.two') !!}
                                     {!! __('termination.synopsis.three') !!}
                                 </li>
                                 <li>
