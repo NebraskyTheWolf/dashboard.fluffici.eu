@@ -169,6 +169,8 @@ class LoginController extends Controller
             $otp->delete();
             $request->session()->regenerate();
 
+            $request->user()->sendFCMNotification('New login detected.', 'You have logged on the dashboard at ' . Carbon::now()->diffForHumans());
+
             return $request->wantsJson()
                 ? new JsonResponse([], 204)
                 : redirect()->intended("main");
