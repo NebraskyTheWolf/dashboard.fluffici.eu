@@ -170,8 +170,7 @@ class EventsEditScreen extends Screen
 
                     Quill::make('events.descriptions')
                         ->title(__('events.screen.input.description.title'))
-                        ->canSee(!$this->events->exists || ($this->events->exists && $this->events->status == "INCOMING"))
-                        ->required(),
+                        ->canSee(!$this->events->exists || ($this->events->exists && $this->events->status == "INCOMING")),
 
                     Select::make('events.type')
                         ->options([
@@ -189,6 +188,7 @@ class EventsEditScreen extends Screen
                         ->disabled($this->events->status == "CANCELLED")
                         ->allowInput()
                         ->format24hr()
+                        ->enableTime()
                         ->required(),
 
                     DateTimer::make('events.end')
@@ -196,18 +196,17 @@ class EventsEditScreen extends Screen
                         ->disabled($this->events->status == "CANCELLED")
                         ->allowInput()
                         ->format24hr()
+                        ->enableTime()
                         ->required(),
                 ]),
 
                 Group::make([
                     Map::make('events.min')
                         ->title(__('events.screen.input.map_min.title'))
-                        ->help(__('events.screen.input.map_min.help'))
-                        ->required(),
+                        ->help(__('events.screen.input.map_min.help')),
                     Map::make('events.max')
                         ->title(__('events.screen.input.map_max.title'))
                         ->help(__('events.screen.input.map_max.help'))
-                        ->required()
                 ]),
 
                 Group::make([
