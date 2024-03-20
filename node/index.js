@@ -96,7 +96,6 @@ app.post('/voucher', async function (req, res) {
         bwipJs.toBuffer({
             bcid: 'datamatrix',
             text: req.body.properties,
-            barcolor: '#FFF'
         }).then(png => {
             const dout = fs.createWriteStream(path.join(__dirname, 'cache', id + '-datamatrix.png')),
                 dstream = new PNGStream.from(png);

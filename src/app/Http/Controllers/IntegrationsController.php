@@ -27,7 +27,7 @@ class IntegrationsController extends Controller
         }
 
         $data = json_decode($request->input('data'), true);
-        $amount = $data['amount'];
+        $amount = intval($data['amount']);
         $fullname = $data['from_name'];
         $type = $data['type'];
 
@@ -42,7 +42,7 @@ class IntegrationsController extends Controller
         if ($response->getStatusCode() == 200) {
             $body = json_decode($response->getBody()->getContents(), true);
             if ($body['result'] === 'success') {
-                $this->saveIncome($fullname, $type, $body['conversion_rate'], $body['conversion_result']);
+                $this->saveIncome($fullname, $type, $body['conversion_rate'], intval($body['conversion_result']));
                 return $this->generateResponse(true, "Operation successfully saved");
             }
         }
@@ -70,11 +70,11 @@ class IntegrationsController extends Controller
      * @param string $fullname The full name of the income source.
      * @param string $type The type of income.
      * @param string $currency The currency used for the income.
-     * @param float $amount The amount of income.
+     * @param int $amount The amount of income.
      *
      * @return void
      */
-    private function saveIncome(string $fullname, string $type, string $currency, float $amount): void
+    private function saveIncome(string $fullname, string $type, string $currency, int $amount): void
     {
         $income = new Accounting();
         $income->type = self::INCOME;

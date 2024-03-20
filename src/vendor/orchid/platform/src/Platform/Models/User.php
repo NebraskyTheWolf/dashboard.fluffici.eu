@@ -8,6 +8,7 @@ use App\Models\UserApiToken;
 use App\Models\UserRestrictions;
 use App\Orchid\Presenters\AuditPresenter;
 use App\Orchid\Presenters\UserPresenters;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -130,20 +131,6 @@ class User extends Authenticatable implements UserInterface
         ]);
     }
 
-    /**
-     * Initialize Firebase Cloud Messaging (FCM) for sending push notifications.
-     *
-     * This method initializes the FCM instance if it has not already been initialized.
-     *
-     * @return void
-     */
-    public function initFCM(): void
-    {
-        if ($this->notification != null)
-            return;
-
-        $this->notification = Firebase::messaging();
-    }
 
     /**
      * @return UserPresenters
@@ -251,23 +238,69 @@ class User extends Authenticatable implements UserInterface
      * @param string $body The body of the notification. Maximum 240 characters.
      *
      * @return bool Returns true if the notification is sent successfully, otherwise false.
+     * @throws Exception
      */
     public function sendFCMNotification(string $title, string $body): bool
     {
-        if (!$this->is_fcm)
+        if (!$this->isFCMAvailable()) {
             return false;
+        }
 
-        $this->initFCM();
-
-        // Android notification 'title' and 'body' maximum characters.
-        // title is 65 characters long on maximum
-        // and the body is maximum 240 characters.
-
-        if (strlen($title) >= 65)
+        if (!$this->isTitleValid($title) || !$this->isBodyValid($body)) {
             return false;
-        if (strlen($body) >= 240)
-            return false;
+        }
 
+        return $this->sendNotification($title, $body);
+    }
+
+    /**
+     * Check if FCM (Firebase Cloud Messaging) is available for the current user.
+     *
+     * @return bool Returns true if FCM is available, false otherwise.
+     */
+    private function isFCMAvailable(): bool
+    {
+        if (!$this->is_fcm) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check if the provided title is valid.
+     *
+     * @param string $title The title to be checked.
+     *
+     * @return bool Returns true if the title is valid, false otherwise.
+     */
+    private function isTitleValid(string $title): bool
+    {
+        return strlen($title) < self::MAX_TITLE_LENGTH;
+    }
+
+    /**
+     * Checks if the body of a message is valid based on its length.
+     *
+     * @param string $body The body of the message.
+     *
+     * @return bool Returns true if the body is valid, and false otherwise.
+     */
+    private function isBodyValid(string $body): bool
+    {
+        return strlen($body) < self::MAX_BODY_LENGTH;
+    }
+
+    /**
+     * Send a notification to the user through Firebase Cloud Messaging (FCM).
+     *
+     * @param string $title The title of the notification.
+     * @param string $body The body/content of the notification.
+     *
+     * @return bool Whether the notification was successfully sent or not.
+     * @throws Exception If there was an error while sending the FCM notification.
+     */
+    private function sendNotification(string $title, string $body): bool
+    {
         $message = CloudMessage::fromArray([
             'token' => $this->fcm_token,
             'notification' => [
@@ -277,13 +310,15 @@ class User extends Authenticatable implements UserInterface
         ]);
 
         try {
-            $this->notification->send($message);
+            Firebase::messaging()->send($message);
+            return true;
         } catch (MessagingException|FirebaseException $e) {
-            return false;
+            throw new Exception('Failed to send FCM notification: ' . $e->getMessage());
         }
-
-        return true;
     }
+
+    const int MAX_TITLE_LENGTH = 65;
+    const int MAX_BODY_LENGTH = 240;
 
     public function getLanguage(): string
     {
