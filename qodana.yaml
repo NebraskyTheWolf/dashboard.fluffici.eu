@@ -37,3 +37,26 @@ exclude:
   - name: PhpUndefinedGotoLabelInspection
   - name: PhpUndefinedFieldInspection
   - name: PhpUndefinedVariableInspection
+  - name: PhpOptionalBeforeRequiredParametersInspection
+  - name: PhpNullIsNotCompatibleWithParameterInspection
+  - name: PhpArithmeticTypeCheckInspection
+  - name: PhpArrayAccessOnIllegalTypeInspection
+  - name: PhpMissingClassConstantTypeInspection
+  - name: PhpIllegalArrayKeyTypeInspection
+  - name: PhpIllegalStringOffsetInspection
+  - name: PhpIncompatibleReturnTypeInspection
+  - name: PhpWrongForeachArgumentTypeInspection
+  - name: PhpParamsInspection
+  - name: PhpStrictTypeCheckingInspection
+  - name: PhpFieldAssignmentTypeMismatchInspection
+  - name: RegExpUnexpectedAnchor
+  - name: RegExpRepeatedSpace
+  - name: CustomRegExpInspection
+  - name: RegExpDuplicateAlternationBranch
+  - name: RegExpDuplicateCharacterInClass
+  - name: RegExpEmptyAlternationBranch
+  - name: RegExpRedundantClassElement
+  - name: RegExpRedundantNestedCharacterClass
+  - name: RegExpSingleCharAlternation
+  - name: RegExpSuspiciousBackref
+  - name: RegExpUnnecessaryNonCapturingGroup
