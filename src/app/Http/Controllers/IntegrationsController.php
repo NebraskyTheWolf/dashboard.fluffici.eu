@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Accounting;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,7 @@ class IntegrationsController extends Controller
      * @param Request $request The incoming request.
      *
      * @return JsonResponse The JSON response.
+     * @throws GuzzleException
      */
     public function kofiCallback(Request $request): JsonResponse
     {
