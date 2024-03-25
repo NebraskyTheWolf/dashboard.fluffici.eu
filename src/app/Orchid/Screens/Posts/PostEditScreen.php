@@ -149,7 +149,7 @@ class PostEditScreen extends Screen
         } else {
             return [
                 Layout::tabs([
-                    __('screen.tabs.post_information') => [
+                    __('posts.screen.tabs.post_information') => [
                         Layout::rows([
                             Input::make('post.title')
                                 ->title(__('posts.screen.input.post_title.title'))

@@ -9,13 +9,6 @@ use Orchid\Screen\TD;
 
 class ShopCategoriesLayout extends Table
 {
-    /**
-     * Used to create the title of a group of form elements.
-     *
-     * @var string|null
-     */
-    protected $title = "Categories";
-
     public $target = 'categories';
 
     /**
