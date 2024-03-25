@@ -9,9 +9,6 @@ class Post extends Model
 {
     use AsSource;
 
-    public $connection = 'blog';
-
-
     /**
      * @var array
      */

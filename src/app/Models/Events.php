@@ -12,8 +12,6 @@ class Events extends Model
 {
     use AsSource;
 
-    public $connection = 'akce';
-
     protected $fillable = [
         'name',
         'descriptions',
