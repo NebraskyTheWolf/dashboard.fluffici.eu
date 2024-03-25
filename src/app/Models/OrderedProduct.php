@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Orchid\Metrics\Chartable;
+use Orchid\Screen\AsSource;
 
 class OrderedProduct extends Model
 {
-    use HasFactory, Chartable;
+    use AsSource, Chartable;
 
     public $connection = 'shop';
     protected $table = "ordered_product";
@@ -22,5 +22,18 @@ class OrderedProduct extends Model
     public function product()
     {
         return $this->belongsTo(ShopProducts::class);
+    }
+
+    public function getProduct(): ?ShopProducts
+    {
+        $product = ShopProducts::where('id', $this->product_id);
+
+        if ($product->exists()) {
+            return $product->first();
+        } else {
+            $this->delete();
+        }
+
+        return null;
     }
 }

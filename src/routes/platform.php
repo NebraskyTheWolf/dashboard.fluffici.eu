@@ -34,6 +34,8 @@ use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\Shop\CustomerEditScreen;
 use App\Orchid\Screens\Shop\CustomerListScreen;
+use App\Orchid\Screens\Shop\InventoryEditScreen;
+use App\Orchid\Screens\Shop\InventoryScreen;
 use App\Orchid\Screens\Shop\ShopCarrierEdit;
 use App\Orchid\Screens\Shop\ShopCarrierList;
 use App\Orchid\Screens\Shop\ShopCategories;
@@ -287,3 +289,10 @@ Route::screen('devices/new/{device?}', DeviceEditScreen::class)
     ->name('platform.device.new');
 
 Route::screen('test/calendar', TestCalendar::class);
+
+
+Route::screen('shop/inventory', InventoryScreen::class)
+    ->name('platform.inventory');
+
+Route::screen('shop/inventory/edit/{inventory?}', InventoryEditScreen::class)
+    ->name('platform.inventory.edit');

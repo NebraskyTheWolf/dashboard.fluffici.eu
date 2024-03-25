@@ -271,6 +271,9 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.shop.countries.write', 'Země EObchodu (Zápis)')
                 ->addPermission('platform.eshop.countries', 'Země EObchodu (Navbar)')
 
+                ->addPermission('platform.eshop.inventory.read', 'Inventory (Čtení)')
+                ->addPermission('platform.eshop.inventory.write', 'Inventory (Zápis)')
+
                 ->addPermission('platform.systems.eshop.carriers', 'Přepravci EObchodu (Navbar)'),
 
             ItemPermission::group('Přílohy')

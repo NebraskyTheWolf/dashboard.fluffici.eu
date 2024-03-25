@@ -4,7 +4,9 @@ namespace App\Orchid\Screens\Shop;
 
 use App\Orchid\Layouts\Shop\ShopProductsList;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Layout;
 use Orchid\Screen\Screen;
+use Orchid\Support\Color;
 
 class ShopProducts extends Screen
 {
@@ -48,13 +50,17 @@ class ShopProducts extends Screen
             Link::make(__('products.screen.button.add'))
                 ->icon('bs.plus-circle')
                 ->href(route('platform.shop.products.edit')),
+            Link::make('Inventory')
+                ->type(Color::SUCCESS)
+                ->icon('bs.box-seam')
+                ->route('platform.inventory')
         ];
     }
 
     /**
      * The screen's layout elements.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return Layout[]|string[]
      */
     public function layout(): iterable
     {
