@@ -8,8 +8,10 @@ use App\Models\EventsInteresteds;
 use App\Models\Pages;
 use App\Models\ShopOrders;
 use App\Models\ShopSupportTickets;
-use app\Models\VisitsStatistics;
+use App\Models\VisitsStatistics;
+use App\Orchid\Layouts\Pie;
 use App\Orchid\Layouts\Shop\ShopProfit;
+use App\Orchid\Layouts\VisitTracking;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
@@ -40,10 +42,22 @@ class PlatformScreen extends Screen
             ],
             'dataset' => [
                 Pages::averageByDays('visits')->toChart('Visits'),
+                VisitsStatistics::averageByDays('id')->toChart('Platform Visits')
+            ],
+            'pie' => [
+                VisitsStatistics::sumByDays('country')->toChart('Countries')
+            ],
+            'pie_platform' => [
+                VisitsStatistics::sumByDays('application_slug')->toChart('Application')
+            ],
+            'pie_path' => [
+                VisitsStatistics::sumByDays('path')->toChart('Routes')
             ],
             'events' => [
                 EventsInteresteds::averageByDays("id")->toChart('Interested'),
-            ]
+            ],
+
+            'visits' => VisitsStatistics::paginate()
         ];
     }
 
@@ -88,8 +102,8 @@ class PlatformScreen extends Screen
                 __('main.screen.metrics.tickets') => 'metrics.tickets',
                 __('main.screen.metrics.visitors') => 'metrics.visitors',
             ]),
-            ShopProfit::make('dataset', __('main.screen.chart.visitors')),
-            ShopProfit::make('events', __('main.screen.chart.events'))
+            ShopProfit::make('dataset', __('main.screen.chart.visitors'))->type("line"),
+            VisitTracking::class
         ];
     }
 }

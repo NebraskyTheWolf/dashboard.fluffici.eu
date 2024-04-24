@@ -134,7 +134,9 @@ class PostEditScreen extends Screen
                             Quill::make('post.body')
                                 ->title(__('posts.screen.input.body.title'))
                                 ->disabled($this->post->exists)
-                                ->required(),
+                                ->roomId("blog-post")
+                                ->collaborative()
+                                ->spellcheck()
                         ])
                     ],
                     __('posts.screen.tabs.statistics') => [
@@ -171,7 +173,9 @@ class PostEditScreen extends Screen
 
                             Quill::make('post.body')
                                 ->title(__('posts.screen.input.body.title'))
-                                ->required()
+                                ->roomId("blog-post")
+                                ->collaborative()
+                                ->spellcheck()
                         ])
                     ],
                     __('posts.screen.tabs.statistics') => [],
