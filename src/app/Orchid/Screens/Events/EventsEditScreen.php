@@ -19,6 +19,7 @@ use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Map;
+use Orchid\Screen\Fields\Picture;
 use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
@@ -203,10 +204,8 @@ class EventsEditScreen extends Screen
                 Group::make([
                     Map::make('events.min')
                         ->title(__('events.screen.input.map_min.title'))
-                        ->help(__('events.screen.input.map_min.help')),
-                    Map::make('events.max')
-                        ->title(__('events.screen.input.map_max.title'))
-                        ->help(__('events.screen.input.map_max.help'))
+                        ->help(__('events.screen.input.map_min.help'))
+                        ->canSee(!$this->events->status == "CANCELLED")
                 ]),
 
                 Group::make([
@@ -217,35 +216,67 @@ class EventsEditScreen extends Screen
                         ->disabled($this->events->status == "CANCELLED"),
                 ]),
 
-                Cropper::make('events.banner')
-                    ->title(__('events.screen.input.banner.title'))
-                    ->actionId($this->events->event_id)
-                    ->remoteTag('banners')
-                    ->minWidth(750)
-                    ->maxWidth(1500)
-                    ->minHeight(250)
-                    ->maxHeight(500)
-                    ->maxFileSize(200)
+                Group::make([
+                    Cropper::make('events.banner_id')
+                        ->title(__('events.screen.input.banner.title'))
+                        ->remoteTag('banners')
+                        ->minWidth(800)
+                        ->minHeight(400)
+                        ->maxFileSize(200)
+                        ->disabled($this->events->status == "CANCELLED")
+                        ->canSee(!$this->events->exists),
+
+                    Cropper::make('events.thumbnail_id')
+                        ->title(__('events.screen.input.thumbnail.title'))
+                        ->remoteTag('attachments')
+                        ->minWidth(600)
+                        ->minHeight(300)
+                        ->maxFileSize(200)
+                        ->disabled($this->events->status == "CANCELLED")
+                        ->canSee(!$this->events->exists),
+
+                    Cropper::make('events.map_id')
+                        ->title(__('events.screen.input.map.title'))
+                        ->remoteTag('attachments')
+                        ->minWidth(620)
+                        ->minHeight(300)
+                        ->maxFileSize(200)
+                        ->disabled($this->events->status == "CANCELLED")
+                        ->canSee(!$this->events->exists),
+
+                    Picture::make('events.banner_id')
+                        ->title(__('events.screen.input.banner.title'))
+                        ->url($this->events->banner_id != null ? "https://autumn.fluffici.eu/banners/" . $this->events->banner_id : 'https://placehold.co/800x400')
+                        ->canSee($this->events->exists),
+
+                    Picture::make('events.thumbnail_id')
+                        ->title(__('events.screen.input.banner.title'))
+                        ->url($this->events->thumbnail_id != null ? "https://autumn.fluffici.eu/attachments/" . $this->events->thumbnail_id : 'https://placehold.co/600x300')
+                        ->canSee($this->events->exists),
+
+                    Picture::make('events.map_id')
+                        ->title(__('events.screen.input.banner.title'))
+                        ->url($this->events->map_id != null ? "https://autumn.fluffici.eu/attachments/" . $this->events->map_id : 'https://placehold.co/620x300')
+                        ->canSee($this->events->exists),
+                ])->alignEnd()
             ])->title("Information"),
         ];
     }
 
     public function createOrUpdate(Request $request) {
 
-        $this->events->fill($request->get('events'))->save();
+        $this->events->fill($request->get('events'));
+
+        $this->events->max = [
+            'lat' => 0.0,
+            'lng' => 0.0,
+        ];
+
+        $this->events->save();
 
         Toast::info(__('events.screen.toast.created'));
 
         event(new UpdateAudit("event", $this->events->name . " updated.", Auth::user()->name));
-
-        if (env('APP_TEST_MAIL', false)) {
-            Mail::to('vakea@fluffici.eu')->send(new ScheduleMail());
-        } else {
-            $users = User::all();
-            foreach ($users as $user) {
-                Mail::to($user->email)->send(new ScheduleMail());
-            }
-        }
 
         return redirect()->route('platform.events.list');
     }

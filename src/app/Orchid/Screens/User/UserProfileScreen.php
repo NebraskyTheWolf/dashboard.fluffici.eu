@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Orchid\Screens\User;
 
 use App\Events\UpdateAudit;
+use App\Events\UserUpdated;
 use App\Orchid\Layouts\User\ProfilePasswordLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Orchid\Access\Impersonation;
@@ -114,8 +116,7 @@ class UserProfileScreen extends Screen
             ->fill($request->get('user'))
             ->save();
 
-        event(new UpdateAudit("profile_updated", "Updated their profile."));
-
+        event(new UpdateAudit("profile_updated", "Updated their profile.", Auth::user()->name));
 
         Toast::info(__('user.screen.profile.toast.saved'));
     }
@@ -132,9 +133,8 @@ class UserProfileScreen extends Screen
             $user->password = Hash::make($request->get('password'));
         })->save();
 
-
-        event(new UpdateAudit("profile_change", "Password changed."));
-        event(new UserUpdate($request->user()->id));
+        event(new UpdateAudit("profile_change", "Password changed.", Auth::user()->name));
+        event(new UserUpdated($request->user()->id));
 
         Toast::info(__('user.screen.profile.toast.password_changed'));
     }

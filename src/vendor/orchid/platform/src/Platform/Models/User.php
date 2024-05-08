@@ -52,7 +52,9 @@ class User extends Authenticatable implements UserInterface
         'password',
         'permissions',
         'fcm_token',
-        'is_fcm'
+        'is_fcm',
+        'bio',
+        'pronouns'
     ];
 
     /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Orchid\Presenters;
+namespace app\Orchid\Presenters;
 
 use Illuminate\Support\Str;
 use Laravel\Scout\Builder;
@@ -10,14 +10,14 @@ use Orchid\Screen\Contracts\Personable;
 use Orchid\Screen\Contracts\Searchable;
 use Orchid\Support\Presenter;
 
-class UserPresenters extends Presenter implements Personable, Searchable
+class NormalPresenter extends Presenter implements Personable, Searchable
 {
     /**
      * Returns the label for this presenter, which is used in the UI to identify it.
      */
     public function label(): string
     {
-        return 'Users';
+        return 'Audit';
     }
 
     /**
@@ -31,22 +31,18 @@ class UserPresenters extends Presenter implements Personable, Searchable
      * Returns the subtitle for this presenter, which provides additional context about the user.
      */
     public function subTitle(): string {
+
+        if ($this->entity->name === 'Deleted User')
+            return '';
+
+        if ($this->entity->name === 'System')
+            return 'System';
+
         $roles = $this->entity->roles->pluck('name')->implode(' / ');
 
-        return (string) Str::of($roles)->limit(20)->whenEmpty(fn () => 'Guest');
-    }
-
-    /**
-     * Returns the URL for this presenter, which is used to link to the user's edit page.
-     */
-    public function url(): string
-    {
-        return route('platform.systems.users.edit', $this->entity);
-    }
-
-    public function status(): ?string
-    {
-        return '';
+        return (string) Str::of($roles)
+            ->limit(20)
+            ->whenEmpty(fn () => 'Guest');
     }
 
     /**
@@ -54,11 +50,10 @@ class UserPresenters extends Presenter implements Personable, Searchable
      */
     public function image(): ?string {
         if ($this->entity->avatar == 1) {
-            if ($this->entity->avatar_id == null) {
-                return 'https://ui-avatars.com/api/?name=' . $this->title() . '&background=0D8ABC&color=fff';
-            } else {
-                return 'https://autumn.fluffici.eu/avatars/' . $this->entity->avatar_id . '?width=256&height=256';
-            }
+            return 'https://autumn.fluffici.eu/avatars/' . $this->entity->avatar_id . '?width=256&height=256';
+        }
+        if ($this->entity->name === "System") {
+            return 'https://ui-avatars.com/api/?name=' . $this->title() . '&background=DC143C&color=fff';
         } else {
             return 'https://ui-avatars.com/api/?name=' . $this->title() . '&background=0D8ABC&color=fff';
         }
@@ -81,7 +76,8 @@ class UserPresenters extends Presenter implements Personable, Searchable
         return $this->entity->search($query);
     }
 
-    public function getId(): int {
-        return $this->entity->id;
+    public function url(): string
+    {
+        return '';
     }
 }

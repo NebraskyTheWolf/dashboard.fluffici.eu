@@ -24,7 +24,10 @@ class Events extends Model
         'max',
 
         'city',
-        'link'
+        'link',
+        'banner_id',
+        'thumbnail_id',
+        'map_id'
     ];
 
     protected $casts = [

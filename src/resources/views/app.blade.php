@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+@php use Illuminate\Support\Facades\Auth;use Orchid\Support\Names; @endphp
+    <!DOCTYPE html>
 <html lang="{{  app()->getLocale() }}" data-controller="html-load" dir="ltr">
 <head>
     <meta charset="utf-8">
@@ -24,10 +25,12 @@
     <meta name="dashboard-prefix" content="{{  Dashboard::prefix() }}">
     <meta name="turbo-cache-control" content="no-cache">
 
-    <meta property="og:image" content="https://autumn.fluffici.eu/attachments/jVrNMLSH1BNA5ZnqGhpLGhVkFoteCwM_Lq0Y5G9Ij7" />
-    <meta property="og:image:secure_url" content="https://autumn.fluffici.eu/attachments/jVrNMLSH1BNA5ZnqGhpLGhVkFoteCwM_Lq0Y5G9Ij7" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="300" />
+    <meta property="og:image"
+          content="https://autumn.fluffici.eu/attachments/jVrNMLSH1BNA5ZnqGhpLGhVkFoteCwM_Lq0Y5G9Ij7"/>
+    <meta property="og:image:secure_url"
+          content="https://autumn.fluffici.eu/attachments/jVrNMLSH1BNA5ZnqGhpLGhVkFoteCwM_Lq0Y5G9Ij7"/>
+    <meta property="og:image:type" content="image/png"/>
+    <meta property="og:image:width" content="300"/>
 
     <meta name="og:title" content="@yield('title') • Fluffici"/>
     <meta name="og:type" content="website"/>
@@ -38,14 +41,14 @@
     <meta name="contact" content="administrace@fluffici.eu">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta content="yes" name="apple-touch-fullscreen" />
+    <meta content="yes" name="apple-touch-fullscreen"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="red">
     <meta name="format-detection" content="telephone=no">
     <meta name="theme-color" content="#FF002E">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet"/>
     <script src="{{ mix('/js/manifest.js','vendor/fluffici') }}" type="text/javascript"></script>
     <script src="{{ mix('/js/vendor.js','vendor/fluffici') }}" type="text/javascript"></script>
     <script src="{{ mix('/js/dashy.js','vendor/fluffici') }}" type="text/javascript"></script>
@@ -62,6 +65,13 @@
     <link rel="stylesheet" href="{{ url('/semantic/semantic.min.css')}}">
     <script type="text/javascript" src="{{url('/semantic/semantic.min.js')}}"></script>
 
+    <meta name="view-transition" content="same-origin">
+    <meta name="turbo-root" content="{{  Dashboard::prefix() }}">
+    <meta name="turbo-refresh-method" content="{{ config('platform.turbo.refresh-method', 'replace') }}">
+    <meta name="turbo-refresh-scroll" content="{{ config('platform.turbo.refresh-scroll', 'reset') }}">
+    <meta name="turbo-prefetch" content="{{ var_export(config('platform.turbo.prefetch', true)) }}">
+    <meta name="dashboard-prefix" content="{{  Dashboard::prefix() }}">
+
     @foreach(Dashboard::getResource('stylesheets') as $stylesheet)
         <link rel="stylesheet" href="{{  $stylesheet }}">
     @endforeach
@@ -73,9 +83,9 @@
     @endforeach
 </head>
 
-<body class="{{ \Orchid\Support\Names::getPageNameClass() }} styled-text" data-controller="pull-to-refresh">
+<body class="{{ Names::getPageNameClass() }} styled-text" data-controller="pull-to-refresh">
 
-<div data-controller="@yield('controller')" @yield('controller-data') id="loading">
+<div class="container-fluid" data-controller="@yield('controller')" @yield('controller-data')>
     <div class="row justify-content-center d-md-flex h-100">
         @yield('aside')
 
@@ -90,8 +100,8 @@
 @stack('scripts')
 @yield('script')
 
-@if (\Illuminate\Support\Facades\Auth::check())
-    <input id="userId" type="number" value="{{ \Illuminate\Support\Facades\Auth::id() }}" hidden="">
+@if (Auth::check())
+    <input id="userId" type="number" value="{{ Auth::id() }}" hidden="">
 @else
     <input id="userId" type="number" value="0" hidden="">
 @endif

@@ -19,6 +19,8 @@ use App\Orchid\Screens\Attachments\AttachmentLists;
 use App\Orchid\Screens\Attachments\AttachmentReportReview;
 use App\Orchid\Screens\Attachments\AttachmentReports;
 use App\Orchid\Screens\Attachments\AttachmentUpload;
+use App\Orchid\Screens\Attachments\PictureApproval;
+use App\Orchid\Screens\Attachments\PictureApprovalEdit;
 use App\Orchid\Screens\Audit\AuditLogsListScreen;
 use App\Orchid\Screens\Devices\DeviceEditScreen;
 use App\Orchid\Screens\Devices\DeviceScreen;
@@ -186,6 +188,13 @@ Route::screen('files/platform/upload', AttachmentUpload::class)
 
 Route::screen('files/lookup/{file}', AttachmentUpload::class)
     ->name('platform.attachments.lookup');
+
+Route::screen('submitted-pictures', PictureApproval::class)
+    ->name('platform.pictures');
+
+Route::screen('submitted-pictures/edit/{attachment}', PictureApprovalEdit::class)
+    ->name('platform.pictures.edit');
+
 
 Route::screen('reports', AttachmentReports::class)
     ->name('platform.reports');

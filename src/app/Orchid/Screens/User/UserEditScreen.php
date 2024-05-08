@@ -168,8 +168,21 @@ class UserEditScreen extends Screen
             $builder->getModel()->password = Hash::make($request->input('user.password'));
         });
 
+        $user->when($request->filled('user.bio'), function (Builder $builder) use ($request) {
+            $builder->getModel()->bio = $request->input('user.bio');
+        });
+
+        $user->when($request->filled('user.pronouns'), function (Builder $builder) use ($request) {
+            $builder->getModel()->pronouns = $request->input('user.pronouns');
+        });
+
+        $user->when($request->filled('user.avatar_id'), function (Builder $builder) use ($request) {
+            $builder->getModel()->avatar_id = $request->input('user.avatar_id');
+            $builder->getModel()->avatar = 1;
+        });
+
         $user
-            ->fill($request->collect('user')->except(['password', 'permissions', 'roles'])->toArray())
+            ->fill($request->collect('user')->except(['password', 'permissions', 'roles', 'bio', 'pronouns'])->toArray())
             ->forceFill(['permissions' => $permissions])
             ->save();
 

@@ -9,6 +9,7 @@ use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Picture;
+use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Layouts\Rows;
 
 
@@ -35,14 +36,21 @@ class UserEditLayout extends Rows
                 ->title(__('user.screen.user.email'))
                 ->placeholder(__('user.screen.user.email.placeholder')),
 
-            Cropper::make('user.avatar')
-                ->userId(Auth::id())
+            Cropper::make('user.avatar_id')
                 ->remoteTag('avatars')
                 ->minWidth(250)
                 ->maxWidth(512)
                 ->minHeight(250)
                 ->maxHeight(512)
                 ->maxFileSize(20),
+
+            Quill::make('user.bio')
+                ->title("About Me"),
+
+            Input::make('user.pronouns')
+                ->type('text')
+                ->title("Mood")
+                ->placeholder("Enter your mood here."),
         ];
     }
 }

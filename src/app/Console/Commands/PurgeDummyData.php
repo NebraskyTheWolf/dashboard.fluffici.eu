@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\AuditLogs;
+use App\Models\Events;
 use App\Models\OrderedProduct;
 use App\Models\OrderIdentifiers;
 use App\Models\OrderInvoice;
@@ -11,6 +12,7 @@ use App\Models\ShopCategories;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
 use App\Models\ShopVouchers;
+use App\Models\VisitsStatistics;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -33,7 +35,7 @@ class PurgeDummyData extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         if (env('ALLOW_DUMMY_SUPPRESSOR', false)) {
 
@@ -44,8 +46,9 @@ class PurgeDummyData extends Command
             $categories = ShopCategories::all();
             $payments = OrderPayment::all();
             $vouchers = ShopVouchers::all();
-            $audits = AuditLogs::paginate();
-            $invoice = OrderInvoice::paginate();
+            $events = Events::all();
+            $audits = AuditLogs::all();
+            $invoice = OrderInvoice::all();
 
             $deletedValue = 0;
 
@@ -92,15 +95,18 @@ class PurgeDummyData extends Command
             }
 
             foreach ($audits as $audit) {
-                if ($audit->name === "Vakea" && Carbon::parse($audit->created_at)->addDays(30)->isPast()) {
-                    $audit->delete();
-                }
-
+                $audit->delete();
                 $deletedValue++;
             }
 
             foreach ($invoice as $invi) {
                 $invi->delete();
+
+                $deletedValue++;
+            }
+
+            foreach ($events as $event) {
+                $event->delete();
 
                 $deletedValue++;
             }

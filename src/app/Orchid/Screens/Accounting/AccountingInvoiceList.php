@@ -5,6 +5,7 @@ namespace app\Orchid\Screens\Accounting;
 use App\Models\OrderInvoice;
 use App\Orchid\Layouts\InvoiceList;
 use Orchid\Screen\Action;
+use Orchid\Screen\Layout;
 use Orchid\Screen\Screen;
 
 class AccountingInvoiceList extends Screen
@@ -51,7 +52,7 @@ class AccountingInvoiceList extends Screen
     /**
      * The screen's layout elements.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return Layout[]|string[]
      */
     public function layout(): iterable
     {

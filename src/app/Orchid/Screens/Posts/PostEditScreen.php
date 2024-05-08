@@ -13,7 +13,9 @@ use App\Orchid\Layouts\Shop\ShopProfit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Picture;
 use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\TextArea;
@@ -134,9 +136,11 @@ class PostEditScreen extends Screen
                             Quill::make('post.body')
                                 ->title(__('posts.screen.input.body.title'))
                                 ->disabled($this->post->exists)
-                                ->roomId("blog-post")
-                                ->collaborative()
-                                ->spellcheck()
+                                ->spellcheck(),
+
+                            Picture::make('post.banner')
+                                ->url('https://autumn.fluffici.eu/attachments/' . $this->post->banner)
+                                ->title('Thumbnail')
                         ])
                     ],
                     __('posts.screen.tabs.statistics') => [
@@ -173,9 +177,18 @@ class PostEditScreen extends Screen
 
                             Quill::make('post.body')
                                 ->title(__('posts.screen.input.body.title'))
-                                ->roomId("blog-post")
-                                ->collaborative()
-                                ->spellcheck()
+                                ->spellcheck(),
+
+                            Cropper::make('post.banner')
+                                ->title("Thumbnail")
+                                ->maxWidth(800)
+                                ->maxHeight(400)
+                                ->minWidth(800)
+                                ->minHeight(400)
+                                ->maxFileSize()
+                                ->maxSizeValidateMessage()
+                                ->help('The thumbnail size is 800x400 and 20MB maximum.')
+                                ->remoteTag('attachments')
                         ])
                     ],
                     __('posts.screen.tabs.statistics') => [],

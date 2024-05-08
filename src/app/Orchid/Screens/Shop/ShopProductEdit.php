@@ -162,6 +162,7 @@ class ShopProductEdit extends Screen
                 ])->alignEnd(),
 
                 Cropper::make('products.image_path')
+                    ->remoteTag("attachments")
                     ->title(__('products.screen.edit.input.image_path.title'))
                     ->placeholder(__('products.screen.edit.input.image_path.placeholder'))
 

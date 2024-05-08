@@ -29,6 +29,7 @@ namespace Orchid\Screen\Fields;
  * @method Cropper height($value = true)
  * @method Cropper popover(string $value = null)
  * @method Cropper title(string $value = null)
+ * @method Cropper remoteTag(string $value = null)
  * @method Cropper maxFileSize($value = true)
  * @method Cropper storage($value = null)
  * @method Cropper staticBackdrop($value = false)
@@ -61,9 +62,7 @@ class Cropper extends Picture
         'acceptedFiles'          => 'image/*',
         'keepOriginalType'       => false,
         'maxSizeValidateMessage' => 'The upload file is too large. Max size: {value} MB',
-        'remoteTag' => 'attachments',
-        'actionId' => '',
-        'objectId' => ''
+        'remoteTag' => 'attachments'
     ];
 
     /**

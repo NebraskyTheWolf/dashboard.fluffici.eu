@@ -16,6 +16,7 @@ class Post extends Model
         'title',
         'description',
         'body',
-        'author'
+        'author',
+        'banner'
     ];
 }

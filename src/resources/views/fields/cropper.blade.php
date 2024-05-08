@@ -16,6 +16,7 @@
          data-cropper-path="{{ $attributes['path'] ?? '' }}"
          data-cropper-keep-original-type-value="{{ $keepOriginalType }}"
          data-cropper-max-size-message-value="{{ __($maxSizeValidateMessage) }}"
+         data-cropper-bucket="{{ $remoteTag }}"
     >
         <div class="border-dashed text-end p-3 cropper-actions">
 
@@ -61,7 +62,6 @@
                         </div>
 
                         <div class="modal-footer">
-
                             <button type="button"
                                     class="btn btn-link"
                                     data-bs-dismiss="modal">
@@ -71,18 +71,12 @@
                             <button type="button"
                                     class="btn btn-default"
                                     data-action="cropper#crop">
-                                {{ __('Crop') }} 
+                                {{ __('Crop') }}
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-
-        <input type="text" name="bucket" value="{{ $remoteTag }}" id="bucket" hidden>
-        <input type="text" name="object_id" value="{{ $objectId }}" id="object_id" hidden>
-        <input type="number" name="user_id" value="{{ Auth::id() }}" id="user_id" hidden>
-        <input type="text" name="action_id" value="{{ $actionId ?: 0 }}" id="action_id" hidden>
     </div>
 @endcomponent

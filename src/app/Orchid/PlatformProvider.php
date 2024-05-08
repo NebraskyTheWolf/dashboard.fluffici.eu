@@ -32,8 +32,7 @@ class PlatformProvider extends OrchidServiceProvider
     /**
      * @return array|Menu[]
      */
-    public function menu(): array
-    {
+    public function menu(): array {
         return [
             Menu::make('Nastavení')
                 ->icon('bs.gear')
@@ -81,7 +80,7 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.bookmark-star')
                         ->route('platform.scope_group.list')
                         ->permission('auth.scope_group.read'),
-                ])->divider(),
+                ])->permission('platform.systems.applications')->divider(),
 
             Menu::make('Přílohy')
                 ->icon('bs.archive')
@@ -93,7 +92,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make("Zprávy & DMCA")
                         ->icon('bs.exclamation-octagon')
                         ->route('platform.reports')
-                        ->permission('platform.systems.attachments.reports')
+                        ->permission('platform.systems.attachments.reports'),
                 ])
                 ->divider()
                 ->permission('platform.systems.attachments'),
@@ -114,7 +113,7 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.calendar-event')
                         ->route('platform.events.list')
                         ->slug('events')
-                        ->badge(fn () => Events::where('status', 'INCOMING')->count() ?: 0)
+                        ->badge(fn () => Events::where('status', 'INCOMING')->where('status', 'STARTED')->count() ?: 0)
                         ->permission('platform.systems.events'),
                     Menu::make('Stránky')
                         ->icon('bs.file-earmark')
@@ -201,7 +200,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Objednávky')
                         ->icon('bs.box-seam')
                         ->route('platform.shop.orders')
-                        ->badge(fn () => ShopOrders::where('status', 'PROCESSING')->count() ?: 0)
+                        ->badge(fn () => ShopOrders::where('status', 'PROCESSING')->where('status', 'OUTING')->count() ?: 0)
                         ->permission('platform.systems.eshop.orders')
                         ->slug('orders')
                         ->title("OBJEDNÁVKY A PODPORA"),
@@ -229,6 +228,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.roles', "Role")
                 ->addPermission('platform.systems.users', "Uživatelé")
                 ->addPermission('platform.systems.settings', "Nastavení (Navbar)")
+                ->addPermission('platform.systems.applications', "OAuth (Dev Only)")
                 ->addPermission('platform.audit.read', "Auditové protokoly (čtení)")
                 ->addPermission('platform.systems.social', "Správa sociálních médií (čtení/zápis)")
                 ->addPermission('platform.systems.dashboard', "Dashboard access (login)"),
