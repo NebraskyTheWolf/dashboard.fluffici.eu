@@ -181,14 +181,12 @@ class PostEditScreen extends Screen
 
                             Cropper::make('post.banner')
                                 ->title("Thumbnail")
+                                ->remoteTag('attachments')
                                 ->maxWidth(800)
                                 ->maxHeight(400)
                                 ->minWidth(800)
                                 ->minHeight(400)
-                                ->maxFileSize()
-                                ->maxSizeValidateMessage()
                                 ->help('The thumbnail size is 800x400 and 20MB maximum.')
-                                ->remoteTag('attachments')
                         ])
                     ],
                     __('posts.screen.tabs.statistics') => [],
