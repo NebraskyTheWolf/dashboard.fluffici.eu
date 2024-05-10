@@ -6,6 +6,8 @@ use App\Events\UpdateAudit;
 use App\Models\Accounting;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
@@ -88,7 +90,18 @@ class AccountingMake extends Screen
                 Input::make('accounting.amount')
                     ->title('Amount')
                     ->help('Enter the amount in CZK')
-                    ->type('number')
+                    ->type('number'),
+
+                CheckBox::make("accounting.is_recurring")
+                    ->title("Recurring?")
+                    ->help("Is this is a recurring payment?"),
+
+                DateTimer::make("accounting.recurring_at")
+                    ->title("Recurring date")
+                    ->help("The date when the payment will be recurring.")
+                    ->allowInput()
+                    ->format24hr()
+                    ->allowEmpty()
             ])->title('Information')
         ];
     }

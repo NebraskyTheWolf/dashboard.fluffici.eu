@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Shop Monthly Report</title>
-    <link href="https://dashboard.rsiniya.uk/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="https://dashboard.fluffici.eu/css/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <div style="page-break-after:auto;">

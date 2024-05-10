@@ -10,6 +10,7 @@ use App\Console\Commands\FinishOldEvent;
 use App\Console\Commands\GenerateAccountingReport;
 use App\Console\Commands\GenerateMonthlyReport;
 use App\Console\Commands\GenerateTransactionsReport;
+use app\Console\Commands\RecurringPayment;
 use App\Console\Commands\Refresh;
 use App\Console\Commands\SendSchedulesEmail;
 use App\Console\Commands\StartNewEvent;
@@ -40,6 +41,8 @@ class Kernel extends ConsoleKernel
         $schedule->command(FinishOldEvent::class)->everyTenSeconds();
         $schedule->command(StartNewEvent::class)->everyTenSeconds();
         $schedule->command(DeleteUsedVouchers::class)->everyTenSeconds();
+
+        $schedule->command(RecurringPayment::class)->everyTenSeconds();
 
         $schedule->command(SyncAutumnFiles::class)->everyThirtyMinutes();
     }

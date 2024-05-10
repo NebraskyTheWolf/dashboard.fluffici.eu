@@ -108,6 +108,11 @@ class EventsEditScreen extends Screen
                 ->method('createOrUpdate')
                 ->canSee(!$this->events->exists),
 
+            Button::make("Remove")
+                ->icon('bs.pencil')
+                ->method('delete')
+                ->canSee($this->events->exists),
+
             Button::make(__('events.screen.edit.button.update'))
                 ->icon('bs.note')
                 ->method('createOrUpdate')
@@ -312,6 +317,17 @@ class EventsEditScreen extends Screen
 
 
         event(new UpdateAudit("event", $this->events->name . " set a finished.", Auth::user()->name));
+
+        return redirect()->route('platform.events.list');
+    }
+
+    public function delete() {
+
+        $this->events->delete();
+
+        Toast::info(__('events.screen.toast.finish', ['name' => $this->events->name]));
+
+        event(new UpdateAudit("event", $this->events->name . " deleted", Auth::user()->name));
 
         return redirect()->route('platform.events.list');
     }
