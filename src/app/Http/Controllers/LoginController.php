@@ -70,7 +70,7 @@ class LoginController extends Controller
      * @param Request $request
      * Příchozí požadavek
      *
-     * @return RedirectResponse|void
+     * @return Factory|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
      * Přesměrování nebo void
      * @throws ValidationException
      * Pokud validace selže
@@ -117,7 +117,7 @@ class LoginController extends Controller
 
                     Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
 
-                    return redirect()->route('login.challenge');
+                    return view('auth.otp');
                 }
             } else {
                 throw ValidationException::withMessages([

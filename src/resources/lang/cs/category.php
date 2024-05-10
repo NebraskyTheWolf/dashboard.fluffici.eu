@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'table.name' => 'Kategorie',
+    'table.name' => 'Název',
     'table.position' => 'Pozice',
-    'table.displayed' => 'Veřejnost',
+    'table.displayed' => 'Zobrazeno',
 
     'screen.title' => 'Kategorie',
-    'screen.button.new' => 'Nové'
+    'screen.button.new' => 'Nová',
 ];

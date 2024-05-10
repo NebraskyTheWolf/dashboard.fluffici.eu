@@ -13,15 +13,15 @@ return [
     'table.payment_status.unpaid' => 'Nezaplaceno',
     'table.payment_status.await' => 'Čeká na potvrzení...',
 
-    'table.status.processing' => 'Zpracovávání',
+    'table.status.processing' => 'Zpracovává se',
     'table.status.cancelled' => 'Zrušeno',
     'table.status.refunded' => 'Vráceno',
-    'table.status.disputed' => 'Proti němu vzneseno námitky',
+    'table.status.disputed' => 'Napadené',
     'table.status.delivered' => 'Doručeno',
     'table.status.archived' => 'Archivováno',
     'table.status.completed' => 'Dokončeno',
 
     'screen.title' => 'Objednávky',
-    'screen.button.refresh' => 'Aktualizovat',
+    'screen.button.refresh' => 'Obnovit',
     'screen.toast.refresh' => 'Data byla obnovena.'
 ];

@@ -3,53 +3,54 @@
 return [
     'table.name' => 'Název',
     'table.status' => 'Stav',
-    'table.interested' => 'Osoby',
-    'table.begin_at' => 'Začít',
-    'table.end_at' => 'Končí za',
-    'table.created_at' => 'Vytvořeno v',
+    'table.interested' => 'Zájemci',
+    'table.begin_at' => 'Začátek',
+    'table.end_at' => 'Konec',
+    'table.created_at' => 'Vytvořeno',
 
     'screen.title' => 'Události',
     'screen.descriptions' => 'Všechny nadcházející i minulé události.',
     'screen.button.create_new' => 'Nová událost',
 
     'screen.edit.title' => 'Upravit událost',
-    'screen.edit.title.create' => 'Upravit událost',
+    'screen.edit.title.create' => 'Vytvořit novou událost',
 
-    'screen.edit.button.create' => 'Uložit',
+    'screen.edit.button.create' => 'Vytvořit',
     'screen.edit.button.update' => 'Aktualizovat',
-    'screen.edit.button.cancel' => 'Zrušit událost',
-    'screen.edit.button.undo' => 'Zpět',
-    'screen.edit.button.finish' => 'Nastavit jako dokončené',
+    'screen.edit.button.cancel' => 'Zrušit',
+    'screen.edit.button.undo' => 'Vrátit',
+    'screen.edit.button.finish' => 'Dokončit',
 
     'screen.input.event_name.title' => 'Název události',
-    'screen.input.event_name.placeholder' => 'Atraktivní, ale záhadné jméno',
-    'screen.input.event_name.help' => 'Zadejte krátký popisný název pro tuto událost.',
+    'screen.input.event_name.placeholder' => 'Poutavý, ale jasný název',
+    'screen.input.event_name.help' => 'Zadejte stručný popisný název pro tuto událost.',
 
-    'screen.input.description.title' => 'Zadejte krátký popisný obsah pro tuto událost.',
+    'screen.input.description.title' => 'Popis události',
 
     'screen.input.type.title' => 'Typ události',
     'screen.input.type.help' => 'Vyberte správný typ události.',
-    'screen.input.type.choice.one' => 'Fyzický',
+    'screen.input.type.choice.one' => 'Fyzická',
     'screen.input.type.choice.two' => 'Online',
 
-    'screen.input.begin.title' => 'Datum zahájení',
-    'screen.input.end.title' => 'Datum konce.',
+    'screen.input.begin.title' => 'Datum začátku',
+    'screen.input.end.title' => 'Datum konce',
 
-    'screen.input.map_min.title' => 'Vyberte první vysazení.',
+    'screen.input.map_min.title' => 'První umístění',
     'screen.input.map_min.help' => 'Zadejte souřadnice nebo použijte vyhledávání.',
-    'screen.input.map_max.title' => 'Vyberte druhé vysazení.',
+    'screen.input.map_max.title' => 'Druhé umístění',
     'screen.input.map_max.help' => 'Zadejte souřadnice nebo použijte vyhledávání.',
 
     'screen.input.link.title' => 'Odkaz',
-    'screen.input.link.help' => 'Zadejte odkaz události.',
-    'screen.input.link.placeholder' => 'https://fluffici.eu/pages/příklad',
+    'screen.input.link.help' => 'Zadejte odkaz na událost.',
+    'screen.input.link.placeholder' => 'https://fluffici.eu/udalost/priklad',
 
-    'screen.input.banner.title' => 'Nahrajte banner nebo nechte prázdné :3',
+    'screen.input.banner.title' => 'Nahrát banner',
 
-    'screen.group.title' => 'Informace o události',
+    'screen.group.title' => 'Detaily události',
 
-    'screen.toast.created' => 'Úspěšně jste vytvořili novou událost.',
-    'screen.toast.cancel' => 'Úspěšně jste zrušili :name',
-    'screen.toast.finish' => 'Úspěšně jste dokončili :name',
-    'screen.toast.undo' => 'Úspěšně jste vrátili poslední změny na :name'
+    'screen.toast.created' => 'Nová událost byla úspěšně vytvořena.',
+    'screen.toast.cancel' => 'Událost :name byla úspěšně zrušena.',
+    'screen.toast.finish' => 'Událost :name byla úspěšně dokončena.',
+    'screen.toast.undo' => 'Změny události :name byly úspěšně vráceny.'
 ];
+

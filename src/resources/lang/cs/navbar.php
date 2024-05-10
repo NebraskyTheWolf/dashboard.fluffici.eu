@@ -2,12 +2,12 @@
 
 return [
     'screen.menu.settings.name' => 'Nastavení',
-    'screen.menu.settings.title' => 'Navigation',
+    'screen.menu.settings.title' => 'Navigace',
 
     'screen.menu.settings.submenu.social_media.title' => 'Sociální média',
     'screen.menu.settings.submenu.users.title' => 'Uživatelé',
-    'screen.menu.settings.submenu.users.group.title' => 'Kontrola přístupu',
-    'screen.menu.settings.submenu.roles.title' => 'Role & oprávnění',
+    'screen.menu.settings.submenu.users.group.title' => 'Skupiny uživatelů',
+    'screen.menu.settings.submenu.roles.title' => 'Role a oprávnění',
     'screen.menu.settings.submenu.audit.title' => 'Audit',
 
     'screen.menu.attachments.name' => 'Přílohy',
@@ -21,17 +21,17 @@ return [
 
     'screen.menu.shop.title' => 'E-shop',
     'screen.menu.shop.submenu.statistics.name' => 'Statistiky',
-    'screen.menu.shop.submenu.statistics.title' => 'RŮST',
+    'screen.menu.shop.submenu.statistics.title' => 'Růst',
 
     'screen.menu.shop.submenu.products.name' => 'Produkty',
-    'screen.menu.shop.submenu.products.title' => 'PRODUKTY A PRODEJ',
+    'screen.menu.shop.submenu.products.title' => 'Produkty a prodej',
     'screen.menu.shop.submenu.categories.name' => 'Kategorie',
     'screen.menu.shop.submenu.sales.name' => 'Prodej',
     'screen.menu.shop.submenu.vouchers.name' => 'Poukázky',
-    'screen.menu.shop.submenu.vouchers.title' => 'ZOBRAZIT',
+    'screen.menu.shop.submenu.vouchers.title' => 'Zobrazit',
     'screen.menu.shop.submenu.orders.name' => 'Objednávky',
-    'screen.menu.shop.submenu.orders.title' => 'PŘÍJMY A PODPORA',
+    'screen.menu.shop.submenu.orders.title' => 'Příjmy a podpora',
     'screen.menu.shop.submenu.support.name' => 'Podpora',
     'screen.menu.shop.submenu.settings.name' => 'Nastavení',
-    'screen.menu.shop.submenu.settings.title' => 'SPRÁVA OBCHODU'
+    'screen.menu.shop.submenu.settings.title' => 'Správa obchodu'
 ];

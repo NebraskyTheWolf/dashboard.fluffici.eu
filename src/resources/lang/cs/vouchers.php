@@ -2,5 +2,5 @@
 
 return [
     'screen.title' => 'Správa poukazů',
-    'screen.button.refresh' => 'Nové'
+    'screen.button.refresh' => 'Aktualizovat'
 ];

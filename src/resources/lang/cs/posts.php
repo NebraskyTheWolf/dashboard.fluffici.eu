@@ -1,30 +1,30 @@
 <?php
 
 return [
-    'table.title' => 'Hlava 1 – Celkem',
+    'table.title' => 'Nadpis – Celkem',
     'table.author' => 'Autor',
-    'table.likes' => 'Líbí se mi',
+    'table.likes' => 'Líbí',
     'table.comments' => 'Komentáře',
-    'table.created_at' => 'Vytvořeno v',
-    'table.updated_at' => 'Poslední úprava',
+    'table.created_at' => 'Vytvořeno dne',
+    'table.updated_at' => 'Poslední aktualizace',
 
     'screen.title' => 'Novinky',
     'screen.descriptions' => 'Všechny příspěvky',
-    'screen.button.create_new' => 'Nové',
+    'screen.button.create_new' => 'Vytvořit nový',
 
     'screen.edit.title' => 'Upravit příspěvek',
-    'screen.edit.title.create' => 'Vytváření nového příspěvku',
+    'screen.edit.title.create' => 'Vytvoření nového příspěvku',
     'screen.edit.descriptions' => 'Novinky',
 
-    'screen.edit.button.create' => 'Uložit',
+    'screen.edit.button.create' => 'Vytvořit',
     'screen.edit.button.update' => 'Aktualizovat',
-    'screen.edit.button.remove' => 'Odebrat',
+    'screen.edit.button.remove' => 'Odstranit',
 
-    'screen.input.post_title.title' => 'Hlava 1 – Celkem',
-    'screen.input.post_title.placeholder' => 'Atraktivní, ale záhadný název',
-    'screen.input.post_title.help' => 'Zadejte krátký popisný název pro tento příspěvek.',
+    'screen.input.post_title.title' => 'Nadpis – Celkem',
+    'screen.input.post_title.placeholder' => 'Poutavý, ale tajemný název',
+    'screen.input.post_title.help' => 'Zadejte stručný popisný název pro tento příspěvek.',
 
-    'screen.input.description.title' => 'L 343, 22.12.2009, s. 1).',
+    'screen.input.description.title' => 'Popis',
     'screen.input.description.placeholder' => 'Stručný popis pro náhled',
 
     'screen.input.author.title' => 'Autor',
@@ -34,8 +34,8 @@ return [
     'screen.tabs.statistics' => 'Statistiky',
     'screen.tabs.comments' => 'Komentáře',
 
-    'screen.chart.likes.title' => 'Celkové statistiky až dosud',
+    'screen.chart.likes.title' => 'Celkové statistiky',
 
-    'screen.toast.created' => 'Úspěšně jste vytvořili příspěvek.',
-    'screen.toast.removed' => 'Úspěšně jste odstranili příspěvek :title'
+    'screen.toast.created' => 'Příspěvek byl úspěšně vytvořen.',
+    'screen.toast.removed' => 'Příspěvek ":title" byl úspěšně odstraněn.'
 ];

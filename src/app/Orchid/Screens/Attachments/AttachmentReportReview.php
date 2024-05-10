@@ -33,7 +33,7 @@ class AttachmentReportReview extends Screen
     {
         return [
             'case' => $case,
-            'attachment' => PlatformAttachments::where('attachment_id', $case->attachment_id)->first(),
+            'attachment' =>  AutumnFile::where('_id', $this->case->attachment_id)->where('tag', 'photos')->get()->first(),
         ];
     }
 
@@ -51,6 +51,7 @@ class AttachmentReportReview extends Screen
                 ->type(Color::SUCCESS)
                 ->method('submit')
                 ->icon('bs.box-arrow-right')
+                ->disabled($this->case->reviewed)
         ];
     }
 
@@ -122,7 +123,7 @@ class AttachmentReportReview extends Screen
         $groupTwoElements = [
             Picture::make('case.attachment_id')
                 ->title("Reported attachment")
-                ->url("https://autumn.fluffici.eu/" . $this->attachment->bucket . '/' . $this->attachment->attachment_id),
+                ->url("https://autumn.fluffici.eu/" . $this->attachment->tag . '/' . $this->attachment->_id),
             $this->generateFormField(CheckBox::class, 'case.isLegalPurpose', "Is DMCA", true, 'If this is checked, the report is for a content DMCA.')
         ];
 
@@ -159,15 +160,14 @@ class AttachmentReportReview extends Screen
         $this->case->reviewed = true;
 
         $this->case->fill($request->get('case'))->save();
-        $file = AutumnFile::where('_id', $this->case->attachment_id)->where('tag', $this->attachment->bucket)->get()->first();
 
         if ($this->case->type == "REPORT") {
-            $file->update([
+            $this->attachment->update([
                'dmca' => true,
                'report' => true
             ]);
         } else if ($this->case->type == "DELETE") {
-            $file->update([
+            $this->attachment->update([
                 'deleted' => true
             ]);
         } else if ($this->case->type == "NOTHING") {
@@ -180,7 +180,7 @@ class AttachmentReportReview extends Screen
             Auth::user()
         ));
 
-        Toast::success("You reviewed " . $this->attachment->id . " report");
+        Toast::success("You reviewed " . $this->attachment->_id . " report");
 
         event(new UpdateAudit("review_report", "Reviewed case N°" . $this->case->id, Auth::user()->name));
 

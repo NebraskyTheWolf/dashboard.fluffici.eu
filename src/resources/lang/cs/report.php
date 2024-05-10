@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'table.reporter' => 'Hlášení',
+    'table.reporter' => 'Nahlášení',
     'table.reason' => 'Důvod',
-    'table.dmca' => 'EUCD',
+    'table.dmca' => 'DMCA',
     'table.isDMCA.yes' => 'Ano',
     'table.isDMCA.no' => 'Ne',
 

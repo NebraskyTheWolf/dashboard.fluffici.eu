@@ -94,6 +94,7 @@ class AccountingMake extends Screen
 
                 CheckBox::make("accounting.is_recurring")
                     ->title("Recurring?")
+                    ->sendTrueOrFalse()
                     ->help("Is this is a recurring payment?"),
 
                 DateTimer::make("accounting.recurring_at")
