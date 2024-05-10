@@ -18,7 +18,9 @@ class Accounting extends Model
     protected $fillable = [
         'type',
         'source',
-        'amount'
+        'amount',
+        'is_recurring',
+        'recurring_at'
     ];
 
     protected $allowedFilters = [

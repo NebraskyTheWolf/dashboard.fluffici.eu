@@ -43,6 +43,7 @@ class GenerateAccountingReport extends Command
 
         $expense = Accounting::orderBy('created_at', 'desc')
             ->where('type', 'EXPENSE')
+            ->where('is_recurring', 0)
             ->whereYear('created_at', $currentYear)
             ->whereMonth('created_at', $currentMonth)
             ->sum('amount');

@@ -37,10 +37,12 @@ class AccountingMain extends Screen
                         Accounting::where('type', 'INCOME')
                             ->whereMonth('created_at',$lastMonth)
                             ->whereYear('created_at', $currentYear)
+                            ->where('is_recurring', 0)
                             ->sum('amount') -
                         Accounting::where('type', 'EXPENSE')
                             ->whereMonth('created_at',$lastMonth)
                             ->whereYear('created_at', $currentYear)
+                            ->where('is_recurring', 0)
                             ->sum('amount')) . ' Kč',
                     'diff' => $this->diff(
                         OrderPayment::where('status', 'PAID')
@@ -99,12 +101,12 @@ class AccountingMain extends Screen
             ],
             'income_ratio' => [
                 OrderPayment::where('status', 'PAID')->sumByDays('price')->toChart('Shop Income'),
-                Accounting::where('type', 'INCOME')->sumByDays('amount')->toChart('External Income')
+                Accounting::where('type', 'INCOME')->where('is_recurring', 0)->sumByDays('amount')->toChart('External Income')
             ],
             'external_expense' => [
                 OrderPayment::where('status', 'REFUNDED')->sumByDays('price')->toChart('Refund'),
                 OrderPayment::where('status', 'UNPAID')->sumByDays('price')->toChart('Unpaid'),
-                Accounting::where('type', 'EXPENSE')->sumByDays('amount')->toChart("External expense")
+                Accounting::where('type', 'EXPENSE')->where('is_recurring', 0)->sumByDays('amount')->toChart("External expense")
             ],
             'accounting' => Accounting::orderBy('created_at', 'desc')->paginate()
         ];
