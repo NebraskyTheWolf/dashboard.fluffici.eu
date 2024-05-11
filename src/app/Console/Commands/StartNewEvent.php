@@ -3,9 +3,13 @@
 namespace App\Console\Commands;
 
 use App\Events\AkceUpdate;
+use App\Mail\ReminderMail;
 use App\Models\Events;
+use App\Models\Subscriptions;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
+use Orchid\Platform\Models\User;
 
 class StartNewEvent extends Command
 {
@@ -24,24 +28,33 @@ class StartNewEvent extends Command
     protected $description = 'Command description';
 
     /**
-     * Execute the console command.
+     * Handle method.
+     *
+     * This method is used to update the status of events and send reminder emails to subscribed users.
+     *
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $events = Events::all();
         foreach ($events as $event) {
-            if ($event->begin != null) {
-                if (Carbon::parse($event->begin)->isPast()
-                    && ($event->status !== "ENDED")
-                    && ($event->status !== "CANCELLED")
-                    && ($event->status !== "FINISHED")) {
-                    $event->update(
-                        [
-                            'status' => 'STARTED'
-                        ]
-                    );
+            if (Carbon::parse($event->begin)->isPast()
+                && ($event->status !== "ENDED")
+                && ($event->status !== "CANCELLED")
+                && ($event->status !== "FINISHED")) {
 
-                    event(new AkceUpdate($event));
+                $event->update(
+                    [
+                        'status' => 'STARTED'
+                    ]
+                );
+
+                $subscriptions = Subscriptions::all();
+                foreach ($subscriptions as $subscription) {
+                    $user = User::where('id', $subscription->user_id);
+                    if ($subscription->is_subscribed) {
+                        Mail::to($user->email)->send(new ReminderMail($event->akce, $user));
+                    }
                 }
             }
         }

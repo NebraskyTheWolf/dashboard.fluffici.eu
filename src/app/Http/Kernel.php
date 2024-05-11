@@ -51,7 +51,7 @@ class Kernel extends HttpKernel
             StartSession::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
-            RedirectIfAuthenticated::class,
+            //RedirectIfAuthenticated::class,
             SubstituteBindings::class
         ],
 

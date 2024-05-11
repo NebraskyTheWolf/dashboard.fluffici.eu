@@ -38,7 +38,6 @@
                             </div>
                             <h4 class="mt-xl">Detaily</h4>
                             <p>Je zde {{ $interested }} lidí, kteří mají zájem o tuto událost.</p>
-                            <p>Je zde {{ $orders }} objednavek, které je třeba zpracovat během této události.</p>
                             <small>Přejeme vám hezký den během této eventu {{ $name }}.</small>
                         </td>
                     </tr>

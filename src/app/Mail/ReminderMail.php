@@ -36,15 +36,14 @@ class ReminderMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reminder Mail',
+            subject: 'Připomenutí zahájení události',
         );
     }
 
     /**
      * Get the message content definition.
      */
-    public function content(): Content
-    {
+    public function content(): Content {
         $currentDate = Carbon::parse($this->event->begin);
         $day = $currentDate->day;
         $month = $currentDate->month;
@@ -56,12 +55,11 @@ class ReminderMail extends Mailable
                 'month' => $month,
                 'day' => $day,
                 'time' => $time,
+                'name' => $this->user->name,
                 'dayFull' => $currentDate->dayName,
                 'monthFull' => $currentDate->monthName,
                 'eventName' => $this->event->name,
                 'interested' => $this->getPeoples(),
-                'orders' => count(ShopOrders::all()),
-                'name' => $this->user->name,
                 'socials' => SocialMedia::all()
             ]
         );
@@ -77,13 +75,8 @@ class ReminderMail extends Mailable
         return [];
     }
 
-    public function getPeoples(): int
-    {
-        $peoples = EventsInteresteds::where('event_id', $this->event->event_id);
-        if ($peoples->exists()) {
-            return $peoples->first()->count();
-        }
-
-        return 0;
+    public function getPeoples(): int {
+        $peoples = EventsInteresteds::where('event_id', $this->event->event_id)->all();
+        return count($peoples);
     }
 }
