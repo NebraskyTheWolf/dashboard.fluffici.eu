@@ -52,7 +52,7 @@ class AttachmentReportReview extends Screen
                 ->type(Color::SUCCESS)
                 ->method('submit')
                 ->icon('bs.box-arrow-right')
-                ->disabled($this->case->reviewed)
+                ->disabled(!$this->case->reviewed)
         ];
     }
 
@@ -112,7 +112,7 @@ class AttachmentReportReview extends Screen
      */
     public function layout(): iterable
     {
-        if (!$this->attachment->exists) {
+        if ($this->attachment == null) {
             redirect()->route("main");
         }
 
