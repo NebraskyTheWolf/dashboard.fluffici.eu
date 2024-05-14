@@ -17,7 +17,7 @@
                         <td class="content pt-0" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; padding: 0 48px 40px;">
                             <p style="margin: 0 0 1em;">{{ __('termination.hello') }}</p>
                             <ul style="margin: 0 0 1em;">
-                                <li><strong style="font-weight: 600;">Fluffici</strong> {{ __('termination.synopsis.one') }}
+                                <li><strong style="font-weight: 600;">Fluffici, z.s.</strong> {{ __('termination.synopsis.one') }}
                                     {!! __('termination.synopsis.two') !!}
                                     {!! __('termination.synopsis.three') !!}
                                 </li>

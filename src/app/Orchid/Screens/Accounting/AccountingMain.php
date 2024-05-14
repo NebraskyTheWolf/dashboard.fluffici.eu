@@ -48,15 +48,15 @@ class AccountingMain extends Screen
                         OrderPayment::where('status', 'PAID')
                                 ->whereMonth('created_at', $lastMonth)
                                 ->whereYear('created_at', $currentYear)
-                                ->sum('price') +
+                                ->sum('price') -
                             OrderPayment::where('status', 'UNPAID')
                                 ->whereMonth('created_at', $lastMonth)
                                 ->whereYear('created_at', $currentYear)
-                                ->sum('price') +
+                                ->sum('price') -
                             OrderPayment::where('status', 'REFUNDED')
                                 ->whereMonth('created_at', $lastMonth)
                                 ->whereYear('created_at', $currentYear)
-                                ->sum('price') +
+                                ->sum('price') -
                             OrderPayment::where('status', 'CANCELLED')
                                 ->whereMonth('created_at', $lastMonth)
                                 ->whereYear('created_at', $currentYear)
@@ -65,6 +65,71 @@ class AccountingMain extends Screen
                     ),
                     'numeric' => true,
                     'icon' => 'bs.piggy-bank'
+                ],
+                'year_balance' => [
+                    'key' => 'year_balance',
+                    'value' => number_format(OrderPayment::where('status', 'PAID')
+                                ->whereYear('created_at', $currentYear)
+                                ->sum('price') -
+                            OrderPayment::where('status', 'REFUNDED')
+                                ->whereYear('created_at', $currentYear)
+                                ->sum('price') -
+                            OrderPayment::where('status', 'UNPAID')
+                                ->sum('price') +
+                            Accounting::where('type', 'INCOME')
+                                ->whereYear('created_at', $currentYear)
+                                ->where('is_recurring', 0)
+                                ->sum('amount') -
+                            Accounting::where('type', 'EXPENSE')
+                                ->whereYear('created_at', $currentYear)
+                                ->where('is_recurring', 0)
+                                ->sum('amount')) . ' Kč',
+                    'diff' => $this->diff(
+                        OrderPayment::where('status', 'PAID')
+                            ->whereYear('created_at', $currentYear)
+                            ->sum('price') -
+                        OrderPayment::where('status', 'UNPAID')
+                            ->whereYear('created_at', $currentYear)
+                            ->sum('price') -
+                        OrderPayment::where('status', 'REFUNDED')
+                            ->whereYear('created_at', $currentYear)
+                            ->sum('price') -
+                        OrderPayment::where('status', 'CANCELLED')
+                            ->whereYear('created_at', $currentYear)
+                            ->sum('price'),
+                        OrderPayment::all()->sum('price')
+                    ),
+                    'numeric' => true,
+                    'icon' => 'bs.piggy-bank'
+                ],
+                'spent_month' => [
+                    'key' => 'spent_month',
+                    'value' => number_format(OrderPayment::where('status', 'REFUNDED')
+                                ->whereMonth('created_at', $lastMonth)
+                                ->whereYear('created_at', $currentYear)
+                                ->sum('price') +
+                            OrderPayment::where('status', 'UNPAID')
+                                ->sum('price') +
+                            Accounting::where('type', 'EXPENSE')
+                                ->whereYear('created_at', $currentYear)
+                                ->where('is_recurring', 0)
+                                ->sum('amount')) . ' Kč',
+                    'diff' => $this->diff(OrderPayment::where('status', 'UNPAID')
+                            ->whereMonth('created_at', $lastMonth)
+                            ->whereYear('created_at', $currentYear)
+                            ->sum('price') +
+                        OrderPayment::where('status', 'REFUNDED')
+                            ->whereMonth('created_at', $lastMonth)
+                            ->whereYear('created_at', $currentYear)
+                            ->sum('price') +
+                        OrderPayment::where('status', 'CANCELLED')
+                            ->whereMonth('created_at', $lastMonth)
+                            ->whereYear('created_at', $currentYear)
+                            ->sum('price'),
+                        OrderPayment::all()->sum('price')
+                    ),
+                    'numeric' => true,
+                    'icon' => 'bs.graph-down-arrow'
                 ],
                 'overdue_amount' => [
                     'key' => 'overdue_amount',
@@ -81,22 +146,6 @@ class AccountingMain extends Screen
                     ),
                     'numeric' => true,
                     'icon' => 'bs.clock-history'
-                ],
-                'expenses' => [
-                    'key' => 'expenses',
-                    'value' => number_format(Accounting::where('type', 'EXPENSE')
-                            ->whereMonth('created_at',$lastMonth)
-                            ->whereYear('created_at', $currentYear)
-                            ->sum('amount')) . ' Kč',
-                    'diff' => $this->diff(
-                        Accounting::where('type', 'EXPENSE')
-                            ->whereMonth('created_at',$lastMonth)
-                            ->whereYear('created_at', $currentYear)
-                            ->sum('amount'),
-                        Accounting::where('type', 'EXPENSE')->sum('amount')
-                    ),
-                    'numeric' => true,
-                    'icon' => 'bs.graph-down-arrow'
                 ]
             ],
             'income_ratio' => [
@@ -137,7 +186,9 @@ class AccountingMain extends Screen
     {
         return [
             Layout::metrics([
+                'Rozvaha za rok' => 'metrics.year_balance',
                 'Čistý zůstatek' => 'metrics.outstanding_amount',
+                'Vydáno tento měsíc' => 'metrics.spent_month',
                 'Prodlení' => 'metrics.overdue_amount'
             ]),
 

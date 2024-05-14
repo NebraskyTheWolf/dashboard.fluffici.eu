@@ -13,6 +13,7 @@ use App\Models\ShopSettings;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 
 class Invoice extends Command
@@ -35,7 +36,7 @@ class Invoice extends Command
      * This function generates and saves an invoice for a given order.
      * The process is as follows:
      * - Retrieves the orderId from command
-     * - Generates a unique invoice Id
+     * - Generates a unique invoice id
      * - Retrieves order, orderIdentifier, carrier, and products
      * - Iterates over products, calculating tax, discount, and sub-total
      * - Creates a PDF from a view with the calculated and fetched data
@@ -44,49 +45,57 @@ class Invoice extends Command
      * - Creates and invoice object and saves it.
      *
      * @return void
+     * @throws \Exception
      */
     public function handle(): void
     {
         $orderId = $this->option('orderId');
 
-        if ($orderId === null) {
+        if (empty($orderId)) {
             printf("OrderId is missing.");
-
-            return ;
+            return;
         }
 
-        $invoiceId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
-
+        $invoiceId = Str::upper(Str::substr(Uuid::uuid4()->toString(), 0, 8));
         $today = Carbon::today()->format("Y-m-d");
 
-        $order = ShopOrders::where('order_id', $orderId)->first();
-        $orderIdentifier = OrderIdentifiers::where('order_id', $orderId)->first();
+        $order = ShopOrders::where('order_id', $orderId)
+            ->firstOrFail();
+        $orderIdentifier = OrderIdentifiers::where('order_id', $orderId)
+            ->firstOrFail();
+        $carrier = OrderCarrier::where('order_id', $orderId)
+            ->value('price') ?? 0;
 
-        $carrier = OrderCarrier::where('order_id', $orderId);
-        if ($carrier->exists()) {
-            $carrier = $carrier->price;
-        } else {
-            $carrier = 0;
-        }
+        $products = OrderedProduct::with('shopProduct')
+            ->where('order_id', $orderId)
+            ->get();
 
+        /**
+         * Aha, tak tady máme úžasnou ukázku kódu, že?
+         * Symfonie komplexity, což elegantně tančí mezi světy zdravého rozumu a absurdity!
+         * Podívejte, jak statečně se funkce reduce snaží zkrotit nezkrotnou smečku dat.
+         * A jaké to je radostné rozlušťování toho jejího složitého tance proměnných a metodických volání!
+         * Je to takové jako naučit kočku trikům – zábavné, ale nakonec docela marné, že?
+         * Opravdový klenot softwarového inženýrství, pokud máte rádi trochu masochismu.
+         * No do prdele, to je kousek!
+         *
+         * -Vakea
+         */
+        $calculations = $products->reduce(function ($carry, $product) {
+            $prdele = $product->shopProduct;
 
-        $products = OrderedProduct::where('order_id', $orderId)->paginate();
+            $carry['subTotal'] += $prdele->getNormalizedPrice();
+            $carry['salePercentage'] += $prdele->getProductSale();
+            $carry['totalDiscount'] += $prdele->calculate($prdele->price, $prdele->getProductSale());
+            $carry['taxPercentage'] +=  $prdele->getProductTax();
+            $carry['totalTax'] += $prdele->calculate($prdele->price, $prdele->getProductTax());
 
-        $taxPercentage = 0;
-        $salePercentage = 0;
-        $totalTax = 0;
-        $totalDiscount = 0;
-        $subTotal = 0;
-        foreach ($products as $product) {
-            $prd = ShopProducts::where('id', $product->product_id)->first();
-            $subTotal += $prd->getNormalizedPrice();
-            $salePercentage += $prd->getProductSale();
-            $totalDiscount += $prd->calculate($prd->price, $prd->getProductSale());
-            $taxPercentage +=  $prd->getProductTax();
-            $totalTax += $prd->calculate($prd->price, $prd->getProductTax());
-        }
+            return $carry;
+        }, ['subTotal' => 0, 'salePercentage' => 0, 'totalDiscount' => 0, 'taxPercentage' => 0, 'totalTax' => 0]);
 
-        $payment = OrderPayment::where('order_id', $orderId)->first();
+        $payment = OrderPayment::where('order_id', $orderId)->get();
+        $providers = $payment->pluck('provider')->implode(', ');
+        $paymentTotalPrice = $payment->sum('price');
 
         $settings = ShopSettings::latest()->first();
 
@@ -96,27 +105,25 @@ class Invoice extends Command
             'orderId' => $orderIdentifier->public_identifier,
 
             'contact_address' => $settings->email,
-
             'first_name' => $order->first_name,
             'last_name' => $order->last_name,
             'address_one' => $order->first_address,
             'address_two' => $order->second_address ?: "",
             'country' => $order->country,
             'email' => $order->email,
-
             'products' => $products,
 
-            'paymentMethod' => $payment->provider,
-            'paymentPrice' => $payment->price,
+            'paymentMethod' => $providers,
+            'paymentPrice' => $paymentTotalPrice,
 
-            'subTotal' => number_format($subTotal - $totalTax + $totalDiscount - $carrier),
-            'discountPer' => number_format($salePercentage),
-            'discount' => number_format($totalDiscount),
-            'taxPer' => number_format($taxPercentage),
-            'tax' => number_format($totalTax),
+            'subTotal' => number_format($calculations['subTotal'] - $calculations['totalTax'] + $calculations['totalDiscount'] - $carrier),
+            'discountPer' => number_format($calculations['salePercentage']),
+            'grandTotal' => number_format($calculations['subTotal']),
+            'discount' => number_format($calculations['totalDiscount']),
+            'taxPer' => number_format($calculations['taxPercentage']),
+            'tax' => number_format($calculations['totalTax']),
+
             'carrierPrice' => number_format($carrier),
-
-            'grandTotal' => number_format($subTotal),
 
             'returnPolicy' => $settings->return_policy
         ]);

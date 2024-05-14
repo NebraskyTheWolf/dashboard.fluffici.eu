@@ -20,7 +20,7 @@
                     <tr>
                         <td class="content" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; padding: 40px 48px;">
                             <p style="margin: 0 0 1em;">Hi {{ $order->first_name }},</p>
-                            <p style="margin: 0 0 1em;"><a href="" style="color: #206bc4; text-decoration: none;">{{ $ticket->assignee }}</a> responded to your message about your order on <strong style="font-weight: 600;">Fluffici z.s</strong>:</p>
+                            <p style="margin: 0 0 1em;"><a href="" style="color: #206bc4; text-decoration: none;">{{ $ticket->assignee }}</a> responded to your message about your order on <strong style="font-weight: 600;">Fluffici, z.s.</strong>:</p>
                             <table class="my-xl" cellspacing="0" cellpadding="0" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; border-collapse: collapse; width: 100%; margin-top: 48px; margin-bottom: 48px;">
                                 <tr>
                                     <td class="w-1p va-top pr-md" style="font-family: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; width: 1%; padding-right: 16px;" valign="top">

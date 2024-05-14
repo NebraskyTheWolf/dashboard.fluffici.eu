@@ -10,7 +10,7 @@
                             <table class="row row-flex" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td class="col text-mobile-center text-right pl-md">
-                                        <span class="font-strong font-lg">Týdenní aktualizace pro Fluffici</span><br />
+                                        <span class="font-strong font-lg">Týdenní aktualizace pro Fluffici, z.s.</span><br />
                                         <span class="text-muted">{{ $range }}</span>
                                     </td>
                                 </tr>

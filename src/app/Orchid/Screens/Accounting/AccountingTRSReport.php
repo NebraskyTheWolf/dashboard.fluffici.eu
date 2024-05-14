@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;
+use Orchid\Support\Facades\Toast;
 use Symfony\Component\HttpFoundation\Request;
 
 class AccountingTRSReport extends Screen
@@ -65,7 +66,7 @@ class AccountingTRSReport extends Screen
 
     public function refresh()
     {
-        \Orchid\Support\Facades\Toast::success('You refreshed the page.')
+        Toast::success('You refreshed the page.')
             ->autoHide();
 
         return redirect()->route('platform.accounting.transactions.reports');
@@ -75,7 +76,7 @@ class AccountingTRSReport extends Screen
     {
         Artisan::queue('app:generate-transactions-report', []);
 
-        \Orchid\Support\Facades\Toast::success('You generated a new monthly report.')
+        Toast::success('You generated a new monthly report.')
             ->autoHide();
 
         return redirect()->route('platform.accounting.transactions.reports');
@@ -90,10 +91,10 @@ class AccountingTRSReport extends Screen
 
             Storage::disk('public')->delete($data->attachment_id);
 
-            \Orchid\Support\Facades\Toast::error('You deleted ' . $request->get('reportId'))
+            Toast::error('You deleted ' . $request->get('reportId'))
                 ->autoHide();
         } else {
-            \Orchid\Support\Facades\Toast::error('This reportId does not exists.')
+            Toast::error('This reportId does not exists.')
                 ->autoHide();
         }
         return redirect()->route('platform.accounting.transactions.reports');

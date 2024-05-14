@@ -2,7 +2,10 @@
 
 namespace App\Mail;
 
+use App\Models\AccountingDocument;
+use App\Models\ShopReports;
 use App\Models\SocialMedia;
+use App\Models\TransactionsReport;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
@@ -29,9 +32,9 @@ class ShopReportReady extends Mailable
      * @var array
      */
     protected array $reportClasses = [
-        \App\Models\ShopReports::class,
-        \App\Models\AccountingDocument::class,
-        \App\Models\TransactionsReport::class,
+        ShopReports::class,
+        AccountingDocument::class,
+        TransactionsReport::class,
     ];
 
     /**
@@ -140,7 +143,21 @@ class ShopReportReady extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $files = $this->getFilesDataForReports($this->reportClasses);
+        $formattedArray = array();
+
+        foreach ($files as $file) {
+            if (intval($file['size']) <= 0)
+                continue;
+
+            $formattedArray[] = [
+                'path' => public_path($file['name']),
+                'name' => $file['name'],
+                'mime' =>  'application/pdf'
+            ];
+        }
+
+        return [...$formattedArray];
     }
 
     /**

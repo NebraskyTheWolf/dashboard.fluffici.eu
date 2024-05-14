@@ -25,7 +25,6 @@
                     <tr>
                         <td class="content pt-0">
                             <table class="list" cellspacing="0" cellpadding="0">
-
                                 @foreach($files as $file)
                                     <tr class="list-item">
                                         <td class="lh-1">
@@ -34,7 +33,6 @@
                                         <td class="text-right text-muted">{{ $file['size'] }}</td>
                                     </tr>
                                 @endforeach
-
                             </table>
                         </td>
                     </tr>

@@ -52,9 +52,10 @@ class StartNewEvent extends Command
                 $subscriptions = Subscriptions::all();
                 foreach ($subscriptions as $subscription) {
                     $user = User::where('id', $subscription->user_id);
-                    if ($subscription->is_subscribed) {
-                        Mail::to($user->email)->send(new ReminderMail($event->akce, $user));
-                    }
+
+                    if ($subscription->is_subscribed)
+                        Mail::to($user->email)
+                            ->send(new ReminderMail($event, $user));
                 }
             }
         }

@@ -39,7 +39,7 @@ class StatisticsMail extends Command
             Mail::to("vakea@fluffici.eu")->send(new WeeklyStatistic());
             printf('Sending as debug to "vakea@fluffici.eu"');
         } else {
-            $users = User::paginate();
+            $users = User::all();
             foreach ($users as $user) {
                 if ($user->hasAccess('platform.systems.eshop')) {
                     Mail::to($user->email)

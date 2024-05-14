@@ -33,7 +33,8 @@ class AttachmentReportReview extends Screen
     {
         return [
             'case' => $case,
-            'attachment' =>  AutumnFile::where('_id', $this->case->attachment_id)->where('tag', 'photos')->get()->first(),
+            'attachment' =>  AutumnFile::where('_id', $case->attachment_id)->get()
+                ->first()
         ];
     }
 

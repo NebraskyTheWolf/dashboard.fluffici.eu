@@ -21,7 +21,7 @@ class GenerateMonthlyReport extends Command
     protected $description = 'Generate the monthly report card.';
     public $products = array();
 
-    public function handle() {
+    public function handle(): void {
         $today = Carbon::today()->format("Y-m-d");
         $currentYear = Carbon::now()->year;
         $currentMonth = Carbon::now()->subMonth()->month;
@@ -100,10 +100,12 @@ class GenerateMonthlyReport extends Command
     {
         $users = User::all();
         foreach ($users as $user) {
-            if ($user->hasAccess('platform.accounting.monthly_report')) {
+            if ($user->hasAccess('platform.systems.eshop')) {
                 Mail::to($user->email)
                     ->locale($user->getLanguage())
                     ->send(new \App\Mail\ShopReportReady());
+
+                $user->notify($notification);
             }
         }
     }
