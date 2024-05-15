@@ -8,7 +8,10 @@ use App\Mail\ApplicationError;
 use App\Mail\ScheduleMail;
 use App\Models\Events;
 use App\Models\PlatformAttachments;
+use Carbon\Carbon;
+use GuzzleHttp\Exception\GuzzleException;
 use Httpful\Exception\ConnectionErrorException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -26,6 +29,9 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use Pusher\ApiErrorException;
+use Pusher\Pusher;
+use Pusher\PusherException;
 use Ramsey\Uuid\Uuid;
 
 class EventsEditScreen extends Screen
@@ -268,14 +274,44 @@ class EventsEditScreen extends Screen
         ];
     }
 
-    public function createOrUpdate(Request $request) {
-
+    /**
+     * @throws PusherException
+     * @throws GuzzleException
+     * @throws ApiErrorException
+     */
+    public function createOrUpdate(Request $request): RedirectResponse {
         $this->events->fill($request->get('events'));
 
         $this->events->max = [
             'lat' => 0.0,
             'lng' => 0.0,
         ];
+
+        $pusher = new Pusher(
+            env('AKCE_PUSHER_APP_KEY'),
+            env('AKCE_PUSHER_APP_SECRET'),
+            env('AKCE_PUSHER_APP_ID'),
+            [
+                'cluster' => env('AKCE_PUSHER_APP_CLUSTER'),
+                'useTLS' => true
+            ]
+        );
+
+        if ($this->events->exists) {
+            $pusher->trigger('notifications-event', 'new-notification', [
+                'url' => 'https://akce.fluffici.eu/event?id=' . $this->events->event_id,
+                'title' => $this->events->name,
+                'message' => 'Byla nedávno aktualizována',
+                'is_cancellation' => false
+            ]);
+        } else {
+            $pusher->trigger('notifications-event', 'new-notification', [
+                'url' => 'https://akce.fluffici.eu/event?id=' . $this->events->event_id,
+                'title' => $this->events->name,
+                'message' => 'Je nyní k dispozici',
+                'is_cancellation' => false
+            ]);
+        }
 
         $this->events->save();
 
@@ -286,7 +322,13 @@ class EventsEditScreen extends Screen
         return redirect()->route('platform.events.list');
     }
 
-    public function cancel() {
+    /**
+     * @throws PusherException
+     * @throws GuzzleException
+     * @throws ApiErrorException
+     */
+    public function cancel(): RedirectResponse
+    {
 
         Events::updateOrCreate(
             ['event_id' => $this->events->event_id],
@@ -297,6 +339,22 @@ class EventsEditScreen extends Screen
 
         Toast::info(__('events.screen.toast.cancel', ['name' => $this->events->name]));
 
+        $pusher = new Pusher(
+            env('AKCE_PUSHER_APP_KEY'),
+            env('AKCE_PUSHER_APP_SECRET'),
+            env('AKCE_PUSHER_APP_ID'),
+            [
+                'cluster' => env('AKCE_PUSHER_APP_CLUSTER'),
+                'useTLS' => true
+            ]
+        );
+
+        $pusher->trigger('notifications-event', 'new-notification', [
+            'url' => 'https://akce.fluffici.eu/event?id=' . $this->events->event_id,
+            'title' => $this->events->name,
+            'message' => 'Byla zrušena spolek',
+            'is_cancellation' => true
+        ]);
 
         event(new UpdateAudit("event", $this->events->name . " set a cancelled.", Auth::user()->name));
         event(new AkceUpdate($this->events));
@@ -304,7 +362,8 @@ class EventsEditScreen extends Screen
         return redirect()->route('platform.events.list');
     }
 
-    public function finish() {
+    public function finish(): RedirectResponse
+    {
 
         Events::updateOrCreate(
             ['event_id' => $this->events->event_id],
@@ -321,7 +380,8 @@ class EventsEditScreen extends Screen
         return redirect()->route('platform.events.list');
     }
 
-    public function delete() {
+    public function delete(): RedirectResponse
+    {
 
         $this->events->delete();
 
@@ -332,7 +392,8 @@ class EventsEditScreen extends Screen
         return redirect()->route('platform.events.list');
     }
 
-    public function undo() {
+    public function undo(): RedirectResponse
+    {
         Events::updateOrCreate(
             ['event_id' => $this->events->event_id],
             [

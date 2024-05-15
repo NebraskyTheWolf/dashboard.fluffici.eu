@@ -52,7 +52,6 @@ class AttachmentReportReview extends Screen
                 ->type(Color::SUCCESS)
                 ->method('submit')
                 ->icon('bs.box-arrow-right')
-                ->disabled(!$this->case->reviewed)
         ];
     }
 
