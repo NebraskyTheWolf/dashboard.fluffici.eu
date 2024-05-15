@@ -1,34 +1,21 @@
 $(document).ready(function($) {
-    axios.get('https://dashboard.fluffici.eu/build/E').then(function (response) {
+    axios.get('https://api.fluffici.eu').then(function (response) {
         if (response.status !== 200) {
             console.log('Cannot update fields for versioning.')
         } else {
-            $('#version').text('Version : ' + response.data.version)
-            $('#rev').text('Rev : ' + response.data.rev)
+            $('#version').text('Version : ' + response.version)
         }
     })
 
-
-    /**
-     * Represents a channel that listens for whisper 'ping' event and triggers a timer when received.
-     *
-     * @property {string} channel - The channel name to join.
-     * @property {function} listenForWhisper - A function to listen for the 'ping' whisper event
-     *                                         and execute the provided callback function.
-     * @property {function} startTimer - A function to start the timer.
-     * @property {function} display - The display element.
-     *
-     */
-    const channel = window.Echo.join(`presence-countdown.bap`).listenForWhisper('ping', (data) => {
+    setTimeout(() => {
         const display = document.getElementById('otp-expiration');
 
         if (display !== null) {
-            startTimer(data.pong, display);
+            startTimer(60 * 30, display);
         }
-        console.log('Ping triggered! (foxing around giggles)')
-    })
 
-    setTimeout(() => channel.whisper('ping', { pong: 60 * 30 }), 1500)
+        console.log('Ping triggered! (foxing around giggles)')
+    }, 500)
 });
 
 /**

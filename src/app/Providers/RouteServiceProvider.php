@@ -18,7 +18,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
 
-    public const string HOME = '/main';
+    public const string HOME = '/dashboard/main';
 
 
     /**
@@ -32,19 +32,21 @@ class RouteServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->routes(function () {
-            Route::middleware('web')
+            Route::prefix('dashboard')
+                ->middleware(['web', 'auth', 'auth.forced'])
                 ->group(base_path('routes/web.php'));
 
-            Route::middleware('auth')
+            Route::prefix('auth')
+                ->middleware(['web', 'guest'])
                 ->group(base_path('routes/auth.php'));
 
-            Route::middleware('legal')
+            Route::middleware('web')
                 ->group(base_path('routes/legal.php'));
 
-            Route::middleware('integrations')
+            Route::middleware('web')
                 ->group(base_path('routes/integrations.php'));
 
-            Route::middleware('backend')
+            Route::middleware('web')
                 ->group(base_path('routes/backend.php'));
         });
     }

@@ -115,8 +115,11 @@ class Dashboard
     /**
      * Get the route with the dashboard prefix.
      */
-    public static function prefix(string $path = ''): string {
-        return '/';
+    public static function prefix(string $path = ''): string
+    {
+        $prefix = config('platform.prefix');
+
+        return Str::start($prefix.$path, '/');
     }
 
     /**

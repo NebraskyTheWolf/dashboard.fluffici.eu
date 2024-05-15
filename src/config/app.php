@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'cs',
 
     /*
     |--------------------------------------------------------------------------
@@ -168,8 +168,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class,
-        Shipu\Themevel\Providers\ThemevelServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class
     ])->toArray(),
 
     /*
@@ -184,8 +183,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
-        'Theme' => Shipu\Themevel\Facades\Theme::class,
+        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class
     ])->toArray(),
 
 ];

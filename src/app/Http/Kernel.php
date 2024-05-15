@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\ApiAuthentication;
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\AuthenticateTest;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\KofiCors;
 use App\Http\Middleware\LanguageDetector;
@@ -11,14 +12,23 @@ use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
+use App\Http\Middleware\ValidateSignature;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Middleware\VisitTracker;
 use GPBMetadata\Google\Api\Auth;
+use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
+use Illuminate\Auth\Middleware\Authorize;
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
+use Illuminate\Auth\Middleware\RequirePassword;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Http\Middleware\SetCacheHeaders;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
@@ -37,7 +47,6 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
-        LanguageDetector::class,
     ];
 
     /**
@@ -47,40 +56,14 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
+            LanguageDetector::class,
+            VisitTracker::class,
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
-            SubstituteBindings::class
-        ],
-
-        'api' => [
-            VisitTracker::class,
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            SubstituteBindings::class
-        ],
-
-        'backend' => [
-            VisitTracker::class,
-            EnsureFrontendRequestsAreStateful::class,
-            SubstituteBindings::class
-        ],
-        'auth' => [
-            EnsureFrontendRequestsAreStateful::class,
-            SubstituteBindings::class
-        ],
-        'device' => [
-            EnsureFrontendRequestsAreStateful::class,
-            SubstituteBindings::class
-        ],
-        'integrations' => [
-            VisitTracker::class,
-            EnsureFrontendRequestsAreStateful::class,
-            SubstituteBindings::class
-        ],
-        'legal' => [
-            VisitTracker::class,
+            SubstituteBindings::class,
             EnsureFrontendRequestsAreStateful::class,
             SubstituteBindings::class
         ]
@@ -94,18 +77,19 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
-        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'auth' => Authenticate::class,
+        'auth.basic' => AuthenticateWithBasicAuth::class,
+        'auth.session' => AuthenticateSession::class,
+        'cache.headers' => SetCacheHeaders::class,
+        'can' => Authorize::class,
         'guest' => RedirectIfAuthenticated::class,
-        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-        'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
-        'signed' => \App\Http\Middleware\ValidateSignature::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'password.confirm' => RequirePassword::class,
+        'precognitive' => HandlePrecognitiveRequests::class,
+        'signed' => ValidateSignature::class,
+        'throttle' => ThrottleRequests::class,
+        'verified' => EnsureEmailIsVerified::class,
         'koficors' => KofiCors::class,
-        'auth.api' => ApiAuthentication::class
+        'auth.api' => ApiAuthentication::class,
+        'auth.forced' => AuthenticateTest::class
     ];
 }

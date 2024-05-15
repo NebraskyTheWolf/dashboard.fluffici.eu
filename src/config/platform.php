@@ -16,7 +16,7 @@ return [
      |
      */
 
-    'domain' => env('DASHBOARD_DOMAIN', null),
+    'domain' => env('DASHBOARD_DOMAIN', 'dashboard.fluffici.eu'),
 
     /*
      |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ return [
      |
      */
 
-    'prefix' => env('DASHBOARD_PREFIX', '/admin'),
+    'prefix' => env('DASHBOARD_PREFIX', '/dashboard'),
 
     /*
      |--------------------------------------------------------------------------

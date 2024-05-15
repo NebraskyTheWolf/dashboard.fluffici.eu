@@ -4,9 +4,13 @@ namespace App\Exceptions;
 
 use App\Mail\ApplicationError;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\PostTooLargeException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Queue\Middleware\RateLimited;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -17,14 +21,9 @@ class Handler extends ExceptionHandler
      * @var array<int, string>
      */
     protected $dontReport = [
-        \Illuminate\Auth\AuthenticationException::class,
-        \Illuminate\Auth\Access\AuthorizationException::class,
-        \Symfony\Component\HttpKernel\Exception\HttpException::class,
-        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
-        \Illuminate\Validation\ValidationException::class,
-        \Illuminate\Http\Exceptions\ThrottleRequestsException::class,
-        \Illuminate\Http\Exceptions\PostTooLargeException::class,
-        \Illuminate\Routing\Exceptions\InvalidSignatureException::class,
+        ValidationException::class,
+        ThrottleRequestsException::class,
+        PostTooLargeException::class,
         ValidationException::class
     ];
 
@@ -79,14 +78,17 @@ class Handler extends ExceptionHandler
      *
      * @param \Illuminate\Http\Request $request
      * @param \Throwable $e
-     * @return \Illuminate\Http\Response
      */
     public function render($request, Throwable $e)
     {
         if ($this->isHttpException($e)) {
             if ($e->getStatusCode() == 404) {
 
-                return response()->view('errors.404', [], 404);
+                if (Auth::guest()) {
+                    return redirect()->route('login');
+                } else {
+                    return response()->view('errors.404', [], 404);
+                }
             }
 
             if ($e->getStatusCode() == 500) {
@@ -94,7 +96,11 @@ class Handler extends ExceptionHandler
             }
 
             if ($e->getStatusCode() == 403) {
-                return response()->view('errors.403', [], 403);
+                if (Auth::guest()) {
+                    return redirect()->route('login');
+                } else {
+                    return response()->view('errors.403', [], 403);
+                }
             }
         }
         return parent::render($request, $e);
