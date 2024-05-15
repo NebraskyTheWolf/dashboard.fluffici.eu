@@ -70,7 +70,7 @@ class LoginController extends Controller
      * @param Request $request
      * Příchozí požadavek
      *
-     * @return Factory|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     * @return RedirectResponse
      * Přesměrování nebo void
      * @throws ValidationException
      * Pokud validace selže
@@ -115,9 +115,13 @@ class LoginController extends Controller
                     $otp->expiry = Carbon::now()->addMinutes(30);
                     $otp->save();
 
-                    Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
+                    if ($user->is_fcm == 1) {
+                        $user->sendFCMNotification('Dashboard OTP login', 'Your authentication code is : ' . $this->splitString($otp->token) . ' and it\'s valid for 30 minutes.');
+                    } else {
+                        Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
+                    }
 
-                    return view('auth.otp');
+                    return redirect()->route('login.challenge');
                 }
             } else {
                 throw ValidationException::withMessages([
@@ -169,11 +173,11 @@ class LoginController extends Controller
             $otp->delete();
             $request->session()->regenerate();
 
-            $request->user()->sendFCMNotification('New login detected.', 'You have logged on the dashboard at ' . Carbon::now()->diffForHumans());
+            $request->user()->sendFCMNotification('New login detected.', 'You have logged on the dashboard at ' . Carbon::now()->format('D, d M Y H:i'));
 
             return $request->wantsJson()
                 ? new JsonResponse([], 204)
-                : redirect()->intended("main");
+                : redirect()->route("main");
         }
 
         throw ValidationException::withMessages([
@@ -376,5 +380,16 @@ class LoginController extends Controller
         }
 
         return $token;
+    }
+
+    private function splitString($str): string
+    {
+        $chunks = str_split($str, 6);
+        foreach($chunks as &$chunk) {
+            if(strlen($chunk) == 6) {
+                $chunk = substr($chunk, 0, 3) . "-" . substr($chunk, 3);
+            }
+        }
+        return implode(" ", $chunks);
     }
 }
