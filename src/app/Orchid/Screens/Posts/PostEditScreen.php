@@ -7,8 +7,7 @@ use App\Events\UpdateAudit;
 use App\Models\Post;
 use App\Models\PostsComments;
 use App\Models\PostsLikes;
-use App\Models\User;
-use App\Orchid\Layouts\Posts\PostCommentLayout;
+use App\Orchid\Layouts\ArticleComments;
 use App\Orchid\Layouts\Shop\ShopProfit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +16,6 @@ use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Picture;
 use Orchid\Screen\Fields\Quill;
-use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
@@ -45,8 +43,8 @@ class PostEditScreen extends Screen
             'post' => $post,
             'posts_comments' => PostsComments::where('post_id', $post->id)->paginate(),
             'likes' => [
-                PostsLikes::sumByDays('post_id')->toChart('Likes'),
-                PostsComments::sumByDays('post_id')->toChart('Comments')
+                PostsLikes::where('post_id', $post->id)->sumByDays('post_id')->toChart('Likes'),
+                PostsComments::where('post_id', $post->id)->sumByDays('post_id')->toChart('Comments')
             ]
         ];
     }
@@ -116,7 +114,6 @@ class PostEditScreen extends Screen
                                 ->title(__('posts.screen.input.post_title.title'))
                                 ->placeholder(__('posts.screen.edit.input.post_title.placeholder'))
                                 ->help(__('posts.screen.edit.input.post_title.help'))
-                                ->disabled($this->post->exists)
                                 ->required(),
 
                             TextArea::make('post.description')
@@ -124,32 +121,32 @@ class PostEditScreen extends Screen
                                 ->rows(3)
                                 ->maxlength(200)
                                 ->placeholder(__('posts.screen.input.description.placeholder'))
-                                ->disabled($this->post->exists)
-                                ->required(),
-
-                            Relation::make('post.author')
-                                ->title(__('posts.screen.input.author.title'))
-                                ->fromModel(User::class, 'name')
-                                ->disabled($this->post->exists)
                                 ->required(),
 
                             Quill::make('post.body')
                                 ->title(__('posts.screen.input.body.title'))
-                                ->disabled($this->post->exists)
                                 ->spellcheck(),
 
                             Picture::make('post.banner')
                                 ->url('https://autumn.fluffici.eu/attachments/' . $this->post->banner)
-                                ->title('Thumbnail')
+                                ->title('Thumbnail'),
+
+                            Cropper::make('post.banner')
+                                ->title("Thumbnail")
+                                ->remoteTag('attachments')
+                                ->maxWidth(800)
+                                ->maxHeight(400)
+                                ->minWidth(800)
+                                ->minHeight(400)
+                                ->help('The thumbnail size is 800x400 and 20MB maximum.')
                         ])
                     ],
                     __('posts.screen.tabs.statistics') => [
                         ShopProfit::make('likes', __('posts.screen.chart.likes.title')),
                     ],
-                    __('posts.screen.tabs.comments') => new PostCommentLayout('partials.comments', [
-                        'comments' => PostsComments::where('post_id', $this->post->id)->paginate(),
-                        'postId' => $this->post->post_id
-                    ])
+                    __('posts.screen.tabs.comments') => [
+                        ArticleComments::class
+                    ]
                 ])->activeTab( __('posts.screen.tabs.post_information'))
             ];
         } else {
@@ -168,11 +165,6 @@ class PostEditScreen extends Screen
                                 ->rows(3)
                                 ->maxlength(200)
                                 ->placeholder(__('posts.screen.input.description.placeholder'))
-                                ->required(),
-
-                            Relation::make('post.author')
-                                ->title(__('posts.screen.input.author.title'))
-                                ->fromModel(User::class, 'name')
                                 ->required(),
 
                             Quill::make('post.body')
@@ -203,6 +195,10 @@ class PostEditScreen extends Screen
      */
     public function createOrUpdate(Request $request)
     {
+        if (!$this->post->exists) {
+            $this->post->author = $request->user()->id;
+        }
+
         $this->post->fill($request->get('post'))->save();
 
         Toast::info(__('posts.screen.toast.created'));

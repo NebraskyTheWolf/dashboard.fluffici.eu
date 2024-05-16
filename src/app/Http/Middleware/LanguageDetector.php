@@ -20,13 +20,13 @@ class LanguageDetector
 
         if (Auth::check() && $request->user()->language !== null) {
             app()->setLocale($request->user()->language);
-            session()->put('locale', 'en');
+            session()->put('locale', $request->user()->language);
             $request->setLocale($request->user()->language);
             return $next($request);
         }
 
-        $request->setLocale('en');
-        session()->put('locale', 'en');
+        $request->setLocale('cs');
+        session()->put('locale', 'cs');
         return $next($request);
     }
 }
