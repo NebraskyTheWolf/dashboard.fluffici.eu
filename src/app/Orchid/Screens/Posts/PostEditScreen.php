@@ -221,4 +221,15 @@ class PostEditScreen extends Screen
 
         return redirect()->route('platform.post.list');
     }
+
+    public function deleteComment(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        PostsComments::where('id', $request->commentId)->delete();
+
+        Toast::info("You removed the comment.");
+
+        event(new UpdateAudit("post_comment_removed", "Removed a comment.", Auth::user()->name));
+
+        return redirect()->route('platform.post.edit', $this->post);
+    }
 }
