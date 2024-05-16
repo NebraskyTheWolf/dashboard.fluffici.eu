@@ -32,7 +32,8 @@ class PlatformProvider extends OrchidServiceProvider
     /**
      * @return array|Menu[]
      */
-    public function menu(): array {
+    public function menu(): array
+    {
         return [
             Menu::make('Nastavení')
                 ->icon('bs.gear')
@@ -76,7 +77,7 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.bounding-box-circles')
                         ->route('platform.scope.list')
                         ->permission('auth.scope.read'),
-                    Menu::make('Scope Groups')
+                    Menu::make('Skupiny rozsahů')
                         ->icon('bs.bookmark-star')
                         ->route('platform.scope_group.list')
                         ->permission('auth.scope_group.read'),
@@ -113,7 +114,7 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.calendar-event')
                         ->route('platform.events.list')
                         ->slug('events')
-                        ->badge(fn () => Events::where('status', 'INCOMING')->where('status', 'STARTED')->count() ?: 0)
+                        ->badge(fn () => Events::where('status', 'INCOMING')->orWhere('status', 'STARTED')->count() ?: 0)
                         ->permission('platform.systems.events'),
                     Menu::make('Stránky')
                         ->icon('bs.file-earmark')
@@ -200,7 +201,7 @@ class PlatformProvider extends OrchidServiceProvider
                     Menu::make('Objednávky')
                         ->icon('bs.box-seam')
                         ->route('platform.shop.orders')
-                        ->badge(fn () => ShopOrders::where('status', 'PROCESSING')->where('status', 'OUTING')->count() ?: 0)
+                        ->badge(fn () => ShopOrders::where('status', 'PROCESSING')->orWhere('status', 'OUTING')->count() ?: 0)
                         ->permission('platform.systems.eshop.orders')
                         ->slug('orders')
                         ->title("OBJEDNÁVKY A PODPORA"),
@@ -227,14 +228,14 @@ class PlatformProvider extends OrchidServiceProvider
             ItemPermission::group("Systémy")
                 ->addPermission('platform.systems.roles', "Role")
                 ->addPermission('platform.systems.users', "Uživatelé")
-                ->addPermission('platform.systems.settings', "Nastavení (Navbar)")
-                ->addPermission('platform.systems.applications', "OAuth (Dev Only)")
-                ->addPermission('platform.audit.read', "Auditové protokoly (čtení)")
+                ->addPermission('platform.systems.settings', "Nastavení (Navigační lišta)")
+                ->addPermission('platform.systems.applications', "OAuth (Pouze pro vývojáře)")
+                ->addPermission('platform.audit.read', "Auditní protokoly (čtení)")
                 ->addPermission('platform.systems.social', "Správa sociálních médií (čtení/zápis)")
-                ->addPermission('platform.systems.dashboard', "Dashboard access (login)"),
+                ->addPermission('platform.systems.dashboard', "Přístup k nástěnce (přihlášení)"),
 
             ItemPermission::group("Správa obchodu")
-                ->addPermission('platform.systems.eshop', 'EObchod (Navbar)')
+                ->addPermission('platform.systems.eshop', 'E-obchod (Navigační lišta)')
 
                 ->addPermission('platform.shop.categories.read', 'Kategorie (Čtení)')
                 ->addPermission('platform.shop.categories.write', 'Kategorie (Zápis)')
@@ -246,58 +247,58 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.shop.sales.write', 'Prodej (Zápis)')
                 ->addPermission('platform.shop.settings.read', 'Nastavení (Čtení)')
                 ->addPermission('platform.shop.settings.write', 'Nastavení (Zápis)')
-                ->addPermission('platform.shop.statistics.read', 'Statistika (Čtení)')
-                ->addPermission('platform.shop.statistics.write', 'Statistika (Zápis)')
+                ->addPermission('platform.shop.statistics.read', 'Statistiky (Čtení)')
+                ->addPermission('platform.shop.statistics.write', 'Statistiky (Zápis)')
                 ->addPermission('platform.shop.support.read', 'Podpora (Čtení)')
                 ->addPermission('platform.shop.support.write', 'Podpora (Zápis)')
-                ->addPermission('platform.shop.vouchers.read', 'Poukazy (Čtení)')
-                ->addPermission('platform.shop.vouchers.write', 'Poukazy (Zápis)')
+                ->addPermission('platform.shop.vouchers.read', 'Slevové kupóny (Čtení)')
+                ->addPermission('platform.shop.vouchers.write', 'Slevové kupóny (Zápis)')
 
-                ->addPermission('platform.shop.taxes.navbar', 'Daň (Navbar)')
+                ->addPermission('platform.shop.taxes.navbar', 'Daň (Navigační lišta)')
                 ->addPermission('platform.shop.taxes.write', 'Daň (Zápis)')
                 ->addPermission('platform.shop.taxes.read', 'Daň (Čtení)')
 
-                ->addPermission('platform.systems.eshop.settings', 'Nastavení EObchodu (čtení/zápis)')
-                ->addPermission('platform.systems.eshop.support', 'Podpora EObchodu (čtení/zápis)')
-                ->addPermission('platform.systems.eshop.orders', 'Objednávky EObchodu (čtení/zápis)')
-                ->addPermission('platform.systems.eshop.products', 'Produkty EObchodu (čtení/zápis)')
-                ->addPermission('platform.systems.eshop.vouchers', 'Poukazy EObchodu (zápis)')
-                ->addPermission('platform.systems.eshop.sales', 'Prodej EObchodu (čtení/zápis)')
+                ->addPermission('platform.systems.eshop.settings', 'Nastavení e-obchodu (čtení/zápis)')
+                ->addPermission('platform.systems.eshop.support', 'Podpora e-obchodu (čtení/zápis)')
+                ->addPermission('platform.systems.eshop.orders', 'Objednávky e-obchodu (čtení/zápis)')
+                ->addPermission('platform.systems.eshop.products', 'Produkty e-obchodu (čtení/zápis)')
+                ->addPermission('platform.systems.eshop.vouchers', 'Slevové kupóny e-obchodu (zápis)')
+                ->addPermission('platform.systems.eshop.sales', 'Prodej e-obchodu (čtení/zápis)')
 
-                ->addPermission('platform.shop.carriers.read', 'Přepravci EObchodu (Čtení)')
-                ->addPermission('platform.shop.carriers.write', 'Přepravci EObchodu (Zápis)')
+                ->addPermission('platform.shop.carriers.read', 'Přepravci e-obchodu (Čtení)')
+                ->addPermission('platform.shop.carriers.write', 'Přepravci e-obchodu (Zápis)')
 
-                ->addPermission('platform.shop.countries.read', 'Země EObchodu (Čtení)')
-                ->addPermission('platform.shop.countries.write', 'Země EObchodu (Zápis)')
-                ->addPermission('platform.eshop.countries', 'Země EObchodu (Navbar)')
+                ->addPermission('platform.shop.countries.read', 'Země e-obchodu (Čtení)')
+                ->addPermission('platform.shop.countries.write', 'Země e-obchodu (Zápis)')
+                ->addPermission('platform.eshop.countries', 'Země e-obchodu (Navigační lišta)')
 
-                ->addPermission('platform.eshop.inventory.read', 'Inventory (Čtení)')
-                ->addPermission('platform.eshop.inventory.write', 'Inventory (Zápis)')
+                ->addPermission('platform.eshop.inventory.read', 'Sklad (Čtení)')
+                ->addPermission('platform.eshop.inventory.write', 'Sklad (Zápis)')
 
-                ->addPermission('platform.systems.eshop.carriers', 'Přepravci EObchodu (Navbar)'),
+                ->addPermission('platform.systems.eshop.carriers', 'Přepravci e-obchodu (Navigační lišta)'),
 
             ItemPermission::group('Přílohy')
                 ->addPermission('platform.systems.attachments.files', 'Soubory (Čtení)')
                 ->addPermission('platform.systems.attachments.files.write', 'Soubory (Zápis)')
                 ->addPermission('platform.systems.attachments.reports', 'Zprávy (Čtení)')
                 ->addPermission('platform.systems.attachments.reports.write', 'Zprávy (Zápis)')
-                ->addPermission('platform.systems.attachments', 'Přílohy (Navbar)'),
+                ->addPermission('platform.systems.attachments', 'Přílohy (Navigační lišta)'),
 
             ItemPermission::group('Účetnictví')
-                ->addPermission('platform.accounting.monthly_report', 'Měsíční zprávy (Čtení / Zápis)')
+                ->addPermission('platform.accounting.monthly_report', 'Měsíční zprávy (Čtení/Zápis)')
                 ->addPermission('platform.accounting', 'Hlavní (Čtení)')
-                ->addPermission('platform.accounting.navbar', 'Přístup (Navbar)')
-                ->addPermission('platform.accounting.invoices', 'Faktury (Čtení / Zápis)')
-                ->addPermission('platform.accounting.transactions', 'Transakce (Čtení / Zápis)'),
+                ->addPermission('platform.accounting.navbar', 'Přístup (Navigační lišta)')
+                ->addPermission('platform.accounting.invoices', 'Faktury (Čtení/Zápis)')
+                ->addPermission('platform.accounting.transactions', 'Transakce (Čtení/Zápis)'),
 
             ItemPermission::group('Správa zařízení')
                 ->addPermission("platform.device", "Zařízení (Přístup)"),
 
             ItemPermission::group("Správa stránek a událostí")
-                ->addPermission('platform.systems.posts', "Příspěvky (Navbar)")
-                ->addPermission('platform.systems.events', "Události (Navbar)")
-                ->addPermission('platform.systems.pages', "Stránky (Navbar)")
-                ->addPermission('platform.systems.gallery', "Fotografie (Navbar)")
+                ->addPermission('platform.systems.posts', "Příspěvky (Navigační lišta)")
+                ->addPermission('platform.systems.events', "Události (Navigační lišta)")
+                ->addPermission('platform.systems.pages', "Stránky (Navigační lišta)")
+                ->addPermission('platform.systems.gallery', "Fotogalerie (Navigační lišta)")
 
                 ->addPermission('platform.systems.pages.read', "Stránky (čtení)")
                 ->addPermission('platform.systems.pages.write', "Stránky (zápis)")
@@ -320,20 +321,21 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('api.calendar.update', 'Aktualizovat událost (API)')
                 ->addPermission('api.calendar.remove', 'Odstranit událost (API)'),
 
-            ItemPermission::group('OAuth platform')
-                ->addPermission('auth.scope.read', 'Scope (Read)')
-                ->addPermission('auth.scope.write', 'Scope (Write)')
+            ItemPermission::group('OAuth platforma')
+                ->addPermission('auth.scope.read', 'Rozsah (Čtení)')
+                ->addPermission('auth.scope.write', 'Rozsah (Zápis)')
 
-                ->addPermission('auth.scope_group.read', 'Scope Group (Read)')
-                ->addPermission('auth.scope_group.write', 'Scope Group (Write)')
+                ->addPermission('auth.scope_group.read', 'Skupina rozsahů (Čtení)')
+                ->addPermission('auth.scope_group.write', 'Skupina rozsahů (Zápis)')
 
-                ->addPermission('auth.application.read', 'Application (Read)')
-                ->addPermission('auth.application.write', 'Application (Write)'),
+                ->addPermission('auth.application.read', 'Aplikace (Čtení)')
+                ->addPermission('auth.application.write', 'Aplikace (Zápis)'),
 
-            ItemPermission::group('Bot management')
-                ->addPermission('platform.navbar', 'Navbar (View)')
+            ItemPermission::group('Správa botů')
+                ->addPermission('platform.navbar', 'Navigační lišta (Zobrazení)')
         ];
     }
+
     private function isSalesEnabled(): bool
     {
         return ShopSettings::latest()->first()->shop_sales;

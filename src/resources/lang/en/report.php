@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'table.reporter' => 'Reporter',
-    'table.reason' => 'Reason',
-    'table.dmca' => 'EUCD',
+    'table.reporter' => 'Reported By',
+    'table.reason' => 'Report Reason',
+    'table.dmca' => 'DMCA Report',
     'table.isDMCA.yes' => 'Yes',
     'table.isDMCA.no' => 'No',
 

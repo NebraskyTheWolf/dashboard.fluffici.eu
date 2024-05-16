@@ -2,34 +2,34 @@
 
 return [
     'table.title' => 'Title',
-    'table.url' => 'Link',
-    'table.visits' => 'Visits',
-    'table.created_at' => 'Created at',
-    'table.updated_at' => 'Updated at',
+    'table.url' => 'URL',
+    'table.visits' => 'Visitors',
+    'table.created_at' => 'Created',
+    'table.updated_at' => 'Last Updated',
 
-    'screen.title' => 'Pages',
-    'screen.descriptions' => 'All the active pages.',
-    'screen.button.create_new' => 'Create new',
+    'screen.title' => 'Pages Overview',
+    'screen.descriptions' => 'View all active pages.',
+    'screen.button.create_new' => 'Create New Page',
 
-    'screen.edit.title' => 'Edit page',
-    'screen.edit.title.create' => 'Creating a new page',
+    'screen.edit.title' => 'Edit Page',
+    'screen.edit.title.create' => 'Create New Page',
 
-    'screen.edit.button.create_page' => 'Save',
-    'screen.edit.button.update' => 'Update',
-    'screen.edit.button.remove' => 'Remove',
+    'screen.edit.button.create_page' => 'Save Page',
+    'screen.edit.button.update' => 'Update Page',
+    'screen.edit.button.remove' => 'Delete Page',
 
-    'screen.input.slug.title' => 'Page slug',
-    'screen.input.slug.placeholder' => 'Add the name related to the page.',
-    'screen.input.slug.help' => 'This slug would be used to access the page.',
+    'screen.input.slug.title' => 'Page Slug',
+    'screen.input.slug.placeholder' => 'Enter a URL-friendly name for the page.',
+    'screen.input.slug.help' => 'This slug will be used to access the page.',
 
-    'screen.input.title.title' => 'Page title',
-    'screen.input.title.placeholder' => 'Attractive but mysterious title.',
-    'screen.input.title.help' => 'Specify a short descriptive title for this event.',
+    'screen.input.title.title' => 'Page Title',
+    'screen.input.title.placeholder' => 'Enter a catchy and descriptive title.',
+    'screen.input.title.help' => 'Provide a short, descriptive title for this page.',
 
-    'screen.input.content.title' => 'Specify the content of the page here.',
+    'screen.input.content.title' => 'Page Content',
 
-    'screen.group.title' => 'Create a new page.',
+    'screen.group.title' => 'Create a New Page',
 
-    'screen.toast.deleted' => 'You have successfully deleted :name',
-    'screen.toast.created' => 'You have successfully created :name',
+    'screen.toast.deleted' => ':name has been successfully deleted.',
+    'screen.toast.created' => ':name has been successfully created.',
 ];

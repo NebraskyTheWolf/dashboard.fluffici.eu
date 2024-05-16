@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'screen.title' => 'Fluffici Admin Panel.',
-    'screen.descriptions' => 'Welcome to your dashboard :name :)',
+    'screen.title' => 'Fluffici Admin Dashboard',
+    'screen.descriptions' => 'Welcome to your dashboard, :name :)',
 
     'screen.metrics.order' => 'Pending Orders',
-    'screen.metrics.tickets' => 'Pending Tickets',
-    'screen.metrics.visitors' => 'Visitors',
+    'screen.metrics.tickets' => 'Open Tickets',
+    'screen.metrics.visitors' => 'Website Visitors',
 
-    'screen.chart.visitors' => 'Overall visitors until now.',
-    'screen.chart.events' => 'Overall events activity until now.'
+    'screen.chart.visitors' => 'Visitor Trends',
+    'screen.chart.events' => 'Event Activity'
 ];

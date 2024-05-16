@@ -1,13 +1,8 @@
 <?php
 
 return [
-
-    'modal.confirm' => 'Jste si jisti, že to chcete smazat? Poté nebudete mít přístup k tomuto zdroji.',
-
-    'modal.event.cancel' => 'Jste si jisti, že chcete zrušit tuto akci? Tuto změnu nebudete moci vrátit!',
-
-    'modal.order.type' => 'Jste si jisti, že chcete nastavit tuto objednávku jako :type ?',
-
-    'modal.order.refund' => 'Jste si jisti, že chcete vrátit tuto objednávku?',
-
+    'modal.confirm' => 'Are you sure you want to delete this? You won\'t have access to this resource after deletion.',
+    'modal.event.cancel' => 'Are you sure you want to cancel this action? You won\'t be able to undo this change!',
+    'modal.order.type' => 'Are you sure you want to set this order as :type ?',
+    'modal.order.refund' => 'Are you sure you want to refund this order?',
 ];

@@ -28,7 +28,7 @@ class InvoiceList extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('download', 'Akce')
+            TD::make('download', 'Download')
                 ->render(function (OrderInvoice $reports) {
                     return Link::make('Stáhnout')
                         ->icon('bs.caret-down-square')

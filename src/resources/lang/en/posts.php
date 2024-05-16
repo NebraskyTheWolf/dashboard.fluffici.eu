@@ -5,37 +5,37 @@ return [
     'table.author' => 'Author',
     'table.likes' => 'Likes',
     'table.comments' => 'Comments',
-    'table.created_at' => 'Created at',
-    'table.updated_at' => 'Last edit',
+    'table.created_at' => 'Date Created',
+    'table.updated_at' => 'Last Updated',
 
-    'screen.title' => 'News post',
-    'screen.descriptions' => 'All news posts',
-    'screen.button.create_new' => 'New',
+    'screen.title' => 'News Posts',
+    'screen.descriptions' => 'View all news posts',
+    'screen.button.create_new' => 'Create New',
 
-    'screen.edit.title' => 'Edit post',
-    'screen.edit.title.create' => 'Creating a new post',
-    'screen.edit.descriptions' => 'News',
+    'screen.edit.title' => 'Edit Post',
+    'screen.edit.title.create' => 'Create New Post',
+    'screen.edit.descriptions' => 'News Post',
 
-    'screen.edit.button.create' => 'Save',
-    'screen.edit.button.update' => 'Update',
-    'screen.edit.button.remove' => 'Remove',
+    'screen.edit.button.create' => 'Save Post',
+    'screen.edit.button.update' => 'Update Post',
+    'screen.edit.button.remove' => 'Delete Post',
 
-    'screen.input.post_title.title' => 'Title',
-    'screen.input.post_title.placeholder' => 'Attractive but mysterious title',
-    'screen.input.post_title.help' => 'Specify a short descriptive title for this post.',
+    'screen.input.post_title.title' => 'Post Title',
+    'screen.input.post_title.placeholder' => 'Enter an engaging title',
+    'screen.input.post_title.help' => 'Provide a short, descriptive title for this post.',
 
-    'screen.input.description.title' => 'Description',
-    'screen.input.description.placeholder' => 'Brief description for preview',
+    'screen.input.description.title' => 'Brief Description',
+    'screen.input.description.placeholder' => 'Enter a brief description for preview',
 
     'screen.input.author.title' => 'Author',
     'screen.input.body.title' => 'Content',
 
     'screen.tabs.post_information' => 'Post Information',
-    'screen.tabs.statistics' => 'Statistics',
+    'screen.tabs.statistics' => 'Post Statistics',
     'screen.tabs.comments' => 'Comments',
 
-    'screen.chart.likes.title' => 'Overall statistics until now',
+    'screen.chart.likes.title' => 'Overall Post Statistics',
 
-    'screen.toast.created' => 'You have successfully created a post.',
-    'screen.toast.removed' => 'You have successfully deleted the post :title'
+    'screen.toast.created' => 'Post created successfully.',
+    'screen.toast.removed' => 'Post ":title" has been deleted successfully.'
 ];

@@ -1,21 +1,23 @@
 <?php
 
 return [
-    'table.user' => 'Author',
-    'table.action' => 'Action',
+    'table.user' => 'Creator',
+    'table.action' => 'Activity',
     'table.operation' => 'Operation',
-    'table.created_at' => 'Created at',
+    'table.created_at' => 'Date Created',
 
-    'type.deleted' => 'Deleted',
-    'type.changed' => 'Changed',
+    'type.deleted' => 'Removed',
+    'type.changed' => 'Modified',
     'type.added' => 'Added',
 
     'type.cancelled' => 'Cancelled',
-    'type.finished' => 'Finished',
+    'type.finished' => 'Completed',
 
-    'screen.title' => 'Audit Logs',
-    'screen.description' => 'All users logs.',
+    'screen.title' => 'Audit Trail',
+    'screen.description' => 'Records of user activities.',
 
-    'screen.button.refresh' => 'Refresh',
-    'screen.toast.refresh' => 'The data has been refreshed.',
+    'screen.button.refresh' => 'Reload',
+    'screen.toast.refresh' => 'Data has been refreshed.',
+
+    'table.create_at' => 'Created At'
 ];

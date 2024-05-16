@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'table.reporter' => 'Nahlášení',
-    'table.reason' => 'Důvod',
-    'table.dmca' => 'DMCA',
+    'table.reporter' => 'Nahlášeno uživatelem',
+    'table.reason' => 'Důvod nahlášení',
+    'table.dmca' => 'DMCA Nahlášení',
     'table.isDMCA.yes' => 'Ano',
     'table.isDMCA.no' => 'Ne',
 
-    'screen.title' => 'Hlášení příloh',
+    'screen.title' => 'Zprávy o přílohách',
 ];

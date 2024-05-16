@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'table.user' => 'Autor',
+    'table.user' => 'Vytvořil',
     'table.action' => 'Akce',
     'table.operation' => 'Operace',
-    'table.created_at' => 'Vytvořeno v',
+    'table.created_at' => 'Datum vytvoření',
 
     'type.deleted' => 'Odstraněno',
     'type.changed' => 'Změněno',
@@ -14,8 +14,10 @@ return [
     'type.finished' => 'Dokončeno',
 
     'screen.title' => 'Záznamy auditu',
-    'screen.description' => 'Všechny záznamy uživatelů.',
+    'screen.description' => 'Záznamy o činnostech uživatelů.',
 
-    'screen.button.refresh' => 'Aktualizovat',
+    'screen.button.refresh' => 'Obnovit',
     'screen.toast.refresh' => 'Data byla obnovena.',
+
+    'table.create_at' => 'Vytvořeno v'
 ];

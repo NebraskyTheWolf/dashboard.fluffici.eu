@@ -1,14 +1,14 @@
 <?php
 
 return [
-    'table.attached_by' => 'Připojeno uživatelem',
-    'table.tag' => 'Značka',
+    'table.attached_by' => 'Nahrál',
+    'table.tag' => 'Štítek',
     'table.reported' => 'Nahlášeno',
-    'table.reported.no_records' => 'Žádné záznamy',
+    'table.reported.no_records' => 'Žádné nahlášené záznamy',
     'table.reported.one' => 'Nahlášeno',
-    'table.reported.two' => 'Hlášené + EUCD',
-    'table.created_at' => 'Vytvořeno v',
+    'table.reported.two' => 'Nahlášeno + Pod revizí',
+    'table.created_at' => 'Vytvořeno',
 
-    'screen.title' => 'Přílohy',
-    'screen.button.new' => 'Nové'
+    'screen.title' => 'Přílohy souborů',
+    'screen.button.new' => 'Vytvořit nový'
 ];
