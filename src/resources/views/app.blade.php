@@ -8,6 +8,8 @@
     <meta name="author" content="Fluffici">
     <meta name="description" content="Fluffici Admin Panel">
 
+    <link rel="icon" href="{{ url('img/favicon.png') }}">
+
     <title>
         @yield('title', 'Fluffici')
         @hasSection('title')
