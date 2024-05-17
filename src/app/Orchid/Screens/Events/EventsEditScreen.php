@@ -221,7 +221,6 @@ class EventsEditScreen extends Screen
                     Map::make('events.min')
                         ->title(__('events.screen.input.map_min.title'))
                         ->help(__('events.screen.input.map_min.help'))
-                        ->canSee(!$this->events->status == "CANCELLED")
                 ]),
 
                 Group::make([
@@ -231,6 +230,23 @@ class EventsEditScreen extends Screen
                         ->help(__('events.screen.input.link.help'))
                         ->disabled($this->events->status == "CANCELLED"),
                 ]),
+
+                Group::make([
+                    Picture::make('events.banner_id')
+                        ->title(__('events.screen.input.banner.title'))
+                        ->url($this->events->banner_id != null ? "https://autumn.fluffici.eu/banners/" . $this->events->banner_id : 'https://placehold.co/800x400')
+                        ->canSee($this->events->exists),
+
+                    Picture::make('events.thumbnail_id')
+                        ->title(__('events.screen.input.banner.title'))
+                        ->url($this->events->thumbnail_id != null ? "https://autumn.fluffici.eu/attachments/" . $this->events->thumbnail_id : 'https://placehold.co/600x300')
+                        ->canSee($this->events->exists),
+
+                    Picture::make('events.map_id')
+                        ->title(__('events.screen.input.banner.title'))
+                        ->url($this->events->map_id != null ? "https://autumn.fluffici.eu/attachments/" . $this->events->map_id : 'https://placehold.co/620x300')
+                        ->canSee($this->events->exists),
+                ])->alignEnd(),
 
                 Group::make([
                     Cropper::make('events.banner_id')
@@ -256,21 +272,6 @@ class EventsEditScreen extends Screen
                         ->minHeight(300)
                         ->maxFileSize(200)
                         ->disabled($this->events->status == "CANCELLED"),
-
-                    Picture::make('events.banner_id')
-                        ->title(__('events.screen.input.banner.title'))
-                        ->url($this->events->banner_id != null ? "https://autumn.fluffici.eu/banners/" . $this->events->banner_id : 'https://placehold.co/800x400')
-                        ->canSee($this->events->exists),
-
-                    Picture::make('events.thumbnail_id')
-                        ->title(__('events.screen.input.banner.title'))
-                        ->url($this->events->thumbnail_id != null ? "https://autumn.fluffici.eu/attachments/" . $this->events->thumbnail_id : 'https://placehold.co/600x300')
-                        ->canSee($this->events->exists),
-
-                    Picture::make('events.map_id')
-                        ->title(__('events.screen.input.banner.title'))
-                        ->url($this->events->map_id != null ? "https://autumn.fluffici.eu/attachments/" . $this->events->map_id : 'https://placehold.co/620x300')
-                        ->canSee($this->events->exists),
                 ])->alignEnd()
             ])->title("Information"),
         ];
