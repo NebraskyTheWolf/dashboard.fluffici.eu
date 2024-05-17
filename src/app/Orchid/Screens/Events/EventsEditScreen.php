@@ -114,6 +114,11 @@ class EventsEditScreen extends Screen
                 ->method('createOrUpdate')
                 ->canSee(!$this->events->exists),
 
+            Button::make('Save')
+                ->icon('bs.pencil')
+                ->method('createOrUpdate')
+                ->canSee($this->events->exists),
+
             Button::make("Remove")
                 ->icon('bs.pencil')
                 ->method('delete')
@@ -234,8 +239,7 @@ class EventsEditScreen extends Screen
                         ->minWidth(800)
                         ->minHeight(400)
                         ->maxFileSize(200)
-                        ->disabled($this->events->status == "CANCELLED")
-                        ->canSee(!$this->events->exists),
+                        ->disabled($this->events->status == "CANCELLED"),
 
                     Cropper::make('events.thumbnail_id')
                         ->title(__('events.screen.input.thumbnail.title'))
@@ -243,8 +247,7 @@ class EventsEditScreen extends Screen
                         ->minWidth(600)
                         ->minHeight(300)
                         ->maxFileSize(200)
-                        ->disabled($this->events->status == "CANCELLED")
-                        ->canSee(!$this->events->exists),
+                        ->disabled($this->events->status == "CANCELLED"),
 
                     Cropper::make('events.map_id')
                         ->title(__('events.screen.input.map.title'))
@@ -252,8 +255,7 @@ class EventsEditScreen extends Screen
                         ->minWidth(620)
                         ->minHeight(300)
                         ->maxFileSize(200)
-                        ->disabled($this->events->status == "CANCELLED")
-                        ->canSee(!$this->events->exists),
+                        ->disabled($this->events->status == "CANCELLED"),
 
                     Picture::make('events.banner_id')
                         ->title(__('events.screen.input.banner.title'))
