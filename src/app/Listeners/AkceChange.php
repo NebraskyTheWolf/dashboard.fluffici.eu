@@ -46,13 +46,13 @@ class AkceChange
                 'status' => strtolower($event->akce->status)
             ]);
         } else {
-            $start = Carbon::parse($event->begin);
+            $start = Carbon::parse($event->akce->begin);
             $startAt = $start->isoFormat('MMMM D, YYYY');
             $startAtTime = $start->isoFormat('HH:mm');
 
             $pusher->trigger('notifications-event', 'create-trello', [
                 'event' => $event->akce->event_id,
-                'thumbnail' => ($event->thumbnail_id != null ? "https://autumn.fluffici.eu/attachments/" . $event->thumbnail_id . "?width=600&height=300" : 'none'),
+                'thumbnail' => ($event->akce->thumbnail_id != null ? "https://autumn.fluffici.eu/attachments/" . $event->akce->thumbnail_id . "?width=600&height=300" : 'none'),
                 'name' => $event->akce->name,
                 'description' => $event->akce->descriptions,
                 'time' => 'Datum: ' . $startAt . ' Čas: ' . $startAtTime
