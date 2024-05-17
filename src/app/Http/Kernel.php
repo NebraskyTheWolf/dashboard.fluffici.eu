@@ -56,7 +56,6 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            LanguageDetector::class,
             VisitTracker::class,
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
@@ -65,7 +64,8 @@ class Kernel extends HttpKernel
             VerifyCsrfToken::class,
             SubstituteBindings::class,
             EnsureFrontendRequestsAreStateful::class,
-            SubstituteBindings::class
+            SubstituteBindings::class,
+            LanguageDetector::class
         ]
     ];
 
