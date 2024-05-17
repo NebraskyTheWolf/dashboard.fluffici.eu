@@ -6,7 +6,7 @@
     <div class="container-md ">
         <div class="form-signin h-full min-vh-100 d-flex flex-column justify-content-center ">
 
-            <a class="d-flex justify-content-center mb-4 p-0 px-sm-5" href="{{Dashboard::prefix()}}">
+            <a class="d-flex justify-content-center mb-4 p-0 px-sm-5" href="">
                 <img src="https://autumn.fluffici.eu/attachments/jVrNMLSH1BNA5ZnqGhpLGhVkFoteCwM_Lq0Y5G9Ij7" alt="fluffici_banner"  class="banner" style="width: auto; bottom: 5px;align-items: flex-end;">
             </a>
 
