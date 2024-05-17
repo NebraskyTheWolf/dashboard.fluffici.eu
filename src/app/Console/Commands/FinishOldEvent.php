@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Events\AkceUpdate;
 use App\Models\Events;
 use App\Models\ShopProducts;
 use Carbon\Carbon;
@@ -37,6 +38,8 @@ class FinishOldEvent extends Command
                             'status' => 'ENDED'
                         ]
                     );
+
+                    event(new AkceUpdate($event));
                 }
             }
         }

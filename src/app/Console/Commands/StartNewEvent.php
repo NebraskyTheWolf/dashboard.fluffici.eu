@@ -49,6 +49,8 @@ class StartNewEvent extends Command
                     ]
                 );
 
+                event(new AkceUpdate($event));
+
                 $subscriptions = Subscriptions::all();
                 foreach ($subscriptions as $subscription) {
                     $user = User::where('id', $subscription->user_id);

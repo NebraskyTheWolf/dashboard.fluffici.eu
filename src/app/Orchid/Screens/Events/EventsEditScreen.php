@@ -311,6 +311,8 @@ class EventsEditScreen extends Screen
                 'message' => 'Je nyní k dispozici',
                 'is_cancellation' => false
             ]);
+
+            event(new AkceUpdate($this->events));
         }
 
         $this->events->save();
@@ -376,18 +378,38 @@ class EventsEditScreen extends Screen
 
 
         event(new UpdateAudit("event", $this->events->name . " set a finished.", Auth::user()->name));
+        event(new AkceUpdate($this->events));
 
         return redirect()->route('platform.events.list');
     }
 
+    /**
+     * @throws PusherException
+     * @throws GuzzleException
+     */
     public function delete(): RedirectResponse
     {
+
+        $pusher = new Pusher(
+            env('AKCE_PUSHER_APP_KEY'),
+            env('AKCE_PUSHER_APP_SECRET'),
+            env('AKCE_PUSHER_APP_ID'),
+            [
+                'cluster' => env('AKCE_PUSHER_APP_CLUSTER'),
+                'useTLS' => true
+            ]
+        );
+
+        $pusher->trigger('notifications-event', 'remove-trello', [
+            'event' => $this->events->event_id,
+        ]);
 
         $this->events->delete();
 
         Toast::info(__('events.screen.toast.finish', ['name' => $this->events->name]));
 
         event(new UpdateAudit("event", $this->events->name . " deleted", Auth::user()->name));
+
 
         return redirect()->route('platform.events.list');
     }
@@ -404,6 +426,7 @@ class EventsEditScreen extends Screen
         Toast::info(__('events.screen.toast.undo', ['name' => $this->events->name]));
 
         event(new UpdateAudit("event", "Undone last changes " . $this->events->name, Auth::user()->name));
+        event(new AkceUpdate($this->events));
 
         return redirect()->route('platform.events.list');
     }
