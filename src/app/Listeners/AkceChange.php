@@ -46,28 +46,17 @@ class AkceChange
                 'status' => strtolower($event->akce->status)
             ]);
         } else {
-            $this->handleEvent($event->akce);
+            $start = Carbon::parse($event->begin);
+            $startAt = $start->isoFormat('MMMM D, YYYY');
+            $startAtTime = $start->isoFormat('HH:mm');
+
             $pusher->trigger('notifications-event', 'create-trello', [
                 'event' => $event->akce->event_id,
-                'thumbnail' => $event->akce->thumbnail,
+                'thumbnail' => ($event->thumbnail_id != null ? "https://autumn.fluffici.eu/attachments/" . $event->thumbnail_id . "?width=600&height=300" : 'none'),
                 'name' => $event->akce->name,
-                'description' => $event->akce->description,
-                'time' => 'Datum: ' . $event->akce->startAt . ' Čas: ' . $event->akce->startAtTime
+                'description' => $event->akce->descriptions,
+                'time' => 'Datum: ' . $startAt . ' Čas: ' . $startAtTime
             ]);
-        }
-    }
-
-    function handleEvent(object $event): void {
-        if ($event->thumbnail === null && $event->thumbnail_id != null) {
-            $event->thumbnail = "https://autumn.fluffici.eu/attachments/{$event->thumbnail_id}?width=600&height=300";
-        } else if ($event->thumbnail === null) {
-            $event->thumbnail = "none";
-        }
-
-        if ($event->startAt === null && $event->begin != null) {
-            $start = Carbon::parse($event->begin);
-            $event->startAt = $start->isoFormat('MMMM D, YYYY');
-            $event->startAtTime = $start->isoFormat('HH:mm');
         }
     }
 }
