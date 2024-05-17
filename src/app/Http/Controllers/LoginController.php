@@ -116,15 +116,19 @@ class LoginController extends Controller
                     $otp->expiry = Carbon::now()->addMinutes(30);
                     $otp->save();
 
-                    if ($user->is_fcm == 1) {
-                        try {
-                            $user->sendFCMNotification('Dashboard OTP login', 'Your authentication code is : ' . $this->splitString($otp->token) . ' and it\'s valid for 30 minutes.');
-                        } catch (Exception $e) {
-                            Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
-                        }
-                    } else {
-                        Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
-                    }
+                    /**
+                     * if ($user->is_fcm == 1) {
+                     * try {
+                     * $user->sendFCMNotification('Dashboard OTP login', 'Your authentication code is : ' . $this->splitString($otp->token) . ' and it\'s valid for 30 minutes.');
+                     * } catch (Exception $e) {
+                     * Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
+                     * }
+                     * } else {
+                     * Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
+                     * }
+                     */
+
+                    Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
 
                     return redirect()->route('login.challenge');
                 }
