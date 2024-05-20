@@ -61,6 +61,11 @@ class PlatformProvider extends OrchidServiceProvider
                         ->icon('bs.clipboard2')
                         ->route('platform.audit')
                         ->permission('platform.audit.read'),
+
+                    Menu::make("Real Time Service")
+                        ->icon('bs.database')
+                        ->route('platform.realtime')
+                        ->permission('platform.systems.realtime'),
                 ])
                 ->divider()
                 ->permission('platform.systems.settings'),
@@ -232,7 +237,8 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.applications', "OAuth (Pouze pro vývojáře)")
                 ->addPermission('platform.audit.read', "Auditní protokoly (čtení)")
                 ->addPermission('platform.systems.social', "Správa sociálních médií (čtení/zápis)")
-                ->addPermission('platform.systems.dashboard', "Přístup k nástěnce (přihlášení)"),
+                ->addPermission('platform.systems.dashboard', "Přístup k nástěnce (přihlášení)")
+                ->addPermission('platform.systems.realtime', 'Real time services (Write)'),
 
             ItemPermission::group("Správa obchodu")
                 ->addPermission('platform.systems.eshop', 'E-obchod (Navigační lišta)')

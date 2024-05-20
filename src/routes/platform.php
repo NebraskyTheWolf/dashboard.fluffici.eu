@@ -32,6 +32,8 @@ use App\Orchid\Screens\Pages\PagesListScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Posts\PostEditScreen;
 use App\Orchid\Screens\Posts\PostListScreen;
+use App\Orchid\Screens\RealTimeAppEdit;
+use App\Orchid\Screens\RealTimeAppList;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\Shop\CustomerEditScreen;
@@ -305,3 +307,9 @@ Route::screen('shop/inventory', InventoryScreen::class)
 
 Route::screen('shop/inventory/edit/{inventory?}', InventoryEditScreen::class)
     ->name('platform.inventory.edit');
+
+Route::screen('services/realtime', RealTimeAppList::class)
+    ->name('platform.realtime');
+
+Route::screen('services/realtime/edit/{application?}', RealTimeAppEdit::class)
+    ->name('platform.realtime.edit');
