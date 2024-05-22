@@ -49,6 +49,9 @@
     <meta name="theme-color" content="#FF002E">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
+    <link rel="preconnect" href="https://autumn.fluffici.eu/attachments/DtSGOGPJV4LppXs39ufpJGTlnvsWtQ3VaclUXhy89V">
+    <link rel="preconnect" href="https://autumn.fluffici.eu/attachments/QSUloX_uJXSZbgxZf0Ykzdgv1_UG3VJ3CE02giBWcj">
+
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet"/>
     <script src="{{ mix('/js/manifest.js','vendor/fluffici') }}" type="text/javascript"></script>

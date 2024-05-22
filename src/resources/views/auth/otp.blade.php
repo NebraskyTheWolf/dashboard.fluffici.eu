@@ -21,7 +21,7 @@
                 window.channel.bind('accepted', function (data) {
                    setTimeout(() => {
                        const audioElement = document.createElement('audio');
-                       audioElement.setAttribute('src', 'https://cdn.discordapp.com/attachments/1232034135799894177/1242636318584869047/logged.mp3?ex=664e8ec1&is=664d3d41&hm=96d16fcdf25c98bccfce262a5c77a8ded3100570e3862caf476accedc7d1b3ba&');
+                       audioElement.setAttribute('src', 'https://autumn.fluffici.eu/attachments/DtSGOGPJV4LppXs39ufpJGTlnvsWtQ3VaclUXhy89V');
                        audioElement.play();
                    }, 300)
 
@@ -45,7 +45,7 @@
                 window.channel.bind('denied', function (data) {
                     setTimeout(() => {
                         const audioElement = document.createElement('audio');
-                        audioElement.setAttribute('src', 'https://cdn.discordapp.com/attachments/1232034135799894177/1242636318962614292/declined.mp3?ex=664e8ec1&is=664d3d41&hm=53cd092ea4c05dff61d55db1c6fcf20b24f3463e9b63176a6743fdcd98f74de4&');
+                        audioElement.setAttribute('src', 'https://autumn.fluffici.eu/attachments/QSUloX_uJXSZbgxZf0Ykzdgv1_UG3VJ3CE02giBWcj');
                         audioElement.play();
                     }, 300)
 
@@ -54,7 +54,7 @@
                     element.text("Žádost byla zamítnuta.")
 
                     setTimeout(() => {
-                        window.location.href = 'https://dashboard.fluffici.eu/auth/login'
+                        window.location.href = 'https://dashboard.fluffici.eu/auth'
                     }, 5000)
                 });
             })
