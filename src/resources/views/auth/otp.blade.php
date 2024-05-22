@@ -15,19 +15,14 @@
 
         @if($isRequest)
             $(document).ready(function () {
-                window.audio = new Howl({
-                    src: [
-                        'https://autumn.fluffici.eu/attachments/DtSGOGPJV4LppXs39ufpJGTlnvsWtQ3VaclUXhy89V',
-                        'https://autumn.fluffici.eu/attachments/QSUloX_uJXSZbgxZf0Ykzdgv1_UG3VJ3CE02giBWcj'
-                    ]
-                });
-
                 window.channel = window.pusher.subscribe('{{ $requestId }}')
                 const element = $("#status_{{ $requestId }}");
 
                 // Subscribing to the requestId of the OTP-Request.
                 window.channel.bind('accepted', function (data) {
-                    window.audio.play(0, true);
+                    var audioElement = document.createElement('audio');
+                    audioElement.setAttribute('src', 'https://autumn.fluffici.eu/attachments/DtSGOGPJV4LppXs39ufpJGTlnvsWtQ3VaclUXhy89V');
+                    audioElement.play();
 
                     element.text("Žádost přijata, přesměrovávám...")
                     let sec = 10;
@@ -47,7 +42,9 @@
                 });
 
                 window.channel.bind('denied', function (data) {
-                    window.audio.play(1, true);
+                    var audioElement = document.createElement('audio');
+                    audioElement.setAttribute('src', 'https://autumn.fluffici.eu/attachments/QSUloX_uJXSZbgxZf0Ykzdgv1_UG3VJ3CE02giBWcj');
+                    audioElement.play();
 
                     element.css('color', 'red')
                     element.text("Žádost byla zamítnuta.")
