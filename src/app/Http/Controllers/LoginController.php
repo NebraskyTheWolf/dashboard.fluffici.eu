@@ -115,14 +115,14 @@ class LoginController extends Controller
                         $otpRequest = new OTPRequest();
                         $otpRequest->user_id = $user->id;
                         $otpRequest->requestId = $reqId;
-                        $otpRequest->service = "DASHBOARD";
+                        $otpRequest->service = "dashboard.fluffici.eu";
                         $otpRequest->date = Carbon::now();
                         $otpRequest->ipAddress = '10.0.0.4';
                         $otpRequest->location = 'CZ';
                         $otpRequest->status = 'PENDING';
                         $otpRequest->save();
 
-                        $user->sendNotification('Login Request', 'You have one pending login request, click here to display the menu.');
+                        $user->sendFCMNotification('Login Request', 'You have one pending login request, click here to display the menu.');
 
                         return view('auth.otp')
                             ->with('isRequest', true)
