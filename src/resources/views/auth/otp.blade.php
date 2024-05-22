@@ -3,9 +3,10 @@
 @section('title', 'Přihlaste se na svůj účet')
 
 @section('head')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js" cache-reference="{{ $requestId }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
             integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
-            crossorigin="anonymous" referrerpolicy="no-referrer" references="{{ $requestId }}"></script>
+            crossorigin="anonymous" referrerpolicy="no-referrer" cache-reference="{{ $requestId }}"></script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     <script>
         window.pusher = new Pusher('b71408463b934d2e96e1', {
@@ -14,19 +15,22 @@
 
         @if($isRequest)
             $(document).ready(function () {
+                window.audio = new Howl({
+                    src: [
+                        'https://autumn.fluffici.eu/attachments/DtSGOGPJV4LppXs39ufpJGTlnvsWtQ3VaclUXhy89V',
+                        'https://autumn.fluffici.eu/attachments/QSUloX_uJXSZbgxZf0Ykzdgv1_UG3VJ3CE02giBWcj'
+                    ]
+                });
+
                 window.channel = window.pusher.subscribe('{{ $requestId }}')
                 const element = $("#status_{{ $requestId }}");
 
                 // Subscribing to the requestId of the OTP-Request.
                 window.channel.bind('accepted', function (data) {
-                   setTimeout(() => {
-                       const audioElement = document.createElement('audio');
-                       audioElement.setAttribute('src', 'https://autumn.fluffici.eu/attachments/DtSGOGPJV4LppXs39ufpJGTlnvsWtQ3VaclUXhy89V');
-                       audioElement.play();
-                   }, 300)
+                    window.audio.play(0, true);
 
                     element.text("Žádost přijata, přesměrovávám...")
-                    let sec = 5;
+                    let sec = 10;
 
                     const countdown = setInterval(() => {
                         sec--
@@ -39,18 +43,13 @@
 
                     setTimeout(() => {
                         window.location.href = 'https://dashboard.fluffici.eu/auth/magic?requestId={{ $requestId }}'
-                    }, 5000)
+                    }, 10000)
                 });
 
                 window.channel.bind('denied', function (data) {
-                    setTimeout(() => {
-                        const audioElement = document.createElement('audio');
-                        audioElement.setAttribute('src', 'https://autumn.fluffici.eu/attachments/QSUloX_uJXSZbgxZf0Ykzdgv1_UG3VJ3CE02giBWcj');
-                        audioElement.play();
-                    }, 300)
+                    window.audio.play(1, true);
 
-
-                    element.css('color: red;')
+                    element.css('color', 'red')
                     element.text("Žádost byla zamítnuta.")
 
                     setTimeout(() => {
