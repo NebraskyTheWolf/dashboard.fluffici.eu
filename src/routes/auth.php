@@ -16,6 +16,8 @@ Route::middleware('throttle:60,1')
 Route::get('otp-challenge', [LoginController::class, 'challenge'])
     ->name('login.challenge');
 
+Route::get('magic', [LoginController::class, 'magicLogin']);
+
 Route::middleware('throttle:60,1')
     ->post('recovery', [LoginController::class, 'recovery'])
     ->name('login.recovery');

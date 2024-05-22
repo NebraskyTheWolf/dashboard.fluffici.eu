@@ -21,7 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{{  mix('/css/dashy.css','vendor/fluffici') }}">
     <script type="module" src="https://unpkg.com/@github/relative-time-element@latest/dist/bundle.js"></script>
 
-    @stack('head')
+    @yield('head')
 
     <meta name="turbo-root" content="{{  Dashboard::prefix() }}">
     <meta name="dashboard-prefix" content="{{  Dashboard::prefix() }}">

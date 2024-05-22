@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\PasswordRecovery;
 use App\Mail\UserOtpMail;
+use App\Models\OTPRequest;
 use App\Models\UserOtp;
 use Carbon\Carbon;
 use Coderflex\LaravelTurnstile\Rules\TurnstileCheck;
@@ -71,7 +72,6 @@ class LoginController extends Controller
      * @param Request $request
      * Příchozí požadavek
      *
-     * @return RedirectResponse
      * Přesměrování nebo void
      * @throws ValidationException
      * Pokud validace selže
@@ -109,26 +109,33 @@ class LoginController extends Controller
 
             if ($user->hasAccess('platform.systems.dashboard')) {
                 if (Hash::check($request->input('password'), $user->password)) {
+                    if ($user->is_fcm == 1) {
+                        $reqId = Uuid::uuid4()->toString();
 
-                    $otp = new UserOtp();
-                    $otp->user_id = $user->id;
-                    $otp->token = $this->generateNumericToken(8);
-                    $otp->expiry = Carbon::now()->addMinutes(30);
-                    $otp->save();
+                        $otpRequest = new OTPRequest();
+                        $otpRequest->user_id = $user->id;
+                        $otpRequest->requestId = $reqId;
+                        $otpRequest->service = "DASHBOARD";
+                        $otpRequest->date = Carbon::now();
+                        $otpRequest->ipAddress = '10.0.0.4';
+                        $otpRequest->location = 'CZ';
+                        $otpRequest->status = 'PENDING';
+                        $otpRequest->save();
 
-                    /**
-                     * if ($user->is_fcm == 1) {
-                     * try {
-                     * $user->sendFCMNotification('Dashboard OTP login', 'Your authentication code is : ' . $this->splitString($otp->token) . ' and it\'s valid for 30 minutes.');
-                     * } catch (Exception $e) {
-                     * Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
-                     * }
-                     * } else {
-                     * Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
-                     * }
-                     */
+                        $user->sendNotification('Login Request', 'You have one pending login request, click here to display the menu.');
 
-                    Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
+                        return view('auth.otp')
+                            ->with('isRequest', true)
+                            ->with('requestId', $reqId);
+                    } else {
+                        $otp = new UserOtp();
+                        $otp->user_id = $user->id;
+                        $otp->token = $this->generateNumericToken(8);
+                        $otp->expiry = Carbon::now()->addMinutes(30);
+                        $otp->save();
+
+                        Mail::to($user->email)->send(new UserOtpMail($user, $otp->token));
+                    }
 
                     return redirect()->route('login.challenge');
                 }
@@ -144,6 +151,29 @@ class LoginController extends Controller
         ]);
     }
 
+    public function magicLogin(Request $request): RedirectResponse
+    {
+        $reqId = $request->query('requestId');
+        $magicOTP = OTPRequest::where('requestId', $reqId)
+            ->where('status', 'GRANTED');
+
+        if ($magicOTP->exists()) {
+            $magicOTP = $magicOTP->first();
+            $magicOTP->status = 'USED';
+            $magicOTP->save();
+
+            $user = User::where('id', $magicOTP->user_id)->first();
+
+            if ($user->hasAccess('platform.systems.dashboard')) {
+                \Illuminate\Support\Facades\Auth::login($user, true);
+
+                return redirect()->route('main');
+            }
+        }
+
+        return redirect('/');
+    }
+
     /**
      * Generovat a zobrazit zobrazení jednorázového hesla (OTP).
      *
@@ -153,7 +183,9 @@ class LoginController extends Controller
      */
     public function challenge(Request $request)
     {
-        return view('auth.otp');
+        return view('auth.otp')
+            ->with('isRequest', false)
+            ->with('requestId', null);
     }
 
     /**

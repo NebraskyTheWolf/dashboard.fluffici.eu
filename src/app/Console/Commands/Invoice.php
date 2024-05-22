@@ -10,6 +10,7 @@ use App\Models\OrderPayment;
 use App\Models\ShopOrders;
 use App\Models\ShopProducts;
 use App\Models\ShopSettings;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -66,7 +67,7 @@ class Invoice extends Command
         $carrier = OrderCarrier::where('order_id', $orderId)
             ->value('price') ?? 0;
 
-        $products = OrderedProduct::with('shopProduct')
+        $products = OrderedProduct::with('product')
             ->where('order_id', $orderId)
             ->get();
 
@@ -82,7 +83,7 @@ class Invoice extends Command
          * -Vakea
          */
         $calculations = $products->reduce(function ($carry, $product) {
-            $prdele = $product->shopProduct;
+            $prdele = $product->product;
 
             $carry['subTotal'] += $prdele->getNormalizedPrice();
             $carry['salePercentage'] += $prdele->getProductSale();
