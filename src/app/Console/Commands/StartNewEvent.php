@@ -43,13 +43,15 @@ class StartNewEvent extends Command
                 && ($event->status !== "CANCELLED")
                 && ($event->status !== "FINISHED")) {
 
+                $copy = $event;
+
                 $event->update(
                     [
                         'status' => 'STARTED'
                     ]
                 );
 
-                event(new AkceUpdate($event));
+                event(new AkceUpdate($event, $copy));
 
                 $subscriptions = Subscriptions::all();
                 foreach ($subscriptions as $subscription) {

@@ -33,13 +33,14 @@ class FinishOldEvent extends Command
         foreach ($events as $event) {
             if ($event->end != null) {
                 if (Carbon::parse($event->end)->isPast()) {
+                    $copy = $event;
                     $event->update(
                         [
                             'status' => 'ENDED'
                         ]
                     );
 
-                    event(new AkceUpdate($event));
+                    event(new AkceUpdate($event, $copy));
                 }
             }
         }

@@ -283,6 +283,8 @@ class EventsEditScreen extends Screen
      * @throws ApiErrorException
      */
     public function createOrUpdate(Request $request): RedirectResponse {
+        $copy = $this->events;
+
         $this->events->fill($request->get('events'));
 
         $this->events->max = [
@@ -315,7 +317,7 @@ class EventsEditScreen extends Screen
                 'is_cancellation' => false
             ]);
 
-            event(new AkceUpdate($this->events));
+            event(new AkceUpdate($this->events, $copy));
         }
 
         $this->events->save();
@@ -334,6 +336,7 @@ class EventsEditScreen extends Screen
      */
     public function cancel(): RedirectResponse
     {
+        $copy = $this->events;
 
         Events::updateOrCreate(
             ['event_id' => $this->events->event_id],
@@ -362,13 +365,14 @@ class EventsEditScreen extends Screen
         ]);
 
         event(new UpdateAudit("event", $this->events->name . " set a cancelled.", Auth::user()->name));
-        event(new AkceUpdate($this->events));
+        event(new AkceUpdate($this->events, $copy));
 
         return redirect()->route('platform.events.list');
     }
 
     public function finish(): RedirectResponse
     {
+        $copy = $this->events;
 
         Events::updateOrCreate(
             ['event_id' => $this->events->event_id],
@@ -381,7 +385,7 @@ class EventsEditScreen extends Screen
 
 
         event(new UpdateAudit("event", $this->events->name . " set a finished.", Auth::user()->name));
-        event(new AkceUpdate($this->events));
+        event(new AkceUpdate($this->events, $copy));
 
         return redirect()->route('platform.events.list');
     }
@@ -392,7 +396,6 @@ class EventsEditScreen extends Screen
      */
     public function delete(): RedirectResponse
     {
-
         $pusher = new Pusher(
             env('AKCE_PUSHER_APP_KEY'),
             env('AKCE_PUSHER_APP_SECRET'),
@@ -405,6 +408,10 @@ class EventsEditScreen extends Screen
 
         $pusher->trigger('notifications-event', 'remove-trello', [
             'event' => $this->events->event_id,
+            'type' => $this->events->type,
+            'thumbnail' => ($this->events->thumbnail_id != null ? "https://autumn.fluffici.eu/attachments/" . $this->events->thumbnail_id . "?width=600&height=300" : 'none'),
+            'name' => $this->events->name,
+            'description' => $this->events->descriptions,
         ]);
 
         $this->events->delete();
