@@ -31,7 +31,10 @@ class FinishOldEvent extends Command
     {
         $events = Events::paginate();
         foreach ($events as $event) {
-            if ($event->end != null) {
+            if ($event->end != null
+                && ($event->status !== "ENDED")
+                && ($event->status !== "CANCELLED"))
+            {
                 if (Carbon::parse($event->end)->isPast()) {
                     $copy = $event;
                     $event->update(
