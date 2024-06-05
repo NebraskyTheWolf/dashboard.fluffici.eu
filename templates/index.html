@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probíhá údržba</title>
+
+    <script src="https://uptime.betterstack.com/widgets/announcement.js" data-id="140274" async="async" type="text/javascript"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #0E1414;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: transparent;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 190px;
+        }
+        .center-image {
+            margin: 20px 0;
+        }
+        .center-image img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .warning-card {
+            border: 2px solid #FF002E;
+            border-radius: 5px;
+            margin-bottom: 40px;
+            align-items: center;
+            padding: 15px;
+            width: fit-content;
+            justify-content: center;
+            margin-left: 5%;
+            margin-top: 10px;
+            animation: pulse 2s infinite; /* Apply pulse animation */
+        }
+
+        @keyframes pulse {
+            0% {
+                border-color: #FF002E;
+                box-shadow: 0 0 0 0 rgba(255, 0, 46, 0.7);
+            }
+            50% {
+                border-color: #FF002E;
+                box-shadow: 0 0 0 10px rgba(255, 0, 46, 0);
+            }
+            100% {
+                border-color: #FF002E;
+                box-shadow: 0 0 0 0 rgba(255, 0, 46, 0);
+            }
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 24px;
+        }
+        p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .status-section {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .status-section iframe {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-left: 10%;
+        }
+
+        .contact-section {
+            background-color: transparent;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .contact-section h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .contact-section p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .contact-section a {
+            color: #ffcc00;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .contact-section a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <img src="https://cdn.discordapp.com/attachments/733246509201752164/1135262951775932426/Fluffici_3.0_-_Logoznak_a_logotyp_se_sloganem_bile.png?ex=665cac03&is=665b5a83&hm=e72ed2da45a03963d8e6e19055f0c985f0b85c2a31ad1ecdab4a1728cf8842cf&" alt="Brand Logo" class="logo">
+</header>
+<main class="container">
+    <section class="center-image">
+        <img src="https://cdn.discordapp.com/attachments/1224419443300372592/1246566006453702759/1717274896279.png?ex=665cda90&is=665b8910&hm=9dff5806b4aa331e375a61f43fe0326a7018a78f6d9818bc6ab208ef3703a101&" alt="Infrastructure Migration Image">
+    </section>
+    <section class="warning-card">
+        <h1>Probíhá údržba</h1>
+        <p>Naše infrastruktura právě prochází migrací.</p>
+        <p>Omlouváme se za případné nepříjemnosti a děkujeme za vaši trpělivost.</p>
+    </section>
+    <section class="contact-section">
+        <h2>Kontaktujte nás</h2>
+        <p>Máte-li jakékoliv dotazy, kontaktujte nás prosím na:</p>
+        <p>Email: <a href="mailto:administrace@fluffici.eu">administrace@fluffici.eu</a></p>
+    </section>
+    <section class="status-section">
+        <iframe src="https://status.fluffici.eu/badge?theme=dark" width="250" height="30" scrolling="no"></iframe>
+    </section>
+</main>
+</body>
+</html>

@@ -185,9 +185,8 @@ class EventsEditScreen extends Screen
                         ->disabled($this->events->status == "CANCELLED")
                         ->required(),
 
-                    Input::make('events.descriptions')
-                        ->title(__('events.screen.input.description.title'))
-                        ->canSee(!$this->events->exists || ($this->events->exists && $this->events->status == "INCOMING")),
+                    Quill::make('events.descriptions')
+                        ->title(__('events.screen.input.description.title')),
 
                     Select::make('events.type')
                         ->options([
