@@ -185,9 +185,6 @@ class EventsEditScreen extends Screen
                         ->disabled($this->events->status == "CANCELLED")
                         ->required(),
 
-                    Quill::make('events.descriptions')
-                        ->title(__('events.screen.input.description.title')),
-
                     Select::make('events.type')
                         ->options([
                             'PHYSICAL'   => __('events.screen.input.type.choice.one'),
@@ -196,6 +193,11 @@ class EventsEditScreen extends Screen
                         ->title(__('events.screen.input.type.title'))
                         ->help(__('events.screen.input.type.help'))
                         ->disabled($this->events->status == "CANCELLED")
+                ]),
+
+                Group::make([
+                    Quill::make('events.descriptions')
+                        ->title(__('events.screen.input.description.title')),
                 ]),
 
                 Group::make([
