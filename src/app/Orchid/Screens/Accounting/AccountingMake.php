@@ -3,7 +3,7 @@
 namespace app\Orchid\Screens\Accounting;
 
 use App\Events\UpdateAudit;
-use App\Models\Accounting;
+use App\Models\Shop\Accounting\Accounting;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\CheckBox;

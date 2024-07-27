@@ -3,15 +3,12 @@
 namespace App\Orchid\Screens\Shop;
 
 use App\Events\UpdateAudit;
-use App\Models\ShopCustomer;
-use App\Models\ShopOrders;
-use App\Models\ShopVouchers;
+use App\Models\Shop\Customer\ShopCustomer;
 use App\Orchid\Layouts\Shop\ShopOrderLayout;
 use App\Orchid\Layouts\Shop\ShopVoucherLayout;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
@@ -35,8 +32,8 @@ class CustomerEditScreen extends Screen
     {
         return [
             'customer' => $customer,
-            'shop_orders' => ShopOrders::where('customer_id', $customer->customer_id)->paginate(),
-            'vouchers' => ShopVouchers::where('customer_id', $customer->customer_id)->paginate()
+            'shop_orders' => $customer->orders()->paginate(),
+            'vouchers' => $customer->vouchers()->paginate()
         ];
     }
 
@@ -101,15 +98,6 @@ class CustomerEditScreen extends Screen
                         ->title('Email')
                         ->disabled()
                 ])->alignCenter(),
-
-                Group::make([
-                    CheckBox::make('customer.email_verified')
-                        ->title('Email verified')
-                        ->disabled(),
-                    CheckBox::make('customer.phone_verified')
-                        ->title('Phone verified')
-                        ->disabled()
-                ])->alignEnd()
             ]),
 
             ShopOrderLayout::class,

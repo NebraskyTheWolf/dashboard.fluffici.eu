@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Events\AkceUpdate;
 use App\Mail\ReminderMail;
-use App\Models\Events;
+use App\Models\Event\Events;
 use App\Models\Subscriptions;
 use Carbon\Carbon;
 use Illuminate\Console\Command;

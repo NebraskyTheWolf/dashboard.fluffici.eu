@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\ShopOrders;
-use App\Models\ShopProducts;
-use App\Models\ShopSales;
-use Carbon\Carbon;
+use App\Models\Shop\Customer\Order\ShopOrders;
+use App\Models\Shop\Internal\ShopProducts;
 use Illuminate\Console\Command;
 
 class Refresh extends Command

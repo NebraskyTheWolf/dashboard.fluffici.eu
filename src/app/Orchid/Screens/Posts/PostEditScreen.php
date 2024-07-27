@@ -4,9 +4,9 @@ namespace App\Orchid\Screens\Posts;
 
 
 use App\Events\UpdateAudit;
-use App\Models\Post;
-use App\Models\PostsComments;
-use App\Models\PostsLikes;
+use App\Models\Posts\Post;
+use App\Models\Posts\PostsComments;
+use App\Models\Posts\PostsLikes;
 use App\Orchid\Layouts\ArticleComments;
 use App\Orchid\Layouts\Shop\ShopProfit;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class PostEditScreen extends Screen
     /**
      * Query data.
      *
-     * @param Post $post
+     * @param \app\Models\Posts\Post $post
      *
      * @return array
      */

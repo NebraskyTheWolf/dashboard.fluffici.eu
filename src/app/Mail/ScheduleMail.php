@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Events;
+use App\Models\Event\Events;
 use App\Models\SocialMedia;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;

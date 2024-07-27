@@ -3,11 +3,12 @@
 namespace App\Orchid\Screens\Shop;
 
 use App\Events\UpdateAudit;
-use App\Models\ShopCarriers;
+use App\Models\Shop\Internal\ShopCarriers;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -73,7 +74,7 @@ class ShopCarrierEdit extends Screen
     public function layout(): iterable
     {
         return [
-            \Orchid\Support\Facades\Layout::rows([
+            Layout::rows([
                 Input::make('carrier.slug')
                     ->title('Slug')
                     ->placeholder('Type the name that the system will use.')

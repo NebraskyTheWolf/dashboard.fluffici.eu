@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens\Shop;
 
 use App\Events\UpdateAudit;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\DateTimer;
@@ -13,6 +14,8 @@ use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Symfony\Component\HttpFoundation\Request;
+use App\Models\Shop\Internal\ShopSales;
+use App\Models\Shop\Internal\ShopProducts;
 
 class ShopSalesEdit extends Screen
 {
@@ -21,9 +24,10 @@ class ShopSalesEdit extends Screen
     /**
      * Fetch data to be displayed on the screen.
      *
-     * @return array
+     * @param ShopSales $sales
+     * @return iterable
      */
-    public function query(\App\Models\ShopSales $sales): iterable
+    public function query(ShopSales $sales): iterable
     {
         return [
             'sale' => $sales
@@ -37,9 +41,14 @@ class ShopSalesEdit extends Screen
      */
     public function name(): ?string
     {
-        return $this->sale->exists ? __('sales.screen.create.title') : __('sales.screen.edit.title');
+        return $this->sale->exists ? __('Edit Sale') : __('Create Sale');
     }
 
+    /**
+     * Define permissions for accessing this screen.
+     *
+     * @return iterable|null
+     */
     public function permission(): ?iterable
     {
         return [
@@ -47,22 +56,21 @@ class ShopSalesEdit extends Screen
         ];
     }
 
-
     /**
      * The screen's action buttons.
      *
-     * @return \Orchid\Screen\Action[]
+     * @return array
      */
     public function commandBar(): iterable
     {
         return [
-            Button::make('Update')
+            Button::make(__('Update'))
                 ->icon('bs.pencil')
                 ->method('createOrUpdate'),
 
-            Button::make(__('sales.screen.button.delete'))
+            Button::make(__('Delete'))
                 ->icon('bs.trash')
-                ->confirm(__('common.modal.confirm'))
+                ->confirm(__('Are you sure you want to delete this sale?'))
                 ->method('remove')
                 ->canSee($this->sale->exists),
         ];
@@ -71,7 +79,7 @@ class ShopSalesEdit extends Screen
     /**
      * The screen's layout elements.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return array
      */
     public function layout(): iterable
     {
@@ -79,41 +87,58 @@ class ShopSalesEdit extends Screen
             Layout::rows([
                 Group::make([
                     Relation::make('sale.product_id')
-                        ->title(__('sales.input.product_id.title'))
-                        ->placeholder(__('sales.input.product_id.placeholder'))
-                        ->fromModel(\App\Models\ShopProducts::class, 'name', 'id')
+                        ->title(__('Product'))
+                        ->placeholder(__('Select a product'))
+                        ->fromModel(ShopProducts::class, 'name', 'id')
                         ->required(),
 
-                     Input::make('sale.reduction')
-                         ->title(__('sales.input.reduction.title'))
-                         ->placeholder(__('sales.input.reduction.placeholder'))
-                         ->required(),
+                    Input::make('sale.reduction')
+                        ->title(__('Reduction (%)'))
+                        ->placeholder(__('Enter the reduction percentage'))
+                        ->type('number')
+                        ->min(0)
+                        ->max(100)
+                        ->required(),
+                ]),
 
-                    DateTimer::make('sale.deleted_at')
-                        ->title(__('sales.input.deleted_at.title'))
-                        ->enableTime()
-                        ->format24hr()
-                        ->allowInput()
-                        ->required()
-                ])
-            ])->title(__('sales.layout.title')),
+                DateTimer::make('sale.deleted_at')
+                    ->title(__('End Date'))
+                    ->enableTime()
+                    ->format24hr()
+                    ->allowInput()
+                    ->required()
+            ])->title(__('Sale Information')),
         ];
     }
 
-    public function createOrUpdate(Request $request) {
-        $this->sale->product_type = "";
-        $this->sale->fill($request->get('sale'))->save();
+    /**
+     * Create or update the sale.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function createOrUpdate(Request $request): RedirectResponse
+    {
+        $data = $request->get('sale');
+        $this->sale->fill($data)->save();
 
-        Toast::info(__('sales.toast.created'));
+        Toast::info($this->sale->exists ? __('Sale updated successfully.') : __('Sale created successfully.'));
 
-        event(new UpdateAudit("sales", $this->sale->name . " created.", Auth::user()->name));
+        event(new UpdateAudit('sales', $this->sale->exists ? 'updated' : 'created', Auth::user()->name));
 
         return redirect()->route('platform.shop.sales');
     }
 
-    public function remove() {
-
+    /**
+     * Remove the sale.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function remove(): RedirectResponse
+    {
         $this->sale->delete();
+
+        Toast::info(__('Sale deleted successfully.'));
 
         return redirect()->route('platform.shop.sales');
     }

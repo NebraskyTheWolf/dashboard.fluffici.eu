@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Orchid\Screens;
 
-use App\Models\EventsInteresteds;
+use App\Models\Event\EventsInteresteds;
 use App\Models\Pages;
-use App\Models\ShopOrders;
-use App\Models\ShopSupportTickets;
+use App\Models\Shop\Customer\Order\ShopOrders;
 use App\Models\VisitsStatistics;
-use App\Orchid\Layouts\Pie;
 use App\Orchid\Layouts\Shop\ShopProfit;
 use App\Orchid\Layouts\VisitTracking;
 use Illuminate\Support\Facades\Auth;
@@ -30,10 +28,6 @@ class PlatformScreen extends Screen
                 'visitors' => [
                     'key' => 'visits',
                     'value' => number_format(intval(Pages::sum('visits')))
-                ],
-                'tickets'   => [
-                    'key' => 'tickets',
-                    'value' => number_format(ShopSupportTickets::where('status', 'PENDING')->count())
                 ],
                 'orders'   => [
                     'key' => 'orders',
@@ -99,7 +93,6 @@ class PlatformScreen extends Screen
         return [
             Layout::metrics([
                 __('main.screen.metrics.order') => 'metrics.orders',
-                __('main.screen.metrics.tickets') => 'metrics.tickets',
                 __('main.screen.metrics.visitors') => 'metrics.visitors',
             ]),
             ShopProfit::make('dataset', __('main.screen.chart.visitors'))->type("line"),

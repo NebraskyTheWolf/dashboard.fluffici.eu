@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Orchid\Platform\Models;
 
-use App\Models\UserApiToken;
-use App\Models\UserRestrictions;
+use App\Models\Security\Account\UserRestrictions;
 use App\Orchid\Presenters\AuditPresenter;
 use App\Orchid\Presenters\UserPresenters;
 use Exception;
@@ -167,7 +166,7 @@ class User extends Authenticatable implements UserInterface
     public function terminate($actor)
     {
         if ($this->isTerminated()) {
-            UserRestrictions::where('user_id', $this->id)->delete();
+            \app\Models\Security\Account\UserRestrictions::where('user_id', $this->id)->delete();
         } else {
             $termination = new UserRestrictions();
             $termination->user_id = $this->id;
@@ -186,7 +185,7 @@ class User extends Authenticatable implements UserInterface
      */
     public function createUserToken(): string
     {
-        $token = new UserApiToken();
+        $token = new \app\Models\Security\Auth\UserApiToken();
         $token->user_id = $this->id;
         $token->token = base64_encode(Uuid::uuid4()->toString());
         $token->save();

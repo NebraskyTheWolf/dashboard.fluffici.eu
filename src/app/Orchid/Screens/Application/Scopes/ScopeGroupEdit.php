@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Application\Scopes;
 
-use App\Models\ScopeGroup;
+use App\Models\Security\OAuth\ScopeGroup;
 use Illuminate\Http\RedirectResponse;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;

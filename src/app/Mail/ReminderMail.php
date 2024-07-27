@@ -2,9 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Events;
-use App\Models\EventsInteresteds;
-use App\Models\ShopOrders;
+use App\Models\Event\EventsInteresteds;
 use App\Models\SocialMedia;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -12,7 +10,6 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Orchid\Platform\Models\User;
 
 class ReminderMail extends Mailable
 {

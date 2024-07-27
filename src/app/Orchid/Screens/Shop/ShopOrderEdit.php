@@ -4,14 +4,9 @@ namespace App\Orchid\Screens\Shop;
 
 use App\Events\OrderUpdateEvent;
 use App\Events\UpdateAudit;
-use App\Models\OrderCarrier;
-use App\Models\OrderedProduct;
-use App\Models\OrderPayment;
-use App\Models\OrderSales;
-use App\Models\ShopCarriers;
-use App\Models\ShopCountries;
-use App\Models\ShopOrders;
-use App\Models\ShopSupportTickets;
+use App\Models\Shop\Customer\Order\OrderPayment;
+use App\Models\Shop\Customer\Order\ShopOrders;
+use App\Models\Shop\Internal\ShopCountries;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -19,34 +14,27 @@ use Orchid\Screen\Sight;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ShopOrderEdit extends Screen
 {
-
-    public $order;
-    public $orderPayment;
-    public $orderProducts;
-    public $orderCarrier;
-    public $orderSales;
-    public $lastHistory;
-    public $supportTicket;
+    public ShopOrders $order;
 
     /**
      * Fetch data to be displayed on the screen.
      *
-     * @return array
+     * @param ShopOrders $order
+     * @return iterable
      */
     public function query(ShopOrders $order): iterable
     {
         return [
             'order' => $order,
-
-            'orderPayment' => OrderPayment::where('order_id', $order->order_id)->orderBy('created_at', 'desc')->paginate(),
-            'lastHistory' => OrderPayment::where('order_id', $order->order_id)->orderBy('created_at', 'desc')->paginate(),
-            'orderProducts' => OrderedProduct::where('order_id', $order->order_id)->first(),
-            'orderCarrier' => OrderCarrier::where('order_id', $order->order_id)->first(),
-            'orderSales' => OrderSales::where('order_id', $order->order_id)->first(),
-            'supportTicket' => ShopSupportTickets::where('order_id', $order->order_id)->first()
+            'orderPayment' => $order->payments,
+            'lastHistory' => $order->payments->last(),
+            'orderProducts' => $order->orderedProducts,
+            'orderCarrier' => $order->carrier,
+            'orderSales' => $order->sales,
         ];
     }
 
@@ -57,9 +45,8 @@ class ShopOrderEdit extends Screen
      */
     public function name(): ?string
     {
-        return $this->order->first_name . ' order';
+        return $this->order->customer->first_name . ' ' . __('Order');
     }
-
 
     /**
      * The screen's action buttons.
@@ -68,204 +55,163 @@ class ShopOrderEdit extends Screen
      */
     public function commandBar(): iterable
     {
-        return [
-            Button::make('Set as completed')
-                ->icon('bs.check2-square')
-                ->type(Color::SUCCESS)
-                ->confirm(__('common.modal.order.type',  ['type' => 'completed']))
-                ->method('completed')
-                ->disabled($this->order->status === "COMPLETED" || $this->order->status === "REFUNDED"),
-            Button::make('Set as delivered')
-                ->icon('bs.envelope-fill')
-                ->type(Color::SUCCESS)
-                ->confirm(__('common.modal.order.type',  ['type' => 'delivered']))
-                ->method('delivered')
-                ->disabled($this->order->status === "DELIVERED" || $this->order->status === "REFUNDED"),
-
-            Button::make('Issue Refund')
-                ->icon('bs.slash-circle')
-                ->type(Color::PRIMARY)
-                ->confirm(__('common.modal.order.refund'))
-                ->method('issueRefund')
-                ->disabled($this->order->status === "REFUNDED" ),
-        ];
+        if ($this->order->status === "PENDING_APPROVAL") {
+            return [
+                Button::make(__('Approve'))
+                    ->icon('bs.check2-square')
+                    ->type(Color::SUCCESS)
+                    ->confirm(__('Are you sure you want to approve this order?'))
+                    ->method('approve'),
+                Button::make(__('Reject'))
+                    ->icon('bs.x-square')
+                    ->type(Color::DANGER)
+                    ->confirm(__('Are you sure you want to reject this order?'))
+                    ->method('reject')
+            ];
+        } else {
+            return [
+                Button::make(__('Set as completed'))
+                    ->icon('bs.check2-square')
+                    ->type(Color::SUCCESS)
+                    ->confirm(__('Are you sure you want to mark this order as completed?'))
+                    ->method('completed')
+                    ->disabled($this->order->status === "COMPLETED" || $this->order->status === "REFUNDED"),
+                Button::make(__('Set as delivered'))
+                    ->icon('bs.envelope-fill')
+                    ->type(Color::SUCCESS)
+                    ->confirm(__('Are you sure you want to mark this order as delivered?'))
+                    ->method('delivered')
+                    ->disabled($this->order->status === "DELIVERED" || $this->order->status === "REFUNDED"),
+                Button::make(__('Issue Refund'))
+                    ->icon('bs.slash-circle')
+                    ->type(Color::PRIMARY)
+                    ->confirm(__('Are you sure you want to issue a refund for this order?'))
+                    ->method('issueRefund')
+                    ->disabled($this->order->status === "REFUNDED"),
+            ];
+        }
     }
 
     /**
      * The screen's layout elements.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return array
      */
     public function layout(): iterable
     {
         return [
             Layout::tabs([
-                'Order Information' => [
+                __('Order Information') => [
                     Layout::legend('order', [
-                        Sight::make('Full Name')
-                            ->render(fn() => $this->order->first_name . ' ' . $this->order->last_name),
-                        Sight::make('first_address'),
-                        Sight::make('second_address'),
-                        Sight::make('postal_code'),
-                        Sight::make('country')
+                        Sight::make(__('Full Name'))
+                            ->render(fn() => $this->order->customer->first_name . ' ' . $this->order->customer->last_name),
+                        Sight::make('first_address', __('First Address'))
+                            ->render(fn() => $this->order->address->address_one),
+                        Sight::make('second_address', __('Second Address'))
+                            ->render(fn() => $this->order->address->address_two),
+                        Sight::make('postal_code', __('Postal Code'))
+                            ->render(fn() => $this->order->address->zip),
+                        Sight::make('country', __('Country'))
                             ->render(fn() => $this->getCountry()),
-                        Sight::make('email'),
-                        Sight::make('phone_number'),
-                        Sight::make('status')
-                            ->render(fn() => $this->orderStatus())
-                    ])->title('Contact & Address'),
+                        Sight::make('email', __('Email'))
+                            ->render(fn() => $this->order->customer->email),
+                        Sight::make('phone_number', __('Phone Number'))
+                            ->render(fn() => $this->order->customer->phone),
+                        Sight::make('status', __('Status'))
+                            ->render(fn() => $this->orderStatus()),
+                    ])->title(__('Contact & Address')),
 
                     Layout::legend('orderCarrier', [
-                        Sight::make('Name')
-                            ->render(fn() => $this->getOrderCarrier()->carrierName),
-                        Sight::make('Delay')
-                            ->render(fn() => $this->getOrderCarrier()->carrierDelay),
-                        Sight::make('Price')
-                            ->render(fn() => $this->getOrderCarrier()->carrierPrice . ' Kc'),
-                    ])->title('Carrier')
-                      ->canSee($this->orderCarrier !== null)
+                        Sight::make('carrier_name', __('Carrier Name'))
+                            ->render(fn() => $this->order->carrier->carrier_name),
+                        Sight::make('carrier_delay', __('Carrier Delay'))
+                            ->render(fn() => $this->order->carrier->carrier_delay),
+                        Sight::make('carrier_price', __('Carrier Price'))
+                            ->render(fn() => $this->order->carrier->carrier_price . ' Kc'),
+                    ])->title(__('Carrier'))
+                        ->canSee($this->order->carrier !== null),
                 ],
-                'Payment' => [
-                    \App\Orchid\Layouts\Shop\OrderPayment::class
+                __('Payment') => [
+                    \App\Orchid\Layouts\Shop\OrderPayment::class,
                 ],
-                'Ordered Products' => [
-                    Layout::legend('orderProducts', [
-                        Sight::make('product_name', 'Name')
-                            ->render(fn() => $this->orderProducts->product_name),
-                        Sight::make('quantity', 'Quantity')
-                            ->render(fn() => $this->orderProducts->quantity),
-                        Sight::make('price', 'Price')
-                            ->render(fn() => $this->getProduct()->getNormalizedPrice()),
-
-                        Sight::make('vat', 'Tax')
-                            ->render(fn() => $this->getProduct()->getProductTax() . '%'),
-
-                        Sight::make('sale', 'Discount')
-                            ->render(fn() => $this->getProduct()->getProductSale() . '%')
-                    ])->title('Products')
+                __('Ordered Products') => [
+                    Layout::table('orderProducts', [
+                        'product_name' => __('Product Name'),
+                        'quantity' => __('Quantity'),
+                        'price' => __('Price'),
+                        'tax' => __('Tax (%)'),
+                        'discount' => __('Discount (%)')
+                    ], function ($product) {
+                        return [
+                            $product->product_name,
+                            $product->quantity,
+                            $this->getProductPrice($product),
+                            $this->getProductTax($product),
+                            $this->getProductDiscount($product)
+                        ];
+                    })->title(__('Products')),
                 ]
-            ])->activeTab('Order Information'),
-
-            Layout::rows([
-                Button::make('Create new ticket')
-                    ->icon('bs.chat-left')
-                    ->type(Color::SUCCESS)
-                    ->method('createTicket')
-                    ->canSee($this->supportTicket == null),
-                Button::make('Close Ticket')
-                    ->icon('bs.dash-circle-dotted')
-                    ->type(Color::PRIMARY)
-                    ->method('closeTicket')
-                    ->canSee($this->supportTicket != null),
-                Button::make('Transcript')
-                    ->icon('bs.chat-left-text')
-                    ->type(Color::SECONDARY)
-                    ->method('transcript')
-                    ->canSee($this->supportTicket != null && $this->supportTicket->status == "CLOSED")
-
-            ])->title('Management')
+            ])->activeTab(__('Order Information'))
         ];
     }
 
     private function orderStatus(): string
     {
-        if ($this->order->status == "PROCESSING") {
-            return '<a class="ui blue label">'.__('orders.table.status.processing').' <i class="loading cog icon"></i></a>';
-        } else if ($this->order->status == "CANCELLED") {
-            return '<a class="ui red label">'.__('orders.table.status.cancelled').'</a>';
-        } else if ($this->order->status == "REFUNDED") {
-            return '<div><a class="ui orange label">'.__('orders.table.status.refunded').'</a></div>';
-        } else if ($this->order->status == "DISPUTED") {
-            return '<a class="ui red label">'.__('orders.table.status.disputed').'</a>';
-        } else if ($this->order->status == "DELIVERED") {
-            return '<a class="ui green label">'.__('orders.table.status.delivered').'</a>';
-        } else if ($this->order->status == "ARCHIVED") {
-            return '<a class="ui brown label">'.__('orders.table.status.archived').'</a>';
-        } else if ($this->order->status == "COMPLETED") {
-            return '<div><a class="ui green label">'.__('orders.table.status.completed').'</a></div>';
-        } else if ($this->order->status == "OUTING") {
-            return '<a class="ui blue label">Payment at Outing <i class="loading cog icon"></i></a>';
-        }
-        return '<a class="ui purple label">'. $this->order->status . '</a>';
+        $statuses = [
+            "PENDING_APPROVAL" => ['label' => 'ui orange label', 'text' => __('orders.table.status.processing')],
+            "PROCESSING" => ['label' => 'ui blue label', 'text' => __('orders.table.status.processing')],
+            "CANCELLED" => ['label' => 'ui red label', 'text' => __('orders.table.status.cancelled')],
+            "REFUNDED" => ['label' => 'ui orange label', 'text' => __('orders.table.status.refunded')],
+            "DISPUTED" => ['label' => 'ui red label', 'text' => __('orders.table.status.disputed')],
+            "DELIVERED" => ['label' => 'ui green label', 'text' => __('orders.table.status.delivered')],
+            "ARCHIVED" => ['label' => 'ui brown label', 'text' => __('orders.table.status.archived')],
+            "COMPLETED" => ['label' => 'ui green label', 'text' => __('orders.table.status.completed')],
+            "OUTING" => ['label' => 'ui blue label', 'text' => 'Payment at Outing'],
+            "DENIED" => ['label' => 'ui red label', 'text' => 'Denied'],
+        ];
+
+        $status = $this->order->status;
+        return '<a class="' . $statuses[$status]['label'] . '">' . $statuses[$status]['text'] . ' <i class="loading cog icon"></i></a>';
     }
 
     private function getCountry(): string
     {
-        $country = ShopCountries::where('iso_code', $this->order->country);
-        if (!$country->exists()) {
-            return $this->order->country;
-        }
-        return $country->first()->country_name;
+        $country = ShopCountries::where('iso_code', $this->order->address->country)->first();
+        return $country ? $country->country_name : $this->order->address->country;
     }
 
-    public function completed()
+    public function completed(): RedirectResponse
     {
-        ShopOrders::updateOrCreate(
-            [ 'order_id' => $this->order->order_id ],
-            [
-                'status' => 'COMPLETED'
-            ]
-        );
-
+        $this->order->update(['status' => 'COMPLETED']);
         event(new OrderUpdateEvent($this->order, 'completed'));
-        event(new UpdateAudit('orders', 'Set as Completed ' . $this->order->first_name, Auth::user()->name));
-
+        event(new UpdateAudit('orders', 'Set as Completed ' . $this->order->customer->first_name, Auth::user()->name));
         return redirect()->route('platform.shop.orders');
     }
 
-    public function archived()
+    public function delivered(): RedirectResponse
     {
-        ShopOrders::updateOrCreate(
-            [ 'order_id' => $this->order->order_id ],
-            [
-                'status' => 'ARCHIVED'
-            ]
-        );
-
-        event(new UpdateAudit('orders', 'Set as Archived ' . $this->order->first_name, Auth::user()->name));
-
-        return redirect()->route('platform.shop.orders');
-    }
-
-    public function delivered()
-    {
-        ShopOrders::updateOrCreate(
-            [ 'order_id' => $this->order->order_id ],
-            [
-                'status' => 'DELIVERED'
-            ]
-        );
-
+        $this->order->update(['status' => 'DELIVERED']);
         event(new OrderUpdateEvent($this->order, 'delivered'));
-        event(new UpdateAudit('orders', 'Set as Delivered ' . $this->order->first_name, Auth::user()->name));
-
+        event(new UpdateAudit('orders', 'Set as Delivered ' . $this->order->customer->first_name, Auth::user()->name));
         return redirect()->route('platform.shop.orders');
     }
 
-    public function issueRefund()
+    public function issueRefund(): RedirectResponse
     {
-        ShopOrders::updateOrCreate(
-            [ 'order_id' => $this->order->order_id ],
-            [
-                'status' => 'REFUNDED'
-            ]
-        );
-
+        $this->order->update(['status' => 'REFUNDED']);
         $payment = $this->getOrderPayment();
 
-        $refund = new OrderPayment();
-        $refund->order_id = $this->order->order_id;
-        $refund->status = 'REFUNDED';
-        $refund->transaction_id = $payment->transaction_id;
-        $refund->provider = $payment->provider;
-        $refund->price = $payment->price;
-        $refund->save();
+        OrderPayment::create([
+            'order_id' => $this->order->order_id,
+            'status' => 'REFUNDED',
+            'transaction_id' => $payment->transaction_id,
+            'provider' => $payment->provider,
+            'price' => $payment->price,
+        ]);
 
-        Toast::success("You refunded " . $this->order->first_name . ' of ' .  $refund->price . ' Kc');
-
+        Toast::success(__('You refunded :name of :price Kc', ['name' => $this->order->customer->first_name, 'price' => $payment->price]));
         event(new OrderUpdateEvent($this->order, 'refund'));
-        event(new UpdateAudit('orders', 'Refunded ' . $this->order->first_name, Auth::user()->name));
-
+        event(new UpdateAudit('orders', 'Refunded ' . $this->order->customer->first_name, Auth::user()->name));
         return redirect()->route('platform.shop.orders');
     }
 
@@ -274,13 +220,18 @@ class ShopOrderEdit extends Screen
         return OrderPayment::where('order_id', $this->order->order_id)->firstOrFail();
     }
 
-    private function getOrderCarrier(): ShopCarriers
+    private function getProductPrice($product): string
     {
-        return ShopCarriers::where('slug', $this->orderCarrier->carrier_name)->first();
+        return number_format($product->price, 2);
     }
 
-    public function getProduct(): \App\Models\ShopProducts
+    private function getProductTax($product): string
     {
-        return \App\Models\ShopProducts::where('id', $this->orderProducts->product_id)->first();
+        return $product->tax . '%';
+    }
+
+    private function getProductDiscount($product): string
+    {
+        return $product->discount . '%';
     }
 }

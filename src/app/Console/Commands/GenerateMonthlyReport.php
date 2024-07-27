@@ -2,14 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Models\OrderCarrier;
-use App\Models\OrderPayment;
-use App\Models\OrderedProduct;
-use App\Models\ShopReports;
+use App\Models\Shop\Customer\Order\OrderedProduct;
+use App\Models\Shop\Customer\Order\OrderPayment;
+use App\Models\Shop\Internal\ShopReports;
 use App\Notifications\ShopReportReady;
+use App\Orchid\Screens\Shop\ShopOrders;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use Orchid\Platform\Models\User;
@@ -45,12 +44,7 @@ class GenerateMonthlyReport extends Command
             ->where('status', 'REFUNDED')
             ->sum('price');
 
-        $carrierFees = OrderCarrier::orderBy('created_at', 'desc')
-            ->whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', $currentMonth)
-            ->sum('price');
-
-        $loss = $total - $paidPrice + $refunded + $carrierFees;
+        $loss = $total - $paidPrice + $refunded;
 
         if ($loss <= 0) {
             $loss = 0;
@@ -65,9 +59,9 @@ class GenerateMonthlyReport extends Command
             'reportProducts' => OrderedProduct::whereMonth('created_at', $currentMonth)
                 ->whereYear('created_at', $currentYear)
                 ->get(),
-            'fees' => number_format(abs($carrierFees)),
+            'fees' => 0,
             'sales' => number_format(abs($loss)),
-            'overallProfit' => number_format(abs($total - $loss - $carrierFees)),
+            'overallProfit' => number_format(abs($total - $loss)),
             'lossPercentage' => number_format($percentage),
             'pagination' => 0
         ]);

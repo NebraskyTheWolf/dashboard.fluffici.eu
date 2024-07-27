@@ -2,10 +2,10 @@
 
 namespace App\Orchid\Layouts\Posts;
 
-use App\Models\Post;
-use App\Models\PostsComments;
-use App\Models\PostsLikes;
-use App\Models\User;
+use App\Models\Posts\Post;
+use App\Models\Posts\PostsComments;
+use App\Models\Posts\PostsLikes;
+use App\Models\Security\Account\User;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;

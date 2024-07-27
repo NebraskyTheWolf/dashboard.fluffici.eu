@@ -2,8 +2,8 @@
 
 namespace App\Orchid\Layouts\Shop;
 
-use App\Models\ShopCategories;
-use App\Models\ShopProducts;
+use App\Models\Shop\Internal\ShopCategories;
+use App\Models\Shop\Internal\ShopProducts;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
@@ -53,7 +53,6 @@ class ShopProductsList extends Table
                 }),
             TD::make('stock', 'Available stock')
                 ->render(function (ShopProducts $products) {
-                    $products->createOrGetInventory();
                     $available =  $products->getAvailableProducts();
 
                     if ($available <= 0) {

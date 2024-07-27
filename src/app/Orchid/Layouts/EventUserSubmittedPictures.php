@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
-use App\Models\EventAttachments;
+use App\Models\Event\EventAttachments;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Picture;

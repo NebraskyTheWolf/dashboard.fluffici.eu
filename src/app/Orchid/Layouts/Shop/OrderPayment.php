@@ -2,9 +2,8 @@
 
 namespace App\Orchid\Layouts\Shop;
 
-use App\Models\OrderCarrier;
-use App\Models\OrderedProduct;
-use App\Models\ShopProducts;
+use App\Models\Shop\Customer\Order\OrderPayment as OrderPaymentModel;
+use App\Models\Shop\Customer\Order\OrderedProduct;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -16,100 +15,86 @@ class OrderPayment extends Table
     {
         return [
             TD::make('status', __('orders.table.payment_status'))
-                ->render(function (\App\Models\OrderPayment $shopOrders) {
-                    if ($shopOrders->status == "CANCELLED") {
-                        return '<a class="ui teal label">' . __('orders.table.payment_status.cancelled') . '</a>';
-                    } else if ($shopOrders->status == "PAID") {
-                        return '<a class="ui green label">' . __('orders.table.payment_status.paid') . '</a>';
-                    } else if ($shopOrders->status == "UNPAID") {
-                        return '<a class="ui red label">' . __('orders.table.payment_status.unpaid') . '</a>';
-                    } else if ($shopOrders->status == "REFUNDED") {
-                        return '<a class="ui yellow label">' . __('orders.table.status.refunded') . '</a>';
-                    } else if ($shopOrders->status == "DISPUTED") {
-                        return '<a class="ui yellow label">' . __('orders.table.payment_status.disputed') . '</a>';
-                    } else if ($shopOrders->status == "PARTIALLY_PAID") {
-                        return '<a class="ui yellow label">' . __('orders.table.status.partially_paid') . '</a>';
-                    }
-
-                    return '<a class="ui blue label">' . __('orders.table.payment_status.await') . ' <i class="loading cog icon"></i></a>';
+                ->render(function (OrderPaymentModel $payment) {
+                    return $this->renderPaymentStatus($payment->status);
                 }),
-            TD::make('transaction_id', 'ID transakce')
-                ->render(function (\App\Models\OrderPayment $payment) {
-                    if ($payment->transaction_id === null) {
-                        return '<a><i class="exclamation triangle icon"></i> Tuto platbu je třeba zkontrolovat u dodavatele!</a>';
-                    }
 
-                    return '<a href=\"https://provider.com/transactions/' . $payment->transaction_id . '\> Kontrola </a>';
+            TD::make('transaction_id', 'Transaction ID')
+                ->render(function (OrderPaymentModel $payment) {
+                    return $this->renderTransactionId($payment->transaction_id);
                 }),
-            TD::make('provider')
-                ->render(function (\App\Models\OrderPayment $payment) {
-                    if ($payment->provider === null) {
-                        return 'Dodavatel nebyl detekován.';
-                    }
 
-                    return $payment->provider;
+            TD::make('provider', 'Provider')
+                ->render(function (OrderPaymentModel $payment) {
+                    return $payment->provider ?? 'Provider not detected';
                 }),
-            TD::make('price')
-                ->render(function (\App\Models\OrderPayment $payment) {
-                    if ($payment->status == "PAID") {
-                        $missing = $this->isMissing($payment);
-                        $over = $this->isOverPaid($payment);
 
-                        $partialPayment = \App\Models\OrderPayment::where('order_id', $payment->order_id);
-                        if ($partialPayment->exists()) {
-                            return $payment->price . ' Kc';
-                        }
-
-                        // 0.01 Precision
-
-                        if ($missing > 0.01) {
-                            return '<a class="ui red label">Chybí ' . $missing . ' Kc</a>';
-                        } else if ($over > 0.01) {
-                            return '<a class="ui yellow label">Přeplatek o ' . $over . ' Kc</a>';
-                        }
-                    }
-
-                    return $payment->price . ' Kc';
+            TD::make('price', 'Price')
+                ->render(function (OrderPaymentModel $payment) {
+                    return $this->renderPrice($payment);
                 }),
-            TD::make('remaining_balance', 'K zaplacení')
-                ->render(function (\App\Models\OrderPayment $payment) {
-                    $remainingBalance = number_format($this->calculate($payment) - $this->getTotalPaid($payment->order_id));
-                    return '<a class="ui green label">K zaplacení ' . $remainingBalance . ' Kc</a>';
-                })
+
+            TD::make('remaining_balance', 'Remaining Balance')
+                ->render(function (OrderPaymentModel $payment) {
+                    return $this->renderRemainingBalance($payment);
+                }),
         ];
     }
 
-    protected function iconNotFound(): string
+    private function renderPaymentStatus(string $status): string
     {
-        return 'bs.exclamation-triangle';
+        $statusMap = [
+            'CANCELLED' => ['class' => 'teal', 'label' => __('orders.table.payment_status.cancelled')],
+            'PAID' => ['class' => 'green', 'label' => __('orders.table.payment_status.paid')],
+            'UNPAID' => ['class' => 'red', 'label' => __('orders.table.payment_status.unpaid')],
+            'REFUNDED' => ['class' => 'yellow', 'label' => __('orders.table.status.refunded')],
+            'DISPUTED' => ['class' => 'yellow', 'label' => __('orders.table.payment_status.disputed')],
+            'PARTIALLY_PAID' => ['class' => 'yellow', 'label' => __('orders.table.status.partially_paid')],
+            'AWAIT' => ['class' => 'blue', 'label' => __('orders.table.payment_status.await')],
+        ];
+
+        $statusInfo = $statusMap[$status] ?? ['class' => 'blue', 'label' => __('orders.table.payment_status.await')];
+
+        return '<a class="ui ' . $statusInfo['class'] . ' label">' . $statusInfo['label'] . ' <i class="loading cog icon"></i></a>';
     }
 
-    protected function textNotFound(): string {
-        return '<a class="ui teal label">Čekání na platbu... <i class="loading cog icon"></i></a>';
+    private function renderTransactionId(?string $transactionId): string
+    {
+        if ($transactionId === null) {
+            return '<a><i class="exclamation triangle icon"></i> This payment needs to be checked with the provider!</a>';
+        }
+
+        return '<a href="https://provider.com/transactions/' . $transactionId . '"> Check </a>';
     }
 
-    protected function subNotFound(): string
+    private function renderPrice(OrderPaymentModel $payment): string
     {
-        return 'Zatím nebyla nalezena žádná platba.';
+        $priceInfo = $payment->price . ' Kc';
+        if ($payment->status === 'PAID') {
+            $missing = $this->isMissing($payment);
+            $overpaid = $this->isOverPaid($payment);
+
+            if ($missing > 0.01) {
+                return '<a class="ui red label">Missing ' . $missing . ' Kc</a>';
+            } elseif ($overpaid > 0.01) {
+                return '<a class="ui yellow label">Overpaid by ' . $overpaid . ' Kc</a>';
+            }
+        }
+        return $priceInfo;
     }
-    /**
-     * Calculate the total price of an order payment.
-     *
-     * This method calculates the total price of an order payment by summing the normalized prices of the ordered products.
-     * It also includes the price of the order carrier, if applicable.
-     *
-     * @param \App\Models\OrderPayment $payment The order payment.
-     * @return float The total price of the order payment.
-     */
-    protected function calculate(\App\Models\OrderPayment $payment): float
+
+    private function renderRemainingBalance(OrderPaymentModel $payment): string
     {
-        // Eager load to optimize database queries
+        $remainingBalance = number_format($this->calculateTotalAmount($payment) - $this->getTotalPaidAmount($payment->order_id));
+        return '<a class="ui green label">Remaining ' . $remainingBalance . ' Kc</a>';
+    }
+
+    protected function calculateTotalAmount(OrderPaymentModel $payment): float
+    {
         $orderedProducts = OrderedProduct::with('product')->where('order_id', $payment->order_id)->get();
-        $totalPrice = $orderedProducts->sum(function ($orderedProduct) {
-            return $orderedProduct->product->getNormalizedPrice();
-        });
+        $totalPrice = $orderedProducts->sum(fn($orderedProduct) => $orderedProduct->product->getNormalizedPrice());
 
-        $carrier = OrderCarrier::where('order_id', $payment->order_id)->first();
+        $carrier = $payment->order->carrier;
 
         if ($carrier) {
             $totalPrice += $carrier->price;
@@ -118,58 +103,49 @@ class OrderPayment extends Table
         return $totalPrice;
     }
 
-    /**
-     * Checks if the given OrderPayment has a missing amount.
-     *
-     * @param \App\Models\OrderPayment $payment The OrderPayment object to check.
-     * @return float Returns the missing amount or 0.0 if no amount is missing.
-     */
-    protected function isMissing(\App\Models\OrderPayment $payment): float
+    protected function isMissing(OrderPaymentModel $payment): float
     {
-        $amount = $this->calculate($payment);
+        $totalAmount = $this->calculateTotalAmount($payment);
 
-        if ($payment->price < $amount) {
-            return $amount - $this->getTotalPaid($payment->order_id);
+        if ($payment->price < $totalAmount) {
+            return $totalAmount - $this->getTotalPaidAmount($payment->order_id);
         }
 
         return 0.0;
     }
 
-    /**
-     * Checks if the given OrderPayment is overpaid.
-     *
-     * @param \App\Models\OrderPayment $payment The OrderPayment object to check.
-     * @return float Returns the overpaid amount or 0.0 if no overpayment is detected.
-     */
-    protected function isOverPaid(\App\Models\OrderPayment $payment): float
+    protected function isOverPaid(OrderPaymentModel $payment): float
     {
-        $amount = $this->calculate($payment);
+        $totalAmount = $this->calculateTotalAmount($payment);
 
-        if ($payment->price > $amount) {
-            return $this->getTotalPaid($payment->order_id) - $amount;
+        if ($payment->price > $totalAmount) {
+            return $this->getTotalPaidAmount($payment->order_id) - $totalAmount;
         }
 
         return 0.0;
     }
 
-    /**
-     * Calculates the total amount paid for a given order.
-     *
-     * @param string $orderId The ID of the order.
-     * @return float The total amount paid for the order.
-     */
-    protected function getTotalPaid(string $orderId): float
+    protected function getTotalPaidAmount(string $orderId): float
     {
-        $payments = \App\Models\OrderPayment::where('order_id', $orderId)
-            ->where('status', 'PAID')
-            ->where('status', 'PARTIALLY_PAID')
-            ->paginate();
+        $payments = OrderPaymentModel::where('order_id', $orderId)
+            ->whereIn('status', ['PAID', 'PARTIALLY_PAID'])
+            ->get();
 
-        $total = 0.0;
-        foreach ($payments as $payment) {
-            $total += $payment->price;
-        }
+        return $payments->sum('price');
+    }
 
-        return $total;
+    protected function iconNotFound(): string
+    {
+        return 'bs.exclamation-triangle';
+    }
+
+    protected function textNotFound(): string
+    {
+        return '<a class="ui teal label">Waiting for payment... <i class="loading cog icon"></i></a>';
+    }
+
+    protected function subNotFound(): string
+    {
+        return 'No payments found yet.';
     }
 }

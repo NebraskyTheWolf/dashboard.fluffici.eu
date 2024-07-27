@@ -2,7 +2,7 @@
 
 namespace app\Orchid\Screens\Accounting;
 
-use App\Models\OrderInvoice;
+use App\Models\Shop\Customer\Order\OrderInvoice;
 use App\Orchid\Layouts\InvoiceList;
 use Orchid\Screen\Action;
 use Orchid\Screen\Layout;

@@ -3,8 +3,8 @@
 namespace App\Orchid\Screens\Attachments;
 
 use App\Models\AutumnFile;
-use App\Models\EventAttachments;
-use App\Models\User;
+use App\Models\Event\EventAttachments;
+use App\Models\Security\Account\User;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;

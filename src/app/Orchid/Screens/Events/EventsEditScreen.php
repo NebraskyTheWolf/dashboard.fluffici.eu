@@ -5,17 +5,14 @@ namespace App\Orchid\Screens\Events;
 use App\Events\AkceUpdate;
 use App\Events\UpdateAudit;
 use App\Mail\ApplicationError;
-use App\Mail\ScheduleMail;
-use App\Models\Events;
+use App\Models\Event\Events;
 use App\Models\PlatformAttachments;
-use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Httpful\Exception\ConnectionErrorException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\DateTimer;
@@ -44,7 +41,7 @@ class EventsEditScreen extends Screen
     /**
      * Query method for retrieving events and associated metrics.
      *
-     * @param Events $events The events object containing event information.
+     * @param \app\Models\Event\Events $events The events object containing event information.
      * @return array The query result containing events and metrics.
      * @throws ConnectionErrorException
      */

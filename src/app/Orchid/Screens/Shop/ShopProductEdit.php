@@ -3,11 +3,10 @@
 namespace App\Orchid\Screens\Shop;
 
 use App\Events\UpdateAudit;
-use App\Models\ProductTax;
-use App\Models\ShopCategories;
-use App\Models\ShopProducts;
-use App\Models\ShopSales;
-use App\Models\TaxGroup;
+use App\Models\Shop\Internal\ProductTax;
+use App\Models\Shop\Internal\ShopProducts;
+use App\Models\Shop\Internal\TaxGroup;
+use App\Models\Shop\Internal\ShopCategories;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
@@ -18,7 +17,6 @@ use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Picture;
-use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
@@ -28,15 +26,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ShopProductEdit extends Screen
 {
-
     public $products;
     public $currentTax;
-
 
     /**
      * Fetch data to be displayed on the screen.
      *
-     * @return array
+     * @param ShopProducts $products
+     * @return iterable
      */
     public function query(ShopProducts $products): iterable
     {
@@ -52,48 +49,14 @@ class ShopProductEdit extends Screen
      */
     public function name(): ?string
     {
-        return $this->products->exists ? __('products.screen.edit.title') : __('products.screen.edit.title.create');
+        return $this->products->exists ? __('Edit Product') : __('Create Product');
     }
 
     /**
-     * The screen's action buttons.
+     * Define permissions for accessing this screen.
      *
-     * @return \Orchid\Screen\Action[]
+     * @return iterable|null
      */
-    public function commandBar(): iterable
-    {
-        if ($this->products->exists) {
-            $currentSale = ShopSales::where('product_id', $this->products->id);
-
-            return [
-                DropDown::make(__('products.screen.edit.dropdown.menu'))
-                    ->icon('bs.caret-down')
-                    ->list([
-                        Button::make(__('products.screen.edit.button.save'))
-                            ->icon('bs.pencil')
-                            ->method('createOrUpdate'),
-                        Button::make(__('products.screen.edit.button.remove'))
-                            ->method('remove')
-                            ->icon('bs.trash'),
-
-                        Link::make($currentSale->exists() ? __('products.screen.edit.button.edit_sale') : __('products.screen.edit.button.new_sale'))
-                            ->icon('bs.cash-coin')
-                            ->href($currentSale->exists() ? route('platform.shop.sales.edit', $currentSale->firstorFail()) : route('platform.shop.sales.edit'))
-                    ])
-            ];
-        }
-
-        return [
-            DropDown::make(__('products.screen.edit.dropdown.menu'))
-                ->icon('bs.caret-down')
-                ->list([
-                    Button::make(__('products.screen.edit.button.save'))
-                        ->icon('bs.pencil')
-                        ->method('createOrUpdate')
-                ])
-        ];
-    }
-
     public function permission(): ?iterable
     {
         return [
@@ -102,71 +65,98 @@ class ShopProductEdit extends Screen
     }
 
     /**
+     * The screen's action buttons.
+     *
+     * @return array
+     */
+    public function commandBar(): iterable
+    {
+        $currentSale = \App\Models\Shop\Internal\ShopSales::where('product_id', $this->products->id);
+
+        return [
+            DropDown::make(__('Actions'))
+                ->icon('bs.caret-down')
+                ->list([
+                    Button::make(__('Save'))
+                        ->icon('bs.pencil')
+                        ->method('createOrUpdate'),
+
+                    Button::make(__('Delete'))
+                        ->method('remove')
+                        ->icon('bs.trash'),
+
+                    Link::make($currentSale->exists() ? __('Edit Sale') : __('Create Sale'))
+                        ->icon('bs.cash-coin')
+                        ->href($currentSale->exists() ? route('platform.shop.sales.edit', $currentSale->firstOrFail()) : route('platform.shop.sales.edit'))
+                ])
+        ];
+    }
+
+    /**
      * The screen's layout elements.
      *
-     * @return \Orchid\Screen\Layout[]|string[]
+     * @return array
      */
     public function layout(): iterable
     {
         return [
             Layout::rows([
-
                 Group::make([
                     Input::make('products.name')
-                        ->title(__('products.screen.edit.input.product_name.title'))
-                        ->placeholder(__('products.screen.edit.input.product_name.placeholder'))
+                        ->title(__('Product Name'))
+                        ->placeholder(__('Enter the product name'))
                         ->required(),
 
                     Relation::make('products.category_id')
-                        ->title(__('products.screen.edit.input.category_id.title'))
-                        ->placeholder(__('products.screen.edit.input.category_id.placeholder'))
+                        ->title(__('Category'))
+                        ->placeholder(__('Select a category'))
                         ->fromModel(ShopCategories::class, 'name', 'id')
-                        ->required()
-
-                ])->alignStart(),
+                        ->required(),
+                ]),
 
                 Group::make([
                     Input::make('products.description')
                         ->type('textarea')
-                        ->title(__('products.screen.edit.input.description.title'))
-                        ->placeholder(__('products.screen.edit.input.description.placeholder')),
+                        ->title(__('Description'))
+                        ->placeholder(__('Enter the product description')),
 
                     Picture::make('Barcode')
-                        ->title('Barcode')
-                        ->help('This is the barcode of this product')
+                        ->title(__('Barcode'))
+                        ->help(__('This is the barcode of this product'))
                         ->url($this->products->exists ? 'https://api.fluffici.eu/api/product/ean?productId=' . $this->products->generateUPCA() : '')
-                        ->canSee($this->products->exists)
-
-                ])->alignCenter(),
+                        ->canSee($this->products->exists),
+                ]),
 
                 Group::make([
                     Input::make('products.price')
-                        ->title(__('products.screen.edit.input.price.title'))
-                        ->placeholder(__('products.screen.edit.input.price.placeholder'))
+                        ->title(__('Price'))
+                        ->placeholder(__('Enter the product price'))
+                        ->type('number')
+                        ->required(),
+
+                    Input::make('products.quantity')
+                        ->title(__('Quantity'))
+                        ->placeholder(__('Enter the inventory quantity'))
                         ->type('number')
                         ->required(),
 
                     CheckBox::make('products.displayed')
-                        ->title(__('products.screen.edit.input.displayed.title'))
-                        ->placeholder(__('products.screen.edit.input.displayed.placeholder'))
+                        ->title(__('Displayed'))
+                        ->placeholder(__('Is this product displayed?'))
                         ->checked()
                         ->sendTrueOrFalse(),
 
                     DateTimer::make('products.deleted_at')
-                        ->title(__('products.screen.edit.input.deleted_at.title'))
-                        ->placeholder(__('products.screen.edit.input.deleted_at.placeholder'))
+                        ->title(__('Deletion Date'))
+                        ->placeholder(__('Select the deletion date'))
                         ->format24hr()
-                        ->allowInput()
-
-
-                ])->alignEnd(),
+                        ->allowInput(),
+                ]),
 
                 Cropper::make('products.image_path')
-                    ->remoteTag("attachments")
-                    ->title(__('products.screen.edit.input.image_path.title'))
-                    ->placeholder(__('products.screen.edit.input.image_path.placeholder'))
-
-            ])->title(__('products.screen.edit.input.title'))
+                    ->title(__('Product Image'))
+                    ->placeholder(__('Upload the product image')),
+            ])->title(__('Product Information'))
         ];
     }
 
@@ -177,29 +167,24 @@ class ShopProductEdit extends Screen
      *
      * @return RedirectResponse The redirect response to the shop products page.
      */
-    public function createOrUpdate(Request $request)
+    public function createOrUpdate(Request $request): RedirectResponse
     {
-        $data = $this->products->fill($request->get('products'));
+        $data = $request->get('products');
+        $this->products->fill($data);
+        $this->products->displayed = $data['displayed'] === "ON";
+        $this->products->save();
 
-        if ($data->displayed === "ON") {
-            $data->displayed = true;
-        } else {
-            $data->displayed = false;
+        $taxes = TaxGroup::all();
+        foreach ($taxes as $tax) {
+            ProductTax::create([
+                'product_id' => $this->products->id,
+                'tax_id' => $tax->id,
+            ]);
         }
 
-        $data->save();
+        Toast::info(__('Product saved successfully.'));
 
-        $taxes = TaxGroup::paginate();
-        foreach ($taxes as $taxs) {
-            $tax = new ProductTax();
-            $tax->product_id = ShopProducts::latest()->first()->id;
-            $tax->tax_id = $taxs->id;
-            $tax->save();
-        }
-
-        Toast::info('You created a new product.');
-
-        event(new UpdateAudit("products", $this->products->name . " created.", Auth::user()->name));
+        event(new UpdateAudit('products', $this->products->name . ' created.', Auth::user()->name));
 
         return redirect()->route('platform.shop.products');
     }
@@ -207,10 +192,13 @@ class ShopProductEdit extends Screen
     /**
      * Remove a product from the shop.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function remove() {
+    public function remove(): RedirectResponse
+    {
         $this->products->delete();
+
+        Toast::info(__('Product deleted successfully.'));
 
         return redirect()->route('platform.shop.products');
     }

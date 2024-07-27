@@ -3,17 +3,15 @@
 namespace App\Console\Commands;
 
 use App\Models\AuditLogs;
-use App\Models\Events;
-use App\Models\OrderedProduct;
-use App\Models\OrderIdentifiers;
-use App\Models\OrderInvoice;
-use App\Models\OrderPayment;
-use App\Models\ShopCategories;
-use App\Models\ShopOrders;
-use App\Models\ShopProducts;
-use App\Models\ShopVouchers;
-use App\Models\VisitsStatistics;
-use Carbon\Carbon;
+use App\Models\Event\Events;
+use App\Models\Shop\Customer\Order\OrderedProduct;
+use App\Models\Shop\Customer\Order\OrderIdentifiers;
+use App\Models\Shop\Customer\Order\OrderInvoice;
+use App\Models\Shop\Customer\Order\OrderPayment;
+use App\Models\Shop\Customer\Order\ShopOrders;
+use App\Models\Shop\Customer\ShopVouchers;
+use App\Models\Shop\Internal\ShopCategories;
+use App\Models\Shop\Internal\ShopProducts;
 use Illuminate\Console\Command;
 
 class PurgeDummyData extends Command

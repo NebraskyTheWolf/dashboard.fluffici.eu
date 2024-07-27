@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Shop;
 
-use App\Models\ShopCountries;
+use App\Models\Shop\Internal\ShopCountries;
 use App\Orchid\Layouts\Shop\ShopCountriesLayout;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;

@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Application\Scopes;
 
-use App\Models\Scopes;
+use App\Models\Security\OAuth\Scopes;
 use App\Orchid\Layouts\ScopeListLayout;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;

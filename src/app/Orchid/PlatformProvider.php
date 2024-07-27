@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
-use App\Models\Events;
-use App\Models\ShopCustomer;
-use App\Models\ShopOrders;
-use App\Models\ShopSettings;
-use App\Models\ShopSupportTickets;
-use Google\Auth\Cache\Item;
+use App\Models\Event\Events;
+use App\Models\Shop\Customer\Order\ShopOrders;
+use App\Models\Shop\Customer\ShopCustomer;
+use App\Models\Shop\Internal\ShopSettings;
 use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
 use Orchid\Platform\OrchidServiceProvider;
@@ -210,12 +208,6 @@ class PlatformProvider extends OrchidServiceProvider
                         ->permission('platform.systems.eshop.orders')
                         ->slug('orders')
                         ->title("OBJEDNÁVKY A PODPORA"),
-                    Menu::make('Podpora - lístky')
-                        ->icon('bs.chat-right-text')
-                        ->slug('tickets')
-                        ->route('platform.shop.support')
-                        ->badge(fn () => ShopSupportTickets::where('status', 'PENDING')->count() ?: 0)
-                        ->permission('platform.systems.eshop.support'),
                     Menu::make('Nastavení')
                         ->icon('bs.gear')
                         ->route('platform.shop.settings')
@@ -227,8 +219,7 @@ class PlatformProvider extends OrchidServiceProvider
         ];
     }
 
-    public function permissions(): array
-    {
+    public function permissions(): array {
         return [
             ItemPermission::group("Systémy")
                 ->addPermission('platform.systems.roles', "Role")

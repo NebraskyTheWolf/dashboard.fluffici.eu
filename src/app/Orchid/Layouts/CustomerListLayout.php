@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
-use App\Models\ShopCustomer;
+use App\Models\Shop\Customer\ShopCustomer;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
@@ -38,8 +38,8 @@ class CustomerListLayout extends Table
                 ->render(function (ShopCustomer $customer) {
                     return '@' . $customer->username;
                 }),
-            TD::make('email', 'E-mail'),
-            TD::make('account_status', 'Stav účtu'),
+            TD::make('email', 'EMail'),
+            TD::make('phone', 'Phone'),
         ];
     }
 

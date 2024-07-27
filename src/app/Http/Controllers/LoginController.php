@@ -6,8 +6,8 @@ namespace App\Http\Controllers;
 
 use App\Mail\PasswordRecovery;
 use App\Mail\UserOtpMail;
-use App\Models\OTPRequest;
-use App\Models\UserOtp;
+use App\Models\Security\Auth\UserOtp;
+use App\Models\Security\OAuth\OTPRequest;
 use Carbon\Carbon;
 use Coderflex\LaravelTurnstile\Rules\TurnstileCheck;
 use Illuminate\Auth\EloquentUserProvider;
@@ -24,7 +24,6 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Orchid\Platform\Models\User;
 use Orchid\Support\Facades\Toast;
-use PHPUnit\Exception;
 use Ramsey\Uuid\Uuid;
 use Random\RandomException;
 
@@ -344,7 +343,7 @@ class LoginController extends Controller
     /**
      * Generování kódu pro obnovení hesla
      *
-     * @param \App\Models\User $user
+     * @param \app\Models\Security\Account\User $user
      *
      * @return void
      */
@@ -353,7 +352,7 @@ class LoginController extends Controller
         $token = Uuid::uuid4()->toString();
 
         // Uložte token do databáze spojené s uživatelem.
-        $passwordRecovery = new \App\Models\PasswordRecovery();
+        $passwordRecovery = new \App\Models\Security\Auth\PasswordRecovery();
         $passwordRecovery->user_id = $user->id;
         $passwordRecovery->token = 1;
         $passwordRecovery->recovery_token = $token;
@@ -379,7 +378,7 @@ class LoginController extends Controller
             'cf-turnstile-response' => ['required', new TurnstileCheck()],
         ]);
 
-        $token = \App\Models\PasswordRecovery::where('recovery_token', $request->input('token'));
+        $token = \App\Models\Security\Auth\PasswordRecovery::where('recovery_token', $request->input('token'));
         if ($token->exists()) {
             $data = $token->first();
             $user = User::where('id', $data->user_id)->first();

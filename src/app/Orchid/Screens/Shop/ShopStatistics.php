@@ -2,9 +2,9 @@
 
 namespace App\Orchid\Screens\Shop;
 
-use App\Models\OrderedProduct;
-use App\Models\OrderPayment;
-use App\Models\ShopOrders;
+use App\Models\Shop\Customer\Order\OrderedProduct;
+use App\Models\Shop\Customer\Order\OrderPayment;
+use App\Models\Shop\Customer\Order\ShopOrders;
 use App\Orchid\Layouts\Pie;
 use App\Orchid\Layouts\Shop\ShopProfit;
 use Carbon\Carbon;
@@ -34,29 +34,18 @@ class ShopStatistics extends Screen
                 ],
                 'overall' => [
                     'key' => 'overall',
-                    'value' => number_format(
-                            OrderPayment::where('status', 'PAID')->sum('price') -
-                            OrderPayment::where('status', 'UNPAID')->sum('price') -
-                            OrderPayment::where('status', 'REFUNDED')->sum('price') -
-                            OrderPayment::where('status', 'CANCELLED')->sum('price')) . ' Kč',
-                    'diff' => $this->diff($this->sumPriceOrderPayment(), $this->sumPriceOrderPaymentSubMonth($currentYear, $currentMonth)),
+                    'value' => number_format($this->calculateOverallPayment()) . ' Kč',
+                    'diff' => $this->calculateDifference($this->sumPriceOrderPayment(), $this->sumPriceOrderPaymentByDate($currentYear, $currentMonth)),
                     'numeric' => true,
                     'icon' => 'bs.safe'
                 ],
                 'monthly' => [
                     'key' => 'monthly',
-                    'value' => $this->sumPriceOrderPaymentByDate($currentYear, $currentMonth) . ' Kč',
-                    'diff' => $this->diff($this->sumPriceOrderPaymentByDate($currentYear, $currentMonth),
-                        $this->sumPriceOrderPaymentByDate($currentYear, $previousMonth)),
+                    'value' => number_format($this->sumPriceOrderPaymentByDate($currentYear, $currentMonth)) . ' Kč',
+                    'diff' => $this->calculateDifference($this->sumPriceOrderPaymentByDate($currentYear, $currentMonth), $this->sumPriceOrderPaymentByDate($currentYear, $previousMonth)),
                     'numeric' => true,
                     'icon' => 'bs.safe2'
                 ],
-            ],
-            'pie' => [
-                OrderedProduct::sumByDays('product_id')->toChart('Product'),
-            ],
-            'dataset' => [
-                OrderedProduct::sumByDays('price')->toChart('Price'),
             ],
             'order' => [
                 ShopOrders::where('status', 'COMPLETED')->averageByDays('id')->toChart(__('statistics.screen.chart.item.completed')),
@@ -75,7 +64,7 @@ class ShopStatistics extends Screen
      */
     private function sumQuantityOrderedProduct(): int
     {
-        return number_format(OrderedProduct::all()->sum('quantity'));
+        return OrderedProduct::sum('quantity');
     }
 
     /**
@@ -85,51 +74,54 @@ class ShopStatistics extends Screen
      */
     private function sumPriceOrderPayment(): float
     {
-        return OrderPayment::where('status', 'PAID')->sum('price') -
-            OrderPayment::where('status', 'UNPAID')->sum('price') -
-            OrderPayment::where('status', 'REFUNDED')->sum('price');
+        return OrderPayment::where('status', 'PAID')->sum('price')
+            - OrderPayment::where('status', 'UNPAID')->sum('price')
+            - OrderPayment::where('status', 'REFUNDED')->sum('price');
     }
 
     /**
-     * Calculates the sum of price for order payments in the previous month.
+     * Calculates the sum of price for order payments in the specified month.
      *
-     * @param int $year The year of the previous month.
-     * @param mixed $month The previous month.
-     * @return float The sum of price for order payments in the previous
-     *               month, after subtracting the values of unpaid, refunded,
-     *               and cancelled order payments.
+     * @param int $year The year of the month.
+     * @param Carbon $month The month.
+     * @return float The sum of price for order payments.
      */
-    private function sumPriceOrderPaymentSubMonth(int $year, mixed $month): float
+    private function sumPriceOrderPaymentByDate(int $year, Carbon $month): float
     {
         return OrderPayment::where('status', 'PAID')
-                ->whereYear('created_at', $year)
-                ->whereMonth('created_at', $month)
-                ->sum('price') -
-            OrderPayment::where('status', 'UNPAID')
-                ->whereYear('created_at', $year)
-                ->whereMonth('created_at', $month)
-                ->sum('price') -
-            OrderPayment::where('status', 'REFUNDED')
-                ->whereYear('created_at', $year)
-                ->whereMonth('created_at', $month)
-                ->sum('price');
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month->month)
+            ->sum('price');
     }
 
     /**
-     * Calculates the sum of price for order payments by date.
+     * Calculates the overall payment after subtracting unpaid, refunded, and cancelled payments.
      *
-     * @param int $year The year of the date.
-     * @param mixed $month The month of the date. Can be integer or string representation of the month.
-     * @return float The sum of price for order payments in Czech koruna (Kč).
+     * @return float The overall payment.
      */
-    private function sumPriceOrderPaymentByDate(int $year, mixed $month) : float
+    private function calculateOverallPayment(): float
     {
-        return number_format(
-                OrderPayment::where('status', 'PAID')
-                    ->whereYear('created_at', $year)
-                    ->whereMonth('created_at', $month)
-                    ->sum('price')
-            );
+        return OrderPayment::where('status', 'PAID')->sum('price')
+            - OrderPayment::where('status', 'UNPAID')->sum('price')
+            - OrderPayment::where('status', 'REFUNDED')->sum('price')
+            - OrderPayment::where('status', 'CANCELLED')->sum('price');
+    }
+
+    /**
+     * Calculates the percentage difference between two given numbers.
+     *
+     * @param float $recent The recent number.
+     * @param float $previous The previous number.
+     * @return float The percentage difference between the recent and previous numbers.
+     *               If either the recent or previous number is less than or equal to zero, returns 0.0.
+     */
+    private function calculateDifference(float $recent, float $previous): float
+    {
+        if ($previous <= 0) {
+            return 0.0;
+        }
+
+        return (($recent - $previous) / abs($previous)) * 100;
     }
 
     /**
@@ -177,26 +169,7 @@ class ShopStatistics extends Screen
                 __('statistics.screen.layout.metrics.overall') => 'metrics.overall',
                 __('statistics.screen.layout.metrics.monthly') => 'metrics.monthly',
             ]),
-
-            Pie::make('pie',  __('statistics.screen.layout.chart.product_frequency')),
-            ShopProfit::make('dataset',  __('statistics.screen.layout.chart.weekly')),
             ShopProfit::make('order', __('statistics.screen.layout.chart.weekly_orders')),
         ];
-    }
-
-    /**
-     * Calculates the percentage difference between two given numbers.
-     *
-     * @param float $recent The recent number.
-     * @param float $previous The previous number.
-     * @return float The percentage difference between the recent and previous numbers.
-     *               If either the recent or previous number is less than or equal to zero, returns 0.0.
-     */
-    public function diff(float $recent, float $previous): float
-    {
-        if ($recent <= 0 || $previous <= 0)
-            return 0.0;
-
-        return (($recent-$previous)/abs($previous)) * 100;
     }
 }

@@ -2,10 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\OrderCarrier;
-use App\Models\OrderedProduct;
-use App\Models\OrderPayment;
-use App\Models\ShopReports;
+use App\Models\Shop\Customer\Order\OrderPayment;
 use App\Models\TransactionsReport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -96,10 +93,7 @@ class GenerateTransactionsReport extends Command
      */
     private function calculateCarrierFees(int $month, int $year): float
     {
-        return OrderCarrier::orderBy('created_at', 'desc')
-            ->whereYear('created_at', $year)
-            ->whereMonth('created_at', $month)
-            ->sum('price');
+        return 0;
     }
 
     /**

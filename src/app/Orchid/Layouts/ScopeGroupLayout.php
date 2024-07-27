@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
-use App\Models\ScopeGroup;
+use App\Models\Security\OAuth\ScopeGroup;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;

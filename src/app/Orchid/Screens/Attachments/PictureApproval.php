@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Attachments;
 
-use App\Models\EventAttachments;
+use App\Models\Event\EventAttachments;
 use App\Orchid\Layouts\EventUserSubmittedPictures;
 use Orchid\Screen\Screen;
 

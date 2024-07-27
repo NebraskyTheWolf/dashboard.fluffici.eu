@@ -3,7 +3,7 @@
 namespace App\Orchid\Screens\Shop;
 
 use App\Events\UpdateAudit;
-use App\Models\TaxGroup;
+use App\Models\Shop\Internal\TaxGroup;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;

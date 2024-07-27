@@ -4,7 +4,7 @@ namespace App\Orchid\Screens\Application;
 
 use App\Events\UpdateAudit;
 use App\Models\Application;
-use App\Models\Scopes;
+use App\Models\Security\OAuth\Scopes;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;

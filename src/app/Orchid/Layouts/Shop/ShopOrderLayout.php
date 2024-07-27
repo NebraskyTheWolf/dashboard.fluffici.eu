@@ -2,8 +2,7 @@
 
 namespace App\Orchid\Layouts\Shop;
 
-use App\Models\OrderPayment;
-use App\Models\ShopOrders;
+use App\Models\Shop\Customer\Order\ShopOrders;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
@@ -30,15 +29,29 @@ class ShopOrderLayout extends Table
         return [
             TD::make('first_name', __('orders.table.first_name'))
                 ->render(function (ShopOrders $shopOrders) {
-                    return Link::make($shopOrders->first_name)
+                    $customer = $shopOrders->customer;
+
+                    return Link::make($customer->first_name)
                         ->icon('bs.box-arrow-in-right')
                         ->href(route('platform.shop.orders.edit', $shopOrders));
                 }),
-            TD::make('last_name', __('orders.table.last_name')),
-            TD::make('email', __('orders.table.email')),
+            TD::make('last_name', __('orders.table.last_name'))
+                ->render(function (ShopOrders $shopOrders) {
+                    $customer = $shopOrders->customer;
+
+                    return $customer->last_name;
+                }),
+            TD::make('email', __('orders.table.email'))
+                ->render(function (ShopOrders $shopOrders) {
+                    $customer = $shopOrders->customer;
+
+                    return $customer->email;
+                }),
             TD::make('status', __('orders.table.status'))
                 ->render(function (ShopOrders $shopOrders) {
-                    if ($shopOrders->status == "PROCESSING") {
+                    if ($shopOrders->status == "PENDING_APPROVAL") {
+                        return '<a class="ui orange label">Pending Approval</a>';
+                    } else if ($shopOrders->status == "PROCESSING") {
                         return '<a class="ui blue label">'.__('orders.table.status.processing').'</a>';
                     } else if ($shopOrders->status == "CANCELLED") {
                         return '<a class="ui red label">'.__('orders.table.status.cancelled').'</a>';
@@ -54,12 +67,14 @@ class ShopOrderLayout extends Table
                         return '<div><a class="ui green label">'.__('orders.table.status.completed').'</a></div>';
                     } else if ($shopOrders->status == "OUTING") {
                         return '<a class="ui blue label">Payment at Outing <i class="loading cog icon"></i></a>';
+                    } else if ($shopOrders->status == "DENIED") {
+                        return '<a class="ui red label">Denied</a>';
                     }
                     return '<a class="ui purple label">'. $shopOrders->status . '</a>';
                 }),
             TD::make('price_paid', __('orders.table.paid'))
                 ->render(function (ShopOrders $shopOrders) {
-                    $payment = OrderPayment::where('order_id', $shopOrders->order_id)->orderBy('created_at', 'desc');
+                    $payment = $shopOrders->payments();
 
                     if ($payment->exists()) {
                         $price = $payment->first()->price;
@@ -71,10 +86,7 @@ class ShopOrderLayout extends Table
                 }),
             TD::make('payment_status', __('orders.table.payment_status'))
                 ->render(function (ShopOrders $shopOrders) {
-                    $payment = OrderPayment::where('order_id', $shopOrders->order_id)->orderBy('created_at', 'desc');
-
-                    // if there is no payment record we say that is still in process
-                    // Until the provider confirms the transactions
+                    $payment = $shopOrders->payments();
 
                     if ($payment->exists()) {
                         $status = $payment->first()->status;

@@ -132,7 +132,7 @@ public function toPushNotification($notifiable)
 By default, the pusher "interest" messages will be sent to will be defined using the {notifiable}.{id} convention, for example `App.User.1`,
 however you can change this behaviour by including a `routeNotificationFor()` in the notifiable class.
 
-I.e. if you are pushing notification on `User` model, you can go to `App\Models\User` class and implement method:
+I.e. if you are pushing notification on `User` model, you can go to `app\Models\Security\Account\User` class and implement method:
 
 ```php
 public function routeNotificationForPusherPushNotifications($notification): string

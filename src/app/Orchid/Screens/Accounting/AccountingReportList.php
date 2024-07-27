@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Accounting;
 
-use App\Models\AccountingDocument;
+use App\Models\Shop\Accounting\AccountingDocument;
 use App\Orchid\Layouts\AccountingReportLayout;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Artisan;

@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts\Shop;
 
-use App\Models\TaxGroup;
+use App\Models\Shop\Internal\TaxGroup;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;

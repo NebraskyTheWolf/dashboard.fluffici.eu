@@ -3,11 +3,9 @@
 namespace App\Orchid\Screens\Shop;
 
 use App\Events\UpdateAudit;
-use App\Orchid\Layouts\Shop\ShopFeaturesSettings;
-use App\Orchid\Layouts\Shop\ShopGeneralSettings;
-use App\Orchid\Layouts\Shop\ShopMaintenanceSettings;
-use App\Orchid\Layouts\Shop\ShopPaymentSettings;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Code;
@@ -25,14 +23,14 @@ class ShopSettings extends Screen
     public $settings;
 
     /**
-     * Fetch data to be displayed on the screen.
+     * Fetch the data to be displayed on the screen.
      *
-     * @return array
+     * @return iterable
      */
     public function query(): iterable
     {
         return [
-            'settings' => \App\Models\ShopSettings::where('id', 1)->first()
+            'settings' => \App\Models\Shop\Internal\ShopSettings::firstOrFail()
         ];
     }
 
@@ -46,6 +44,11 @@ class ShopSettings extends Screen
         return 'Settings';
     }
 
+    /**
+     * Define permissions for accessing this screen.
+     *
+     * @return iterable|null
+     */
     public function permission(): ?iterable
     {
         return [
@@ -56,7 +59,7 @@ class ShopSettings extends Screen
     /**
      * The screen's action buttons.
      *
-     * @return \Orchid\Screen\Action[]
+     * @return array
      */
     public function commandBar(): iterable
     {
@@ -67,61 +70,90 @@ class ShopSettings extends Screen
         ];
     }
 
+    /**
+     * The screen's layout elements.
+     *
+     * @return iterable
+     */
     public function layout(): iterable
     {
         return [
             Layout::rows([
                 CheckBox::make('settings.enabled')
-                    ->title("Is the shop active?")
+                    ->title('Is the shop active?')
                     ->sendTrueOrFalse(),
 
                 Cropper::make('settings.favicon')
-                    ->title('Upload the shop favicon.'),
+                    ->title('Upload the shop favicon'),
                 Cropper::make('settings.banner')
-                    ->title('Upload the front-banner.'),
+                    ->title('Upload the front banner'),
 
                 Input::make('settings.email')
-                    ->title('The public contact address.'),
+                    ->title('Public contact address')
+                    ->type('email')
+                    ->required(),
                 Code::make('settings.return_policy')
                     ->language('html')
-                    ->title('Please write the Return Policy'),
+                    ->title('Return Policy'),
             ])->title('General Settings'),
 
             Layout::rows([
                 CheckBox::make('settings.shop_sales')
-                    ->title('Do you want the sales module on?')
+                    ->title('Enable the sales module?')
                     ->sendTrueOrFalse(),
                 CheckBox::make('settings.shop_vouchers')
-                    ->title('Do you want the voucher module on?')
+                    ->title('Enable the voucher module?')
                     ->sendTrueOrFalse(),
 
                 CheckBox::make('settings.shop_billing')
-                    ->title('Do you want the billing module on?')
+                    ->title('Enable the billing module?')
                     ->sendTrueOrFalse(),
 
-                Input::make('settings.billing-host')
-                    ->title('Please enter the provider host'),
-                Password::make('settings.billing-secret')
-                    ->title('Please enter your API secret.')
-            ])->title('Features Settings'),
+                Input::make('settings.billing_host')
+                    ->title('Provider host')
+                    ->type('url')
+                    ->required(),
+                Password::make('settings.billing_secret')
+                    ->title('API secret')
+                    ->required(),
+            ])->title('Feature Settings'),
 
             Layout::rows([
                 CheckBox::make('settings.shop_maintenance')
-                    ->title('Are you sure to take down the shop?'),
-                Input::make('settings.shop_maintenance-text')
-                    ->title('Please enter a description.')
+                    ->title('Enable maintenance mode?'),
+                Quill::make('settings.shop_maintenance_text')
+                    ->title('Maintenance description')
             ])->title('Maintenance Settings')
         ];
     }
 
-    public function createOrUpdate(Request $request)
+    /**
+     * Create or update the shop settings.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function createOrUpdate(Request $request): RedirectResponse
     {
-        $this->settings['shop_maintenance-text'] = strip_tags($this->settings['shop_maintenance']);
+        $data = $request->get('settings');
+        $validator = Validator::make($data, [
+            'email' => 'required|email',
+            'billing_host' => 'required|url',
+            'billing_secret' => 'required|string',
+        ]);
 
-        $this->settings->fill($request->get('settings'))->save();
+        if ($validator->fails()) {
+            Toast::error('Please correct the errors in the form.');
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
-        Toast::info('You edited the shop settings');
+        $data['shop_maintenance_text'] = strip_tags($data['shop_maintenance_text']);
+        $this->settings->fill($data)->save();
+
+        Toast::info('Shop settings have been successfully updated.');
 
         event(new UpdateAudit('shop_settings', 'Updated the shop settings', Auth::user()->name));
+
+        return redirect()->route('platform.shop.settings');
     }
 }

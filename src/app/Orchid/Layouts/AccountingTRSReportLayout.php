@@ -2,18 +2,14 @@
 
 namespace App\Orchid\Layouts;
 
-use App\Models\ShopReports;
 use App\Models\TransactionsReport;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
-use Symfony\Component\HttpFoundation\Request;
 
 class AccountingTRSReportLayout extends Table
 {

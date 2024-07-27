@@ -3,7 +3,7 @@
 namespace App\Orchid\Screens\Shop;
 
 use App\Events\UpdateAudit;
-use App\Models\ShopCategories;
+use App\Models\Shop\Internal\ShopCategories;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\CheckBox;

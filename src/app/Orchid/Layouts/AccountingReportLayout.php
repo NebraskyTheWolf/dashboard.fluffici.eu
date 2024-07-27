@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
-use App\Models\AccountingDocument;
+use App\Models\Shop\Accounting\AccountingDocument;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;

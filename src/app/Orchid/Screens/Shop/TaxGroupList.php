@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Shop;
 
-use App\Models\TaxGroup;
+use App\Models\Shop\Internal\TaxGroup;
 use App\Orchid\Layouts\Shop\TaxGroupLayout;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;

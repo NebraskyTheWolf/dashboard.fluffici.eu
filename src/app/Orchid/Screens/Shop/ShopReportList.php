@@ -2,11 +2,10 @@
 
 namespace App\Orchid\Screens\Shop;
 
-use App\Models\ShopReports;
+use App\Models\Shop\Internal\ShopReports;
 use App\Orchid\Layouts\Shop\ShopReportLayout;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use Orchid\Alert\Toast;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Color;

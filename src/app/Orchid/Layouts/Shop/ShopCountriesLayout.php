@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts\Shop;
 
-use App\Models\ShopCountries;
+use App\Models\Shop\Internal\ShopCountries;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;

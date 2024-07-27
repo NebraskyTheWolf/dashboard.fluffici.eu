@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Shop;
 
-use App\Models\ShopCustomer;
+use App\Models\Shop\Customer\ShopCustomer;
 use App\Orchid\Layouts\CustomerListLayout;
 use Orchid\Screen\Screen;
 

@@ -3,10 +3,9 @@
 namespace App\Mail;
 
 use App\Models\Pages;
-use App\Models\ShopOrders;
+use App\Models\Shop\Customer\Order\ShopOrders;
 use App\Models\SocialMedia;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;

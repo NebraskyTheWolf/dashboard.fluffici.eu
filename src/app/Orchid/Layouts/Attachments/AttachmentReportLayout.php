@@ -2,9 +2,7 @@
 
 namespace App\Orchid\Layouts\Attachments;
 
-use App\Models\DmcaRequest;
 use App\Models\ReportedAttachments;
-use Google\Rpc\Help\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;

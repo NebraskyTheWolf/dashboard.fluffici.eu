@@ -38,8 +38,6 @@ use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\Shop\CustomerEditScreen;
 use App\Orchid\Screens\Shop\CustomerListScreen;
-use App\Orchid\Screens\Shop\InventoryEditScreen;
-use App\Orchid\Screens\Shop\InventoryScreen;
 use App\Orchid\Screens\Shop\ShopCarrierEdit;
 use App\Orchid\Screens\Shop\ShopCarrierList;
 use App\Orchid\Screens\Shop\ShopCategories;
@@ -55,7 +53,6 @@ use App\Orchid\Screens\Shop\ShopSales;
 use App\Orchid\Screens\Shop\ShopSalesEdit;
 use App\Orchid\Screens\Shop\ShopSettings;
 use App\Orchid\Screens\Shop\ShopStatistics;
-use App\Orchid\Screens\Shop\ShopSupport;
 use App\Orchid\Screens\Shop\ShopVoucherEdit;
 use App\Orchid\Screens\Shop\ShopVouchers;
 use App\Orchid\Screens\Shop\TaxGroupEdit;
@@ -236,9 +233,6 @@ Route::screen('shop/orders', ShopOrders::class)
 Route::screen('shop/orders/{order?}', ShopOrderEdit::class)
     ->name('platform.shop.orders.edit');
 
-Route::screen('shop/support', ShopSupport::class)
-    ->name('platform.shop.support');
-
 Route::screen('shop/edit/settings', ShopSettings::class)
     ->name('platform.shop.settings');
 
@@ -298,15 +292,6 @@ Route::screen('devices', DeviceScreen::class)
 
 Route::screen('devices/new/{device?}', DeviceEditScreen::class)
     ->name('platform.device.new');
-
-Route::screen('test/calendar', TestCalendar::class);
-
-
-Route::screen('shop/inventory', InventoryScreen::class)
-    ->name('platform.inventory');
-
-Route::screen('shop/inventory/edit/{inventory?}', InventoryEditScreen::class)
-    ->name('platform.inventory.edit');
 
 Route::screen('services/realtime', RealTimeAppList::class)
     ->name('platform.realtime');

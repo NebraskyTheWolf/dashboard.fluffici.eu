@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\ShopProducts;
-use App\Models\ShopSales;
+use App\Models\Shop\Internal\ShopProducts;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

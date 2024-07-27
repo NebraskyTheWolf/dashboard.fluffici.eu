@@ -17,7 +17,7 @@ class ShopOrders extends Screen
     public function query(): iterable
     {
         return [
-            'shop_orders' => \App\Models\ShopOrders::orderBy('created_at', 'desc')->paginate()
+            'shop_orders' => \App\Models\Shop\Customer\Order\ShopOrders::orderBy('created_at', 'desc')->paginate()
         ];
 
     }

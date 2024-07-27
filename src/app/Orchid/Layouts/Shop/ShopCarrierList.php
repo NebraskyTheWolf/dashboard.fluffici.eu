@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts\Shop;
 
-use App\Models\ShopCarriers;
+use App\Models\Shop\Internal\ShopCarriers;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;

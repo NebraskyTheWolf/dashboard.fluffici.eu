@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Mail\ReminderMail;
-use App\Models\Events;
+use App\Models\Event\Events;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;

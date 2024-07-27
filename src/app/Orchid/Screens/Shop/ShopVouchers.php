@@ -16,7 +16,7 @@ class ShopVouchers extends Screen
     public function query(): iterable
     {
         return [
-            'vouchers' => \App\Models\ShopVouchers::paginate()
+            'vouchers' => \App\Models\Shop\Customer\ShopVouchers::paginate()
         ];
     }
 

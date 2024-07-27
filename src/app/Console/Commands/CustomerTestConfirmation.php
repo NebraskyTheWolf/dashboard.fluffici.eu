@@ -3,10 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Mail\CustomerOrderConfirmed;
-use App\Models\OrderedProduct;
-use App\Models\OrderIdentifiers;
-use App\Models\ShopOrders;
-use App\Models\ShopProducts;
+use App\Models\Shop\Customer\Order\OrderedProduct;
+use App\Models\Shop\Customer\Order\OrderIdentifiers;
+use App\Models\Shop\Customer\Order\ShopOrders;
+use App\Models\Shop\Internal\ShopProducts;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
@@ -49,38 +49,7 @@ class CustomerTestConfirmation extends Command
      * @throws RandomException If an error occurs while generating the numeric token.
      * @throws Exception
      */
-    public function handle(): void
-    {
-        $order = new ShopOrders();
-        $order->customer_id = "3a37c91d-42fc-429a-828c-e7762ac67018";
-        $order->order_id = Uuid::uuid4();
-        $order->first_name = "Alexej";
-        $order->last_name = "Le Roy";
-        $order->phone_number = "+420 607 168 620";
-        $order->email = "alex.leroy8303@gmail.com";
-        $order->first_address = "5 valley of foxes";
-        $order->second_address = "18 avenue of cookies";
-        $order->postal_code = "190-FAOP";
-        $order->country = "cs";
-        $order->status = 'OUTING';
-        $order->save();
-
-        $orderPrd = new OrderedProduct();
-        $orderPrd->order_id = $order->order_id;
-        $orderPrd->product_id = ShopProducts::latest()->first()->id;
-        $orderPrd->product_name = "Dergi mug";
-        $orderPrd->price = 190;
-        $orderPrd->save();
-
-        $orderIdentifier = new OrderIdentifiers();
-        $orderIdentifier->order_id = $order->order_id;
-        $orderIdentifier->public_identifier = $this->generateLatestID();
-        $orderIdentifier->internal = Uuid::uuid4();
-        $orderIdentifier->access_pin = $this->generateNumericToken();
-        $orderIdentifier->save();
-
-        Mail::to($order->email)->send(new CustomerOrderConfirmed($order, $orderIdentifier));
-    }
+    public function handle(): void {}
 
     /**
      * Generates the latest ID for a shop order.

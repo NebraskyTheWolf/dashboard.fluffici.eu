@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts\Shop;
 
-use App\Models\ShopCategories;
+use App\Models\Shop\Internal\ShopCategories;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Field;
 use Orchid\Screen\Layouts\Table;

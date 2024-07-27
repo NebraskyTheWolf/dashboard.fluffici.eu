@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AccountingDocument;
-use App\Models\OrderInvoice;
-use App\Models\ShopReports;
+use App\Models\Shop\Accounting\AccountingDocument;
+use App\Models\Shop\Customer\Order\OrderInvoice;
+use App\Models\Shop\Internal\ShopReports;
 use App\Models\TransactionsReport;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\JsonResponse;

@@ -2,8 +2,7 @@
 
 namespace App\Orchid\Layouts\Event;
 
-use App\Models\Events;
-use App\Models\EventsInteresteds;
+use App\Models\Event\Events;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -39,11 +38,6 @@ class EventListLayout extends Table
             TD::make('status', __('events.table.status'))
                 ->render(function (Events $event) {
                     return "<span>" . $event->status . "</span>";
-                }),
-
-            TD::make('interested', __('events.table.interested'))
-                ->render(function (Events $event) {
-                    return EventsInteresteds::where('event_id', $event->id)->count() ?: 0;
                 }),
 
             TD::make('begin_at', __('events.table.begin_at'))

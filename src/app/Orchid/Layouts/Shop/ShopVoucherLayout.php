@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts\Shop;
 
-use App\Models\ShopVouchers;
+use App\Models\Shop\Customer\ShopVouchers;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;

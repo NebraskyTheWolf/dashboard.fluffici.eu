@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 namespace App\Events;
-use Illuminate\Queue\SerializesModels;
-
+use App\Models\Event\Events as DEvents;
 use App\Models\Pages;
-use App\Models\Events as DEvents;
-use App\Models\ShopOrders;
+use App\Models\Shop\Customer\Order\ShopOrders;
 use App\Models\ShopSupportTickets;
+use Illuminate\Queue\SerializesModels;
 
 /**
  * Class Statistics
@@ -27,7 +26,7 @@ class Statistics
     public function __construct()
     {
         $this->visits = number_format(intval(Pages::sum('visits')));
-        $this->tickets = number_format(ShopSupportTickets::where('status', 'PENDING')->count());
+        $this->tickets = 0;
         $this->orders = number_format(ShopOrders::where('status', 'PENDING')->count());
         $this->events = number_format(DEvents::where('status', 'INCOMING')->count());
     }

@@ -2,15 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Models\OrderCarrier;
-use App\Models\OrderedProduct;
-use App\Models\OrderIdentifiers;
-use App\Models\OrderInvoice;
-use App\Models\OrderPayment;
-use App\Models\ShopOrders;
-use App\Models\ShopProducts;
-use App\Models\ShopSettings;
-use App\Models\User;
+use App\Models\Shop\Customer\Order\OrderInvoice;
+use App\Models\Shop\Customer\Order\OrderPayment;
+use App\Models\Shop\Customer\Order\ShopOrders;
+use App\Models\Shop\Internal\ShopSettings;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -62,14 +57,10 @@ class Invoice extends Command
 
         $order = ShopOrders::where('order_id', $orderId)
             ->firstOrFail();
-        $orderIdentifier = OrderIdentifiers::where('order_id', $orderId)
-            ->firstOrFail();
-        $carrier = OrderCarrier::where('order_id', $orderId)
-            ->value('price') ?? 0;
+        $orderIdentifier = $order->identifiers;
+        $carrier = $order->carrier->carrierPrice;
 
-        $products = OrderedProduct::with('product')
-            ->where('order_id', $orderId)
-            ->get();
+        $products = $order->orderedProducts;
 
         /**
          * Aha, tak tady máme úžasnou ukázku kódu, že?
@@ -106,12 +97,12 @@ class Invoice extends Command
             'orderId' => $orderIdentifier->public_identifier,
 
             'contact_address' => $settings->email,
-            'first_name' => $order->first_name,
-            'last_name' => $order->last_name,
-            'address_one' => $order->first_address,
-            'address_two' => $order->second_address ?: "",
-            'country' => $order->country,
-            'email' => $order->email,
+            'first_name' => $order->customer->first_name,
+            'last_name' => $order->customer->last_name,
+            'address_one' => $order->address->address_one,
+            'address_two' => $order->address->address_two ?: "",
+            'country' => $order->address->country,
+            'email' => $order->customer->email,
             'products' => $products,
 
             'paymentMethod' => $providers,

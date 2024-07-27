@@ -3,9 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Events\UpdateAudit;
-use App\Models\ShopProducts;
-use App\Models\ShopVouchers;
-use Carbon\Carbon;
+use App\Models\Shop\Customer\ShopVouchers;
 use Illuminate\Console\Command;
 
 class DeleteUsedVouchers extends Command

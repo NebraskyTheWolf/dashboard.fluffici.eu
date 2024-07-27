@@ -4,24 +4,13 @@ declare(strict_types=1);
 
 namespace Orchid\Platform\Http\Controllers;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Contracts\Routing\ResponseFactory;
+use App\Models\AuditLogs;
+use App\Models\PlatformAttachments;
+use app\Models\Security\Account\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Orchid\Attachment\File;
 use Orchid\Attachment\Models\Attachment;
 use Orchid\Platform\Dashboard;
-use Orchid\Platform\Events\UploadedFileEvent;
-use Symfony\Component\HttpFoundation\Response;
-use App\Models\PlatformAttachments;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7;
-
-use App\Models\User;
-use App\Models\AuditLogs;
-
-use Intervention\Image\Image;
 
 /**
  * Class AttachmentController.
@@ -44,8 +33,8 @@ class AttachmentController extends Controller
     }
 
     public function uploaded(Request $request): JsonResponse {
-        
-        if ($request->has('user_id') 
+
+        if ($request->has('user_id')
             && $request->has('action_id')
             && $request->has('tag')
             && $request->has('id')) {
@@ -66,7 +55,7 @@ class AttachmentController extends Controller
                 $user->avatar_id = $request->input('id');
                 $user->save();
             }
-            
+
             PlatformAttachments::create([
                 'user_id' => $request->input('user_id'),
                 'action_id' => $request->input('action_id') ?: "none",

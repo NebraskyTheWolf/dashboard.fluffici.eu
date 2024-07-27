@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Events;
 
-use App\Models\Events;
+use App\Models\Event\Events;
 use App\Orchid\Layouts\Event\EventListLayout;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;

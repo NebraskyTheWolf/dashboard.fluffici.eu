@@ -3,8 +3,8 @@
 namespace App\Orchid\Screens\Application\Scopes;
 
 use App\Events\UpdateAudit;
-use App\Models\ScopeGroup;
-use App\Models\Scopes;
+use App\Models\Security\OAuth\ScopeGroup;
+use App\Models\Security\OAuth\Scopes;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;

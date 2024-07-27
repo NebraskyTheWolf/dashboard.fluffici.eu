@@ -2,8 +2,8 @@
 
 namespace App\Mail;
 
-use App\Models\AccountingDocument;
-use App\Models\ShopReports;
+use App\Models\Shop\Accounting\AccountingDocument;
+use App\Models\Shop\Internal\ShopReports;
 use App\Models\SocialMedia;
 use App\Models\TransactionsReport;
 use Illuminate\Bus\Queueable;

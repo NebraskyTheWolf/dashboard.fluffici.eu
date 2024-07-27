@@ -4,8 +4,6 @@ use App\Models\LastVersion;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PagesController;
-use App\Http\Controllers\LoginController;
-
 use Orchid\Platform\Http\Controllers\AsyncController;
 use Orchid\Platform\Http\Controllers\AttachmentController;
 use Orchid\Platform\Http\Controllers\IndexController;

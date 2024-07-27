@@ -2,15 +2,13 @@
 
 namespace app\Orchid\Layouts\Shop;
 
-use App\Models\ShopReports;
+use App\Models\Shop\Internal\ShopReports;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 use Orchid\Support\Color;
-use Orchid\Support\Facades\Toast;
-use Symfony\Component\HttpFoundation\Request;
 
 class ShopReportLayout extends Table
 {

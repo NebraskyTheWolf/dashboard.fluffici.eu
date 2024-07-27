@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
-use App\Models\OrderedProduct;
+use App\Models\Shop\Customer\Order\OrderedProduct;
 use Carbon\Carbon;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;

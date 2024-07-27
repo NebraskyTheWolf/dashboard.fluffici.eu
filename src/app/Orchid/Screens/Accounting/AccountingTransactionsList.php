@@ -2,7 +2,7 @@
 
 namespace app\Orchid\Screens\Accounting;
 
-use App\Models\OrderPayment;
+use App\Models\Shop\Customer\Order\OrderPayment;
 use App\Orchid\Layouts\AccountingShopTransactions;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;

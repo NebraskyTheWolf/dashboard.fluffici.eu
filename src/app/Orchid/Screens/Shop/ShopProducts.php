@@ -18,7 +18,7 @@ class ShopProducts extends Screen
     public function query(): iterable
     {
         return [
-            'products' => \App\Models\ShopProducts::paginate()
+            'products' => \App\Models\Shop\Internal\ShopProducts::paginate()
         ];
     }
 
@@ -47,13 +47,9 @@ class ShopProducts extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make(__('products.screen.button.add'))
+            Link::make('Create product')
                 ->icon('bs.plus-circle')
                 ->href(route('platform.shop.products.edit')),
-            Link::make('Inventory')
-                ->type(Color::SUCCESS)
-                ->icon('bs.box-seam')
-                ->route('platform.inventory')
         ];
     }
 

@@ -9,7 +9,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use function Laravel\Prompts\suggest;
 
 #[AsCommand(name: 'make:policy')]
@@ -92,7 +91,7 @@ class PolicyMakeCommand extends GeneratorCommand
         }
 
         if (! $config->get('auth.providers.'.$guardProvider.'.model')) {
-            return 'App\\Models\\User';
+            return 'app\\Models\\Security\\Account\\User';
         }
 
         return $config->get(

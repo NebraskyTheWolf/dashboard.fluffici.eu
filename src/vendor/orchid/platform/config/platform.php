@@ -237,14 +237,14 @@ return [
      | Example:
      |
      | 'search' => [
-     |     \App\Models\User::class,
-     |     \App\Models\Post::class,
+     |     \app\Models\Security\Account\User::class,
+     |     \app\Models\Posts\Post::class,
      | ],
      |
      */
 
     'search' => [
-        \App\Models\User::class
+        \app\Models\Security\Account\User::class
     ],
 
     /*

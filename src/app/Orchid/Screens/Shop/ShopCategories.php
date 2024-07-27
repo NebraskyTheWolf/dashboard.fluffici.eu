@@ -16,7 +16,7 @@ class ShopCategories extends Screen
     public function query(): iterable
     {
         return [
-            'categories' => \App\Models\ShopCategories::paginate()
+            'categories' => \App\Models\Shop\Internal\ShopCategories::paginate()
         ];
     }
 

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ShopVouchers;
+use App\Models\Shop\Customer\ShopVouchers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Orchid\Platform\Models\User;
 
 class VoucherController extends Controller
 {

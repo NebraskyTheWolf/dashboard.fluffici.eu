@@ -2,7 +2,7 @@
 
 namespace App\Broadcasting;
 
-use App\Models\User;
+use App\Models\Security\Account\User;
 
 class PresenceEditor
 {

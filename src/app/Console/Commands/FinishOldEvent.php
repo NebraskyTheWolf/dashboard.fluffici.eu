@@ -3,8 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Events\AkceUpdate;
-use App\Models\Events;
-use App\Models\ShopProducts;
+use App\Models\Event\Events;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

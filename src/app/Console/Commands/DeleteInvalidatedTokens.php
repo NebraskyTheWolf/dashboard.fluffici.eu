@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\PasswordRecovery;
-use App\Models\UserOtp;
+use App\Models\Security\Auth\PasswordRecovery;
+use App\Models\Security\Auth\UserOtp;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Accounting;
+use App\Models\Shop\Accounting\Accounting;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;

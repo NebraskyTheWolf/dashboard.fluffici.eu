@@ -7,7 +7,6 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
-
 class PagesListLayout extends Table
 {
     /**

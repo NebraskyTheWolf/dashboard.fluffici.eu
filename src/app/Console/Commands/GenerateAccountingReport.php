@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Accounting;
-use App\Models\AccountingDocument;
+use App\Models\Shop\Accounting\Accounting;
+use App\Models\Shop\Accounting\AccountingDocument;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Console\Command;

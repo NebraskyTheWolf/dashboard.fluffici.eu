@@ -2,8 +2,7 @@
 
 namespace App\Orchid\Layouts\Shop;
 
-use App\Models\ShopProducts;
-use App\Models\ShopSales;
+use App\Models\Shop\Internal\ShopSales;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
@@ -32,23 +31,16 @@ class ShopSalesList extends Table
         return [
             TD::make('product', 'Action')
                 ->render(function (ShopSales $sale) {
-                    $product = ShopProducts::where('id', $sale->product_id);
-                    if ($product->exists()) {
-                        return DropDown::make('Click here')
-                            ->icon('bs.caret-down')
-                            ->list([
-                                Link::make('Edit Product')
-                                    ->icon('bs.box')
-                                    ->route('platform.shop.products.edit', $product->firstOrFail()),
-                                Link::make('Edit Sale')
-                                    ->icon('bs.cash-coin')
-                                    ->route('platform.shop.sales.edit',$sale),
-                            ]);
-                    } else {
-                        return Link::make('Edit')
-                            ->icon('bs.pencil')
-                            ->route('platform.shop.sales.edit',$sale);
-                    }
+                    return DropDown::make('Click here')
+                        ->icon('bs.caret-down')
+                        ->list([
+                            Link::make('Edit Product')
+                                ->icon('bs.box')
+                                ->route('platform.shop.products.edit', $sale->product),
+                            Link::make('Edit Sale')
+                                ->icon('bs.cash-coin')
+                                ->route('platform.shop.sales.edit',$sale),
+                        ]);
                 }),
             TD::make('reduction', 'Reduction')
                 ->render(function (ShopSales $sale) {
