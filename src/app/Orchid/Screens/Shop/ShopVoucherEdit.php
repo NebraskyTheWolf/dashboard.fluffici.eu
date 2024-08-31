@@ -82,7 +82,7 @@ class ShopVoucherEdit extends Screen
                     Relation::make('voucher.customer_id')
                         ->title('Customer')
                         ->help('Please select the assigned customer to this Voucher code.')
-                        ->fromModel(ShopCustomer::class, 'email')
+                        ->fromModel(ShopCustomer::class, 'email',  'customer_id')
                         ->required(),
 
                     DateTimer::make('voucher.expiration')
@@ -131,9 +131,9 @@ class ShopVoucherEdit extends Screen
         $data = $request->get('voucher');
 
         $validator = Validator::make($data, [
-            'customer_id' => 'required|exists:shop_customers,id',
+            'customer_id' => 'required|string',
             'expiration' => 'required|date',
-            'money' => 'required|numeric|min:0',
+            'money' => 'required|numeric|min:1',
             'restricted' => 'boolean',
             'gift' => 'boolean',
             'note' => 'nullable|string',

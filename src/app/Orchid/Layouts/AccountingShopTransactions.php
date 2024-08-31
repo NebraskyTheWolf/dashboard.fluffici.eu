@@ -72,66 +72,7 @@ class AccountingShopTransactions extends Table
 
     private function renderPrice(OrderPayment $payment): string
     {
-        $missing = $this->isMissing($payment);
-        $overpaid = $this->isOverPaid($payment);
-
-        if ($payment->status === 'PAID') {
-            if ($missing > 0.1) {
-                return '<a class="ui yellow label">Missing ' . $missing . ' Kc</a>';
-            } elseif ($overpaid > 0.1) {
-                return '<a class="ui yellow label">Overpaid by ' . $overpaid . ' Kc</a>';
-            }
-        }
-
         return $payment->price . ' Kc';
-    }
-
-    protected function calculate(OrderPayment $payment): float
-    {
-        $orderedProducts = $payment->order->orderedProducts;
-        $totalPrice = 0;
-
-        foreach ($orderedProducts as $orderedProduct) {
-            $product = $orderedProduct->product;
-            $sale = ShopSales::where('product_id', $product->id)->first();
-            $salePrice = 0;
-
-            if ($sale) {
-                $salePrice = $product->price * ($sale->reduction / 100);
-            }
-
-            $totalPrice += ($product->price - $salePrice) * $orderedProduct->quantity;
-        }
-
-        $carrier = $payment->order->carrier;
-
-        if ($carrier) {
-            $totalPrice += $carrier->price;
-        }
-
-        return $totalPrice;
-    }
-
-    protected function isMissing(OrderPayment $payment): float
-    {
-        $amount = $this->calculate($payment);
-
-        if ($amount > $payment->price) {
-            return $amount - $payment->price;
-        }
-
-        return 0;
-    }
-
-    protected function isOverPaid(OrderPayment $payment): float
-    {
-        $amount = $this->calculate($payment);
-
-        if ($amount < $payment->price) {
-            return $payment->price - $amount;
-        }
-
-        return 0;
     }
 
     protected function iconNotFound(): string

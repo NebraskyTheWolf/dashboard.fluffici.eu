@@ -22,7 +22,7 @@ class AccountingMain extends Screen
             'metrics' => [
                 'outstanding_amount' => [
                     'key' => 'outstanding_amount',
-                    'value' => $this->calculateOutstandingAmount($lastMonth, $currentYear) . ' Kč',
+                    'value' => number_format($this->calculateOutstandingAmount($lastMonth, $currentYear)) . ' Kč',
                     'diff' => $this->calculateDifference(
                         $this->calculateOutstandingAmount($lastMonth, $currentYear),
                         $this->calculateTotalPayments()
@@ -32,7 +32,7 @@ class AccountingMain extends Screen
                 ],
                 'year_balance' => [
                     'key' => 'year_balance',
-                    'value' => $this->calculateYearBalance($currentYear) . ' Kč',
+                    'value' => number_format($this->calculateYearBalance($currentYear)) . ' Kč',
                     'diff' => $this->calculateDifference(
                         $this->calculateYearBalance($currentYear),
                         $this->calculateTotalPayments()
@@ -42,7 +42,7 @@ class AccountingMain extends Screen
                 ],
                 'spent_month' => [
                     'key' => 'spent_month',
-                    'value' => $this->calculateSpentMonth($lastMonth, $currentYear) . ' Kč',
+                    'value' => number_format($this->calculateSpentMonth($lastMonth, $currentYear)) . ' Kč',
                     'diff' => $this->calculateDifference(
                         $this->calculateSpentMonth($lastMonth, $currentYear),
                         $this->calculateTotalPayments()
@@ -52,7 +52,7 @@ class AccountingMain extends Screen
                 ],
                 'overdue_amount' => [
                     'key' => 'overdue_amount',
-                    'value' => $this->calculateOverdueAmount($lastMonth, $currentYear) . ' Kč',
+                    'value' => number_format($this->calculateOverdueAmount($lastMonth, $currentYear)) . ' Kč',
                     'diff' => $this->calculateDifference(
                         $this->calculateOverdueAmount($lastMonth, $currentYear),
                         $this->calculateTotalOverdue()
@@ -76,8 +76,7 @@ class AccountingMain extends Screen
 
     private function calculateOutstandingAmount($lastMonth, $currentYear): float
     {
-        return number_format(
-            OrderPayment::where('status', 'PAID')
+        return OrderPayment::where('status', 'PAID')
                 ->whereMonth('created_at', $lastMonth->month)
                 ->whereYear('created_at', $currentYear)
                 ->sum('price') -
@@ -98,14 +97,12 @@ class AccountingMain extends Screen
                 ->whereMonth('created_at', $lastMonth->month)
                 ->whereYear('created_at', $currentYear)
                 ->where('is_recurring', 0)
-                ->sum('amount')
-        );
+                ->sum('amount');
     }
 
     private function calculateYearBalance($currentYear): float
     {
-        return number_format(
-            OrderPayment::where('status', 'PAID')
+        return OrderPayment::where('status', 'PAID')
                 ->whereYear('created_at', $currentYear)
                 ->sum('price') -
             OrderPayment::where('status', 'REFUNDED')
@@ -120,14 +117,12 @@ class AccountingMain extends Screen
             Accounting::where('type', 'EXPENSE')
                 ->whereYear('created_at', $currentYear)
                 ->where('is_recurring', 0)
-                ->sum('amount')
-        );
+                ->sum('amount');
     }
 
     private function calculateSpentMonth($lastMonth, $currentYear): float
     {
-        return number_format(
-            OrderPayment::where('status', 'REFUNDED')
+        return OrderPayment::where('status', 'REFUNDED')
                 ->whereMonth('created_at', $lastMonth->month)
                 ->whereYear('created_at', $currentYear)
                 ->sum('price') +
@@ -136,18 +131,15 @@ class AccountingMain extends Screen
             Accounting::where('type', 'EXPENSE')
                 ->whereYear('created_at', $currentYear)
                 ->where('is_recurring', 0)
-                ->sum('amount')
-        );
+                ->sum('amount');
     }
 
     private function calculateOverdueAmount($lastMonth, $currentYear): float
     {
-        return number_format(
-            OrderPayment::where('status', 'UNPAID')
-                ->whereMonth('created_at', $lastMonth->month)
-                ->whereYear('created_at', $currentYear)
-                ->sum('price')
-        );
+        return OrderPayment::where('status', 'UNPAID')
+            ->whereMonth('created_at', $lastMonth->month)
+            ->whereYear('created_at', $currentYear)
+            ->sum('price');
     }
 
     private function calculateTotalPayments(): float

@@ -3,7 +3,6 @@
 namespace App\Orchid\Layouts\Shop;
 
 use App\Models\Shop\Customer\Order\OrderPayment as OrderPaymentModel;
-use App\Models\Shop\Customer\Order\OrderedProduct;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -32,12 +31,7 @@ class OrderPayment extends Table
             TD::make('price', 'Price')
                 ->render(function (OrderPaymentModel $payment) {
                     return $this->renderPrice($payment);
-                }),
-
-            TD::make('remaining_balance', 'Remaining Balance')
-                ->render(function (OrderPaymentModel $payment) {
-                    return $this->renderRemainingBalance($payment);
-                }),
+                })
         ];
     }
 
@@ -67,62 +61,8 @@ class OrderPayment extends Table
         return '<a href="https://provider.com/transactions/' . $transactionId . '"> Check </a>';
     }
 
-    private function renderPrice(OrderPaymentModel $payment): string
-    {
-        $priceInfo = $payment->price . ' Kc';
-        if ($payment->status === 'PAID') {
-            $missing = $this->isMissing($payment);
-            $overpaid = $this->isOverPaid($payment);
-
-            if ($missing > 0.01) {
-                return '<a class="ui red label">Missing ' . $missing . ' Kc</a>';
-            } elseif ($overpaid > 0.01) {
-                return '<a class="ui yellow label">Overpaid by ' . $overpaid . ' Kc</a>';
-            }
-        }
-        return $priceInfo;
-    }
-
-    private function renderRemainingBalance(OrderPaymentModel $payment): string
-    {
-        $remainingBalance = number_format($this->calculateTotalAmount($payment) - $this->getTotalPaidAmount($payment->order_id));
-        return '<a class="ui green label">Remaining ' . $remainingBalance . ' Kc</a>';
-    }
-
-    protected function calculateTotalAmount(OrderPaymentModel $payment): float
-    {
-        $orderedProducts = OrderedProduct::with('product')->where('order_id', $payment->order_id)->get();
-        $totalPrice = $orderedProducts->sum(fn($orderedProduct) => $orderedProduct->product->getNormalizedPrice());
-
-        $carrier = $payment->order->carrier;
-
-        if ($carrier) {
-            $totalPrice += $carrier->price;
-        }
-
-        return $totalPrice;
-    }
-
-    protected function isMissing(OrderPaymentModel $payment): float
-    {
-        $totalAmount = $this->calculateTotalAmount($payment);
-
-        if ($payment->price < $totalAmount) {
-            return $totalAmount - $this->getTotalPaidAmount($payment->order_id);
-        }
-
-        return 0.0;
-    }
-
-    protected function isOverPaid(OrderPaymentModel $payment): float
-    {
-        $totalAmount = $this->calculateTotalAmount($payment);
-
-        if ($payment->price > $totalAmount) {
-            return $this->getTotalPaidAmount($payment->order_id) - $totalAmount;
-        }
-
-        return 0.0;
+    private function renderPrice(OrderPaymentModel $payment): string{
+        return number_format($this->getTotalPaidAmount($payment->order_id)) . ' Kc';
     }
 
     protected function getTotalPaidAmount(string $orderId): float

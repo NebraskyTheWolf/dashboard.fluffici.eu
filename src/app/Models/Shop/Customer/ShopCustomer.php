@@ -2,9 +2,8 @@
 
 namespace App\Models\Shop\Customer;
 
-use app\Models\Shop\Customer\Order\ShopOrders;
+use App\Models\Shop\Customer\Order\ShopOrders;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Orchid\Screen\AsSource;
 
 class ShopCustomer extends Model
@@ -18,15 +17,15 @@ class ShopCustomer extends Model
         'password'
     ];
 
-    public function addresses(): HasMany {
-        return $this->hasMany(ShopCustomerAddress::class);
+    public function addresses() {
+        return ShopCustomerAddress::where('customer_id', $this->customer_id);
     }
 
-    public function orders(): HasMany {
-        return $this->hasMany(ShopOrders::class);
+    public function orders() {
+        return ShopOrders::where('customer_id', $this->customer_id);
     }
 
-    public function vouchers(): HasMany {
-        return $this->hasMany(ShopVouchers::class);
+    public function vouchers() {
+        return ShopVouchers::where('customer_id', $this->customer_id);
     }
 }

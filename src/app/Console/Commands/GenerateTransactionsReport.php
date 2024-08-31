@@ -44,7 +44,6 @@ class GenerateTransactionsReport extends Command
         $overdueAmount = $this->calculateOrderPayments('DISPUTED', $currentMonth, $currentYear);
         $carrierFees = $this->calculateCarrierFees($currentMonth, $currentYear);
 
-
         $document = $this->generateDocument(
             $reportId,
             $today,

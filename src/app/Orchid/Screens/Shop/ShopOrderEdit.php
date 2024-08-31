@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\Shop;
 
 use App\Events\OrderUpdateEvent;
 use App\Events\UpdateAudit;
+use app\Models\Shop\Customer\Order\OrderedProduct;
 use App\Models\Shop\Customer\Order\OrderPayment;
 use App\Models\Shop\Customer\Order\ShopOrders;
 use App\Models\Shop\Internal\ShopCountries;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Screen\Sight;
+use Orchid\Screen\TD;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
@@ -18,7 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ShopOrderEdit extends Screen
 {
-    public ShopOrders $order;
+    public $order;
 
     /**
      * Fetch data to be displayed on the screen.
@@ -30,11 +32,10 @@ class ShopOrderEdit extends Screen
     {
         return [
             'order' => $order,
-            'orderPayment' => $order->payments,
-            'lastHistory' => $order->payments->last(),
-            'orderProducts' => $order->orderedProducts,
-            'orderCarrier' => $order->carrier,
-            'orderSales' => $order->sales,
+            'orderPayment' => $order->payments()->paginate(),
+            'orderProducts' => $order->orderedProducts()->paginate(),
+            'orderCarrier' => $order->carrier(),
+            'orderSales' => $order->sales(),
         ];
     }
 
@@ -45,7 +46,7 @@ class ShopOrderEdit extends Screen
      */
     public function name(): ?string
     {
-        return $this->order->customer->first_name . ' ' . __('Order');
+        return $this->order->customer()->first_name . ' ' . __('Order');
     }
 
     /**
@@ -104,52 +105,59 @@ class ShopOrderEdit extends Screen
                 __('Order Information') => [
                     Layout::legend('order', [
                         Sight::make(__('Full Name'))
-                            ->render(fn() => $this->order->customer->first_name . ' ' . $this->order->customer->last_name),
+                            ->render(fn() => $this->order->customer()->first_name . ' ' . $this->order->customer()->last_name),
                         Sight::make('first_address', __('First Address'))
-                            ->render(fn() => $this->order->address->address_one),
+                            ->render(fn() => $this->order->address()->address_one),
                         Sight::make('second_address', __('Second Address'))
-                            ->render(fn() => $this->order->address->address_two),
+                            ->render(fn() => $this->order->address()->address_two),
                         Sight::make('postal_code', __('Postal Code'))
-                            ->render(fn() => $this->order->address->zip),
+                            ->render(fn() => $this->order->address()->zip),
                         Sight::make('country', __('Country'))
                             ->render(fn() => $this->getCountry()),
                         Sight::make('email', __('Email'))
-                            ->render(fn() => $this->order->customer->email),
+                            ->render(fn() => $this->order->customer()->email),
                         Sight::make('phone_number', __('Phone Number'))
-                            ->render(fn() => $this->order->customer->phone),
+                            ->render(fn() => $this->order->customer()->phone),
                         Sight::make('status', __('Status'))
                             ->render(fn() => $this->orderStatus()),
                     ])->title(__('Contact & Address')),
 
                     Layout::legend('orderCarrier', [
                         Sight::make('carrier_name', __('Carrier Name'))
-                            ->render(fn() => $this->order->carrier->carrier_name),
+                            ->render(fn() => $this->order->carrier()->carrierName),
                         Sight::make('carrier_delay', __('Carrier Delay'))
-                            ->render(fn() => $this->order->carrier->carrier_delay),
+                            ->render(fn() => $this->order->carrier()->carrierDelay . ' (Business Days)'),
                         Sight::make('carrier_price', __('Carrier Price'))
-                            ->render(fn() => $this->order->carrier->carrier_price . ' Kc'),
+                            ->render(fn() => $this->order->carrier()->carrierPrice . ' Kc'),
                     ])->title(__('Carrier'))
-                        ->canSee($this->order->carrier !== null),
+                        ->canSee($this->order->carrier() !== null),
                 ],
                 __('Payment') => [
                     \App\Orchid\Layouts\Shop\OrderPayment::class,
                 ],
                 __('Ordered Products') => [
                     Layout::table('orderProducts', [
-                        'product_name' => __('Product Name'),
-                        'quantity' => __('Quantity'),
-                        'price' => __('Price'),
-                        'tax' => __('Tax (%)'),
-                        'discount' => __('Discount (%)')
-                    ], function ($product) {
-                        return [
-                            $product->product_name,
-                            $product->quantity,
-                            $this->getProductPrice($product),
-                            $this->getProductTax($product),
-                            $this->getProductDiscount($product)
-                        ];
-                    })->title(__('Products')),
+                        TD::make('product_name', 'Product Name')
+                            ->render(function (OrderedProduct $product) {
+                                return $product->getProduct()->name;
+                            }),
+                        TD::make('quantity', 'Quantity')
+                            ->render(function (OrderedProduct $product) {
+                                return number_format($product->quantity);
+                            }),
+                        TD::make('price','Price')
+                            ->render(function (OrderedProduct $product) {
+                                return $this->getProductPrice($product);
+                            }),
+                        TD::make('tax','Tax (%)')
+                            ->render(function (OrderedProduct $product) {
+                                return $this->getProductTax($product);
+                            }),
+                        TD::make('discount', 'Discount (%)')
+                            ->render(function (OrderedProduct $product) {
+                                return $this->getProductDiscount($product);
+                            })
+                    ])->title(__('Products')),
                 ]
             ])->activeTab(__('Order Information'))
         ];
@@ -158,33 +166,34 @@ class ShopOrderEdit extends Screen
     private function orderStatus(): string
     {
         $statuses = [
-            "PENDING_APPROVAL" => ['label' => 'ui orange label', 'text' => __('orders.table.status.processing')],
-            "PROCESSING" => ['label' => 'ui blue label', 'text' => __('orders.table.status.processing')],
-            "CANCELLED" => ['label' => 'ui red label', 'text' => __('orders.table.status.cancelled')],
-            "REFUNDED" => ['label' => 'ui orange label', 'text' => __('orders.table.status.refunded')],
-            "DISPUTED" => ['label' => 'ui red label', 'text' => __('orders.table.status.disputed')],
-            "DELIVERED" => ['label' => 'ui green label', 'text' => __('orders.table.status.delivered')],
-            "ARCHIVED" => ['label' => 'ui brown label', 'text' => __('orders.table.status.archived')],
-            "COMPLETED" => ['label' => 'ui green label', 'text' => __('orders.table.status.completed')],
-            "OUTING" => ['label' => 'ui blue label', 'text' => 'Payment at Outing'],
-            "DENIED" => ['label' => 'ui red label', 'text' => 'Denied'],
+            "PENDING_APPROVAL" => ['label' => 'ui orange label', 'text' => 'Pending Approval <i class="loading cog icon"></i>'],
+            "PROCESSING" => ['label' => 'ui blue label', 'text' => 'Processing <i class="loading cog icon"></i>'],
+            "CANCELLED" => ['label' => 'ui red label', 'text' => 'Cancelled'],
+            "REFUNDED" => ['label' => 'ui orange label', 'text' => 'Refunded'],
+            "DISPUTED" => ['label' => 'ui red label', 'text' => 'Disputed'],
+            "DELIVERED" => ['label' => 'ui green label', 'text' => 'Delivered'],
+            "ARCHIVED" => ['label' => 'ui brown label', 'text' => 'Archived'],
+            "COMPLETED" => ['label' => 'ui green label', 'text' => 'Completed'],
+            "OUTING" => ['label' => 'ui blue label', 'text' => 'Ready for pickup <i class="loading cog icon"></i>'],
+            "OUTING_DELIVERED" => ['label' => 'ui blue label', 'text' => 'Picked up'],
+            "DENIED" => ['label' => 'ui red label', 'text' => 'Cancelled'],
         ];
 
         $status = $this->order->status;
-        return '<a class="' . $statuses[$status]['label'] . '">' . $statuses[$status]['text'] . ' <i class="loading cog icon"></i></a>';
+        return '<a class="' . $statuses[$status]['label'] . '">' . $statuses[$status]['text'] . ' </a>';
     }
 
     private function getCountry(): string
     {
-        $country = ShopCountries::where('iso_code', $this->order->address->country)->first();
-        return $country ? $country->country_name : $this->order->address->country;
+        $country = ShopCountries::where('iso_code', $this->order->address()->country)->first();
+        return $country ? $country->country_name : $this->order->address()->country;
     }
 
     public function completed(): RedirectResponse
     {
         $this->order->update(['status' => 'COMPLETED']);
         event(new OrderUpdateEvent($this->order, 'completed'));
-        event(new UpdateAudit('orders', 'Set as Completed ' . $this->order->customer->first_name, Auth::user()->name));
+        event(new UpdateAudit('orders', 'Set as Completed ' . $this->order->customer()->first_name, Auth::user()->name));
         return redirect()->route('platform.shop.orders');
     }
 
@@ -192,7 +201,7 @@ class ShopOrderEdit extends Screen
     {
         $this->order->update(['status' => 'DELIVERED']);
         event(new OrderUpdateEvent($this->order, 'delivered'));
-        event(new UpdateAudit('orders', 'Set as Delivered ' . $this->order->customer->first_name, Auth::user()->name));
+        event(new UpdateAudit('orders', 'Set as Delivered ' . $this->order->customer()->first_name, Auth::user()->name));
         return redirect()->route('platform.shop.orders');
     }
 
@@ -200,6 +209,15 @@ class ShopOrderEdit extends Screen
     {
         $this->order->update(['status' => 'REFUNDED']);
         $payment = $this->getOrderPayment();
+
+        if ($payment === null) {
+            Toast::error("This order has not been paid and cannot be refunded.");
+            return redirect()->route('platform.shop.orders');
+        }
+        if (str_contains($payment->provider, 'Poukaz')) {
+            Toast::error("This order was paid using a voucher code and cannot be refunded.");
+            return redirect()->route('platform.shop.orders');
+        }
 
         OrderPayment::create([
             'order_id' => $this->order->order_id,
@@ -209,29 +227,29 @@ class ShopOrderEdit extends Screen
             'price' => $payment->price,
         ]);
 
-        Toast::success(__('You refunded :name of :price Kc', ['name' => $this->order->customer->first_name, 'price' => $payment->price]));
+        Toast::success(__('You refunded :name of :price Kc', ['name' => $this->order->customer()->first_name, 'price' => $payment->price]));
         event(new OrderUpdateEvent($this->order, 'refund'));
-        event(new UpdateAudit('orders', 'Refunded ' . $this->order->customer->first_name, Auth::user()->name));
+        event(new UpdateAudit('orders', 'Refunded ' . $this->order->customer()->first_name, Auth::user()->name));
         return redirect()->route('platform.shop.orders');
     }
 
     private function getOrderPayment(): OrderPayment
     {
-        return OrderPayment::where('order_id', $this->order->order_id)->firstOrFail();
+        return OrderPayment::where('order_id', $this->order->order_id)->first();
     }
 
     private function getProductPrice($product): string
     {
-        return number_format($product->price, 2);
+        return number_format($product->getProduct()->getNormalizedPrice() * $product->quantity, 2);
     }
 
     private function getProductTax($product): string
     {
-        return $product->tax . '%';
+        return $product->getProduct()->getProductTax() . '%';
     }
 
     private function getProductDiscount($product): string
     {
-        return $product->discount . '%';
+        return $product->getProduct()->getProductSale() . '%';
     }
 }

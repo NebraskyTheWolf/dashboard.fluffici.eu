@@ -57,10 +57,10 @@ class Invoice extends Command
 
         $order = ShopOrders::where('order_id', $orderId)
             ->firstOrFail();
-        $orderIdentifier = $order->identifiers;
-        $carrier = $order->carrier->carrierPrice;
+        $orderIdentifier = $order->identifiers();
+        $carrier = $order->carrier()->carrierPrice;
 
-        $products = $order->orderedProducts;
+        $products = $order->orderedProducts()->paginate();
 
         /**
          * Aha, tak tady máme úžasnou ukázku kódu, že?
@@ -97,18 +97,18 @@ class Invoice extends Command
             'orderId' => $orderIdentifier->public_identifier,
 
             'contact_address' => $settings->email,
-            'first_name' => $order->customer->first_name,
-            'last_name' => $order->customer->last_name,
-            'address_one' => $order->address->address_one,
-            'address_two' => $order->address->address_two ?: "",
-            'country' => $order->address->country,
-            'email' => $order->customer->email,
+            'first_name' => $order->customer()->first_name,
+            'last_name' => $order->customer()->last_name,
+            'address_one' => $order->address()->address_one,
+            'address_two' => $order->address()->address_two ?: "",
+            'country' => $order->address()->country,
+            'email' => $order->customer()->email,
             'products' => $products,
 
             'paymentMethod' => $providers,
             'paymentPrice' => $paymentTotalPrice,
 
-            'subTotal' => number_format($calculations['subTotal'] - $calculations['totalTax'] + $calculations['totalDiscount'] - $carrier),
+            'subTotal' => number_format($calculations['subTotal'] + $calculations['totalTax'] - $calculations['totalDiscount'] + $carrier),
             'discountPer' => number_format($calculations['salePercentage']),
             'grandTotal' => number_format($calculations['subTotal']),
             'discount' => number_format($calculations['totalDiscount']),
@@ -116,7 +116,6 @@ class Invoice extends Command
             'tax' => number_format($calculations['totalTax']),
 
             'carrierPrice' => number_format($carrier),
-
             'returnPolicy' => $settings->return_policy
         ]);
 

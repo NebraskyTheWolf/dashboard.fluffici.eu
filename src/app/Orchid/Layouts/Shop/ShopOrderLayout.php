@@ -29,7 +29,7 @@ class ShopOrderLayout extends Table
         return [
             TD::make('first_name', __('orders.table.first_name'))
                 ->render(function (ShopOrders $shopOrders) {
-                    $customer = $shopOrders->customer;
+                    $customer = $shopOrders->customer();
 
                     return Link::make($customer->first_name)
                         ->icon('bs.box-arrow-in-right')
@@ -37,13 +37,13 @@ class ShopOrderLayout extends Table
                 }),
             TD::make('last_name', __('orders.table.last_name'))
                 ->render(function (ShopOrders $shopOrders) {
-                    $customer = $shopOrders->customer;
+                    $customer = $shopOrders->customer();
 
                     return $customer->last_name;
                 }),
             TD::make('email', __('orders.table.email'))
                 ->render(function (ShopOrders $shopOrders) {
-                    $customer = $shopOrders->customer;
+                    $customer = $shopOrders->customer();
 
                     return $customer->email;
                 }),

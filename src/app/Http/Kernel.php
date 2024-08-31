@@ -56,7 +56,6 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            VisitTracker::class,
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,

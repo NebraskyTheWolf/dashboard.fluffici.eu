@@ -27,11 +27,6 @@ class GenerateMonthlyReport extends Command
 
         $reportId = strtoupper(substr(Uuid::uuid4()->toString(), 0, 8));
 
-        $total = OrderedProduct::orderBy('created_at', 'desc')
-            ->whereYear('created_at', $currentYear)
-            ->whereMonth('created_at', $currentMonth)
-            ->sum('price');
-
         $paidPrice = OrderPayment::orderBy('created_at', 'desc')
             ->whereYear('created_at', $currentYear)
             ->whereMonth('created_at', $currentMonth)
@@ -44,13 +39,13 @@ class GenerateMonthlyReport extends Command
             ->where('status', 'REFUNDED')
             ->sum('price');
 
-        $loss = $total - $paidPrice + $refunded;
+        $loss = $paidPrice - $refunded;
 
         if ($loss <= 0) {
             $loss = 0;
         }
 
-        $percentage = $this->percent($loss, $total);
+        $percentage = $this->percent($loss, $paidPrice);
 
         $document = Pdf::loadView('documents.report', [
             'reportId' => $reportId,
@@ -61,7 +56,7 @@ class GenerateMonthlyReport extends Command
                 ->get(),
             'fees' => 0,
             'sales' => number_format(abs($loss)),
-            'overallProfit' => number_format(abs($total - $loss)),
+            'overallProfit' => number_format(abs($paidPrice - $refunded)),
             'lossPercentage' => number_format($percentage),
             'pagination' => 0
         ]);

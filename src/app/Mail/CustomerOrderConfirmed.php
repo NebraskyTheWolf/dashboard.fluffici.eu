@@ -73,7 +73,7 @@ class CustomerOrderConfirmed extends Mailable
     {
         return [
             'order' => $this->order,
-            'product' => $this->order->orderedProducts(),
+            'product' => $this->order->orderedProducts()->get(),
             'productTax' => TaxGroup::all(),
             'publicData' => $this->order->identifiers(),
             'carrierFees' => $this->order->carrier(),

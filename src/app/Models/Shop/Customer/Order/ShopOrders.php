@@ -1,14 +1,12 @@
 <?php
 
-namespace app\Models\Shop\Customer\Order;
+namespace App\Models\Shop\Customer\Order;
 
-use app\Models\Shop\Customer\ShopCustomer;
-use app\Models\Shop\Customer\ShopCustomerAddress;
-use app\Models\Shop\Internal\ShopCarriers;
-use app\Models\Shop\Internal\ShopSales;
+use App\Models\Shop\Customer\ShopCustomer;
+use App\Models\Shop\Customer\ShopCustomerAddress;
+use App\Models\Shop\Internal\ShopCarriers;
+use App\Models\Shop\Internal\ShopSales;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Orchid\Metrics\Chartable;
 use Orchid\Screen\AsSource;
 
@@ -30,25 +28,25 @@ class ShopOrders extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function orderedProducts(): HasMany {
-        return $this->hasMany(OrderedProduct::class);
+    public function orderedProducts() {
+        return OrderedProduct::where('order_id',$this->order_id);
     }
 
-    public function payments(): BelongsTo {
-        return $this->belongsTo(OrderPayment::class);
+    public function payments() {
+        return OrderPayment::where('order_id',$this->order_id);
     }
 
-    public function identifiers(): BelongsTo {
-        return $this->belongsTo(OrderIdentifiers::class);
+    public function identifiers() {
+        return OrderIdentifiers::where('order_id',$this->order_id)->first();
     }
 
-    public function invoice(): BelongsTo {
-        return $this->belongsTo(OrderInvoice::class);
+    public function invoice() {
+        return OrderInvoice::where('order_id',$this->order_id)->first();
     }
 
     public function getTotalPrice(): float {
         $totalPrice = 0;
-        foreach ($this->orderedProducts() as $orderedProduct) {
+        foreach ($this->orderedProducts()->get() as $orderedProduct) {
             $totalPrice += $orderedProduct->price * $orderedProduct->quantity;
         }
         return $totalPrice;
@@ -59,26 +57,24 @@ class ShopOrders extends Model
         return number_format($this->getTotalPrice(), 2);
     }
 
-    public function customer(): BelongsTo {
-        return $this->belongsTo(ShopCustomer::class);
+    public function customer() {
+        return ShopCustomer::where('customer_id', $this->customer_id)->first();
     }
 
     public function getStatus(): string {
         return $this->status;
     }
 
-    public function carrier(): BelongsTo
-    {
-        return $this->belongsTo(ShopCarriers::class);
+    public function carrier() {
+        return ShopCarriers::where('id', $this->carrier_id)->first();
     }
 
-    public function sales(): BelongsTo
-    {
-        return $this->belongsTo(ShopSales::class);
+    public function sales() {
+        return ShopSales::where('id', $this->sale_id)->first();
     }
 
-    public function address(): BelongsTo
+    public function address()
     {
-        return $this->belongsTo(ShopCustomerAddress::class);
+        return ShopCustomerAddress::where('id', $this->address_id)->first();
     }
 }
